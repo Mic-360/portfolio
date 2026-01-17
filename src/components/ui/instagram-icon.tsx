@@ -1,44 +1,44 @@
-import { forwardRef, useImperativeHandle, useCallback } from "react";
-import type { AnimatedIconHandle, AnimatedIconProps } from "./types";
-import { motion, useAnimate } from "motion/react";
+import { forwardRef, useImperativeHandle, useCallback } from 'react'
+import type { AnimatedIconHandle, AnimatedIconProps } from './types'
+import { motion, useAnimate } from 'motion/react'
 
 const InstagramIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
   (
-    { size = 24, color = "currentColor", strokeWidth = 2, className = "" },
+    { size = 24, color = 'currentColor', strokeWidth = 2, className = '' },
     ref,
   ) => {
-    const [scope, animate] = useAnimate();
+    const [scope, animate] = useAnimate()
 
     const start = useCallback(async () => {
       animate(
-        ".ig-body",
+        '.ig-body',
         { scale: [1, 1.05, 1] },
-        { duration: 0.3, ease: "easeOut" },
-      );
+        { duration: 0.3, ease: 'easeOut' },
+      )
       await animate(
-        ".ig-lens",
+        '.ig-lens',
         { scale: [1, 1.2, 1] },
-        { duration: 0.25, ease: "easeOut" },
-      );
+        { duration: 0.25, ease: 'easeOut' },
+      )
       animate(
-        ".ig-dot",
+        '.ig-dot',
         { opacity: [1, 0, 1] },
-        { duration: 0.2, ease: "easeInOut" },
-      );
-    }, [animate]);
+        { duration: 0.2, ease: 'easeInOut' },
+      )
+    }, [animate])
 
     const stop = useCallback(() => {
       animate(
-        ".ig-body, .ig-lens, .ig-dot",
+        '.ig-body, .ig-lens, .ig-dot',
         { scale: 1, opacity: 1 },
-        { duration: 0.2, ease: "easeInOut" },
-      );
-    }, [animate]);
+        { duration: 0.2, ease: 'easeInOut' },
+      )
+    }, [animate])
 
     useImperativeHandle(ref, () => ({
       startAnimation: start,
       stopAnimation: stop,
-    }));
+    }))
 
     return (
       <motion.div
@@ -60,22 +60,22 @@ const InstagramIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
         >
           <motion.path
             className="ig-body"
-            style={{ transformOrigin: "50% 50%" }}
+            style={{ transformOrigin: '50% 50%' }}
             d="M4 8a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z"
           />
 
           <motion.path
             className="ig-lens"
-            style={{ transformOrigin: "50% 50%" }}
+            style={{ transformOrigin: '50% 50%' }}
             d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"
           />
 
           <motion.path className="ig-dot" d="M16.5 7.5v.01" />
         </svg>
       </motion.div>
-    );
+    )
   },
-);
+)
 
-InstagramIcon.displayName = "InstagramIcon";
-export default InstagramIcon;
+InstagramIcon.displayName = 'InstagramIcon'
+export default InstagramIcon

@@ -1,17 +1,17 @@
-import { forwardRef, useImperativeHandle, useCallback } from "react";
-import type { AnimatedIconHandle, AnimatedIconProps } from "./types";
-import { motion, useAnimate } from "motion/react";
+import { forwardRef, useImperativeHandle, useCallback } from 'react'
+import type { AnimatedIconHandle, AnimatedIconProps } from './types'
+import { motion, useAnimate } from 'motion/react'
 
 const TwitterIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
   (
-    { size = 24, color = "currentColor", strokeWidth = 2, className = "" },
+    { size = 24, color = 'currentColor', strokeWidth = 2, className = '' },
     ref,
   ) => {
-    const [scope, animate] = useAnimate();
+    const [scope, animate] = useAnimate()
 
     const start = useCallback(async () => {
       await animate(
-        ".bird",
+        '.bird',
         {
           y: [0, -6, -13],
           x: [0, 4, 8],
@@ -21,12 +21,12 @@ const TwitterIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
         },
         {
           duration: 0.8,
-          ease: "easeIn",
+          ease: 'easeIn',
         },
-      );
+      )
 
       animate(
-        ".bird",
+        '.bird',
         {
           y: 0,
           x: 0,
@@ -36,14 +36,14 @@ const TwitterIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
         },
         {
           duration: 0.6,
-          ease: "easeOut",
+          ease: 'easeOut',
         },
-      );
-    }, [animate]);
+      )
+    }, [animate])
 
     const stop = useCallback(() => {
       animate(
-        ".bird",
+        '.bird',
         {
           y: 0,
           x: 0,
@@ -53,15 +53,15 @@ const TwitterIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
         },
         {
           duration: 0.2,
-          ease: "easeOut",
+          ease: 'easeOut',
         },
-      );
-    }, [animate]);
+      )
+    }, [animate])
 
     useImperativeHandle(ref, () => ({
       startAnimation: start,
       stopAnimation: stop,
-    }));
+    }))
 
     return (
       <motion.svg
@@ -81,13 +81,13 @@ const TwitterIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
       >
         <motion.path
           className="bird"
-          style={{ transformOrigin: "12px 12px" }}
+          style={{ transformOrigin: '12px 12px' }}
           d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"
         />
       </motion.svg>
-    );
+    )
   },
-);
+)
 
-TwitterIcon.displayName = "TwitterIcon";
-export default TwitterIcon;
+TwitterIcon.displayName = 'TwitterIcon'
+export default TwitterIcon

@@ -1,15 +1,15 @@
 export interface AnimatedIconProps {
   /** Icon size in pixels or CSS string */
-  size?: number | string;
+  size?: number | string
   /** Icon color (defaults to currentColor) */
-  color?: string;
+  color?: string
   /** SVG stroke width */
-  strokeWidth?: number;
+  strokeWidth?: number
   /** Additional CSS classes */
-  className?: string;
+  className?: string
 }
 
 export interface AnimatedIconHandle {
-  startAnimation: () => void;
-  stopAnimation: () => void;
+  startAnimation: () => void
+  stopAnimation: () => void
 }

@@ -1,39 +1,35 @@
-import { forwardRef, useImperativeHandle, useCallback } from "react";
-import type { AnimatedIconHandle, AnimatedIconProps } from "./types";
-import { motion, useAnimate } from "motion/react";
+import { forwardRef, useImperativeHandle, useCallback } from 'react'
+import type { AnimatedIconHandle, AnimatedIconProps } from './types'
+import { motion, useAnimate } from 'motion/react'
 
 const LinkedinIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
   (
-    { size = 24, color = "currentColor", strokeWidth = 2, className = "" },
+    { size = 24, color = 'currentColor', strokeWidth = 2, className = '' },
     ref,
   ) => {
-    const [scope, animate] = useAnimate();
+    const [scope, animate] = useAnimate()
 
     const start = useCallback(async () => {
       animate(
-        ".border",
+        '.border',
         { scale: [1, 1.05, 1] },
-        { duration: 0.4, ease: "easeInOut" },
-      );
+        { duration: 0.4, ease: 'easeInOut' },
+      )
       await animate(
-        ".lines",
+        '.lines',
         { pathLength: [0, 1] },
-        { duration: 0.5, ease: "easeOut" },
-      );
-    }, [animate]);
+        { duration: 0.5, ease: 'easeOut' },
+      )
+    }, [animate])
 
     const stop = useCallback(() => {
-      animate(
-        ".lines, .border",
-        { pathLength: 1, scale: 1 },
-        { duration: 0.2 },
-      );
-    }, [animate]);
+      animate('.lines, .border', { pathLength: 1, scale: 1 }, { duration: 0.2 })
+    }, [animate])
 
     useImperativeHandle(ref, () => ({
       startAnimation: start,
       stopAnimation: stop,
-    }));
+    }))
 
     return (
       <motion.svg
@@ -75,12 +71,12 @@ const LinkedinIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
         <motion.path
           className="border"
           d="M3 7a4 4 0 0 1 4 -4h10a4 4 0 0 1 4 4v10a4 4 0 0 1 -4 4h-10a4 4 0 0 1 -4 -4z"
-          style={{ transformOrigin: "center" }}
+          style={{ transformOrigin: 'center' }}
         />
       </motion.svg>
-    );
+    )
   },
-);
+)
 
-LinkedinIcon.displayName = "LinkedinIcon";
-export default LinkedinIcon;
+LinkedinIcon.displayName = 'LinkedinIcon'
+export default LinkedinIcon

@@ -1,56 +1,56 @@
-import { forwardRef, useImperativeHandle, useCallback } from "react";
-import type { AnimatedIconHandle, AnimatedIconProps } from "./types";
-import { motion, useAnimate } from "motion/react";
+import { forwardRef, useImperativeHandle, useCallback } from 'react'
+import type { AnimatedIconHandle, AnimatedIconProps } from './types'
+import { motion, useAnimate } from 'motion/react'
 
 const PenIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
   (
-    { size = 24, color = "currentColor", strokeWidth = 2, className = "" },
+    { size = 24, color = 'currentColor', strokeWidth = 2, className = '' },
     ref,
   ) => {
-    const [scope, animate] = useAnimate();
+    const [scope, animate] = useAnimate()
 
     const start = useCallback(async () => {
       await animate(
-        ".pen-group",
+        '.pen-group',
         {
           x: [0, 1, -1, 1, -1, 0],
           y: [0, -2, -4, -6, -8, -10],
           rotate: [0, -6, -4, -6, -4, 0],
         },
-        { duration: 0.8, ease: "easeInOut" },
-      );
+        { duration: 0.8, ease: 'easeInOut' },
+      )
 
       await animate(
-        ".pen-slash",
+        '.pen-slash',
         { pathLength: [0, 1], opacity: [0, 1] },
-        { duration: 0.3, ease: "easeOut" },
-      );
+        { duration: 0.3, ease: 'easeOut' },
+      )
 
       await animate(
-        ".pen-slash",
+        '.pen-slash',
         { pathLength: 0, opacity: 0 },
-        { duration: 0.2, ease: "easeInOut" },
-      );
+        { duration: 0.2, ease: 'easeInOut' },
+      )
 
       animate(
-        ".pen-group",
+        '.pen-group',
         { x: 0, y: 0, rotate: 0 },
-        { duration: 0.25, ease: "easeInOut" },
-      );
-    }, [animate]);
+        { duration: 0.25, ease: 'easeInOut' },
+      )
+    }, [animate])
 
     const stop = useCallback(() => {
       animate(
-        ".pen-group",
+        '.pen-group',
         { x: 0, y: 0, rotate: 0 },
-        { duration: 0.2, ease: "easeInOut" },
-      );
-    }, [animate]);
+        { duration: 0.2, ease: 'easeInOut' },
+      )
+    }, [animate])
 
     useImperativeHandle(ref, () => ({
       startAnimation: start,
       stopAnimation: stop,
-    }));
+    }))
 
     return (
       <motion.svg
@@ -64,15 +64,15 @@ const PenIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
         strokeLinecap="square"
         strokeMiterlimit="10"
         className={`cursor-pointer ${className}`}
-        style={{ overflow: "visible" }}
+        style={{ overflow: 'visible' }}
         onHoverStart={start}
         onHoverEnd={stop}
       >
         <motion.g
           className="pen-group"
           style={{
-            transformOrigin: "50% 50%",
-            transformBox: "fill-box",
+            transformOrigin: '50% 50%',
+            transformBox: 'fill-box',
           }}
         >
           {/* Slash animation (pathLength works now) */}
@@ -89,9 +89,9 @@ const PenIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
           />
         </motion.g>
       </motion.svg>
-    );
+    )
   },
-);
+)
 
-PenIcon.displayName = "PenIcon";
-export default PenIcon;
+PenIcon.displayName = 'PenIcon'
+export default PenIcon
