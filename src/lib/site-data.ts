@@ -65,6 +65,5 @@ export const socialLinks: SocialLink[] = [
 ]
 
 export const contactLinks = [
-	{ label: 'resume', url: 'https://bhaumiksingh.com/resume.pdf' },
-	{ label: 'cal.com', url: 'https://cal.com/bhaumik-singh' },
+	{ label: 'resume', url: '/resume.pdf' }
 ]

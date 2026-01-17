@@ -1,3 +1,4 @@
+import LayersIcon from '@/components/ui/layers-icon'
 import { getProjectIndex } from '@/lib/content.server'
 import { formatDate } from '@/lib/format'
 import { siteMeta } from '@/lib/site-data'
@@ -37,9 +38,13 @@ function ProjectsIndex() {
   return (
     <section className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
-        <h1 className="text-lg font-semibold italic">Projects</h1>
+        <h1 className="text-lg font-semibold italic">
+          <LayersIcon size={20} className="inline-block mr-1" />
+          Projects
+        </h1>
         <p className="text-muted-foreground">
-          A short list of work across products with full‑stack builds of web and android apps using AI or integrating AI.
+          A short list of work across products with full‑stack builds of web and
+          android apps using AI or integrating AI.
         </p>
       </div>
       <div className="flex flex-col gap-4">
@@ -66,10 +71,7 @@ function ProjectsIndex() {
           </Link>
         ))}
       </div>
-      <Link
-        to="/"
-        className="mr-2 inline-flex items-center gap-1 italic"
-      >
+      <Link to="/" className="mr-2 inline-flex items-center gap-1 italic">
         ← back
       </Link>
     </section>

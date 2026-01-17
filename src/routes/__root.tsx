@@ -85,6 +85,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             {
               name: 'Tanstack Router',
               render: <TanStackRouterDevtoolsPanel />,
+              defaultOpen: true,
             },
           ]}
         />

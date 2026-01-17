@@ -1,3 +1,4 @@
+import PenIcon from '@/components/ui/pen-icon'
 import { getBlogIndex } from '@/lib/content.server'
 import { formatDate } from '@/lib/format'
 import { siteInfo, siteMeta } from '@/lib/site-data'
@@ -37,9 +38,13 @@ function BlogIndex() {
   return (
     <section className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
-        <h1 className="text-xl font-semibold italic">Blog</h1>
+        <h1 className="text-xl font-semibold italic">
+          <PenIcon size={20} className="inline-block mr-1" />
+          Blog
+        </h1>
         <p className="text-muted-foreground">
-          Short, practical notes on building web and android apps, tools, systems, and experiments.
+          Short, practical notes on building web and android apps, tools,
+          systems, and experiments.
         </p>
       </div>
       <div className="flex flex-col gap-4">
@@ -66,10 +71,7 @@ function BlogIndex() {
           </Link>
         ))}
       </div>
-      <Link
-        to="/"
-        className="mr-2 inline-flex items-center gap-1 italic"
-      >
+      <Link to="/" className="mr-2 inline-flex items-center gap-1 italic">
         ← back
       </Link>
     </section>
