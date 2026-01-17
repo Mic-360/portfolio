@@ -1,12 +1,47 @@
-import { evaluate } from '@mdx-js/mdx'
+// Content server for MDX processing with syntax highlighting
 import { createServerFn } from '@tanstack/react-start'
 import matter from 'gray-matter'
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import React from 'react'
-import { renderToStaticMarkup } from 'react-dom/server'
-import * as runtime from 'react/jsx-runtime'
+import rehypeStringify from 'rehype-stringify'
+import remarkGfm from 'remark-gfm'
+import remarkParse from 'remark-parse'
+import remarkRehype from 'remark-rehype'
+import { createHighlighter, type Highlighter } from 'shiki'
+import { unified } from 'unified'
 import { z } from 'zod'
+
+// Shiki highlighter instance (cached)
+let highlighterPromise: Promise<Highlighter> | null = null
+
+async function getHighlighter() {
+  if (!highlighterPromise) {
+    highlighterPromise = createHighlighter({
+      themes: ['github-dark', 'github-light'],
+      langs: [
+        'javascript',
+        'typescript',
+        'tsx',
+        'jsx',
+        'json',
+        'html',
+        'css',
+        'python',
+        'rust',
+        'go',
+        'bash',
+        'shell',
+        'yaml',
+        'markdown',
+        'sql',
+        'java',
+        'c',
+        'cpp',
+      ],
+    })
+  }
+  return highlighterPromise
+}
 
 export type BlogMeta = {
   slug: string
@@ -100,12 +135,50 @@ function normalizeList(items?: string[] | string) {
 }
 
 async function renderMdxToHtml(content: string) {
-  const { default: Content } = await evaluate(content, {
-    ...runtime,
-    development: false,
-  })
+  const highlighter = await getHighlighter()
 
-  return renderToStaticMarkup(React.createElement(Content))
+  // Process code blocks with shiki before unified pipeline
+  const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g
+  let processedContent = content
+
+  const matches = [...content.matchAll(codeBlockRegex)]
+  for (const match of matches) {
+    const lang = match[1] || 'text'
+    const code = match[2].trimEnd()
+    const fullMatch = match[0]
+
+    try {
+      const highlighted = highlighter.codeToHtml(code, {
+        lang: lang as any,
+        theme: 'github-dark',
+      })
+      // Replace the markdown code block with HTML placeholder
+      processedContent = processedContent.replace(
+        fullMatch,
+        `<div class="shiki-code-block">${highlighted}</div>`,
+      )
+    } catch {
+      // If language not supported, wrap in generic pre/code
+      const escapedCode = code
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+      processedContent = processedContent.replace(
+        fullMatch,
+        `<pre class="shiki-fallback"><code>${escapedCode}</code></pre>`,
+      )
+    }
+  }
+
+  // Use unified to process markdown with GFM support
+  const result = await unified()
+    .use(remarkParse)
+    .use(remarkGfm)
+    .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypeStringify, { allowDangerousHtml: true })
+    .process(processedContent)
+
+  return String(result)
 }
 
 async function readBlogIndex(): Promise<BlogMeta[]> {

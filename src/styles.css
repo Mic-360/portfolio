@@ -216,22 +216,177 @@ code {
     0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
-.mdx-content pre {
-  background: color-mix(
-    in oklab,
-    var(--foreground) 90%,
-    transparent
-  ); /* Darker background for code */
-  color: var(--background);
-  padding: 1.25rem;
+/* Shiki syntax highlighted code blocks */
+.mdx-content .shiki-code-block {
+  margin-bottom: 1.25rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.mdx-content .shiki-code-block pre {
+  margin: 0;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  border: none;
+  border-radius: 0;
+}
+
+.mdx-content .shiki-code-block code {
+  background: transparent;
+  padding: 0;
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, Monaco, 'Courier New',
+    monospace;
+}
+
+/* Fallback code blocks */
+.mdx-content .shiki-fallback {
+  background: #0d1117;
+  color: #c9d1d9;
+  padding: 1rem 1.25rem;
   border-radius: 0.5rem;
   overflow-x: auto;
   margin-bottom: 1.25rem;
   border: 1px solid var(--border);
+  font-size: 0.875rem;
+  line-height: 1.7;
 }
 
-.mdx-content pre code {
-  color: inherit;
+.mdx-content .shiki-fallback code {
   background: transparent;
   padding: 0;
+  color: inherit;
 }
+
+/* Inline code */
+.mdx-content code:not(pre code) {
+  color: var(--primary);
+  background: color-mix(in oklab, var(--primary) 15%, transparent);
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, Monaco, 'Courier New',
+    monospace;
+}
+
+/* GitHub-style Tables */
+.mdx-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.25rem;
+  font-size: 0.875rem;
+}
+
+.mdx-content thead {
+  background: color-mix(in oklab, var(--foreground) 8%, transparent);
+}
+
+.mdx-content th,
+.mdx-content td {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  text-align: left;
+}
+
+.mdx-content th {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.mdx-content tbody tr:nth-child(even) {
+  background: color-mix(in oklab, var(--foreground) 3%, transparent);
+}
+
+.mdx-content tbody tr:hover {
+  background: color-mix(in oklab, var(--primary) 8%, transparent);
+}
+
+/* Task Lists (GFM) */
+.mdx-content ul.contains-task-list,
+.mdx-content ul:has(input[type='checkbox']) {
+  list-style: none;
+  padding-left: 0;
+}
+
+.mdx-content li.task-list-item,
+.mdx-content li:has(input[type='checkbox']) {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.mdx-content input[type='checkbox'] {
+  margin-top: 0.35rem;
+  accent-color: var(--primary);
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Strikethrough (GFM) */
+.mdx-content del {
+  text-decoration: line-through;
+  color: var(--muted-foreground);
+}
+
+/* Horizontal Rule */
+.mdx-content hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--border),
+    transparent
+  );
+  margin: 2rem 0;
+}
+
+/* Autolinks */
+.mdx-content a {
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in oklab, var(--primary) 50%, transparent);
+  transition: text-decoration-color 0.2s;
+}
+
+.mdx-content a:hover {
+  text-decoration-color: var(--primary);
+}
+
+/* Strong and Emphasis */
+.mdx-content strong {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.mdx-content em {
+  font-style: italic;
+}
+
+/* Footnotes */
+.mdx-content .footnotes {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+/* Definition Lists */
+.mdx-content dl {
+  margin-bottom: 1.25rem;
+}
+
+.mdx-content dt {
+  font-weight: 600;
+  margin-top: 1rem;
+}
+
+.mdx-content dd {
+  margin-left: 1.5rem;
+  color: var(--muted-foreground);
+}
+
