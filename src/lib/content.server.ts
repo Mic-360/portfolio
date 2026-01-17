@@ -147,26 +147,61 @@ async function renderMdxToHtml(content: string) {
     const code = match[2].trimEnd()
     const fullMatch = match[0]
 
+    // Escape code for data attribute (used by copy button)
+    const escapedCodeForAttr = code
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+
     try {
       const highlighted = highlighter.codeToHtml(code, {
         lang: lang as any,
         theme: 'github-dark',
       })
-      // Replace the markdown code block with HTML placeholder
-      processedContent = processedContent.replace(
-        fullMatch,
-        `<div class="shiki-code-block">${highlighted}</div>`,
-      )
+
+      // Create code block with header containing language and copy button
+      const codeBlockHtml = `
+<div class="shiki-code-block" data-code="${escapedCodeForAttr}">
+  <div class="shiki-header">
+    <span class="shiki-lang">${lang}</span>
+    <button class="shiki-copy-btn" onclick="(function(btn){
+      const code = btn.closest('.shiki-code-block').dataset.code;
+      const decoded = code.replace(/&quot;/g, '&quot;').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+      navigator.clipboard.writeText(decoded).then(function(){
+        btn.textContent = 'Copied!';
+        setTimeout(function(){ btn.textContent = 'Copy'; }, 2000);
+      });
+    })(this)">Copy</button>
+  </div>
+  ${highlighted}
+</div>`
+
+      processedContent = processedContent.replace(fullMatch, codeBlockHtml)
     } catch {
       // If language not supported, wrap in generic pre/code
       const escapedCode = code
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
-      processedContent = processedContent.replace(
-        fullMatch,
-        `<pre class="shiki-fallback"><code>${escapedCode}</code></pre>`,
-      )
+
+      const fallbackHtml = `
+<div class="shiki-code-block" data-code="${escapedCodeForAttr}">
+  <div class="shiki-header">
+    <span class="shiki-lang">${lang}</span>
+    <button class="shiki-copy-btn" onclick="(function(btn){
+      const code = btn.closest('.shiki-code-block').dataset.code;
+      const decoded = code.replace(/&quot;/g, '&quot;').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+      navigator.clipboard.writeText(decoded).then(function(){
+        btn.textContent = 'Copied!';
+        setTimeout(function(){ btn.textContent = 'Copy'; }, 2000);
+      });
+    })(this)">Copy</button>
+  </div>
+  <pre class="shiki-fallback"><code>${escapedCode}</code></pre>
+</div>`
+
+      processedContent = processedContent.replace(fullMatch, fallbackHtml)
     }
   }
 

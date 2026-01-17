@@ -222,6 +222,50 @@ code {
   border-radius: 0.5rem;
   overflow: hidden;
   border: 1px solid var(--border);
+  position: relative;
+}
+
+/* Code block header with language and copy button */
+.mdx-content .shiki-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: #161b22;
+  border-bottom: 1px solid var(--border);
+  font-family: 'Manrope', sans-serif;
+}
+
+.mdx-content .shiki-lang {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #8b949e;
+}
+
+.mdx-content .shiki-copy-btn {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #c9d1d9;
+  background: #21262d;
+  border: 1px solid #30363d;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: 'Manrope', sans-serif;
+}
+
+.mdx-content .shiki-copy-btn:hover {
+  background: #30363d;
+  border-color: #484f58;
+  color: #f0f6fc;
+}
+
+.mdx-content .shiki-copy-btn:active {
+  background: #484f58;
+  transform: scale(0.95);
 }
 
 .mdx-content .shiki-code-block pre {
@@ -241,20 +285,20 @@ code {
     monospace;
 }
 
-/* Fallback code blocks */
-.mdx-content .shiki-fallback {
+/* Fallback code blocks (inside shiki-code-block wrapper) */
+.mdx-content .shiki-code-block .shiki-fallback {
   background: #0d1117;
   color: #c9d1d9;
   padding: 1rem 1.25rem;
-  border-radius: 0.5rem;
   overflow-x: auto;
-  margin-bottom: 1.25rem;
-  border: 1px solid var(--border);
+  margin: 0;
+  border: none;
+  border-radius: 0;
   font-size: 0.875rem;
   line-height: 1.7;
 }
 
-.mdx-content .shiki-fallback code {
+.mdx-content .shiki-code-block .shiki-fallback code {
   background: transparent;
   padding: 0;
   color: inherit;
