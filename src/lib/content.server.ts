@@ -43,7 +43,9 @@ const PROJECT_DIR = path.join(process.cwd(), 'src', 'content', 'projects')
 
 const blogFrontmatterSchema = z.object({
   title: z.string(),
-  date: z.string(),
+  date: z
+    .union([z.string(), z.date()])
+    .transform((val) => new Date(val).toISOString()),
   summary: z.string(),
   tags: z.union([z.array(z.string()), z.string()]).optional(),
   categories: z.union([z.array(z.string()), z.string()]).optional(),
@@ -52,7 +54,9 @@ const blogFrontmatterSchema = z.object({
 
 const projectFrontmatterSchema = z.object({
   title: z.string(),
-  date: z.string(),
+  date: z
+    .union([z.string(), z.date()])
+    .transform((val) => new Date(val).toISOString()),
   summary: z.string(),
   stack: z.union([z.array(z.string()), z.string()]).optional(),
   tags: z.union([z.array(z.string()), z.string()]).optional(),

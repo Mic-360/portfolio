@@ -47,28 +47,30 @@ function ProjectsIndex() {
           android apps using AI or integrating AI.
         </p>
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-6">
         {projects.map((project) => (
-          <Link
-            key={project.slug}
-            to="/projects/$slug"
-            params={{ slug: project.slug }}
-            className="group flex flex-col gap-1"
-          >
-            <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.2em] text-primary">
-              <span>{project.title}</span>
-              <span className="h-px w-8 bg-primary/60"></span>
-              <span>{formatDate(project.date)}</span>
-            </div>
-            <p className="text-xs text-muted-foreground group-hover:text-foreground">
-              {project.summary}
-            </p>
-            {project.stack.length > 0 && (
-              <p className="text-xs uppercase tracking-[0.2em] text-primary/80">
-                {project.stack.join(' · ')}
+          <div key={project.slug} className="flex items-center gap-2">
+            <img src={project.image} alt={project.title} className="w-20 h-20 object-cover rounded" />
+            <Link
+              to="/projects/$slug"
+              params={{ slug: project.slug }}
+              className="group flex flex-col gap-1"
+            >
+              <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.2em] text-primary">
+                <span>{project.title}</span>
+                <span className="h-px w-8 bg-primary/60"></span>
+                <span>{formatDate(project.date)}</span>
+              </div>
+              <p className="text-xs text-muted-foreground group-hover:text-foreground">
+                {project.summary}
               </p>
-            )}
-          </Link>
+              {project.stack.length > 0 && (
+                <p className="text-[0.65rem] uppercase tracking-[0.2em] text-primary/80">
+                  {project.stack.join(' · ')}
+                </p>
+              )}
+            </Link>
+          </div>
         ))}
       </div>
       <Link to="/" className="mr-2 inline-flex items-center gap-1 italic">

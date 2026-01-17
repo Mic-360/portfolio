@@ -165,7 +165,7 @@ function App() {
       </Section>
 
       <Section title="blogs">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-4">
           {posts.slice(0, 3).map((post) => (
             <Link
               key={post.slug}
@@ -182,7 +182,7 @@ function App() {
                 {post.summary}
               </p>
               {(post.categories.length > 0 || post.tags.length > 0) && (
-                <p className="text-[0.65rem] uppercase tracking-[0.2em] text-primary/80">
+                <p className="text-[0.55rem] uppercase tracking-[0.2em] text-primary/80">
                   {[...post.categories, ...post.tags].join(' · ')}
                 </p>
               )}
@@ -191,16 +191,16 @@ function App() {
         </div>
         <Link
           to="/blog/"
-          className="text-xs uppercase tracking-[0.2em] text-primary hover:text-primary/80 mt-2"
+          className="text-xs uppercase tracking-[0.2em] text-white underline decoration-primary underline-offset-4 mt-2"
         >
           Read all blogs
         </Link>
       </Section>
 
       <Section title="projects">
-        <div className="flex flex-col-reverse md:flex-row items-start md:items-center justify-between gap-4">
-          <div className="space-y-4">
-            <div className="flex flex-col gap-2">
+        <div className="flex flex-col-reverse md:flex-row items-start justify-between gap-4">
+          <div className="space-y-6">
+            <div className="flex flex-col gap-4">
               {projects.slice(0, 2).map((project) => (
                 <Link
                   key={project.slug}
@@ -218,7 +218,7 @@ function App() {
                   </p>
                   {(project.categories.length > 0 ||
                     project.tags.length > 0) && (
-                    <p className="text-[0.65rem] uppercase tracking-[0.2em] text-primary/80">
+                    <p className="text-[0.55rem] uppercase tracking-[0.2em] text-primary/80">
                       {[...project.categories, ...project.tags].join(' · ')}
                     </p>
                   )}
@@ -227,7 +227,7 @@ function App() {
             </div>
             <Link
               to="/projects/"
-              className="text-xs uppercase tracking-[0.2em] text-primary hover:text-primary/80"
+              className="text-xs uppercase tracking-[0.2em] text-white underline decoration-primary underline-offset-4"
             >
               View all projects
             </Link>
@@ -235,7 +235,7 @@ function App() {
           <img
             src="/logo.gif"
             alt="dev logo gif"
-            className="w-full md:w-48 md:h-32 object-cover rounded-md mix-blend-screen opacity-75"
+            className="w-full md:w-48 h-full object-cover rounded-md mix-blend-screen opacity-75"
           />
         </div>
       </Section>
