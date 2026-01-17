@@ -61,7 +61,7 @@ function BlogPost() {
   }
 
   return (
-    <article className="flex flex-col gap-6">
+    <article className="flex flex-col gap-4">
       <header className="flex flex-col gap-2">
         <h1 className="text-xl font-semibold italic">{post.title}</h1>
         <p className="text-xs uppercase tracking-[0.2em] text-primary">
@@ -75,7 +75,7 @@ function BlogPost() {
         )}
       </header>
       <div
-        className="mdx-content flex flex-col gap-4 text-foreground"
+        className="mdx-content flex flex-col gap-1 text-foreground"
         dangerouslySetInnerHTML={{ __html: post.html }}
       />
       <Link

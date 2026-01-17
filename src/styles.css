@@ -223,6 +223,7 @@ code {
   overflow: hidden;
   border: 1px solid var(--border);
   position: relative;
+  background: var(--card);
 }
 
 /* Code block header with language and copy button */
@@ -231,7 +232,7 @@ code {
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 1rem;
-  background: #161b22;
+  background: color-mix(in oklab, var(--foreground) 6%, transparent);
   border-bottom: 1px solid var(--border);
   font-family: 'Manrope', sans-serif;
 }
@@ -241,16 +242,16 @@ code {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #8b949e;
+  color: var(--muted-foreground);
 }
 
 .mdx-content .shiki-copy-btn {
   padding: 0.25rem 0.75rem;
   font-size: 0.75rem;
   font-weight: 500;
-  color: #c9d1d9;
-  background: #21262d;
-  border: 1px solid #30363d;
+  color: var(--foreground);
+  background: color-mix(in oklab, var(--foreground) 8%, transparent);
+  border: 1px solid var(--border);
   border-radius: 0.375rem;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -258,13 +259,12 @@ code {
 }
 
 .mdx-content .shiki-copy-btn:hover {
-  background: #30363d;
-  border-color: #484f58;
-  color: #f0f6fc;
+  background: color-mix(in oklab, var(--foreground) 14%, transparent);
+  border-color: color-mix(in oklab, var(--foreground) 18%, transparent);
 }
 
 .mdx-content .shiki-copy-btn:active {
-  background: #484f58;
+  background: color-mix(in oklab, var(--foreground) 18%, transparent);
   transform: scale(0.95);
 }
 
@@ -281,8 +281,36 @@ code {
 .mdx-content .shiki-code-block code {
   background: transparent;
   padding: 0;
-  font-family: 'JetBrains Mono', 'Fira Code', Consolas, Monaco, 'Courier New',
-    monospace;
+  font-family:
+    'JetBrains Mono', 'Fira Code', Consolas, Monaco, 'Courier New', monospace;
+}
+
+.mdx-content .shiki-theme {
+  display: block;
+}
+
+.mdx-content .shiki-theme.shiki-dark {
+  display: none;
+}
+
+.mdx-content .shiki-theme .shiki {
+  background: transparent !important;
+}
+
+[data-theme='dark'] .mdx-content .shiki-theme.shiki-light {
+  display: none;
+}
+
+[data-theme='dark'] .mdx-content .shiki-theme.shiki-dark {
+  display: block;
+}
+
+[data-theme='light'] .mdx-content .shiki-theme.shiki-light {
+  display: block;
+}
+
+[data-theme='light'] .mdx-content .shiki-theme.shiki-dark {
+  display: none;
 }
 
 /* Fallback code blocks (inside shiki-code-block wrapper) */
@@ -311,8 +339,8 @@ code {
   padding: 0.15rem 0.4rem;
   border-radius: 0.25rem;
   font-size: 0.875em;
-  font-family: 'JetBrains Mono', 'Fira Code', Consolas, Monaco, 'Courier New',
-    monospace;
+  font-family:
+    'JetBrains Mono', 'Fira Code', Consolas, Monaco, 'Courier New', monospace;
 }
 
 /* GitHub-style Tables */
@@ -321,6 +349,20 @@ code {
   border-collapse: collapse;
   margin-bottom: 1.25rem;
   font-size: 0.875rem;
+}
+
+.mdx-content .table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 1.25rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+
+.mdx-content .table-wrapper table {
+  margin-bottom: 0;
+  border: none;
 }
 
 .mdx-content thead {
@@ -378,12 +420,10 @@ code {
 .mdx-content hr {
   border: none;
   height: 1px;
-  background: linear-gradient(
-    to right,
-    transparent,
-    var(--border),
-    transparent
-  );
+  background: linear-gradient(to right,
+      transparent,
+      var(--border),
+      transparent);
   margin: 2rem 0;
 }
 
@@ -433,4 +473,3 @@ code {
   margin-left: 1.5rem;
   color: var(--muted-foreground);
 }
-

@@ -3,12 +3,17 @@ import { createServerFn } from '@tanstack/react-start'
 import matter from 'gray-matter'
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import rehypeRaw from 'rehype-raw'
+import rehypeSlug from 'rehype-slug'
 import rehypeStringify from 'rehype-stringify'
 import remarkGfm from 'remark-gfm'
 import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
-import { createHighlighter, type Highlighter } from 'shiki'
+import type { Highlighter } from 'shiki'
+import { createHighlighter } from 'shiki'
 import { unified } from 'unified'
+import { visit } from 'unist-util-visit'
 import { z } from 'zod'
 
 // Shiki highlighter instance (cached)
@@ -48,8 +53,8 @@ export type BlogMeta = {
   title: string
   date: string
   summary: string
-  tags: string[]
-  categories: string[]
+  tags: Array<string>
+  categories: Array<string>
   image?: string
 }
 
@@ -62,10 +67,10 @@ export type ProjectMeta = {
   title: string
   date: string
   summary: string
-  stack: string[]
-  links: { label: string; url: string }[]
-  tags: string[]
-  categories: string[]
+  stack: Array<string>
+  links: Array<{ label: string; url: string }>
+  tags: Array<string>
+  categories: Array<string>
   image?: string
 }
 
@@ -116,7 +121,7 @@ function slugFromFile(fileName: string) {
   return fileName.replace(/\.mdx?$/, '')
 }
 
-function normalizeStack(stack?: string[] | string) {
+function normalizeStack(stack?: Array<string> | string) {
   if (!stack) return []
   if (Array.isArray(stack)) return stack
   return stack
@@ -125,7 +130,7 @@ function normalizeStack(stack?: string[] | string) {
     .filter(Boolean)
 }
 
-function normalizeList(items?: string[] | string) {
+function normalizeList(items?: Array<string> | string) {
   if (!items) return []
   if (Array.isArray(items)) return items
   return items
@@ -134,34 +139,36 @@ function normalizeList(items?: string[] | string) {
     .filter(Boolean)
 }
 
-async function renderMdxToHtml(content: string) {
-  const highlighter = await getHighlighter()
+function escapeHtml(input: string) {
+  return input
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+}
 
-  // Process code blocks with shiki before unified pipeline
-  const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g
-  let processedContent = content
+function remarkShiki() {
+  return async (tree: any) => {
+    const highlighter = await getHighlighter()
 
-  const matches = [...content.matchAll(codeBlockRegex)]
-  for (const match of matches) {
-    const lang = match[1] || 'text'
-    const code = match[2].trimEnd()
-    const fullMatch = match[0]
+    visit(tree, 'code', (node: any, index: number | undefined, parent: any) => {
+      if (!parent || typeof index !== 'number') return
 
-    // Escape code for data attribute (used by copy button)
-    const escapedCodeForAttr = code
-      .replace(/&/g, '&amp;')
-      .replace(/"/g, '&quot;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
+      const lang = (node.lang ?? 'text').toString().toLowerCase()
+      const code = node.value ?? ''
+      const escapedCodeForAttr = escapeHtml(code)
 
-    try {
-      const highlighted = highlighter.codeToHtml(code, {
-        lang: lang as any,
-        theme: 'github-dark',
-      })
+      try {
+        const highlightedLight = highlighter.codeToHtml(code, {
+          lang: lang,
+          theme: 'github-light',
+        })
+        const highlightedDark = highlighter.codeToHtml(code, {
+          lang: lang,
+          theme: 'github-dark',
+        })
 
-      // Create code block with header containing language and copy button
-      const codeBlockHtml = `
+        const codeBlockHtml = `
 <div class="shiki-code-block" data-code="${escapedCodeForAttr}">
   <div class="shiki-header">
     <span class="shiki-lang">${lang}</span>
@@ -174,18 +181,14 @@ async function renderMdxToHtml(content: string) {
       });
     })(this)">Copy</button>
   </div>
-  ${highlighted}
+  <div class="shiki-theme shiki-light">${highlightedLight}</div>
+  <div class="shiki-theme shiki-dark">${highlightedDark}</div>
 </div>`
 
-      processedContent = processedContent.replace(fullMatch, codeBlockHtml)
-    } catch {
-      // If language not supported, wrap in generic pre/code
-      const escapedCode = code
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-
-      const fallbackHtml = `
+        parent.children[index] = { type: 'html', value: codeBlockHtml }
+      } catch {
+        const escapedCode = escapeHtml(code)
+        const fallbackHtml = `
 <div class="shiki-code-block" data-code="${escapedCodeForAttr}">
   <div class="shiki-header">
     <span class="shiki-lang">${lang}</span>
@@ -201,22 +204,49 @@ async function renderMdxToHtml(content: string) {
   <pre class="shiki-fallback"><code>${escapedCode}</code></pre>
 </div>`
 
-      processedContent = processedContent.replace(fullMatch, fallbackHtml)
-    }
+        parent.children[index] = { type: 'html', value: fallbackHtml }
+      }
+    })
   }
+}
 
+function rehypeWrapTables() {
+  return (tree: any) => {
+    visit(
+      tree,
+      'element',
+      (node: any, index: number | undefined, parent: any) => {
+        if (!parent || typeof index !== 'number') return
+        if (node.tagName !== 'table') return
+
+        parent.children[index] = {
+          type: 'element',
+          tagName: 'div',
+          properties: { className: ['table-wrapper'] },
+          children: [node],
+        }
+      },
+    )
+  }
+}
+
+async function renderMdxToHtml(content: string) {
   // Use unified to process markdown with GFM support
   const result = await unified()
     .use(remarkParse)
     .use(remarkGfm)
+    .use(remarkShiki)
     .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypeRaw)
+    .use(rehypeSlug)
+    .use(rehypeAutolinkHeadings, { behavior: 'wrap' })
+    .use(rehypeWrapTables)
     .use(rehypeStringify, { allowDangerousHtml: true })
-    .process(processedContent)
-
+    .process(content)
   return String(result)
 }
 
-async function readBlogIndex(): Promise<BlogMeta[]> {
+async function readBlogIndex(): Promise<Array<BlogMeta>> {
   const files = await fs.readdir(BLOG_DIR)
   const entries = await Promise.all(
     files
@@ -264,7 +294,7 @@ async function readBlogPost(slug: string): Promise<BlogPost | null> {
   }
 }
 
-async function readBlogPostsWithHtml(): Promise<BlogPost[]> {
+async function readBlogPostsWithHtml(): Promise<Array<BlogPost>> {
   const files = await fs.readdir(BLOG_DIR)
   const entries = await Promise.all(
     files
@@ -281,7 +311,7 @@ async function readBlogPostsWithHtml(): Promise<BlogPost[]> {
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }
 
-async function readProjectIndex(): Promise<ProjectMeta[]> {
+async function readProjectIndex(): Promise<Array<ProjectMeta>> {
   const files = await fs.readdir(PROJECT_DIR)
   const entries = await Promise.all(
     files
