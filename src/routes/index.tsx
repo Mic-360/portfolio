@@ -158,7 +158,6 @@ function App() {
               <span className="text-primary">~</span>
               <span>{role.role}</span>
               <span className="text-primary">[{role.location}]</span>
-              <span className="text-destructive">{role.date}</span>
             </div>
           ))}
         </div>
@@ -181,11 +180,6 @@ function App() {
               <p className="text-muted-foreground group-hover:text-foreground text-xs">
                 {post.summary}
               </p>
-              {(post.categories.length > 0 || post.tags.length > 0) && (
-                <p className="text-[0.55rem] uppercase tracking-[0.2em] text-primary/80">
-                  {[...post.categories, ...post.tags].join(' · ')}
-                </p>
-              )}
             </Link>
           ))}
         </div>
@@ -216,12 +210,6 @@ function App() {
                   <p className="text-xs text-muted-foreground group-hover:text-foreground">
                     {project.summary}
                   </p>
-                  {(project.categories.length > 0 ||
-                    project.tags.length > 0) && (
-                    <p className="text-[0.55rem] uppercase tracking-[0.2em] text-primary/80">
-                      {[...project.categories, ...project.tags].join(' · ')}
-                    </p>
-                  )}
                 </Link>
               ))}
             </div>
@@ -235,7 +223,7 @@ function App() {
           <img
             src="/logo.gif"
             alt="dev logo gif"
-            className="w-full md:w-48 h-full object-cover rounded-md mix-blend-screen opacity-75"
+            className="w-full md:w-48 h-40 object-cover rounded-md mix-blend-screen opacity-75"
           />
         </div>
       </Section>
