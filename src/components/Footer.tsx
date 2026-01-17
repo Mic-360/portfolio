@@ -32,7 +32,7 @@ function RssIcon() {
 
 export default function Footer() {
   return (
-    <footer className="mx-auto w-full max-w-2xl px-4 pb-12 pt-12 text-sm text-primary">
+    <footer className="mx-auto w-full max-w-2xl p-4 text-sm text-primary">
       <ul className="flex flex-wrap gap-4 lowercase">
         <li>
           <Link

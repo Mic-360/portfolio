@@ -72,7 +72,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         />
       </head>
       <body className="bg-background text-foreground antialiased">
-        <Header />
+        {/* <Header /> */}
         <main className="mx-auto w-full max-w-2xl p-4 text-sm lowercase">
           {children}
         </main>

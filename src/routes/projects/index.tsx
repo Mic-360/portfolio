@@ -39,7 +39,7 @@ function ProjectsIndex() {
       <div className="flex flex-col gap-2">
         <h1 className="text-lg font-semibold italic">Projects</h1>
         <p className="text-muted-foreground">
-          A short list of work across AI, product, and full‑stack builds.
+          A short list of work across products with full‑stack builds of web and android apps using AI or integrating AI.
         </p>
       </div>
       <div className="flex flex-col gap-4">
@@ -55,7 +55,7 @@ function ProjectsIndex() {
               <span className="h-px w-8 bg-primary/60"></span>
               <span>{formatDate(project.date)}</span>
             </div>
-            <p className="text-muted-foreground group-hover:text-foreground">
+            <p className="text-xs text-muted-foreground group-hover:text-foreground">
               {project.summary}
             </p>
             {project.stack.length > 0 && (
@@ -63,14 +63,15 @@ function ProjectsIndex() {
                 {project.stack.join(' · ')}
               </p>
             )}
-            {(project.categories.length > 0 || project.tags.length > 0) && (
-              <p className="text-[0.65rem] uppercase tracking-[0.2em] text-primary/80">
-                {[...project.categories, ...project.tags].join(' · ')}
-              </p>
-            )}
           </Link>
         ))}
       </div>
+      <Link
+        to="/"
+        className="mr-2 inline-flex items-center gap-1 italic"
+      >
+        ← back
+      </Link>
     </section>
   )
 }

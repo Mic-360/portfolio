@@ -132,17 +132,25 @@ function App() {
                 rel="noopener noreferrer"
                 className="underline decoration-primary underline-offset-4"
               >
+                {role.icon && (
+                  <img
+                    src={role.icon}
+                    alt={role.company}
+                    className="inline-block w-4 h-4 mr-1 mb-0.5 rounded-md object-cover"
+                  />
+                )}
                 {role.company}
               </a>
               <span className="text-primary">~</span>
               <span>{role.role}</span>
               <span className="text-primary">[{role.location}]</span>
+              <span className="text-destructive">{role.date}</span>
             </div>
           ))}
         </div>
       </Section>
 
-      <Section title="writings">
+      <Section title="blogs">
         <div className="flex flex-col gap-2">
           {posts.slice(0, 3).map((post) => (
             <Link
@@ -171,11 +179,11 @@ function App() {
           to="/blog/"
           className="text-xs uppercase tracking-[0.2em] text-primary hover:text-primary/80 mt-2"
         >
-          Read all writings
+          Read all blogs
         </Link>
       </Section>
 
-      <Section title="builds">
+      <Section title="projects">
         <div className="flex flex-col-reverse md:flex-row items-start md:items-center justify-between gap-4">
           <div className="space-y-4">
             <div className="flex flex-col gap-2">
@@ -207,7 +215,7 @@ function App() {
               to="/projects/"
               className="text-xs uppercase tracking-[0.2em] text-primary hover:text-primary/80"
             >
-              Read all projects
+              View all projects
             </Link>
           </div>
           <img
