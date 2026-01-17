@@ -1,4 +1,3 @@
-import { Resvg } from '@resvg/resvg-js'
 import { siteMeta } from './site-data'
 
 type OgImageOptions = {
@@ -47,8 +46,9 @@ function buildOgSvg({ title, description, label, date }: OgImageOptions) {
 </svg>`
 }
 
-export function createOgImageResponse(options: OgImageOptions) {
+export async function createOgImageResponse(options: OgImageOptions) {
 	const svg = buildOgSvg(options)
+	const { Resvg } = await import('@resvg/resvg-js')
 	const resvg = new Resvg(svg, {
 		fitTo: {
 			mode: 'width',

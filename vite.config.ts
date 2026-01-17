@@ -1,14 +1,43 @@
-import { defineConfig } from 'vite'
+import { URL, fileURLToPath } from 'node:url'
 import { devtools } from '@tanstack/devtools-vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import viteReact from '@vitejs/plugin-react'
+import { defineConfig } from 'vite'
 import viteTsConfigPaths from 'vite-tsconfig-paths'
-import { fileURLToPath, URL } from 'url'
 
 import tailwindcss from '@tailwindcss/vite'
 import { nitro } from 'nitro/vite'
 
 const config = defineConfig({
+  server: {
+    allowedHosts: ['.trycloudflare.com'],
+  },
+  ssr: {
+    external: [
+      '@resvg/resvg-js',
+      '@resvg/resvg-js-win32-x64-msvc',
+      '@resvg/resvg-js-win32-ia32-msvc',
+      '@resvg/resvg-js-win32-arm64-msvc',
+    ],
+  },
+  optimizeDeps: {
+    exclude: [
+      '@resvg/resvg-js',
+      '@resvg/resvg-js-win32-x64-msvc',
+      '@resvg/resvg-js-win32-ia32-msvc',
+      '@resvg/resvg-js-win32-arm64-msvc',
+    ],
+  },
+  build: {
+    rollupOptions: {
+      external: [
+        '@resvg/resvg-js',
+        '@resvg/resvg-js-win32-x64-msvc',
+        '@resvg/resvg-js-win32-ia32-msvc',
+        '@resvg/resvg-js-win32-arm64-msvc',
+      ],
+    },
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
