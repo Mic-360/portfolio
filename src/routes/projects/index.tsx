@@ -12,6 +12,7 @@ export const Route = createFileRoute('/projects/')({
     const title = `Projects | ${siteMeta.defaultTitle}`
     const description = 'Selected projects across Android, AI, and web.'
     const imageUrl = `${siteMeta.baseUrl}${siteMeta.defaultImage}`
+    const canonicalUrl = `${siteMeta.baseUrl}/projects`
 
     return {
       meta: [
@@ -22,11 +23,16 @@ export const Route = createFileRoute('/projects/')({
         { property: 'og:type', content: 'website' },
         { property: 'og:url', content: `${siteMeta.baseUrl}/projects` },
         { property: 'og:image', content: imageUrl },
+        { property: 'og:image:width', content: '1200' },
+        { property: 'og:image:height', content: '630' },
+        { property: 'og:image:type', content: 'image/png' },
         { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: title },
         { name: 'twitter:description', content: description },
         { name: 'twitter:image', content: imageUrl },
+        { name: 'twitter:image:alt', content: title },
       ],
+      links: [{ rel: 'canonical', href: canonicalUrl }],
     }
   },
   component: ProjectsIndex,
@@ -50,7 +56,11 @@ function ProjectsIndex() {
       <div className="flex flex-col gap-6">
         {projects.map((project) => (
           <div key={project.slug} className="flex items-center gap-2">
-            <img src={project.image} alt={project.title} className="w-20 h-20 object-cover rounded" />
+            <img
+              src={project.image}
+              alt={project.title}
+              className="w-20 h-20 object-cover rounded"
+            />
             <Link
               to="/projects/$slug"
               params={{ slug: project.slug }}

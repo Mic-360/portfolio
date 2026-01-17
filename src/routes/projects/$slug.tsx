@@ -17,27 +17,45 @@ export const Route = createFileRoute('/projects/$slug')({
     const { project } = loaderData
     const title = `${project.title} | ${siteMeta.defaultTitle}`
     const description = project.summary
-    const imageUrl = `${siteMeta.baseUrl}${project.image ?? siteMeta.defaultImage}`
+    const imageUrl = project.image
+      ? `${siteMeta.baseUrl}${project.image}`
+      : `${siteMeta.baseUrl}/og/projects/${project.slug}`
     const keywords = [...project.categories, ...project.tags].join(', ')
+    const canonicalUrl = `${siteMeta.baseUrl}/projects/${project.slug}`
 
     return {
       meta: [
         { title },
         { name: 'description', content: description },
         { name: 'keywords', content: keywords },
+        { name: 'robots', content: 'index, follow' },
         { property: 'og:title', content: title },
         { property: 'og:description', content: description },
         { property: 'og:type', content: 'article' },
         {
           property: 'og:url',
-          content: `${siteMeta.baseUrl}/projects/${project.slug}`,
+          content: canonicalUrl,
         },
         { property: 'og:image', content: imageUrl },
+        { property: 'og:image:width', content: '1200' },
+        { property: 'og:image:height', content: '630' },
+        { property: 'og:image:type', content: 'image/png' },
+        { property: 'article:published_time', content: project.date },
         { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: title },
         { name: 'twitter:description', content: description },
         { name: 'twitter:image', content: imageUrl },
+        { name: 'twitter:image:alt', content: project.title },
+        ...project.categories.map((category) => ({
+          property: 'article:section',
+          content: category,
+        })),
+        ...project.tags.map((tag) => ({
+          property: 'article:tag',
+          content: tag,
+        })),
       ],
+      links: [{ rel: 'canonical', href: canonicalUrl }],
     }
   },
   component: ProjectDetail,
@@ -51,7 +69,7 @@ function ProjectDetail() {
       <section className="flex flex-col gap-4">
         <h1 className="text-lg font-semibold italic">project not found</h1>
         <Link
-          to="/projects/"
+          to="/projects"
           className="text-xs uppercase tracking-[0.2em] text-primary hover:text-primary/80"
         >
           back to projects
@@ -60,8 +78,29 @@ function ProjectDetail() {
     )
   }
 
+  const canonicalUrl = `${siteMeta.baseUrl}/projects/${project.slug}`
+  const imageUrl = project.image
+    ? `${siteMeta.baseUrl}${project.image}`
+    : `${siteMeta.baseUrl}/og/projects/${project.slug}`
+  const projectJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: project.title,
+    description: project.summary,
+    datePublished: project.date,
+    image: imageUrl,
+    url: canonicalUrl,
+    keywords: [...project.categories, ...project.tags].join(', '),
+  }
+
   return (
     <article className="flex flex-col gap-6">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(projectJsonLd),
+        }}
+      />
       <header className="flex flex-col gap-2">
         <h1 className="text-xl font-semibold italic">{project.title}</h1>
         <p className="text-xs uppercase tracking-[0.2em] text-primary">
@@ -104,7 +143,7 @@ function ProjectDetail() {
         dangerouslySetInnerHTML={{ __html: project.html }}
       />
       <Link
-        to="/projects/"
+        to="/projects"
         className="text-xs uppercase tracking-[0.2em] text-primary hover:text-primary/80"
       >
         back to projects

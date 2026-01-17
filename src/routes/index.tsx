@@ -8,7 +8,7 @@ import {
   siteInfo,
   siteMeta,
 } from '@/lib/site-data'
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { Link, createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
   loader: async () => {
@@ -26,6 +26,7 @@ export const Route = createFileRoute('/')({
     const title = siteMeta.defaultTitle
     const description = siteMeta.defaultDescription
     const imageUrl = `${siteMeta.baseUrl}${siteMeta.defaultImage}`
+    const canonicalUrl = siteMeta.baseUrl
 
     return {
       meta: [
@@ -36,11 +37,16 @@ export const Route = createFileRoute('/')({
         { property: 'og:type', content: 'website' },
         { property: 'og:url', content: siteMeta.baseUrl },
         { property: 'og:image', content: imageUrl },
+        { property: 'og:image:width', content: '1200' },
+        { property: 'og:image:height', content: '630' },
+        { property: 'og:image:type', content: 'image/png' },
         { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: title },
         { name: 'twitter:description', content: description },
         { name: 'twitter:image', content: imageUrl },
+        { name: 'twitter:image:alt', content: title },
       ],
+      links: [{ rel: 'canonical', href: canonicalUrl }],
     }
   },
   component: App,
@@ -184,7 +190,7 @@ function App() {
           ))}
         </div>
         <Link
-          to="/blog/"
+          to="/blog"
           className="text-xs uppercase tracking-[0.2em] text-white underline decoration-primary underline-offset-4 mt-2"
         >
           Read all blogs
@@ -214,7 +220,7 @@ function App() {
               ))}
             </div>
             <Link
-              to="/projects/"
+              to="/projects"
               className="text-xs uppercase tracking-[0.2em] text-white underline decoration-primary underline-offset-4"
             >
               View all projects

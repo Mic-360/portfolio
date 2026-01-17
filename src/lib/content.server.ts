@@ -382,3 +382,5 @@ export const getProjectBySlug = createServerFn({ method: 'GET' })
 export const getBlogIndexInternal = readBlogIndex
 export const getBlogPostsWithHtmlInternal = readBlogPostsWithHtml
 export const getProjectIndexInternal = readProjectIndex
+export const getBlogPostBySlugInternal = readBlogPost
+export const getProjectBySlugInternal = readProjectPost

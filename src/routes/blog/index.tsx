@@ -1,7 +1,7 @@
 import PenIcon from '@/components/ui/pen-icon'
 import { getBlogIndex } from '@/lib/content.server'
 import { formatDate } from '@/lib/format'
-import { siteInfo, siteMeta } from '@/lib/site-data'
+import { siteMeta } from '@/lib/site-data'
 import { createFileRoute, Link } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/blog/')({
@@ -12,6 +12,7 @@ export const Route = createFileRoute('/blog/')({
     const title = `Blog | ${siteMeta.defaultTitle}`
     const description = 'Writing and notes from recent builds and experiments.'
     const imageUrl = `${siteMeta.baseUrl}${siteMeta.defaultImage}`
+    const canonicalUrl = `${siteMeta.baseUrl}/blog`
 
     return {
       meta: [
@@ -22,11 +23,16 @@ export const Route = createFileRoute('/blog/')({
         { property: 'og:type', content: 'website' },
         { property: 'og:url', content: `${siteMeta.baseUrl}/blog` },
         { property: 'og:image', content: imageUrl },
+        { property: 'og:image:width', content: '1200' },
+        { property: 'og:image:height', content: '630' },
+        { property: 'og:image:type', content: 'image/png' },
         { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: title },
         { name: 'twitter:description', content: description },
         { name: 'twitter:image', content: imageUrl },
+        { name: 'twitter:image:alt', content: title },
       ],
+      links: [{ rel: 'canonical', href: canonicalUrl }],
     }
   },
   component: BlogIndex,

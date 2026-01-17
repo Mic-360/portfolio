@@ -26,7 +26,11 @@ export const siteMeta = {
   defaultTitle: 'Bhaumik Singh — Portfolio',
   defaultDescription:
     'Full stack engineer building Android, AI, and cloud products with a love for modern web systems.',
-  defaultImage: '/logo.gif',
+  defaultImage: '/og/site',
+  siteName: 'Bhaumik Singh',
+  locale: 'en_US',
+  twitterHandle: '@bhaumicsingh',
+  themeColor: '#0f172a',
 }
 
 export const previousRoles = [
@@ -56,7 +60,7 @@ export const previousRoles = [
   },
 ]
 
-export const socialLinks: SocialLink[] = [
+export const socialLinks: Array<SocialLink> = [
   { label: 'rss', url: '/rss' },
   { label: 'x', url: 'https://x.com/bhaumicsingh' },
   { label: 'instagram', url: 'https://www.instagram.com/bhaumic.me/' },

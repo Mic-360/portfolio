@@ -13,8 +13,12 @@ import { Route as RssRouteImport } from './routes/rss'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
+import { Route as SitemapXmlRouteImport } from './routes/sitemap.xml'
 import { Route as ProjectsSlugRouteImport } from './routes/projects/$slug'
+import { Route as OgSiteRouteImport } from './routes/og/site'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
+import { Route as OgProjectsSlugRouteImport } from './routes/og/projects/$slug'
+import { Route as OgBlogSlugRouteImport } from './routes/og/blog/$slug'
 
 const RssRoute = RssRouteImport.update({
   id: '/rss',
@@ -36,9 +40,19 @@ const BlogIndexRoute = BlogIndexRouteImport.update({
   path: '/blog/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitemapXmlRoute = SitemapXmlRouteImport.update({
+  id: '/sitemap/xml',
+  path: '/sitemap/xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProjectsSlugRoute = ProjectsSlugRouteImport.update({
   id: '/projects/$slug',
   path: '/projects/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OgSiteRoute = OgSiteRouteImport.update({
+  id: '/og/site',
+  path: '/og/site',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
@@ -46,31 +60,53 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OgProjectsSlugRoute = OgProjectsSlugRouteImport.update({
+  id: '/og/projects/$slug',
+  path: '/og/projects/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OgBlogSlugRoute = OgBlogSlugRouteImport.update({
+  id: '/og/blog/$slug',
+  path: '/og/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/rss': typeof RssRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/og/site': typeof OgSiteRoute
   '/projects/$slug': typeof ProjectsSlugRoute
+  '/sitemap/xml': typeof SitemapXmlRoute
   '/blog/': typeof BlogIndexRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/og/blog/$slug': typeof OgBlogSlugRoute
+  '/og/projects/$slug': typeof OgProjectsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/rss': typeof RssRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/og/site': typeof OgSiteRoute
   '/projects/$slug': typeof ProjectsSlugRoute
+  '/sitemap/xml': typeof SitemapXmlRoute
   '/blog': typeof BlogIndexRoute
   '/projects': typeof ProjectsIndexRoute
+  '/og/blog/$slug': typeof OgBlogSlugRoute
+  '/og/projects/$slug': typeof OgProjectsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/rss': typeof RssRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/og/site': typeof OgSiteRoute
   '/projects/$slug': typeof ProjectsSlugRoute
+  '/sitemap/xml': typeof SitemapXmlRoute
   '/blog/': typeof BlogIndexRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/og/blog/$slug': typeof OgBlogSlugRoute
+  '/og/projects/$slug': typeof OgProjectsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -78,28 +114,50 @@ export interface FileRouteTypes {
     | '/'
     | '/rss'
     | '/blog/$slug'
+    | '/og/site'
     | '/projects/$slug'
+    | '/sitemap/xml'
     | '/blog/'
     | '/projects/'
+    | '/og/blog/$slug'
+    | '/og/projects/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/rss' | '/blog/$slug' | '/projects/$slug' | '/blog' | '/projects'
+  to:
+    | '/'
+    | '/rss'
+    | '/blog/$slug'
+    | '/og/site'
+    | '/projects/$slug'
+    | '/sitemap/xml'
+    | '/blog'
+    | '/projects'
+    | '/og/blog/$slug'
+    | '/og/projects/$slug'
   id:
     | '__root__'
     | '/'
     | '/rss'
     | '/blog/$slug'
+    | '/og/site'
     | '/projects/$slug'
+    | '/sitemap/xml'
     | '/blog/'
     | '/projects/'
+    | '/og/blog/$slug'
+    | '/og/projects/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   RssRoute: typeof RssRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  OgSiteRoute: typeof OgSiteRoute
   ProjectsSlugRoute: typeof ProjectsSlugRoute
+  SitemapXmlRoute: typeof SitemapXmlRoute
   BlogIndexRoute: typeof BlogIndexRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
+  OgBlogSlugRoute: typeof OgBlogSlugRoute
+  OgProjectsSlugRoute: typeof OgProjectsSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -132,11 +190,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sitemap/xml': {
+      id: '/sitemap/xml'
+      path: '/sitemap/xml'
+      fullPath: '/sitemap/xml'
+      preLoaderRoute: typeof SitemapXmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/projects/$slug': {
       id: '/projects/$slug'
       path: '/projects/$slug'
       fullPath: '/projects/$slug'
       preLoaderRoute: typeof ProjectsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/og/site': {
+      id: '/og/site'
+      path: '/og/site'
+      fullPath: '/og/site'
+      preLoaderRoute: typeof OgSiteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/$slug': {
@@ -146,6 +218,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/og/projects/$slug': {
+      id: '/og/projects/$slug'
+      path: '/og/projects/$slug'
+      fullPath: '/og/projects/$slug'
+      preLoaderRoute: typeof OgProjectsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/og/blog/$slug': {
+      id: '/og/blog/$slug'
+      path: '/og/blog/$slug'
+      fullPath: '/og/blog/$slug'
+      preLoaderRoute: typeof OgBlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -153,9 +239,13 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   RssRoute: RssRoute,
   BlogSlugRoute: BlogSlugRoute,
+  OgSiteRoute: OgSiteRoute,
   ProjectsSlugRoute: ProjectsSlugRoute,
+  SitemapXmlRoute: SitemapXmlRoute,
   BlogIndexRoute: BlogIndexRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
+  OgBlogSlugRoute: OgBlogSlugRoute,
+  OgProjectsSlugRoute: OgProjectsSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

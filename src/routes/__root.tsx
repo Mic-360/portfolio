@@ -7,6 +7,7 @@ import {
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
 import Footer from '../components/Footer'
+import { siteInfo, siteMeta } from '../lib/site-data'
 
 import appCss from '../styles.css?url'
 
@@ -35,6 +36,30 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: 'width=device-width, initial-scale=1',
       },
       {
+        name: 'theme-color',
+        content: siteMeta.themeColor,
+      },
+      {
+        name: 'robots',
+        content: 'index, follow',
+      },
+      {
+        property: 'og:site_name',
+        content: siteMeta.siteName,
+      },
+      {
+        property: 'og:locale',
+        content: siteMeta.locale,
+      },
+      {
+        name: 'twitter:site',
+        content: siteMeta.twitterHandle,
+      },
+      {
+        name: 'twitter:creator',
+        content: siteMeta.twitterHandle,
+      },
+      {
         title: 'Bhaumik Singh — Portfolio',
       },
     ],
@@ -43,6 +68,24 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         rel: 'stylesheet',
         href: appCss,
       },
+      {
+        rel: 'icon',
+        href: '/logo.gif',
+      },
+      {
+        rel: 'apple-touch-icon',
+        href: '/logo.gif',
+      },
+      {
+        rel: 'manifest',
+        href: '/manifest.json',
+      },
+      {
+        rel: 'alternate',
+        type: 'application/rss+xml',
+        title: 'RSS',
+        href: '/rss',
+      },
     ],
   }),
 
@@ -50,10 +93,28 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const websiteJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: siteMeta.siteName,
+    url: siteMeta.baseUrl,
+    description: siteMeta.defaultDescription,
+    publisher: {
+      '@type': 'Person',
+      name: siteInfo.name,
+    },
+  }
+
   return (
     <html lang="en" data-theme="dark">
       <head>
         <HeadContent />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteJsonLd),
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `
