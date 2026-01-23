@@ -1,0 +1,264 @@
+---
+title: 'From React to Reflex: Unnecessary Abstraction Hell'
+date: '2026-01-24'
+summary: "A journey from React to Python's Reflex framework, exploring the pitfalls of unnecessary abstractions and the value of using the right tool for the job."
+tags:
+  - 'python'
+  - 'react'
+  - 'reflex'
+  - 'web-development'
+categories:
+  - 'Engineering'
+image: '/blog/why-reflex.png'
+---
+
+# From React to Reflex: A Journey Through Unnecessary Abstraction Hell
+
+> Or: How I Learned to Stop Worrying and Hate Python Web Frameworks
+
+![Why Reflex](/blog/why-reflex.png)
+
+So there I was, minding my own business with a perfectly functional React + Vite dashboard. Clean code, fast builds, straightforward TypeScript. Life was good. The dashboard worked. Users were happy. Then someone had a brilliant idea: "Hey, let's rewrite this in Python!" (I'm that someone.)
+
+Why? Because apparently, I hate myself.
+
+## The Migration Begins
+
+"It'll be easy," they said. "Reflex is just Python," they said. "You won't even need to touch JavaScript," they said.
+
+**Inner voice:** _It was not easy._
+
+### What I Expected
+
+```python
+# Beautiful, Pythonic code
+def dashboard():
+    return render_my_beautiful_ui()
+```
+
+### What I Got
+
+```python
+# This is literally just React with extra steps
+def business_row(business: dict) -> rx.Component:
+    return rx.table.row(
+        rx.table.cell(
+            rx.hstack(
+                rx.box(
+                    rx.icon("building-2", size=18, style={"color": COLORS["mauve"]}),
+                    style={"background": COLORS["surface0"]},
+                    class_name="w-10 h-10 rounded-full flex items-center justify-center",
+                ),
+                # ... 50 more lines of this nonsense
+```
+
+Wait a minute... `class_name`? `style`? `rx.hstack`? This is just JSX with Python syntax!
+
+![The Wrapper Nightmare](/blog/wrapper_nightmare.png)
+
+## The "Python" Experience
+
+Let me tell you about the "Python coding experience" I got:
+
+### String Concatenation? LOL
+
+Remember simple string concatenation? Yeah, forget about it.
+
+**Before (React):**
+
+```jsx
+<img src={`https://s3.amazonaws.com/${image}`} />
+```
+
+**After (Reflex):**
+
+```python
+rx.image(
+    src="https://s3.amazonaws.com/" + log["personImage"].to(str),
+    # Because apparently log["personImage"] isn't a string
+    # It's a Var, which is a special Reflex type
+    # That you need to convert to string
+    # To concatenate with another string
+    # In Python
+    # The language known for easy string handling
+)
+```
+
+### Dict Access? Think Again
+
+**Before (React):**
+
+```jsx
+business.name.substring(0, 2).toUpperCase()
+```
+
+**After (Reflex):**
+
+```python
+# Can't do this - Var types don't support slicing
+# business["businessName"][0:2].upper()
+
+# Have to do this instead:
+rx.icon("building-2")  # Just use an icon, who needs initials anyway?
+```
+
+### Empty Strings? Not Allowed
+
+My favorite error message:
+
+```
+Error: A <Select.Item /> must have a value prop that is not an empty string.
+```
+
+So I had to create a special `__all__` value and convert it back to empty string in the state handler. In Python. The language where `""` is literally just `""`.
+
+## The Styling Nightmare
+
+"Use Tailwind!" they said. So I did. But here's the thing - I'm writing Tailwind classes... in Python strings... that get compiled to React... that renders HTML.
+
+```python
+class_name="rounded-xl border p-5 hover:border-[#45475a] transition-colors duration-200"
+```
+
+This is literally just HTML with extra steps. I could be writing this in a `.jsx` file with proper syntax highlighting, autocomplete, and type checking. Instead, I'm writing it in Python strings where my IDE thinks I'm just typing random words.
+
+## The Build Process
+
+![Waiting for Build](/blog/waiting_for_build.png)
+
+**React + Vite:**
+
+- `npm run dev` - 200ms startup
+- Hot reload - instant
+- Build - 2 seconds
+
+**Reflex:**
+
+- `reflex run` - Wait for Python to start
+- Wait for Reflex to compile
+- Wait for the frontend to build
+- Wait for the backend to start
+- Oh, you changed a component? Let's recompile everything!
+- Port 8000 already in use? Cool, we'll use 8001
+- Hope you like seeing deprecation warnings about Pydantic v1!
+
+## The "Benefits"
+
+Let me list the benefits of using Reflex over React:
+
+1. You can write Python instead of JavaScript
+2. ...
+3. That's it
+
+But wait! You're not really writing Python. You're writing React component trees with Python syntax. You're still thinking in components, props, and state. You're still writing Tailwind classes. You're still debugging browser issues.
+
+The only difference is now you have:
+
+- Worse error messages
+- Slower build times
+- A massive abstraction layer
+- Type errors that make no sense
+- Documentation that's "still being written"
+- A framework that's wrapping React anyway
+
+## The Reality Check
+
+Here's what really happened:
+
+![React vs Reflex](/blog/react_vs_reflex.png)
+
+**Before:**
+
+- 260 lines of TypeScript
+- Clear type definitions
+- Fast development
+- Works everywhere
+
+**After:**
+
+- 456 lines of Python
+- Var types that pretend to be Python but aren't
+- Slower development
+- Still compiles to React anyway
+
+![Reflex Code IDE](/blog/reflex-code.png)
+
+## Why Does This Exist?
+
+I genuinely don't understand why frameworks like Reflex exist. The pitch is "write web apps in Python!" but the reality is "write React in Python syntax while fighting with type systems that don't make sense."
+
+If you want to write Python, write Python. Make a FastAPI backend. Use Jinja templates. Use HTMX if you want interactivity. These are proven, simple, fast.
+
+If you want to write modern web apps, write React. Or Vue. Or Svelte. Use the tools designed for the job.
+
+But don't use a framework that tries to be both and ends up being neither.
+
+## The Lessons Learned
+
+1. **Abstraction has a cost** - Every layer you add makes debugging harder
+2. **Python isn't magic** - Just because it's Python doesn't mean it's better
+3. **Learn the fundamentals** - React isn't that hard. TypeScript isn't that scary.
+4. **Use the right tool** - Python for backend, JavaScript for frontend. It's okay.
+5. **Hype is not architecture** - "Full-stack Python" sounds cool until you actually try it
+
+## The Conclusion
+
+Would I recommend Reflex? Only if you:
+
+- Hate yourself
+- Have unlimited time for debugging
+- Enjoy fighting with type systems
+- Think "it's in Python" is a valid technical argument
+- Want to explain to your team why the build is slow
+
+For everyone else: Just learn React. Seriously. It'll take you a weekend. You'll be more productive, have better tooling, and won't need to convert strings to strings before concatenating them.
+
+## The Irony
+
+The funniest part? After all this migration work, the app still:
+
+- Runs in a browser
+- Uses React under the hood
+- Requires Node.js to build
+- Needs JavaScript to run
+
+We just added Python as a middleman. Congratulations, we played ourselves.
+
+---
+
+## Final Thoughts
+
+Look, I get it. Python is comfortable. JavaScript can be weird. But you know what's weirder? Writing Python that isn't really Python to generate JavaScript that you could have just written directly.
+
+If you're a Python developer who wants to build web apps, I have two suggestions:
+
+1. **Learn React** - It's not that hard. There are thousands of tutorials. The ecosystem is mature. The tooling is excellent.
+
+2. **Stick to what Python is good at** - Backend APIs, data processing, machine learning. Let JavaScript handle the frontend.
+
+Don't fall for the "full-stack in one language" trap. It's a lie. You're still writing frontend code, just with worse tooling.
+
+If you're interested in reflex code, here's the project which was migrated:
+
+<div class="w-full items-center justify-center flex">
+<a
+  href="https://github.com/Mic-360/tryon-dash/tree/reflex"
+  target="_blank"
+  class="text-blue-600 underline flex items-center flex-col"
+>
+
+<svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
+  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+</svg>
+
+
+<span class="ml-2 text-lg font-semibold capitalize">TryOn Dash Reflex Code</span>
+
+</a>
+</div>
+
+---
+
+_Written while waiting for Reflex to recompile for the 47th time today_
+
+_P.S. - If you're a Reflex maintainer reading this, I'm sorry. Your framework is technically impressive. It's just solving a problem that doesn't need solving._
