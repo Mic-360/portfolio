@@ -1,26 +1,62 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+
+type ThemePreference = 'light' | 'dark'
+
+const resolveDocumentTheme = () => {
+  if (typeof document === 'undefined') return 'dark'
+  const attr = document.documentElement.getAttribute('data-theme')
+  return attr === 'light' || attr === 'dark' ? attr : 'dark'
+}
+
+const readStoredTheme = (): ThemePreference | null => {
+  try {
+    const stored = localStorage.getItem('theme')
+    return stored === 'light' || stored === 'dark' ? stored : null
+  } catch {
+    return null
+  }
+}
+
+const writeStoredTheme = (theme: ThemePreference) => {
+  try {
+    localStorage.setItem('theme', theme)
+  } catch {
+    // Ignore storage write errors (private mode/quota)
+  }
+}
+
+const applyTheme = (theme: ThemePreference) => {
+  if (typeof document === 'undefined') return
+  document.documentElement.setAttribute('data-theme', theme)
+  document.documentElement.classList.toggle('dark', theme === 'dark')
+}
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<'light' | 'dark'>('dark')
+  const [theme, setTheme] = useState<ThemePreference>(() =>
+    resolveDocumentTheme(),
+  )
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
-    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null
+    const savedTheme = readStoredTheme()
     if (savedTheme) {
       setTheme(savedTheme)
-      document.documentElement.setAttribute('data-theme', savedTheme)
-      document.documentElement.classList.toggle('dark', savedTheme === 'dark')
+      applyTheme(savedTheme)
+      return
     }
+
+    applyTheme(resolveDocumentTheme())
   }, [])
 
-  const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light'
-    setTheme(newTheme)
-    document.documentElement.setAttribute('data-theme', newTheme)
-    document.documentElement.classList.toggle('dark', newTheme === 'dark')
-    localStorage.setItem('theme', newTheme)
-  }
+  const toggleTheme = useCallback(() => {
+    setTheme((prevTheme) => {
+      const newTheme: ThemePreference = prevTheme === 'light' ? 'dark' : 'light'
+      applyTheme(newTheme)
+      writeStoredTheme(newTheme)
+      return newTheme
+    })
+  }, [])
 
   return (
     <button

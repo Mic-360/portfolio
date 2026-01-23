@@ -1,10 +1,9 @@
-import { TanStackDevtools } from '@tanstack/react-devtools'
 import {
   HeadContent,
   Scripts,
   createRootRouteWithContext,
 } from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
+import { Suspense, lazy } from 'react'
 
 import Footer from '../components/Footer'
 import { siteInfo, siteMeta } from '../lib/site-data'
@@ -12,6 +11,22 @@ import { siteInfo, siteMeta } from '../lib/site-data'
 import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
+
+const TanStackDevtools = import.meta.env.DEV
+  ? lazy(() =>
+      import('@tanstack/react-devtools').then((module) => ({
+        default: module.TanStackDevtools,
+      })),
+    )
+  : null
+
+const TanStackRouterDevtoolsPanel = import.meta.env.DEV
+  ? lazy(() =>
+      import('@tanstack/react-router-devtools').then((module) => ({
+        default: module.TanStackRouterDevtoolsPanel,
+      })),
+    )
+  : null
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -119,7 +134,13 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
-                var theme = localStorage.getItem('theme') || 'dark';
+                var theme = 'dark';
+                try {
+                  var stored = localStorage.getItem('theme');
+                  if (stored === 'light' || stored === 'dark') {
+                    theme = stored;
+                  }
+                } catch (e) {}
                 document.documentElement.setAttribute('data-theme', theme);
                 if (theme === 'dark') {
                   document.documentElement.classList.add('dark');
@@ -137,18 +158,22 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           {children}
         </main>
         <Footer />
-        <TanStackDevtools
-          config={{
-            position: 'bottom-right',
-          }}
-          plugins={[
-            {
-              name: 'Tanstack Router',
-              render: <TanStackRouterDevtoolsPanel />,
-              defaultOpen: true,
-            },
-          ]}
-        />
+        {TanStackDevtools && TanStackRouterDevtoolsPanel ? (
+          <Suspense fallback={null}>
+            <TanStackDevtools
+              config={{
+                position: 'bottom-right',
+              }}
+              plugins={[
+                {
+                  name: 'TanStack Router',
+                  render: <TanStackRouterDevtoolsPanel />,
+                  defaultOpen: true,
+                },
+              ]}
+            />
+          </Suspense>
+        ) : null}
         <Scripts />
       </body>
     </html>

@@ -30,7 +30,7 @@ export const siteMeta = {
   siteName: 'Bhaumik Singh',
   locale: 'en_US',
   twitterHandle: '@bhaumicsingh',
-  themeColor: '#0f172a',
+  themeColor: '#1e1e2e',
 }
 
 export const previousRoles = [
