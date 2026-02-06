@@ -119,7 +119,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html data-theme="dark" suppressHydrationWarning>
       <head>
         <HeadContent />
         <script
