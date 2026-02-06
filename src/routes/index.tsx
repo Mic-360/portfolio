@@ -107,7 +107,7 @@ function App() {
           </div>
         </div>
         <p className="italic">
-          i <span className="not-italic font-medium">build</span>{' '}
+          <span className="not-italic font-medium">i build</span>{' '}
           <span className="underline decoration-primary underline-offset-4">
             {siteInfo.buildLine}
           </span>
