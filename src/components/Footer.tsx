@@ -4,6 +4,7 @@ import InstagramIcon from './ui/instagram-icon'
 import LinkedinIcon from './ui/linkedin-icon'
 import TwitterIcon from './ui/twitter-icon'
 import { socialLinks } from '@/lib/site-data'
+import ThemeToggle from './ThemeToggle'
 
 const iconMap = {
   github: GithubIcon,
@@ -30,16 +31,43 @@ function RssIcon() {
   )
 }
 
+// AC Insignia SVG Component
+function AcInsignia() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-6 w-6 opacity-30 transition-opacity hover:opacity-80"
+      aria-hidden="true"
+    >
+      <path d="M12 2L2 22h3.5L8 16h8l2.5 6H22L12 2z" />
+      <path d="M12 22v-6" />
+      <circle cx="12" cy="16" r="1.5" />
+    </svg>
+  )
+}
+
 export default function Footer() {
   return (
-    <footer className="mx-auto w-full max-w-2xl p-4 text-sm text-primary">
-      <ul className="flex flex-wrap gap-4 lowercase">
+    <footer className="relative mx-auto w-full max-w-2xl p-4 text-sm text-primary">
+      {/* Separator with Diamond */}
+      <div className="mb-6 flex items-center justify-center gap-2 opacity-50">
+        <div className="h-px w-full bg-linear-to-r from-transparent via-border to-transparent" />
+        <div className="h-1.5 w-1.5 rotate-45 bg-primary/50" />
+        <div className="h-px w-full bg-linear-to-r from-transparent via-border to-transparent" />
+      </div>
+
+      <ul className="flex flex-wrap items-center gap-4 lowercase">
         <li>
           <Link
             to="/rss"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-primary transition hover:text-primary/80"
+            className="flex items-center gap-2 text-primary transition hover:text-primary/80 hover:animate-pulse-slow"
             aria-label="rss"
           >
             <RssIcon />
@@ -61,7 +89,7 @@ export default function Footer() {
                       ? 'noopener noreferrer'
                       : undefined
                   }
-                  className="flex items-center gap-2 text-primary transition hover:text-primary/80"
+                  className="flex items-center gap-2 text-primary transition hover:text-primary/80 hover:animate-pulse-slow"
                   aria-label={link.label}
                 >
                   <Icon size={20} className="text-primary" />
