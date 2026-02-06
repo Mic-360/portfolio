@@ -1,9 +1,9 @@
 import {
   HeadContent,
+  Link,
   Scripts,
   createRootRouteWithContext,
 } from '@tanstack/react-router'
-import { Suspense, lazy } from 'react'
 
 import Footer from '../components/Footer'
 import { siteInfo, siteMeta } from '../lib/site-data'
@@ -12,30 +12,12 @@ import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
 
-const TanStackDevtools = import.meta.env.DEV
-  ? lazy(() =>
-      import('@tanstack/react-devtools').then((module) => ({
-        default: module.TanStackDevtools,
-      })),
-    )
-  : null
-
-const TanStackRouterDevtoolsPanel = import.meta.env.DEV
-  ? lazy(() =>
-      import('@tanstack/react-router-devtools').then((module) => ({
-        default: module.TanStackRouterDevtoolsPanel,
-      })),
-    )
-  : null
-
 interface MyRouterContext {
   queryClient: QueryClient
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   beforeLoad: async () => {
-    // Other redirect strategies are possible; see
-    // https://github.com/TanStack/router/tree/main/examples/react/i18n-paraglide#offline-redirect
     if (typeof document !== 'undefined') {
       document.documentElement.setAttribute('lang', 'en')
     }
@@ -104,8 +86,24 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     ],
   }),
 
+  notFoundComponent: NotFound,
   shellComponent: RootDocument,
 })
+
+function NotFound() {
+  return (
+    <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 text-center">
+      <h1 className="text-6xl font-bold">404</h1>
+      <p className="text-xl text-muted-foreground">page not found</p>
+      <Link
+        to="/"
+        className="mt-4 rounded-lg bg-primary px-6 py-2 text-primary-foreground transition-colors hover:bg-primary/90"
+      >
+        go home
+      </Link>
+    </div>
+  )
+}
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   const websiteJsonLd = {
@@ -121,7 +119,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <html lang="en" data-theme="dark">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
         <script
@@ -130,50 +128,12 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             __html: JSON.stringify(websiteJsonLd),
           }}
         />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                var theme = 'dark';
-                try {
-                  var stored = localStorage.getItem('theme');
-                  if (stored === 'light' || stored === 'dark') {
-                    theme = stored;
-                  }
-                } catch (e) {}
-                document.documentElement.setAttribute('data-theme', theme);
-                if (theme === 'dark') {
-                  document.documentElement.classList.add('dark');
-                } else {
-                  document.documentElement.classList.remove('dark');
-                }
-              })();
-            `,
-          }}
-        />
       </head>
       <body className="bg-background text-foreground antialiased">
-        {/* <Header /> */}
         <main className="mx-auto w-full max-w-2xl p-4 text-sm lowercase">
           {children}
         </main>
         <Footer />
-        {TanStackDevtools && TanStackRouterDevtoolsPanel ? (
-          <Suspense fallback={null}>
-            <TanStackDevtools
-              config={{
-                position: 'bottom-right',
-              }}
-              plugins={[
-                {
-                  name: 'TanStack Router',
-                  render: <TanStackRouterDevtoolsPanel />,
-                  defaultOpen: true,
-                },
-              ]}
-            />
-          </Suspense>
-        ) : null}
         <Scripts />
       </body>
     </html>
