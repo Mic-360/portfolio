@@ -1,0 +1,64 @@
+---
+title: 'Spotify Looper'
+date: '2026-02-23'
+summary: 'A precision playback tool that empowers Spotify users to loop their favorite song segments and skip unwanted sections, elevating the standard listening experience.'
+stack:
+  - 'Flutter'
+  - 'Riverpod'
+  - 'Spotify SDK'
+  - 'Material 3'
+  - 'Web Auth'
+links:
+  - label: 'Live'
+    url: 'https://spotify-looper-cc1ad.web.app/'
+  - label: 'GitHub'
+    url: 'https://github.com/Mic-360/spotify_looper'
+tags:
+  - 'UX Improvement'
+  - 'Spotify API'
+  - 'Audio Control'
+categories:
+  - 'Web'
+  - 'Mobile'
+  - 'Utility'
+image: '/project/spotify-looper-mockup.png'
+---
+
+![Spotify Looper](/project/spotify-looper-mockup.png)
+
+# Spotify Looper
+
+Spotify Looper is a cross-platform utility designed to give users total control over their music playback. While Spotify is the world's most popular streaming service, it lacks granular tools for users who want to interact deeply with their tracks—looping specific highlights or skipping tedious sections.
+
+## The Problem
+
+The official Spotify experience is largely passive. Users have very little control over *how* they hear a specific track. If you want to hear a specific 10-second guitar solo on repeat, or if you want to skip an annoying skit in the middle of a song, you're forced to manual scrub or wait it out. Spotify lacks native A/B looping and precise segment boundaries.
+
+## The Solution
+
+I built Spotify Looper to elevate the listener's experience by providing the missing precision tools. Using the Spotify App Remote and Web Playback SDKs, the app allows for:
+
+- **Precision Looping**: Set millisecond-accurate start and end points to loop your favorite parts of any song.
+- **Segment Skipping**: Define boundaries to automatically skip over sections you don't like, such as long intros, bridges, or dialogues.
+- **Instrument Interaction**: For those who play along with their music, the app provides a stable "loop" environment to practice specific riffs without breaking flow.
+
+## Highlights
+
+- **Seamless Sync**: Synchronizes with your active Spotify session across devices.
+- **Dynamic Interface**: A Material 3 UI that evolves based on the album art of the track you're currently looping.
+- **Cross-Platform**: Built once with Flutter to serve both Android users and Web listeners.
+
+## Results
+
+Spotify Looper successfully fills a niche that the main Spotify app ignores. It transforms a passive listening session into an active, curated experience, allowing users to "edit" their music in real-time.
+
+## What I learned
+
+Creating a tool that sits "on top" of an existing giant like Spotify required deep understanding of:
+- **SDK Limitations**: Navigating the differences between the Spotify Web SDK and the Native Android SDK.
+- **Real-time UX**: Designing a progress bar and marker system that remains responsive even during high-frequency looping.
+- **User Agency**: Focusing the design on giving power back to the user, rather than following standard streaming app conventions.
+
+---
+
+If you'd like a walkthrough of the architecture or want to contribute, feel free to reach out.

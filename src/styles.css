@@ -266,6 +266,19 @@ code {
     0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
+.mdx-content .image-grid {
+  display: flex;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.mdx-content .image-grid img {
+  flex: 1;
+  min-width: 200px;
+  margin: 0;
+}
+
 /* Shiki syntax highlighted code blocks */
 .mdx-content .shiki-code-block {
   margin-bottom: 1.25rem;
