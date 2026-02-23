@@ -19,6 +19,7 @@ export const siteInfo = {
     'Recent grad from ITER, SOA University with impeccable academics and a passion for innovation.',
   interests:
     'I enjoy building, deploying, and designing experiments with code and bleeding edge technology — and occasional anime binge.',
+  calendlyUrl: 'https://calendly.com/bhaumic/connect-with-bhaumic',
 }
 
 export const siteMeta = {

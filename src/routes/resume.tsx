@@ -51,7 +51,7 @@ function ResumePage() {
             />
 
             <a
-                href="/Resume_Bhaumik.pdf"
+                href="/Resume-web.pdf"
                 download
                 className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-primary hover:text-white transition-colors"
             >

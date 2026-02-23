@@ -1,5 +1,6 @@
 import LayersIcon from '@/components/ui/layers-icon'
 import PenIcon from '@/components/ui/pen-icon'
+import CalendarIcon from '@/components/ui/calendar-icon'
 import { getBlogIndex, getProjectIndex } from '@/lib/content.server'
 import { formatDate } from '@/lib/format'
 import {
@@ -261,26 +262,15 @@ function App() {
               {i < contactLinks.length - 1 ? ', ' : ' '}
             </span>
           ))}
-          or e-mail me at{' '}
+          or book a call with me on
           <a
-            href="mailto:bhaumiksingh2000@gmail.com"
-            className="underline decoration-primary pl-1"
+            href={siteInfo.calendlyUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline decoration-primary pl-1 inline-flex items-center gap-1 group"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="inline-block w-4 h-4 mr-1 mb-0.5 text-teal-500"
-            >
-              <path d="M22 17a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8z" />
-              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-            </svg>
+            calendly
+            <CalendarIcon size={16} className="inline-block mr-1 mb-0.5 text-teal-500" />
           </a>
           .
         </p>
