@@ -60,4 +60,7 @@ export const socialLinks: Array<SocialLink> = [
   { label: 'linkedin', url: 'https://www.linkedin.com/in/bhaumic/' },
 ]
 
-export const contactLinks = [{ label: 'resume', url: '/resume' }]
+export const contactLinks = [
+  { label: 'resume', url: '/resume' },
+  { label: 'bento', url: '/bento' },
+]

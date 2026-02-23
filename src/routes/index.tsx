@@ -229,15 +229,22 @@ function App() {
         </div>
       </Section>
 
+
+
       <Section title="contact">
         <p>
           interested to talk? read my{' '}
-          <Link
-            to={contactLinks[0].url}
-            className="underline decoration-primary underline-offset-4"
-          >
-            resume
-          </Link>{' '}
+          {contactLinks.map((link, i) => (
+            <span key={link.label}>
+              <Link
+                to={link.url}
+                className="underline decoration-primary underline-offset-4"
+              >
+                {link.label}
+              </Link>
+              {i < contactLinks.length - 1 ? ', ' : ' '}
+            </span>
+          ))}
           or e-mail me at{' '}
           <a
             href="mailto:bhaumiksingh2000@gmail.com"

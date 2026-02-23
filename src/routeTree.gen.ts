@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RssRouteImport } from './routes/rss'
 import { Route as ResumeRouteImport } from './routes/resume'
+import { Route as BentoRouteImport } from './routes/bento'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
@@ -29,6 +30,11 @@ const RssRoute = RssRouteImport.update({
 const ResumeRoute = ResumeRouteImport.update({
   id: '/resume',
   path: '/resume',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BentoRoute = BentoRouteImport.update({
+  id: '/bento',
+  path: '/bento',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -79,6 +85,7 @@ const OgBlogSlugRoute = OgBlogSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/bento': typeof BentoRoute
   '/resume': typeof ResumeRoute
   '/rss': typeof RssRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -92,6 +99,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/bento': typeof BentoRoute
   '/resume': typeof ResumeRoute
   '/rss': typeof RssRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -106,6 +114,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/bento': typeof BentoRoute
   '/resume': typeof ResumeRoute
   '/rss': typeof RssRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -121,6 +130,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/bento'
     | '/resume'
     | '/rss'
     | '/blog/$slug'
@@ -134,6 +144,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/bento'
     | '/resume'
     | '/rss'
     | '/blog/$slug'
@@ -147,6 +158,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/bento'
     | '/resume'
     | '/rss'
     | '/blog/$slug'
@@ -161,6 +173,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BentoRoute: typeof BentoRoute
   ResumeRoute: typeof ResumeRoute
   RssRoute: typeof RssRoute
   BlogSlugRoute: typeof BlogSlugRoute
@@ -187,6 +200,13 @@ declare module '@tanstack/react-router' {
       path: '/resume'
       fullPath: '/resume'
       preLoaderRoute: typeof ResumeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bento': {
+      id: '/bento'
+      path: '/bento'
+      fullPath: '/bento'
+      preLoaderRoute: typeof BentoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -257,6 +277,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BentoRoute: BentoRoute,
   ResumeRoute: ResumeRoute,
   RssRoute: RssRoute,
   BlogSlugRoute: BlogSlugRoute,
