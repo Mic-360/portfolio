@@ -37,17 +37,9 @@ export const previousRoles = [
   {
     company: 'karkhanaHub.com',
     url: 'https://karkhanahub.com/',
-    role: 'Founding engineer',
+    role: 'Software Development Engineer',
     date: '2025 - present',
     icon: '/khub.jpg',
-    location: 'Gurgaon, India',
-  },
-  {
-    company: 'genpact.com',
-    url: 'https://www.genpact.com/',
-    role: 'software engineering (java) intern',
-    date: '2025',
-    icon: '/genpact.svg',
     location: 'Gurgaon, India',
   },
   {
@@ -63,9 +55,9 @@ export const previousRoles = [
 export const socialLinks: Array<SocialLink> = [
   { label: 'rss', url: '/rss' },
   { label: 'x', url: 'https://x.com/bhaumicsingh' },
-  { label: 'instagram', url: 'https://www.instagram.com/bhaumic.me/' },
+  { label: 'instagram', url: 'https://www.instagram.com/bhaumic.singh/' },
   { label: 'github', url: 'https://github.com/Mic-360' },
   { label: 'linkedin', url: 'https://www.linkedin.com/in/bhaumic/' },
 ]
 
-export const contactLinks = [{ label: 'resume', url: '/resume.pdf' }]
+export const contactLinks = [{ label: 'resume', url: '/Resume_Bhaumik.pdf' }]

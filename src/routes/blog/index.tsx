@@ -44,7 +44,7 @@ function BlogIndex() {
   return (
     <section className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
-        <h1 className="text-xl font-semibold italic">
+        <h1 className="text-2xl font-semibold italic">
           <PenIcon size={20} className="inline-block mr-1" />
           Blog
         </h1>
@@ -61,12 +61,12 @@ function BlogIndex() {
             params={{ slug: post.slug }}
             className="group flex flex-col gap-1"
           >
-            <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.2em] text-primary">
-              <span>{formatDate(post.date)}</span>
+            <div className="flex flex-wrap items-center gap-2 text-base uppercase tracking-[0.2em] text-primary">
+              <span className='text-[10px] text-secondary'>{formatDate(post.date)}</span>
               <span className="h-px w-8 bg-primary/60"></span>
               <span>{post.title}</span>
             </div>
-            <p className="text-xs text-muted-foreground group-hover:text-foreground">
+            <p className="text-sm text-muted-foreground group-hover:text-foreground">
               {post.summary}
             </p>
             {(post.categories.length > 0 || post.tags.length > 0) && (

@@ -60,8 +60,8 @@ function Section({
   children: React.ReactNode
 }) {
   return (
-    <section className="flex flex-col gap-2">
-      <h2 className="font-semibold italic text-base underline underline-offset-2 decoration-primary">
+    <section className="flex flex-col gap-2 my-4">
+      <h2 className="font-semibold italic text-2xl underline underline-offset-2 decoration-primary">
         {title === 'blogs' ? (
           <>
             <PenIcon size={16} className="inline-block mr-1" />
@@ -89,9 +89,9 @@ function App() {
       <section className="flex flex-col gap-3">
         <div className="flex item-center justify-between">
           <div className="flex flex-col gap-1">
-            <h1 className="text-xl font-semibold italic">
+            <h1 className="text-2xl font-semibold italic">
               {siteInfo.name} ~{' '}
-              <span className="text-xs mb-1 align-bottom inline-flex leading-4">
+              <span className="text-sm mb-1 align-bottom inline-flex leading-4">
                 {siteInfo.nativeName}
               </span>
             </h1>
@@ -171,19 +171,19 @@ function App() {
 
       <Section title="blogs">
         <div className="flex flex-col gap-4">
-          {posts.slice(0, 3).map((post) => (
+          {posts.slice(0, 6).map((post) => (
             <Link
               key={post.slug}
               to="/blog/$slug"
               params={{ slug: post.slug }}
               className="group flex flex-col gap-1"
             >
-              <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.2em] text-primary">
-                <span>{formatDate(post.date)}</span>
+              <div className="flex flex-wrap items-center gap-2 text-base uppercase tracking-[0.2em] text-primary">
+                <span className="text-[10px] text-secondary-foreground">{formatDate(post.date)}</span>
                 <span className="h-px w-8 bg-primary/60"></span>
                 <span>{post.title}</span>
               </div>
-              <p className="text-muted-foreground group-hover:text-foreground text-xs">
+              <p className="text-xs text-secondary-foreground group-hover:text-foreground">
                 {post.summary}
               </p>
             </Link>
@@ -191,7 +191,7 @@ function App() {
         </div>
         <Link
           to="/blog"
-          className="text-xs uppercase tracking-[0.2em] text-white underline decoration-primary underline-offset-4 mt-2"
+          className="text-md uppercase tracking-[0.2em] text-white underline decoration-primary underline-offset-4 mt-2"
         >
           Read all blogs
         </Link>
@@ -201,19 +201,19 @@ function App() {
         <div className="flex flex-col-reverse md:flex-row items-start justify-between gap-4">
           <div className="space-y-6">
             <div className="flex flex-col gap-4">
-              {projects.slice(0, 2).map((project) => (
+              {projects.slice(0, 4).map((project) => (
                 <Link
                   key={project.slug}
                   to="/projects/$slug"
                   params={{ slug: project.slug }}
                   className="group flex flex-col gap-1"
                 >
-                  <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.2em] text-primary">
+                  <div className="flex flex-wrap items-center gap-2 text-base uppercase tracking-[0.2em] text-primary">
                     <span>{project.title}</span>
                     <span className="h-px w-8 bg-primary/60"></span>
-                    <span>{formatDate(project.date)}</span>
+                    <span className="text-[10px] text-secondary-foreground">{formatDate(project.date)}</span>
                   </div>
-                  <p className="text-xs text-muted-foreground group-hover:text-foreground">
+                  <p className="text-xs text-secondary-foreground group-hover:text-foreground">
                     {project.summary}
                   </p>
                 </Link>
@@ -221,16 +221,11 @@ function App() {
             </div>
             <Link
               to="/projects"
-              className="text-xs uppercase tracking-[0.2em] text-white underline decoration-primary underline-offset-4"
+              className="text-md uppercase tracking-[0.2em] text-white underline decoration-primary underline-offset-4"
             >
               View all projects
             </Link>
           </div>
-          <img
-            src="/logo.gif"
-            alt="dev logo gif"
-            className="w-full md:w-48 h-40 object-cover rounded-md mix-blend-screen opacity-75"
-          />
         </div>
       </Section>
 

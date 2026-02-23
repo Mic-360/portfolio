@@ -44,7 +44,7 @@ function ProjectsIndex() {
   return (
     <section className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
-        <h1 className="text-lg font-semibold italic">
+        <h1 className="text-2xl font-semibold italic">
           <LayersIcon size={20} className="inline-block mr-1" />
           Projects
         </h1>
@@ -55,23 +55,23 @@ function ProjectsIndex() {
       </div>
       <div className="flex flex-col gap-6">
         {projects.map((project) => (
-          <div key={project.slug} className="flex items-center gap-2">
+          <div key={project.slug} className="flex flex-col items-center gap-2">
             <img
               src={project.image}
               alt={project.title}
-              className="w-20 h-20 object-cover rounded"
+              className="object-center rounded aspect-video w-full h-72"
             />
             <Link
               to="/projects/$slug"
               params={{ slug: project.slug }}
               className="group flex flex-col gap-1"
             >
-              <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.2em] text-primary">
+              <div className="flex flex-wrap items-center gap-2 text-base uppercase tracking-[0.2em] text-primary">
                 <span>{project.title}</span>
                 <span className="h-px w-8 bg-primary/60"></span>
-                <span>{formatDate(project.date)}</span>
+                <span className='text-[10px] text-secondary'>{formatDate(project.date)}</span>
               </div>
-              <p className="text-xs text-muted-foreground group-hover:text-foreground">
+              <p className="text-sm text-muted-foreground group-hover:text-foreground">
                 {project.summary}
               </p>
               {project.stack.length > 0 && (
