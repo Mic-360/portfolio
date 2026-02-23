@@ -182,7 +182,7 @@ function ReadmePage() {
                 </div>
             </section>
 
-            <div className="mt-10 flex justify-center grayscale hover:grayscale-0 transition-all">
+            <div className="flex justify-center">
                 <img src="https://raw.githubusercontent.com/Mic-360/Mic-360/main/space-shooter.gif" alt="Space Shooter" />
             </div>
 

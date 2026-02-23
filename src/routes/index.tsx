@@ -87,7 +87,7 @@ function App() {
   return (
     <div className="flex flex-col gap-8">
       <section className="flex flex-col gap-3">
-        <div className="flex item-center justify-between">
+        <div className="flex flex-col sm:flex-row item-center justify-between">
           <div className="flex flex-col gap-1">
             <h1 className="text-2xl font-semibold italic">
               {siteInfo.name} ~{' '}
@@ -99,7 +99,7 @@ function App() {
               {siteInfo.tagline}
             </p>
           </div>
-          <div className="flex flex-col items-end text-xs uppercase tracking-[0.3em] text-primary">
+          <div className="flex flex-col sm:items-end text-[10px] sm:text-xs uppercase tracking-[0.3em] text-primary mt-1.5">
             <span>{siteInfo.location}</span>
             <span className="italic tracking-wide text-foreground">
               {siteInfo.locationNative}

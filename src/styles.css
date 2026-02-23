@@ -242,6 +242,11 @@
   margin-top: 1.5rem;
 }
 
+.mdx-content h1,
+.mdx-content h2 {
+  font-size: 1.5rem;
+}
+
 .mdx-content a {
   color: var(--primary);
   text-decoration: underline;

@@ -37,35 +37,10 @@ function ResumePage() {
     return (
         <article className="flex flex-col gap-6">
             <header className="flex flex-col gap-4">
-                <div className="flex items-center justify-between">
-                    <h1 className="text-2xl font-semibold italic">
-                        <FileDescriptionIcon size={24} className="inline-block mr-2" />
-                        Resume
-                    </h1>
-                    <a
-                        href="/Resume_Bhaumik.pdf"
-                        download
-                        className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-white transition-colors rounded-sm"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="w-3.5 h-3.5"
-                        >
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                            <polyline points="7 10 12 15 17 10" />
-                            <line x1="12" y1="15" x2="12" y2="3" />
-                        </svg>
-                        Download PDF
-                    </a>
-                </div>
+                <h1 className="text-2xl font-semibold italic">
+                    <FileDescriptionIcon size={24} className="inline-block mr-2" />
+                    Resume
+                </h1>
                 <p className="text-muted-foreground">{resume.summary}</p>
                 <hr className="border-border" />
             </header>
@@ -74,6 +49,30 @@ function ResumePage() {
                 className="mdx-content flex flex-col gap-1 text-foreground"
                 dangerouslySetInnerHTML={{ __html: resume.html }}
             />
+
+            <a
+                href="/Resume_Bhaumik.pdf"
+                download
+                className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-primary hover:text-white transition-colors"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="w-3.5 h-3.5"
+                >
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                Download PDF
+            </a>
 
             <footer className="flex flex-col gap-4">
                 <p className="text-xs text-muted-foreground italic">
