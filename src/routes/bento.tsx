@@ -22,17 +22,9 @@ function BentoPage() {
   return (
     <article className="flex flex-col gap-6 min-h-[80vh]">
       <header className="flex flex-col gap-4">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold italic">
-            my bento
-          </h1>
-          <Link
-            to="/"
-            className="text-xs uppercase tracking-[0.2em] px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-white transition-colors rounded-sm"
-          >
-            back home
-          </Link>
-        </div>
+        <h1 className="text-2xl font-semibold italic">
+          my bento
+        </h1>
         <p className="text-muted-foreground">all my links and socials in one box.</p>
         <hr className="border-border" />
       </header>
@@ -58,6 +50,9 @@ function BentoPage() {
           view original at avely.me/bhaumic ↗
         </a>
       </footer>
+      <Link to="/" className="mr-2 inline-flex items-center gap-1 italic">
+        ← back
+      </Link>
     </article>
   )
 }
