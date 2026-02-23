@@ -126,7 +126,7 @@ function App() {
             <img
               src="/khub.jpg"
               alt="KarkhanaHub Logo"
-              className="inline-block w-4 h-4 mr-1 mb-0.5 rounded-md object-cover"
+              className="inline-block w-6 h-6 mr-1 mb-0.5 rounded-md object-cover"
             />
             {siteInfo.currentCompany}
           </a>
@@ -156,7 +156,7 @@ function App() {
                   <img
                     src={role.icon}
                     alt={role.company}
-                    className="inline-block w-4 h-4 mr-1 mb-0.5 rounded-md object-cover"
+                    className="inline-block w-6 h-6 mr-1 mb-0.5 rounded-md object-cover"
                   />
                 )}
                 {role.company}
@@ -228,8 +228,6 @@ function App() {
           </div>
         </div>
       </Section>
-
-
 
       <Section title="contact">
         <p>

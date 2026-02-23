@@ -10,7 +10,7 @@ export const siteInfo = {
   buildLine: 'bleeding edge things.',
   location: 'Prayagraj, India',
   locationNative: 'प्रयागराज, भारत',
-  currentRole: 'Full Stack engineer',
+  currentRole: 'Full Stack software engineer',
   currentCompany: 'KarkhanaHub.com',
   currentCompanyUrl: 'https://karkhanahub.com/',
   currentSummary:
@@ -35,20 +35,28 @@ export const siteMeta = {
 
 export const previousRoles = [
   {
-    company: 'karkhanaHub.com',
-    url: 'https://karkhanahub.com/',
-    role: 'Software Development Engineer',
-    date: '2025 - present',
-    icon: '/khub.jpg',
-    location: 'Gurgaon, India',
-  },
-  {
     company: 'twinverse.in',
     url: 'https://twinverse.in/',
     role: 'product owner/developer',
     date: '2022 - 2024',
     icon: '/twinverse.png',
     location: 'Bhubaneswar, India',
+  },
+  {
+    company: 'X01BD Team',
+    url: 'https://t.me/s/AsusMaxProM2?q=%40bhaumic_kun',
+    role: 'custom rom developer',
+    date: '2019 - 2021',
+    icon: '/lineage.png',
+    location: 'Remote, India',
+  },
+  {
+    company: 'upwork.com',
+    url: 'https://www.upwork.com/freelancers/~01117721778627818a',
+    role: 'freelance developer',
+    date: '2022 - 2024',
+    icon: '/upwork.png',
+    location: 'Remote, India',
   },
 ]
 
