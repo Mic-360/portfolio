@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RssRouteImport } from './routes/rss'
 import { Route as ResumeRouteImport } from './routes/resume'
+import { Route as ReadmeRouteImport } from './routes/readme'
 import { Route as BentoRouteImport } from './routes/bento'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
@@ -30,6 +31,11 @@ const RssRoute = RssRouteImport.update({
 const ResumeRoute = ResumeRouteImport.update({
   id: '/resume',
   path: '/resume',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReadmeRoute = ReadmeRouteImport.update({
+  id: '/readme',
+  path: '/readme',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BentoRoute = BentoRouteImport.update({
@@ -86,6 +92,7 @@ const OgBlogSlugRoute = OgBlogSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/bento': typeof BentoRoute
+  '/readme': typeof ReadmeRoute
   '/resume': typeof ResumeRoute
   '/rss': typeof RssRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -100,6 +107,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/bento': typeof BentoRoute
+  '/readme': typeof ReadmeRoute
   '/resume': typeof ResumeRoute
   '/rss': typeof RssRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/bento': typeof BentoRoute
+  '/readme': typeof ReadmeRoute
   '/resume': typeof ResumeRoute
   '/rss': typeof RssRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -131,6 +140,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/bento'
+    | '/readme'
     | '/resume'
     | '/rss'
     | '/blog/$slug'
@@ -145,6 +155,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/bento'
+    | '/readme'
     | '/resume'
     | '/rss'
     | '/blog/$slug'
@@ -159,6 +170,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/bento'
+    | '/readme'
     | '/resume'
     | '/rss'
     | '/blog/$slug'
@@ -174,6 +186,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BentoRoute: typeof BentoRoute
+  ReadmeRoute: typeof ReadmeRoute
   ResumeRoute: typeof ResumeRoute
   RssRoute: typeof RssRoute
   BlogSlugRoute: typeof BlogSlugRoute
@@ -200,6 +213,13 @@ declare module '@tanstack/react-router' {
       path: '/resume'
       fullPath: '/resume'
       preLoaderRoute: typeof ResumeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/readme': {
+      id: '/readme'
+      path: '/readme'
+      fullPath: '/readme'
+      preLoaderRoute: typeof ReadmeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/bento': {
@@ -278,6 +298,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BentoRoute: BentoRoute,
+  ReadmeRoute: ReadmeRoute,
   ResumeRoute: ResumeRoute,
   RssRoute: RssRoute,
   BlogSlugRoute: BlogSlugRoute,

@@ -142,6 +142,24 @@ function App() {
         </p>
       </Section>
 
+      <Section title="">
+        <div className="flex flex-col gap-4">
+          <Link
+            to="/readme"
+            className="block overflow-hidden rounded-lg p-2 transition-all hover:border-primary/50 hover:shadow-lg"
+          >
+            <img
+              src="https://ghchart.rshah.org/Mic-360"
+              alt="Mic-360 GitHub Contributions"
+              className="w-full h-auto"
+            />
+          </Link>
+          <p className="text-xs italic text-muted-foreground">
+            click the graph to view my full github readme.
+          </p>
+        </div>
+      </Section>
+
       <Section title="previous">
         <div className="flex flex-col gap-2">
           {previousRoles.map((role) => (
