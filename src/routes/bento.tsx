@@ -29,11 +29,10 @@ function BentoPage() {
         <hr className="border-border" />
       </header>
 
-      <div className="relative w-full overflow-hidden rounded-xl border border-border bg-card shadow-2xl aspect-16/10 md:aspect-auto md:h-[800px]">
+      <div className="relative w-full overflow-hidden rounded-xl border border-border bg-card shadow-2xl h-[85vh] min-h-[500px] md:h-[800px]">
         <iframe
           src="https://avely.me/bhaumic"
-          className="absolute inset-0 w-full h-full border-0"
-          style={{ zoom: 1.5 }}
+          className="absolute inset-0 w-full h-full border-0 [zoom:1] md:[zoom:1.5]"
           title="Bhaumik Singh Bento Profile"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
