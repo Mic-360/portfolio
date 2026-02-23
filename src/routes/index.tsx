@@ -232,14 +232,12 @@ function App() {
       <Section title="contact">
         <p>
           interested to talk? read my{' '}
-          <a
-            href={contactLinks[0].url}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to={contactLinks[0].url}
             className="underline decoration-primary underline-offset-4"
           >
             resume
-          </a>{' '}
+          </Link>{' '}
           or e-mail me at{' '}
           <a
             href="mailto:bhaumiksingh2000@gmail.com"

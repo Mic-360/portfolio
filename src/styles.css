@@ -5,6 +5,7 @@
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
+
 :root {
   --background: #f2dfbc;
   --foreground: #61440a;
@@ -43,7 +44,7 @@
   --font-mono: Fira Code, monospace;
 
   --radius: 0.625rem;
-  
+
   --shadow-2xs: 0 1px 3px 0px rgb(0 0 0 / 0.05);
   --shadow-xs: 0 1px 3px 0px rgb(0 0 0 / 0.05);
   --shadow-sm: 0 1px 3px 0px rgb(0 0 0 / 0.10), 0 1px 2px -1px rgb(0 0 0 / 0.10);
@@ -52,7 +53,7 @@
   --shadow-lg: 0 1px 3px 0px rgb(0 0 0 / 0.10), 0 4px 6px -1px rgb(0 0 0 / 0.10);
   --shadow-xl: 0 1px 3px 0px rgb(0 0 0 / 0.10), 0 8px 10px -1px rgb(0 0 0 / 0.10);
   --shadow-2xl: 0 1px 3px 0px rgb(0 0 0 / 0.25);
-  
+
 }
 
 [data-theme='dark'] {
@@ -87,7 +88,7 @@
   --sidebar-accent-foreground: #e0cfac;
   --sidebar-border: #3d332b;
   --sidebar-ring: #abdf6f;
-  
+
   --shadow-2xs: 0 1px 3px 0px rgb(0 0 0 / 0.05);
   --shadow-xs: 0 1px 3px 0px rgb(0 0 0 / 0.05);
   --shadow-sm: 0 1px 3px 0px rgb(0 0 0 / 0.10), 0 1px 2px -1px rgb(0 0 0 / 0.10);
@@ -149,22 +150,40 @@
   --shadow-xl: var(--shadow-xl);
   --shadow-2xl: var(--shadow-2xl);
 
-  --animate-glitch: glitch 0.3s cubic-bezier(.25,.46,.45,.94) both;
+  --animate-glitch: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both;
   --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 @keyframes glitch {
-  0% { transform: translate(0); }
-  20% { transform: translate(-2px, 2px); }
-  40% { transform: translate(-2px, -2px); }
-  60% { transform: translate(2px, 2px); }
-  80% { transform: translate(2px, -2px); }
-  100% { transform: translate(0); }
+  0% {
+    transform: translate(0);
+  }
+
+  20% {
+    transform: translate(-2px, 2px);
+  }
+
+  40% {
+    transform: translate(-2px, -2px);
+  }
+
+  60% {
+    transform: translate(2px, 2px);
+  }
+
+  80% {
+    transform: translate(2px, -2px);
+  }
+
+  100% {
+    transform: translate(0);
+  }
 }
 
 .animus-corner {
   position: relative;
 }
+
 .animus-corner::before,
 .animus-corner::after {
   content: '';
@@ -175,18 +194,21 @@
   transition: all 0.3s ease;
   opacity: 0.5;
 }
+
 .animus-corner::before {
   top: 0;
   left: 0;
   border-right: none;
   border-bottom: none;
 }
+
 .animus-corner::after {
   bottom: 0;
   right: 0;
   border-left: none;
   border-top: none;
 }
+
 .animus-corner:hover::before,
 .animus-corner:hover::after {
   opacity: 1;
@@ -546,4 +568,38 @@
 .mdx-content dd {
   margin-left: 1.5rem;
   color: var(--muted-foreground);
+}
+
+/* Image Handling */
+.mdx-content img {
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  margin: 1.5rem 0;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.mdx-content img:hover {
+  transform: scale(1.02);
+}
+
+.mdx-content .image-grid {
+  display: flex;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.mdx-content .image-grid img {
+  flex: 1;
+  min-width: 250px;
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .mdx-content .image-grid img {
+    min-width: 100%;
+  }
 }

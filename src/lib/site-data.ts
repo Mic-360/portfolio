@@ -23,9 +23,9 @@ export const siteInfo = {
 
 export const siteMeta = {
   baseUrl: 'https://bhaumiksingh.com',
-  defaultTitle: 'Bhaumik Singh — Portfolio',
+  defaultTitle: 'Bhaumik Singh — Software Engineer',
   defaultDescription:
-    'Full stack engineer building Android, AI, and cloud products with a love for modern web systems.',
+    'Full stack software engineer building web, android, ai, and cloud products with a love for modern web systems.',
   defaultImage: '/og/site',
   siteName: 'Bhaumik Singh',
   locale: 'en_US',
@@ -60,4 +60,4 @@ export const socialLinks: Array<SocialLink> = [
   { label: 'linkedin', url: 'https://www.linkedin.com/in/bhaumic/' },
 ]
 
-export const contactLinks = [{ label: 'resume', url: '/Resume_Bhaumik.pdf' }]
+export const contactLinks = [{ label: 'resume', url: '/resume' }]

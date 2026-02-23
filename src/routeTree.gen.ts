@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RssRouteImport } from './routes/rss'
+import { Route as ResumeRouteImport } from './routes/resume'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
@@ -23,6 +24,11 @@ import { Route as OgBlogSlugRouteImport } from './routes/og/blog/$slug'
 const RssRoute = RssRouteImport.update({
   id: '/rss',
   path: '/rss',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResumeRoute = ResumeRouteImport.update({
+  id: '/resume',
+  path: '/resume',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -73,6 +79,7 @@ const OgBlogSlugRoute = OgBlogSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/resume': typeof ResumeRoute
   '/rss': typeof RssRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/og/site': typeof OgSiteRoute
@@ -85,6 +92,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/resume': typeof ResumeRoute
   '/rss': typeof RssRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/og/site': typeof OgSiteRoute
@@ -98,6 +106,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/resume': typeof ResumeRoute
   '/rss': typeof RssRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/og/site': typeof OgSiteRoute
@@ -112,6 +121,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/resume'
     | '/rss'
     | '/blog/$slug'
     | '/og/site'
@@ -124,6 +134,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/resume'
     | '/rss'
     | '/blog/$slug'
     | '/og/site'
@@ -136,6 +147,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/resume'
     | '/rss'
     | '/blog/$slug'
     | '/og/site'
@@ -149,6 +161,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ResumeRoute: typeof ResumeRoute
   RssRoute: typeof RssRoute
   BlogSlugRoute: typeof BlogSlugRoute
   OgSiteRoute: typeof OgSiteRoute
@@ -167,6 +180,13 @@ declare module '@tanstack/react-router' {
       path: '/rss'
       fullPath: '/rss'
       preLoaderRoute: typeof RssRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resume': {
+      id: '/resume'
+      path: '/resume'
+      fullPath: '/resume'
+      preLoaderRoute: typeof ResumeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -237,6 +257,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ResumeRoute: ResumeRoute,
   RssRoute: RssRoute,
   BlogSlugRoute: BlogSlugRoute,
   OgSiteRoute: OgSiteRoute,

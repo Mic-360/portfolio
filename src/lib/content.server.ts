@@ -375,6 +375,25 @@ export const getProjectIndex = createServerFn({ method: 'GET' }).handler(
   async () => readProjectIndex(),
 )
 
+export const getResume = createServerFn({ method: 'GET' }).handler(async () => {
+  const filePath = path.join(process.cwd(), 'src', 'content', 'resume.mdx')
+  try {
+    const { data, content } = await readMdxFile(filePath)
+    const frontmatter = blogFrontmatterSchema.parse(data)
+    const html = await renderMdxToHtml(content)
+
+    return {
+      html,
+      title: frontmatter.title,
+      summary: frontmatter.summary,
+      date: frontmatter.date,
+    }
+  } catch (error) {
+    console.error('Error reading resume:', error)
+    return null
+  }
+})
+
 export const getProjectBySlug = createServerFn({ method: 'GET' })
   .inputValidator(z.object({ slug: z.string() }))
   .handler(async ({ data }) => readProjectPost(data.slug))
