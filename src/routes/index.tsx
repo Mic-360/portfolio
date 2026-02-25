@@ -229,7 +229,7 @@ function App() {
                 >
                   <div className="flex flex-wrap items-center gap-2 text-base uppercase tracking-[0.2em] text-primary">
                     <span>{project.title}</span>
-                    <span className="h-px w-8 bg-primary/60"></span>
+                    <span className="h-px w-4 sm:w-8 bg-primary/60"></span>
                     <span className="text-[10px] text-secondary-foreground">{formatDate(project.date)}</span>
                   </div>
                   <p className="text-xs text-secondary-foreground group-hover:text-foreground">

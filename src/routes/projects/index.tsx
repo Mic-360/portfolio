@@ -55,11 +55,11 @@ function ProjectsIndex() {
       </div>
       <div className="flex flex-col gap-6">
         {projects.map((project) => (
-          <div key={project.slug} className="flex flex-col items-center gap-2">
+          <div key={project.slug} className="flex flex-col sm:flex-row items-center gap-2">
             <img
               src={project.image}
               alt={project.title}
-              className="object-center rounded aspect-video w-full h-72"
+              className="object-center rounded aspect-video w-full sm:w-64 h-44"
             />
             <Link
               to="/projects/$slug"
