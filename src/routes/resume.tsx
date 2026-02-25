@@ -41,12 +41,11 @@ function ResumePage() {
                     <FileDescriptionIcon size={24} className="inline-block mr-2" />
                     Resume
                 </h1>
-                <p className="text-muted-foreground">{resume.summary}</p>
                 <hr className="border-border" />
             </header>
 
             <div
-                className="mdx-content flex flex-col gap-1 text-foreground"
+                className="latex-content flex flex-col gap-1 text-foreground"
                 dangerouslySetInnerHTML={{ __html: resume.html }}
             />
 

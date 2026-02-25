@@ -376,17 +376,17 @@ export const getProjectIndex = createServerFn({ method: 'GET' }).handler(
 )
 
 export const getResume = createServerFn({ method: 'GET' }).handler(async () => {
-  const filePath = path.join(process.cwd(), 'src', 'content', 'resume.mdx')
+  const filePath = path.join(process.cwd(), 'src', 'content', 'resume.tex')
   try {
-    const { data, content } = await readMdxFile(filePath)
-    const frontmatter = blogFrontmatterSchema.parse(data)
-    const html = await renderMdxToHtml(content)
+    const latexSource = await fs.readFile(filePath, 'utf-8')
+    const { parseLatexResume } = await import('./latex-parser')
+    const resume = parseLatexResume(latexSource)
 
     return {
-      html,
-      title: frontmatter.title,
-      summary: frontmatter.summary,
-      date: frontmatter.date,
+      html: resume.html,
+      title: resume.title,
+      summary: resume.summary,
+      date: resume.date,
     }
   } catch (error) {
     console.error('Error reading resume:', error)

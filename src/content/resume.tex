@@ -1,0 +1,86 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{geometry}
+
+\geometry{margin=0.75in}
+
+% Metadata
+\title{Resume}
+\author{Bhaumik Singh}
+\date{2026-02-23}
+
+% Custom metadata
+% summary: Software Development Engineer | B.Tech CSE
+
+\begin{document}
+
+\begin{center}
+{\LARGE \textbf{Bhaumik Singh}} \\[0.3em]
+{\large Full-Stack Software Engineer | Web, Android \& Cloud Expert} \\[0.5em]
+\href{https://github.com/Mic-360}{github.com/Mic-360} \quad | \quad \href{https://linkedin.com/in/bhaumic}{linkedin.com/in/bhaumic}
+\end{center}
+
+\section{Education}
+\textbf{Institute of Technical Education \& Research, SOA University -- Bhubaneswar, Odisha} \hfill 2021 -- 2025 \\
+\textit{B.Tech in Computer Science and Engineering}
+\begin{itemize}
+  \item \textbf{CGPA}: 7.3/10
+  \item \textbf{Relevant Courses}: Data Structures, Operating Systems, Database Systems, Algorithms, Distributed Systems, Machine Learning
+\end{itemize}
+
+\section{Experience}
+\textbf{Karkhana, Gurugram} \hfill Jan 2025 -- Present \\
+\textit{SDE 1 | Full-time}
+\begin{itemize}
+  \item Built and launched a production-grade makerspace booking platform (\textbf{Karkhana Hub}) using \textbf{Next.js 15, tRPC, and MongoDB}. Enabled end-to-end machine rentals and workshop workflows for 2K+ users.
+  \item Eliminated frontend-backend contract mismatches and reduced integration bugs by architecting a strict type-safe service layer using \textbf{TypeScript} and \textbf{tRPC} within a monorepo.
+  \item Engineered a fault-tolerant payment pipeline using \textbf{Razorpay} and unchanging state transitions, preventing duplicate bookings and ensuring 100\% reconciliation accuracy.
+  \item Optimized performance by implementing \textbf{Redis} caching strategies, reducing data-fetch latency for high-read queries by 53\%.
+  \item Established a Dockerized CI/CD pipeline on \textbf{AWS (EC2, Lambda)} with \textbf{Prometheus} monitoring, ensuring high availability and proactive detection of production issues.
+\end{itemize}
+
+\section{Skills}
+\begin{itemize}
+  \item \textbf{Languages}: Java, Python, C++, Go, TypeScript, JavaScript, Kotlin, Dart, Bash
+  \item \textbf{Frameworks}: Next.js, Flask, Django, Express.js, Spring Boot, ASP.NET, Flutter, Jetpack Compose, React Native (Expo)
+  \item \textbf{Tools \& Database}: ARCore, Gradle, Firebase, PostgreSQL, MongoDB, Git
+  \item \textbf{Cloud}: AWS (EC2, S3, Lambda, CloudFront), GKE, Vertex, Docker, Kubernetes, Terraform, Jenkins, Github Actions
+  \item \textbf{Observability}: Custom Renderers, FFmpeg, SQL/NoSQL Queries, Prometheus, ELK Stack, Performance Profiling
+\end{itemize}
+
+\section{Projects}
+\textbf{Makerapp} -- \href{https://karkhanahub.com/}{Website} \\
+\textit{Multi-Tenant Machine Booking Platform}
+\begin{itemize}
+  \item Architected and delivered a full-stack, multi-tenant booking platform using \textbf{Next.js 15, TypeScript, tRPC, Prisma, and MongoDB}, enabling machine rentals, lab onboarding, and workshop scheduling across Admin, Vendor, and User roles.
+  \item Engineered a transactional booking and payment pipeline with \textbf{Razorpay}, implementing idempotent state transitions, role-based OAuth authorization (Google/LinkedIn), optimized indexing, and \textbf{Redis} caching for low-latency dashboard queries.
+  \item Designed a modular monorepo architecture with \textbf{Turborepo} and deployed containerized services on \textbf{AWS (EC2, S3, Lambda, VPC)} via CI/CD pipelines, integrating \textbf{Prometheus} monitoring for production reliability and observability.
+\end{itemize}
+
+\textbf{Spotify Looper} -- \href{https://github.com/Mic-360/spotify_looper}{Github} \\
+\textit{Precision A-B Playback Controller}
+\begin{itemize}
+  \item Architected a cross-platform Spotify playback controller using \textbf{Flutter + Riverpod}, implementing millisecond-accurate A-B looping and secure \textbf{OAuth 2.0} Web API integration with automated token lifecycle management for >99\% session reliability.
+  \item Engineered a low-latency loop execution pipeline using \textbf{just\_audio}, optimizing seek operations to achieve sub-120ms glitch-free transitions while maintaining responsive \textbf{Material 3 UI} across Android and Web (PWA).
+\end{itemize}
+
+\section{Certifications}
+\begin{itemize}
+  \item Aug 2024: \textbf{Cybersecurity Professional Specialization}, Google
+  \item Jun 2024: \textbf{Automate Cybersecurity Tasks with Python}, Google
+  \item Mar 2024: \textbf{Tools of the Trade: Linux and SQL}, Google
+  \item Jan 2024: \textbf{Connect and Protect: Networks and Network Security}, Google
+  \item Jan 2024: \textbf{Google Analytics Certificate}, ULS Association
+  \item Mar 2023: \textbf{Frontend Certification Exam}, Codedamn
+  \item Sep 2022: \textbf{Android Mobile Application Development}, Meta
+  \item Sep 2022: \textbf{Architecting Google Compute Engine Specialization}, Google
+  \item Sep 2022: \textbf{Elastic Google Cloud Infrastructure: Scaling and Automation}, Coursera
+  \item Sep 2022: \textbf{Reliable Google Cloud Infrastructure: Design and Process}, Coursera
+  \item Sep 2022: \textbf{Essential Google Cloud Infrastructure: Core Services}, Coursera
+  \item Mar 2022: \textbf{GitHub Actions: CI/CD}, Codedamn
+\end{itemize}
+
+\end{document}
