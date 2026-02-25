@@ -1,0 +1,72 @@
+---
+title: 'Guarding Your Code: The Rise of Mamoru-WAF'
+date: '2026-02-25'
+summary: 'Discover how Mamoru-kun, a lightweight Go-based guardian, brings enterprise-grade security and a stunning TUI to your hobby projects.'
+tags:
+  - 'golang'
+  - 'security'
+  - 'cybersecurity'
+  - 'open-source'
+categories:
+  - 'software-engineering'
+image: '/blog/mamoru-banner.png'
+---
+
+# Guarding Your Code: The Rise of Mamoru-WAF
+
+> "Security shouldn't be a luxury for hobbyists; it should be as easy as running a single binary."
+
+In the world of web development, we often think of Web Application Firewalls (WAFs) as massive, enterprise-grade monsters. They satisfy the needs of giants but often leave the solo developer or hobbyist in the dust, crushed by the weight of external databases, complex configurations, and heavy infrastructure requirements.
+
+Enter **Mamoru-WAF**. Designed to be the "Guardian of Your Web Applications," this Go-based reverse proxy is proving that you don't need a massive cluster to keep the bad guys at bay.
+
+![Mamoru-kun Mascot](/blog/mamoru-mascot.png)
+
+## Meet Mamoru-kun 🛡️
+
+At the heart of this project is Mamoru-kun, our official mascot. He represents everything the project stands for: vigilant, lightweight, and surprisingly friendly. While Mamoru-kun stands guard, your applications can breathe easy, shielded from SQL injections, XSS attacks, and malicious bots.
+
+What makes Mamoru-WAF unique is its commitment to the developer experience. It’s a single binary that requires zero external infrastructure. No Redis for rate limiting. No Postgres for logs. Just Go, YAML, and pure security logic.
+
+## Security in Real-Time
+
+The project features a modular rule engine that evaluates traffic with surgical precision. But the real "magic" is the **Hot Reload** capability. Using an `AtomicEngine` implementation, you can edit your `rules.yaml` and watch Mamoru-kun apply the new protections within two seconds—without dropping a single connection.
+
+### Core Protections:
+- **Regex Pattern Matching:** Detects SQLi, XSS, and Path Traversal.
+- **Token-Bucket Rate Limiting:** Built-in per-IP limiting with path-specific overrides.
+- **Body Inspection:** Deep packet inspection for POST requests.
+- **Fail-Safe Mode:** Choose between "Fail-Open" for uptime or "Block" for maximum security.
+
+```go
+// The Rule interface: Simple, powerful, and modular.
+type Rule interface {
+    Name() string
+    Evaluate(r *http.Request) (blocked bool, reason string)
+}
+```
+
+## The Terminal Advantage: A Sage-Green TUI
+
+While headless mode is perfect for production, Mamoru-WAF introduces a stunning Terminal UI (TUI) built with the Bubble Tea framework. It transforms your terminal into a command center, featuring a premium sage-green aesthetic that feels alive.
+
+| Feature | Benefit |
+| ------- | ------- |
+| **Live Event Log** | See blocks and requests as they happen with zero latency. |
+| **Backend Monitoring** | Real-time health indicators for your proxied services. |
+| **Interactive Hotkeys** | Reload rules or toggle "Detection Mode" with a single keystroke. |
+| **Zero Performance Hit** | The TUI runs on a non-blocking event bus. |
+
+![Mamoru Banner](/blog/mamoru-banner.png)
+
+## Closing Thoughts
+
+Mamoru-WAF isn't just a tool; it's a statement that security can be beautiful and accessible. By stripping away the bloat and focusing on the core essentials—modular rules, high-speed proxying, and great observability—we've created a guardian that anyone can deploy in seconds.
+
+- **Get Started:** Build it with `go build -o mamoru ./cmd/server`.
+- **Contribute:** Help Mamoru-kun grow by implementing new rules in `internal/rules/`.
+- **Deploy:** Use the 10 MB multi-stage Docker image for your next cloud project.
+
+---
+
+Thanks for reading. Stay safe out there!

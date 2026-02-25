@@ -1,0 +1,65 @@
+---
+title: 'Mamoru-WAF'
+date: '2026-02-25'
+summary: 'A lightweight, zero-dependency Go Web Application Firewall with a premium Terminal UI and hot-reloading rule engine.'
+stack:
+  - 'Go'
+  - 'Bubble Tea'
+  - 'Docker'
+  - 'YAML'
+links:
+  - label: 'GitHub'
+    url: 'https://github.com/Mic-360/mamoru-waf'
+tags:
+  - 'security'
+  - 'golang'
+  - 'tui'
+  - 'devops'
+categories:
+  - 'software-engineering'
+image: '/project/mamoru.png'
+---
+
+# Mamoru-WAF: The Lightweight Guardian
+
+Mamoru-WAF is a high-performance reverse proxy and Web Application Firewall (WAF) built in Go. It provides enterprise-grade protection for hobbyist projects and small-scale applications without the overhead of external databases or complex infrastructure.
+
+![Mamoru-kun Mascot](/project/mamoru-kun.gif)
+
+## The problem
+
+Traditional WAFs (Web Application Firewalls) are often built for enterprise scale, requiring external dependencies like Redis for rate limiting, PostgreSQL for logging, and complex orchestration for configuration updates. For developers building hobby projects or small microservices, these tools introduce unnecessary bloat, high latency, and infrastructure costs that outweigh the benefits.
+
+## The solution
+
+Mamoru-WAF was built to be "the guardian you can run in a single binary." By leveraging Go's concurrency primitives and a modular internal architecture, it provides robust security features with zero external requirements.
+
+- **Modular Rule Engine:** Highly extensible system for defining security rules using Regex and logic.
+- **Atomic Hot Reload:** Rules can be updated on-the-fly without dropping active connections.
+- **Embedded Rate Limiting:** State is managed entirely in-memory using token-bucket algorithms.
+- **Zero-Config Deployment:** Ships as a single binary or a tiny 10MB Docker image.
+
+## Highlights
+
+- **Sage-Green TUI:** An interactive dashboard built with Bubble Tea that provides real-time visibility into blocked attacks and backend health markers.
+- **Blazing Fast Proxying:** Minimal latency overhead thanks to Go's `httputil.ReverseProxy` and optimized rule evaluation.
+- **Deep Packet Inspection:** Analyzes request bodies for SQL injection and XSS payloads before they reach your backend.
+- **Fail-Safe Modes:** Configurable behavior (Block vs. Fail-Open) to balance security and uptime requirements.
+
+![Mamoru-kun Mascot](/project/mamoru.png)
+
+## Results
+
+Mamoru-WAF successfully protects local and cloud-deployed applications from common web vulnerabilities (OWASP Top 10) while maintaining a minimal resource footprint.
+
+- **Size:** < 15MB binary (uncompressed).
+- **Latency:** < 2ms overhead per request in standard configurations.
+- **Flexibility:** Deployed in seconds across Docker, bare metal, or as a sidecar.
+
+## What I learned
+
+Building Mamoru-WAF reinforced the power of **Go's concurrency model**, specifically using channels and atomics to handle real-time configuration updates in a high-traffic proxy environment. Integrating a **Terminal UI** taught me how to bridge the gap between headless system logic and human-friendly observability, ensuring that "security doesn't have to be a dark box."
+
+---
+
+If you'd like a walkthrough of the architecture or want to contribute a new rule profile, feel free to reach out.
