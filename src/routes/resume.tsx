@@ -36,7 +36,7 @@ function ResumePage() {
 
     return (
         <article className="flex flex-col gap-6">
-            <header className="flex flex-col gap-4">
+            <header className="flex flex-col gap-4 sr-only">
                 <h1 className="text-2xl font-semibold italic">
                     <FileDescriptionIcon size={24} className="inline-block mr-2" />
                     Resume

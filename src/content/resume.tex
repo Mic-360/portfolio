@@ -1,86 +1,177 @@
-\documentclass[11pt,a4paper]{article}
+\documentclass[9pt, letterpaper]{russell}
+\geometry{left=1.4cm, top=0.5cm, right=1.4cm, bottom=0.5cm, footskip=.5cm}
 
-\usepackage[utf8]{inputenc}
-\usepackage{hyperref}
-\usepackage{enumitem}
-\usepackage{geometry}
+% --- YOUR PERSONAL INFORMATION ---
+\name{\LARGE Bhaumik}{\LARGE Singh}
+\position{Full-Stack Software Engineer | Web, Android \& Cloud Expert}
 
-\geometry{margin=0.75in}
+\github{github.com/mic-360}
+\linkedin{linkedin.com/in/bhaumic}
 
-% Metadata
-\title{Resume}
-\author{Bhaumik Singh}
-\date{2026-02-23}
+\renewcommand{\acvHeaderAfterNameSkip}{1mm}
 
-% Custom metadata
-% summary: Software Development Engineer | B.Tech CSE
-
+% --- DOCUMENT STRUCTURE ---
 \begin{document}
+\makecvheader
 
-\begin{center}
-{\LARGE \textbf{Bhaumik Singh}} \\[0.3em]
-{\large Full-Stack Software Engineer | Web, Android \& Cloud Expert} \\[0.5em]
-\href{https://github.com/Mic-360}{github.com/Mic-360} \quad | \quad \href{https://linkedin.com/in/bhaumic}{linkedin.com/in/bhaumic}
-\end{center}
+%------------------------------------------------
+% Education
+%------------------------------------------------
+\cvsection{Education}
+\begin{cventries}
+  \cventry
+    {B.Tech in Computer Science and Engineering}
+    {Institute of Technical Education \& Research, SOA University – Bhubaneswar, Odisha}
+    {2021 -- 2025}
+    {}
+    {
+      \begin{cvitems}
+      \item {CGPA: 7.3/10}
+      \item {Relevant Courses: Data Structures, Operating Systems, Database Systems, Algorithms, Distributed Systems, Machine Learning}
+      \end{cvitems}
+    }
+\end{cventries}
 
-\section{Education}
-\textbf{Institute of Technical Education \& Research, SOA University -- Bhubaneswar, Odisha} \hfill 2021 -- 2025 \\
-\textit{B.Tech in Computer Science and Engineering}
-\begin{itemize}
-  \item \textbf{CGPA}: 7.3/10
-  \item \textbf{Relevant Courses}: Data Structures, Operating Systems, Database Systems, Algorithms, Distributed Systems, Machine Learning
-\end{itemize}
+%------------------------------------------------
+% Experience
+%------------------------------------------------
+\cvsection{Experience}
+\begin{cventries}
 
-\section{Experience}
-\textbf{Karkhana, Gurugram} \hfill Jan 2025 -- Present \\
-\textit{SDE 1 | Full-time}
-\begin{itemize}
-  \item Built and launched a production-grade makerspace booking platform (\textbf{Karkhana Hub}) using \textbf{Next.js 15, tRPC, and MongoDB}. Enabled end-to-end machine rentals and workshop workflows for 2K+ users.
-  \item Eliminated frontend-backend contract mismatches and reduced integration bugs by architecting a strict type-safe service layer using \textbf{TypeScript} and \textbf{tRPC} within a monorepo.
-  \item Engineered a fault-tolerant payment pipeline using \textbf{Razorpay} and unchanging state transitions, preventing duplicate bookings and ensuring 100\% reconciliation accuracy.
-  \item Optimized performance by implementing \textbf{Redis} caching strategies, reducing data-fetch latency for high-read queries by 53\%.
-  \item Established a Dockerized CI/CD pipeline on \textbf{AWS (EC2, Lambda)} with \textbf{Prometheus} monitoring, ensuring high availability and proactive detection of production issues.
-\end{itemize}
+  \cventry
+    {SDE I}
+    {Karkhana, Gurugram}
+    {Jan 2025 – Present}
+    {Full-time}
+    {
+      \begin{cvitems}
+      \item {Built and launched a production-grade makerspace booking platform (Karkhana Hub) using Next.js 16, tRPC, and MongoDB. Enabled end-to-end machine rentals and workshop workflows for \textbf{2K+ users}.}
+      \item {Eliminated frontend-backend contract mismatches and reduced integration bugs by architecting a strict type-safe service layer using TypeScript and tRPC within a monorepo.}
+      \item {Engineered a fault-tolerant payment pipeline using Razorpay and unchanging state transitions, preventing duplicate bookings and ensuring \textbf{100\%} reconciliation accuracy.}
+      \item {Optimized performance by implementing Redis caching strategies, reducing data-fetch latency for high-read queries by \textbf{53\%}.}
+      \item {Established a Dockerized CI/CD pipeline on AWS (EC2, Lambda) with Prometheus monitoring, ensuring high availability and proactive detection of production issues.}
+      \end{cvitems}
+    }
 
-\section{Skills}
-\begin{itemize}
-  \item \textbf{Languages}: Java, Python, C++, Go, TypeScript, JavaScript, Kotlin, Dart, Bash
-  \item \textbf{Frameworks}: Next.js, Flask, Django, Express.js, Spring Boot, ASP.NET, Flutter, Jetpack Compose, React Native (Expo)
-  \item \textbf{Tools \& Database}: ARCore, Gradle, Firebase, PostgreSQL, MongoDB, Git
-  \item \textbf{Cloud}: AWS (EC2, S3, Lambda, CloudFront), GKE, Vertex, Docker, Kubernetes, Terraform, Jenkins, Github Actions
-  \item \textbf{Observability}: Custom Renderers, FFmpeg, SQL/NoSQL Queries, Prometheus, ELK Stack, Performance Profiling
-\end{itemize}
+\end{cventries}
 
-\section{Projects}
-\textbf{Makerapp} -- \href{https://karkhanahub.com/}{Website} \\
-\textit{Multi-Tenant Machine Booking Platform}
-\begin{itemize}
-  \item Architected and delivered a full-stack, multi-tenant booking platform using \textbf{Next.js 15, TypeScript, tRPC, Prisma, and MongoDB}, enabling machine rentals, lab onboarding, and workshop scheduling across Admin, Vendor, and User roles.
-  \item Engineered a transactional booking and payment pipeline with \textbf{Razorpay}, implementing idempotent state transitions, role-based OAuth authorization (Google/LinkedIn), optimized indexing, and \textbf{Redis} caching for low-latency dashboard queries.
-  \item Designed a modular monorepo architecture with \textbf{Turborepo} and deployed containerized services on \textbf{AWS (EC2, S3, Lambda, VPC)} via CI/CD pipelines, integrating \textbf{Prometheus} monitoring for production reliability and observability.
-\end{itemize}
+%------------------------------------------------
+% Skills
+%------------------------------------------------
+\cvsection{Skills}
+\begin{cvskills}
+\cvskill{Languages}{Java, Python, C++, Go, TypeScript, JavaScript, Kotlin, Dart, Bash}
+\cvskill{Frameworks}{Next.js, Flask, Django, Express.js, Spring Boot, ASP.Net, Flutter, Jetpack Compose, React Native (Expo)}
+\cvskill{Tools \& Database}{ARCore, Gradle, Firebase, PostgreSQL, MongoDB, Git}
+\cvskill{Cloud}{AWS (EC2, S3, Lambda, CloudFront), GKE, Vertex, Docker, Kubernetes, Terraform, Jenkins, GitHub Actions}
+\cvskill{Observability}{Custom Renderers, FFmpeg, SQL/NoSQL Queries, Prometheus, ELK Stack, Performance Profiling}
+\end{cvskills}
 
-\textbf{Spotify Looper} -- \href{https://github.com/Mic-360/spotify_looper}{Github} \\
-\textit{Precision A-B Playback Controller}
-\begin{itemize}
-  \item Architected a cross-platform Spotify playback controller using \textbf{Flutter + Riverpod}, implementing millisecond-accurate A-B looping and secure \textbf{OAuth 2.0} Web API integration with automated token lifecycle management for >99\% session reliability.
-  \item Engineered a low-latency loop execution pipeline using \textbf{just\_audio}, optimizing seek operations to achieve sub-120ms glitch-free transitions while maintaining responsive \textbf{Material 3 UI} across Android and Web (PWA).
-\end{itemize}
+%------------------------------------------------
+% Projects
+%------------------------------------------------
+\cvsection{Projects}
+\begin{cventries}
 
-\section{Certifications}
-\begin{itemize}
-  \item Aug 2024: \textbf{Cybersecurity Professional Specialization}, Google
-  \item Jun 2024: \textbf{Automate Cybersecurity Tasks with Python}, Google
-  \item Mar 2024: \textbf{Tools of the Trade: Linux and SQL}, Google
-  \item Jan 2024: \textbf{Connect and Protect: Networks and Network Security}, Google
-  \item Jan 2024: \textbf{Google Analytics Certificate}, ULS Association
-  \item Mar 2023: \textbf{Frontend Certification Exam}, Codedamn
-  \item Sep 2022: \textbf{Android Mobile Application Development}, Meta
-  \item Sep 2022: \textbf{Architecting Google Compute Engine Specialization}, Google
-  \item Sep 2022: \textbf{Elastic Google Cloud Infrastructure: Scaling and Automation}, Coursera
-  \item Sep 2022: \textbf{Reliable Google Cloud Infrastructure: Design and Process}, Coursera
-  \item Sep 2022: \textbf{Essential Google Cloud Infrastructure: Core Services}, Coursera
-  \item Mar 2022: \textbf{GitHub Actions: CI/CD}, Codedamn
-\end{itemize}
+\cventry
+{Multi-Tenant Machine Booking Platform}{Makerapp}{\hyperlink{https://makerapp-v3-web.vercel.app/}{Website}}{}
+{
+\begin{cvitems}
+\item {Architected and delivered a full-stack, multi-tenant booking platform using \textbf{Next.js 16, TypeScript, tRPC, Prisma, and MongoDB}, enabling machine rentals, lab onboarding, and workshop scheduling across Admin, Vendor, and User roles.}
+\item {Engineered a transactional booking and payment pipeline with \textbf{Razorpay}, implementing idempotent state transitions, role-based OAuth authorization (Google/LinkedIn), optimized indexing, and \textbf{Redis} caching for low-latency dashboard queries.}
+\item {Designed a modular monorepo architecture with \textbf{Turborepo} and deployed containerized services on \textbf{AWS (EC2, S3, Lambda, VPC)} via CI/CD pipelines, integrating \textbf{Prometheus} monitoring for production reliability and observability.}
+\end{cvitems}
+}
+
+\cventry
+{Precision A–B Playback Controller}{Spotify Looper}{\hyperlink{https://github.com/Mic-360/spotify_looper}{Github}}{}
+{
+\begin{cvitems}
+\item {Architected a cross-platform Spotify playback controller using \textbf{Flutter + Riverpod}, implementing millisecond-accurate A–B looping and secure \textbf{OAuth 2.0} Web API integration with automated token lifecycle management for >99\% session reliability.}
+\item {Engineered a low-latency loop execution pipeline using \textbf{just\_audio}, optimizing seek operations to achieve sub-120ms glitch-free transitions while maintaining responsive Material 3 UI across Android and Web (PWA).}
+\end{cvitems}
+}
+
+\end{cventries}
+
+%------------------------------------------------
+% Certifications
+%------------------------------------------------
+\cvsection{Certifications}
+\begin{cvhonors}
+
+  \cvhonor
+    {Cybersecurity Professional Specialization}
+    {}
+    {Google}
+    {Aug 2024}
+
+  \cvhonor
+    {Automate Cybersecurity Tasks with Python}
+    {}
+    {Google}
+    {Jun 2024}
+
+  \cvhonor
+    {Tools of the Trade: Linux and SQL}
+    {}
+    {Google}
+    {Mar 2024}
+
+  \cvhonor
+    {Connect and Protect: Networks and Network Security}
+    {}
+    {Google}
+    {Jan 2024}
+
+  \cvhonor
+    {Google Analytics Certificate}
+    {}
+    {ULS Association}
+    {Jan 2024}
+
+  \cvhonor
+    {Frontend Certification Exam}
+    {}
+    {Codedamn}
+    {Mar 2023}
+
+  \cvhonor
+    {Android Mobile Application Development}
+    {}
+    {Meta}
+    {Sep 2022}
+
+  \cvhonor
+    {Architecting Google Compute Engine Specialization}
+    {}
+    {Google}
+    {Sep 2022}
+
+  \cvhonor
+    {Elastic Google Cloud Infrastructure: Scaling and Automation}
+    {}
+    {Coursera}
+    {Sep 2022}
+
+  \cvhonor
+    {Reliable Google Cloud Infrastructure: Design and Process}
+    {}
+    {Coursera}
+    {Sep 2022}
+
+  \cvhonor
+    {Essential Google Cloud Infrastructure: Core Services}
+    {}
+    {Coursera}
+    {Sep 2022}
+
+  \cvhonor
+    {GitHub Actions: CI/CD}
+    {}
+    {Codedamn}
+    {Mar 2022}
+
+\end{cvhonors}
 
 \end{document}
