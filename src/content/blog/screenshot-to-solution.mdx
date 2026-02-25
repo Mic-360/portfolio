@@ -1,0 +1,71 @@
+---
+title: 'From Screenshot to Solution: The Power of Multimodal AI in Debugging'
+date: '2026-02-26'
+summary: 'Learn how AI Feedbacks leverages Google Gemini to turn visual bug reports into actionable prompts for coding agents.'
+tags:
+  - 'AI'
+  - 'WebDev'
+  - 'Productivity'
+  - 'Gemini'
+categories:
+  - 'Engineering'
+  - 'Tools'
+image: '/ai-feedbacks.png'
+---
+
+# From Screenshot to Solution
+
+> "The hardest part of fixing a bug isn't the code—it's describing it."
+
+Reporting a bug is often a game of telephone. A screenshot here, a vague "it's broken" there, and suddenly the developer is spending half their morning just trying to reproduce the issue. With the rise of agentic coding, we have a new problem: **how do we feed these agents the right context to fix the bug?**
+
+Enter **AI Feedbacks**—a bridge designed to transform the friction of bug reporting into the flow of resolution.
+
+![AI Feedbacks Logo](/ai-feedbacks-logo.png)
+
+## The Problem: Context Decay
+
+When an issue occurs, the rich context (DOM state, console logs, network errors) is often lost. By the time it reaches an agent like Cursor or Windsurf, the prompt is too thin. Developers end up manually copying errors and describing layouts, which is slow and error-prone.
+
+## The Solution: Multimodal Intelligence
+
+AI Feedbacks uses **Google Gemini 3 Flash Preview** to analyze screenshots and text description simultaneously. It doesn't just see a picture; it understands the UI hierarchy and the user's intent to craft a "perfect" prompt.
+
+### How it works:
+- **Visual Analysis**: Gemini identifies UI components and visual glitches.
+- **Log Integration**: The Chrome Extension captures unhandled rejections and network logs.
+- **Prompt Engineering**: The backend synthesizes this into a prompt that a coding agent can execute immediately.
+
+```ts
+// Example of the AI processing logic
+const result = streamText({
+    model: google("gemini-3-flash-preview"),
+    messages: [
+        {
+            role: "user",
+            content: [
+                { type: "text", text: `Analyze this bug: ${description}` },
+                { type: "image", image: screenshotBuffer }
+            ]
+        }
+    ]
+});
+```
+
+## A Premium Developer Experience
+
+Beyond its AI core, the platform is built for speed.
+
+- **Monochrome Aesthetic**: A high-contrast, distraction-free UI.
+- **Optimistic Updates**: Using `@tanstack/react-form` and local persistence for instant feedback.
+- **Natural Language Search**: Find past issues using semantic queries rather than exact keywords.
+
+![AI Feedbacks](/ai-feedbacks.png)
+
+## Closing thoughts
+
+The future of development isn't just about AI writing code; it's about humans and AI collaborating with high-fidelity context. AI Feedbacks is a step toward that friction-less future.
+
+---
+
+Thanks for reading. Check out the project on [GitHub](https://github.com/Mic-360/ai-feedbacks).

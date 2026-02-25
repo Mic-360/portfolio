@@ -1,0 +1,59 @@
+---
+title: 'AI Feedbacks'
+date: '2026-02-26'
+summary: 'A premium bug-to-prompt engine that closes the loop between issue discovery and resolution using multimodal AI.'
+stack:
+  - 'Next.js 15'
+  - 'Tailwind CSS v4'
+  - 'Google Gemini'
+  - 'TanStack Form'
+  - 'Framer Motion'
+links:
+  - label: 'GitHub'
+    url: 'https://github.com/Mic-360/ai-feedbacks'
+tags:
+  - 'AI'
+  - 'DevTools'
+  - 'Open Source'
+categories:
+  - 'Web'
+image: '/ai-feedbacks.png'
+---
+
+# AI Feedbacks
+
+A state-of-the-art web application designed to transform application issues and bugs into actionable prompts for coding agents.
+
+![AI Feedbacks](/ai-feedbacks.png)
+
+## The problem
+
+Standard bug reporting is fragmented. Developers often receive screenshots without logs, or logs without context. When using AI coding agents, this lack of structure leads to hallucinations or the need for multiple follow-up prompts to clarify the issue, wasting valuable development time.
+
+## The solution
+
+AI Feedbacks provides a unified pipeline for bug capture and prompt generation. By combining a web dashboard with a powerful Chrome Extension, it captures the full state of a bug and uses multimodal AI to translate that state into a precise instruction for an agent.
+
+### Key Features
+-   **AI Prompt Generation**: Translates screenshots + descriptions into optimized agent prompts.
+-   **Chrome Extension**: Captures cropped screenshots, DOM state, and network logs automatically.
+-   **Semantic Search**: Query past feedbacks using natural language (e.g., "that issue with the login button from Tuesday").
+-   **Glassmorphic UI**: High-fidelity monochrome design built with Tailwind v4.
+
+## Highlights
+
+- **Multimodal Analysis**: Utilizes `gemini-3-flash-preview` for real-time visual reasoning.
+- **Optimistic UI**: Snappy performance using TanStack Form for instant local state updates.
+- **Zero-Friction Extension**: Manifest V3 extension that integrates directly with the browser's developer tools.
+
+## Results
+
+The project successfully demonstrates how AI can be used to "pre-process" developer tasks. By automating the prompt creation phase, developers can move from "finding a bug" to "applying a fix" in seconds rather than minutes.
+
+## What I learned
+
+Building this project highlighted the maturity of multimodal LLMs in understanding UI bugs. I learned how to handle large file uploads (screenshots) efficiently in Next.js and how to bridge the gap between a browser extension and a web app using local storage and custom API routes.
+
+---
+
+If you'd like a walkthrough of the architecture, reach out on GitHub.
