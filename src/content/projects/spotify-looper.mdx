@@ -28,37 +28,151 @@ image: '/project/spotify-looper-mockup.png'
 
 # Spotify Looper
 
-Spotify Looper is a cross-platform utility designed to give users total control over their music playback. While Spotify is the world's most popular streaming service, it lacks granular tools for users who want to interact deeply with their tracks—looping specific highlights or skipping tedious sections.
+A cross-platform precision playback tool built with Flutter. Spotify Looper fills the gap Spotify has ignored for 20 years — millisecond-accurate A/B looping and automatic segment skipping on any track in your library. Runs on Android and the web from a single codebase.
 
 ## The Problem
 
-The official Spotify experience is largely passive. Users have very little control over *how* they hear a specific track. If you want to hear a specific 10-second guitar solo on repeat, or if you want to skip an annoying skit in the middle of a song, you're forced to manual scrub or wait it out. Spotify lacks native A/B looping and precise segment boundaries.
+The official Spotify experience is passive by design. If you want to loop a 15-second guitar riff, repeat a specific chorus, or skip a 90-second spoken intro every time a track plays, you're stuck manually scrubbing an imprecise seek bar. Spotify has no native A/B looping, no persistent segment markers, and no automatic skip boundaries.
 
 ## The Solution
 
-I built Spotify Looper to elevate the listener's experience by providing the missing precision tools. Using the Spotify App Remote and Web Playback SDKs, the app allows for:
+Spotify Looper wraps the Spotify App Remote SDK (Android) and Web Playback SDK (web) to expose the precision controls Spotify keeps hidden. Set start and end markers to the millisecond, save them per-track, and let the app manage playback position automatically.
 
-- **Precision Looping**: Set millisecond-accurate start and end points to loop your favorite parts of any song.
-- **Segment Skipping**: Define boundaries to automatically skip over sections you don't like, such as long intros, bridges, or dialogues.
-- **Instrument Interaction**: For those who play along with their music, the app provides a stable "loop" environment to practice specific riffs without breaking flow.
+## Prerequisites
 
-## Highlights
+- **Flutter** 3.19 or higher — `flutter --version`
+- **Dart** 3.3 or higher (bundled with Flutter)
+- A **Spotify Premium** account — both SDKs require Premium for playback control
+- A **Spotify Developer App** — register one at [developer.spotify.com/dashboard](https://developer.spotify.com/dashboard)
 
-- **Seamless Sync**: Synchronizes with your active Spotify session across devices.
-- **Dynamic Interface**: A Material 3 UI that evolves based on the album art of the track you're currently looping.
-- **Cross-Platform**: Built once with Flutter to serve both Android users and Web listeners.
+## Spotify Developer Setup
 
-## Results
+Before running the app, you must register it with Spotify:
 
-Spotify Looper successfully fills a niche that the main Spotify app ignores. It transforms a passive listening session into an active, curated experience, allowing users to "edit" their music in real-time.
+1. Go to [developer.spotify.com/dashboard](https://developer.spotify.com/dashboard) and click **Create App**.
+2. Fill in any name and description.
+3. Under **Redirect URIs**, add:
+   - **Web:** `http://localhost:8080/callback`
+   - **Android debug:** `myapp://callback`
+4. Under **APIs Used**, enable **Spotify Web Playback SDK** and **Android SDK**.
+5. Copy your **Client ID** — you'll need it next.
 
-## What I learned
+## Configuration
 
-Creating a tool that sits "on top" of an existing giant like Spotify required deep understanding of:
-- **SDK Limitations**: Navigating the differences between the Spotify Web SDK and the Native Android SDK.
-- **Real-time UX**: Designing a progress bar and marker system that remains responsive even during high-frequency looping.
-- **User Agency**: Focusing the design on giving power back to the user, rather than following standard streaming app conventions.
+Create a `.env` file in the project root:
+
+```env
+SPOTIFY_CLIENT_ID=your_client_id_here
+SPOTIFY_REDIRECT_URI_WEB=http://localhost:8080/callback
+SPOTIFY_REDIRECT_URI_ANDROID=myapp://callback
+```
+
+The app reads these at build time via `flutter_dotenv`. Do not commit `.env` to version control.
+
+## Installation
+
+```bash
+git clone https://github.com/Mic-360/spotify_looper.git
+cd spotify_looper
+flutter pub get
+```
+
+## Running the App
+
+### Web
+
+```bash
+flutter run -d chrome --web-port 8080
+```
+
+The redirect URI must match exactly what you registered in the Spotify dashboard. `localhost:8080` is the default.
+
+### Android (Debug)
+
+Connect your Android device with USB debugging enabled:
+
+```bash
+flutter run -d android
+```
+
+Android authentication uses a deep link callback (`myapp://callback`) handled automatically by the `app_links` package.
+
+## Production Builds
+
+**Web:**
+
+```bash
+flutter build web --release
+# Output: build/web/ — deploy to Firebase Hosting, Vercel, etc.
+```
+
+**Android APK:**
+
+```bash
+flutter build apk --release
+# Output: build/app/outputs/flutter-apk/app-release.apk
+```
+
+**Android App Bundle (Play Store):**
+
+```bash
+flutter build appbundle --release
+```
+
+## How It Works
+
+### Authentication Flow
+
+1. User taps **Connect with Spotify**.
+2. The app opens the Spotify OAuth page in a web view.
+3. Spotify redirects back to the app's callback URI with an auth code.
+4. The app exchanges the code for `access_token` and `refresh_token`.
+5. Tokens are stored securely and refreshed automatically before expiry.
+
+### Setting a Loop
+
+1. Play any track through the Spotify Looper app.
+2. Tap **Set Start** at the moment you want the loop to begin.
+3. Tap **Set End** at the moment you want the loop to end.
+4. Toggle **Loop ON** — the app monitors playback position and auto-seeks back to the start point when it passes the end point.
+5. Markers persist per-track in local storage and restore the next time you play that track.
+
+### Progress Bar Behavior
+
+The custom progress bar polls the Spotify SDK's playback state every **250ms**. Start and end markers are rendered as draggable overlays on the bar for fine-grained visual adjustment.
+
+## Project Architecture
+
+```
+spotify_looper/
+├── lib/
+│   ├── main.dart
+│   ├── providers/
+│   │   ├── auth_provider.dart        # Riverpod: Spotify OAuth state
+│   │   ├── playback_provider.dart    # Riverpod: current track + position
+│   │   └── loop_provider.dart        # Riverpod: A/B marker state
+│   ├── screens/
+│   │   ├── home_screen.dart          # Main playback UI
+│   │   └── login_screen.dart
+│   ├── services/
+│   │   ├── spotify_service.dart      # Web Playback + App Remote wrapper
+│   │   └── storage_service.dart      # Persist markers per track ID
+│   └── widgets/
+│       ├── loop_progress_bar.dart    # Custom scrubber with A/B markers
+│       └── album_theme_provider.dart # Material 3 dynamic color from album art
+├── android/                          # Android App Remote SDK integration
+└── web/                              # Spotify Web Playback SDK JS bridge
+```
+
+## Known SDK Limitations
+
+| Limitation                   | Details                                                                                                                   |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| **Spotify Premium required** | Both SDKs require a Premium subscription to control playback programmatically                                             |
+| **Web seek precision**       | The Web Playback SDK is accurate to ~100ms; fine for looping in practice                                                  |
+| **Android seek resolution**  | The App Remote SDK has ~500ms seek resolution — coarser than web                                                          |
+| **Browser background tab**   | Browser autoplay policies may pause the web player when the tab is backgrounded — a browser constraint, not a Flutter one |
 
 ---
 
-If you'd like a walkthrough of the architecture or want to contribute, feel free to reach out.
+Live demo: [spotify-looper-cc1ad.web.app](https://spotify-looper-cc1ad.web.app) · Source: [github.com/Mic-360/spotify_looper](https://github.com/Mic-360/spotify_looper)

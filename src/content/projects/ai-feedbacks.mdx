@@ -22,38 +22,140 @@ image: '/ai-feedbacks.png'
 
 # AI Feedbacks
 
-A state-of-the-art web application designed to transform application issues and bugs into actionable prompts for coding agents.
+A multimodal bug-to-prompt engine that captures the full context of a web application issue — screenshot, DOM state, console errors, network failures — and synthesizes it into a structured, agent-ready prompt using Google Gemini.
 
 ![AI Feedbacks](/ai-feedbacks.png)
 
-## The problem
+## The Problem
 
-Standard bug reporting is fragmented. Developers often receive screenshots without logs, or logs without context. When using AI coding agents, this lack of structure leads to hallucinations or the need for multiple follow-up prompts to clarify the issue, wasting valuable development time.
+Standard bug reporting is fragmented. Developers receive screenshots without logs, or logs without context. When that thin description reaches an AI coding agent, the result is hallucinations or a 5-message back-and-forth before the agent understands what actually broke. Context that exists at the moment of failure is lost within seconds of the user closing the tab.
 
-## The solution
+## The Solution
 
-AI Feedbacks provides a unified pipeline for bug capture and prompt generation. By combining a web dashboard with a powerful Chrome Extension, it captures the full state of a bug and uses multimodal AI to translate that state into a precise instruction for an agent.
+AI Feedbacks unifies bug capture and prompt generation into a single pipeline. The Chrome Extension grabs the screenshot, DOM state, and network errors automatically. The reporter adds a one-line description. The backend calls Gemini and returns a structured fix-ready prompt.
 
-### Key Features
--   **AI Prompt Generation**: Translates screenshots + descriptions into optimized agent prompts.
--   **Chrome Extension**: Captures cropped screenshots, DOM state, and network logs automatically.
--   **Semantic Search**: Query past feedbacks using natural language (e.g., "that issue with the login button from Tuesday").
--   **Glassmorphic UI**: High-fidelity monochrome design built with Tailwind v4.
+## Prerequisites
 
-## Highlights
+Before running the project, make sure you have:
 
-- **Multimodal Analysis**: Utilizes `gemini-3-flash-preview` for real-time visual reasoning.
-- **Optimistic UI**: Snappy performance using TanStack Form for instant local state updates.
-- **Zero-Friction Extension**: Manifest V3 extension that integrates directly with the browser's developer tools.
+- **Node.js** v18.17.0 or higher (`node --version`)
+- **npm** v9+ or **pnpm** v8+
+- A **Google Gemini API key** from [aistudio.google.com](https://aistudio.google.com)
+- **Google Chrome** for the extension
 
-## Results
+## Getting Started
 
-The project successfully demonstrates how AI can be used to "pre-process" developer tasks. By automating the prompt creation phase, developers can move from "finding a bug" to "applying a fix" in seconds rather than minutes.
+### 1. Clone and Install
 
-## What I learned
+```bash
+git clone https://github.com/Mic-360/ai-feedbacks.git
+cd ai-feedbacks
+npm install
+```
 
-Building this project highlighted the maturity of multimodal LLMs in understanding UI bugs. I learned how to handle large file uploads (screenshots) efficiently in Next.js and how to bridge the gap between a browser extension and a web app using local storage and custom API routes.
+### 2. Configure Environment Variables
+
+```bash
+cp .env.example .env.local
+```
+
+Fill in `.env.local`:
+
+```env
+# Required
+GEMINI_API_KEY=your_gemini_api_key_here
+
+# Optional — defaults shown
+GEMINI_MODEL=gemini-3-flash-preview
+MAX_IMAGE_SIZE=5242880
+```
+
+### 3. Start the Development Server
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+### 4. Install the Chrome Extension
+
+1. Navigate to `chrome://extensions` in Chrome.
+2. Enable **Developer Mode** (top-right toggle).
+3. Click **Load unpacked** and select the `extension/` directory.
+4. The extension icon appears in your Chrome toolbar — you're ready.
+
+## How It Works
+
+### Capturing a Bug
+
+1. Navigate to the broken page in your browser.
+2. Click the extension icon and use the crop selector to highlight the problem area.
+3. The extension automatically captures:
+   - Your cropped screenshot
+   - All `console.error` / `console.warn` output from the session
+   - Failed network requests (4xx/5xx) from the last 60 seconds
+4. Add a one-line description of what went wrong.
+5. Submit — the payload goes to the dashboard API.
+
+### AI Prompt Generation
+
+The `/api/analyze` route receives the payload and calls Gemini with the image and context:
+
+```ts
+const result = streamText({
+  model: google('gemini-3-flash-preview'),
+  messages: [
+    {
+      role: 'user',
+      content: [
+        { type: 'text', text: `Analyze this bug: ${description}` },
+        { type: 'image', image: screenshotBuffer },
+      ],
+    },
+  ],
+})
+```
+
+Gemini returns a structured prompt identifying the broken component, relevant network failures, and a fix instruction ready to paste into Cursor, Windsurf, or any agentic tool.
+
+### Searching Past Reports
+
+The dashboard supports **natural language semantic search**. Query with:
+
+- _"login button error from last week"_
+- _"the white flash on mobile"_
+
+No tag system needed. No exact-keyword matching required.
+
+## Project Architecture
+
+```
+ai-feedbacks/
+├── app/
+│   ├── api/
+│   │   ├── analyze/        # POST: receives bug payload, calls Gemini
+│   │   └── feedbacks/      # GET/POST: feedback CRUD
+│   ├── page.tsx            # Main dashboard
+│   └── layout.tsx
+├── components/             # Tailwind v4 UI components
+├── extension/              # Chrome Manifest V3 extension
+│   ├── manifest.json
+│   ├── content.js          # DOM + network log capture
+│   ├── popup.html          # Crop tool UI
+│   └── background.js       # Service worker
+└── lib/
+    └── gemini.ts           # Gemini client wrapper
+```
+
+## Deploying to Vercel
+
+```bash
+vercel --prod
+```
+
+Add `GEMINI_API_KEY` under **Settings → Environment Variables** in your Vercel project. All other variables are optional.
 
 ---
 
-If you'd like a walkthrough of the architecture, reach out on GitHub.
+Source: [github.com/Mic-360/ai-feedbacks](https://github.com/Mic-360/ai-feedbacks)

@@ -16,27 +16,35 @@ image: '/blog/mamoru-banner.png'
 
 > "Security shouldn't be a luxury for hobbyists; it should be as easy as running a single binary."
 
-In the world of web development, we often think of Web Application Firewalls (WAFs) as massive, enterprise-grade monsters. They satisfy the needs of giants but often leave the solo developer or hobbyist in the dust, crushed by the weight of external databases, complex configurations, and heavy infrastructure requirements.
+Hot take: if configuring your WAF requires a 40-page enterprise PDF, a Redis cluster, and a dedicated DevOps engineer on standby — it was never built for you. It was built for a $2M-budget company with annual compliance audits. You are a solo dev. Different audience. Different budget. Same bots targeting your login endpoint.
 
-Enter **Mamoru-WAF**. Designed to be the "Guardian of Your Web Applications," this Go-based reverse proxy is proving that you don't need a massive cluster to keep the bad guys at bay.
+And yet the WAF market looked at hobbyists and went: "figure it out or go unprotected." Cool. Incredibly thoughtful.
+
+Enter **Mamoru-WAF**. Single binary. Zero external dependencies. Running in 60 seconds. If sqlmap is currently probing your side project right now, there is genuinely no excuse left after this post.
 
 ![Mamoru-kun Mascot](/blog/mamoru-mascot.png)
 
-## Meet Mamoru-kun 🛡️
+## Who Asked for Enterprise WAFs? (Not You)
 
-At the heart of this project is Mamoru-kun, our official mascot. He represents everything the project stands for: vigilant, lightweight, and surprisingly friendly. While Mamoru-kun stands guard, your applications can breathe easy, shielded from SQL injections, XSS attacks, and malicious bots.
+Let's price this out. Cloudflare WAF: $200/month before features. AWS WAF: charged per rule, per request, per configuration change. ModSecurity with Apache: enjoy reading the documentation, I'll be over here.
 
-What makes Mamoru-WAF unique is its commitment to the developer experience. It’s a single binary that requires zero external infrastructure. No Redis for rate limiting. No Postgres for logs. Just Go, YAML, and pure security logic.
+**Mamoru-WAF:** `go build -o mamoru ./cmd/server`. Done. You're protected.
 
-## Security in Real-Time
+No Redis for rate limiting. No Postgres for logging. No YAML config that reads like legal boilerplate. Just Go, a `rules.yaml` you can understand in 5 minutes, and Mamoru-kun — who is clearly more invested in your security posture than whatever you're running right now.
 
-The project features a modular rule engine that evaluates traffic with surgical precision. But the real "magic" is the **Hot Reload** capability. Using an `AtomicEngine` implementation, you can edit your `rules.yaml` and watch Mamoru-kun apply the new protections within two seconds—without dropping a single connection.
+## The Part Where It Does Real Security
 
-### Core Protections:
-- **Regex Pattern Matching:** Detects SQLi, XSS, and Path Traversal.
-- **Token-Bucket Rate Limiting:** Built-in per-IP limiting with path-specific overrides.
-- **Body Inspection:** Deep packet inspection for POST requests.
-- **Fail-Safe Mode:** Choose between "Fail-Open" for uptime or "Block" for maximum security.
+Nobody:\
+Enterprise WAF vendors: "Have you completed our 14-step onboarding wizard?"
+
+Here's what's actually running under the hood — and yes, it cares about your OWASP Top 10 more than the SaaS tool that sent you a welcome email:
+
+- **Regex Pattern Matching:** Catches SQLi (`union`, `select`, `drop`, `sleep`), XSS (`<script>`, `onerror=`), and path traversal (`../`) before your backend ever sees a request.
+- **Token-Bucket Rate Limiting:** Per-IP, per-path, configurable globally. Your `/api/login` will not survive 500 requests per second anymore. Good.
+- **Body Inspection:** POST request bodies get the full treatment. Your text fields cannot be injection vectors.
+- **Fail-Safe Mode:** Rule engine crashes — choose "Fail-Open" for uptime priority or "Block" when security actually matters.
+
+The `AtomicEngine` handles **hot reload**. Edit `rules.yaml` live, updates apply in **2 seconds** without dropping any active connections. Realtime security config changes on a hobby budget. Completely unhinged in the best way.
 
 ```go
 // The Rule interface: Simple, powerful, and modular.
@@ -46,27 +54,31 @@ type Rule interface {
 }
 ```
 
-## The Terminal Advantage: A Sage-Green TUI
+## The Part Nobody Expected: A Gorgeous TUI
 
-While headless mode is perfect for production, Mamoru-WAF introduces a stunning Terminal UI (TUI) built with the Bubble Tea framework. It transforms your terminal into a command center, featuring a premium sage-green aesthetic that feels alive.
+Nobody asked for a WAF with a sage-green terminal dashboard. Nobody asked, and yet here it is, and it absolutely slaps.
 
-| Feature | Benefit |
-| ------- | ------- |
-| **Live Event Log** | See blocks and requests as they happen with zero latency. |
-| **Backend Monitoring** | Real-time health indicators for your proxied services. |
-| **Interactive Hotkeys** | Reload rules or toggle "Detection Mode" with a single keystroke. |
-| **Zero Performance Hit** | The TUI runs on a non-blocking event bus. |
+Built with Bubble Tea, the TUI is a real command center — not "a wall of scrolling JSON you can't parse at 3 AM." Organized panels. Actual hotkeys. Real-time visibility.
+
+| Feature                  | What It Does                                                                                      |
+| ------------------------ | ------------------------------------------------------------------------------------------------- |
+| **Live Event Log**       | Blocked requests in real-time with reason, IP, and timestamp. You see exactly what's hitting you. |
+| **Backend Health**       | Your proxied services — are they alive? This panel has the answer.                                |
+| **Interactive Hotkeys**  | `r` to reload rules live. `d` to toggle detect mode. `q` when you've seen enough.                 |
+| **Zero Performance Hit** | Non-blocking event bus. Adds visibility, not latency.                                             |
 
 ![Mamoru Banner](/blog/mamoru-banner.png)
 
-## Closing Thoughts
+## The Hot Take Conclusion
 
-Mamoru-WAF isn't just a tool; it's a statement that security can be beautiful and accessible. By stripping away the bloat and focusing on the core essentials—modular rules, high-speed proxying, and great observability—we've created a guardian that anyone can deploy in seconds.
+Your side project with 50 users still gets bot-scanned. Your login endpoints still get brute-forced. Your text inputs are probed for SQL injection every single day. "I'm just a hobby project" is not a threat model.
 
-- **Get Started:** Build it with `go build -o mamoru ./cmd/server`.
-- **Contribute:** Help Mamoru-kun grow by implementing new rules in `internal/rules/`.
-- **Deploy:** Use the 10 MB multi-stage Docker image for your next cloud project.
+You do not need a $200/month WAF. You need a single Go binary, a YAML file, and 60 seconds.
+
+- **Get Started:** `go build -o mamoru ./cmd/server`
+- **Contribute:** Implement new rules in `internal/rules/` — the `Rule` interface is literally 2 methods
+- **Deploy:** 15MB Docker image. Free tier. No more excuses.
 
 ---
 
-Thanks for reading. Stay safe out there!
+Protect your stuff. It's not complicated. Mamoru-kun is watching.

@@ -18,9 +18,9 @@ image: '/blog/why-reflex.png'
 
 ![Why Reflex](/blog/why-reflex.png)
 
-So there I was, minding my own business with a perfectly functional React + Vite dashboard. Clean code, fast builds, straightforward TypeScript. Life was good. The dashboard worked. Users were happy. Then someone had a brilliant idea: "Hey, let's rewrite this in Python!" (I'm that someone.)
+So there I was with a perfectly functional React + Vite dashboard. Clean code, fast builds, straightforward TypeScript. Life was good. The dashboard worked. Users were happy. Then the worst kind of idea showed up: "Let's rewrite this in Python." (I was the one who said it.)
 
-Why? Because apparently, I hate myself.
+Why? Because I was bored. Because "full-stack Python" sounds clean on paper. Because apparently I needed a very concrete lesson in the cost of unnecessary abstraction.
 
 ## The Migration Begins
 
@@ -142,15 +142,15 @@ This is literally just HTML with extra steps. I could be writing this in a `.jsx
 - Port 8000 already in use? Cool, we'll use 8001
 - Hope you like seeing deprecation warnings about Pydantic v1!
 
-## The "Benefits"
+## The "Benefits" of Reflex Over React
 
-Let me list the benefits of using Reflex over React:
+Complete, unabridged list of benefits from using Reflex instead of React:
 
 1. You can write Python instead of JavaScript
 2. ...
 3. That's it
 
-But wait! You're not really writing Python. You're writing React component trees with Python syntax. You're still thinking in components, props, and state. You're still writing Tailwind classes. You're still debugging browser issues.
+That's the full value proposition. "Python for web." Except you're not writing Python — you're writing React component trees in Python syntax. You're still thinking in components, props, and state. You're still writing Tailwind classes. The only thing that changed is the language you're doing it in, and that language is demonstrably worse at this specific task.
 
 The only difference is now you have:
 
@@ -183,15 +183,15 @@ Here's what really happened:
 
 ![Reflex Code IDE](/blog/reflex-code.png)
 
-## Why Does This Exist?
+## Why Does This Framework Exist?
 
-I genuinely don't understand why frameworks like Reflex exist. The pitch is "write web apps in Python!" but the reality is "write React in Python syntax while fighting with type systems that don't make sense."
+Honest question. The pitch is "write web apps in Python!" The reality is "write React in Python syntax while fighting type systems that don't make sense and watching build times measured in geological epochs."
 
-If you want to write Python, write Python. Make a FastAPI backend. Use Jinja templates. Use HTMX if you want interactivity. These are proven, simple, fast.
+If you want Python, write Python. FastAPI. Jinja templates. HTMX if you need interactivity. These are proven, fast, and designed for the task.
 
-If you want to write modern web apps, write React. Or Vue. Or Svelte. Use the tools designed for the job.
+If you want modern web apps, write React. Or Vue. Or Svelte. Use tools that were actually designed for the job.
 
-But don't use a framework that tries to be both and ends up being neither.
+Don't use a framework trying to be both that ends up being neither.
 
 ## The Lessons Learned
 
@@ -201,28 +201,27 @@ But don't use a framework that tries to be both and ends up being neither.
 4. **Use the right tool** - Python for backend, JavaScript for frontend. It's okay.
 5. **Hype is not architecture** - "Full-stack Python" sounds cool until you actually try it
 
-## The Conclusion
+## The Conclusion (Hot Take Edition)
 
 Would I recommend Reflex? Only if you:
 
-- Hate yourself
-- Have unlimited time for debugging
-- Enjoy fighting with type systems
-- Think "it's in Python" is a valid technical argument
-- Want to explain to your team why the build is slow
+- Actively enjoy debugging type systems that shouldn't exist
+- Have time to wait for builds measured in minutes
+- Think "it's Python so it must be simpler" is a technical argument
+- Want to explain to your team why the hot-reload takes 90 seconds
 
-For everyone else: Just learn React. Seriously. It'll take you a weekend. You'll be more productive, have better tooling, and won't need to convert strings to strings before concatenating them.
+For everyone else: **just learn React**. It takes a weekend. Not three weeks. A weekend. You will be more productive, have better tooling, and won't find yourself converting strings to strings before you can concatenate them.
 
 ## The Irony
 
-The funniest part? After all this migration work, the app still:
+After all of this migration work, the final app still:
 
 - Runs in a browser
 - Uses React under the hood
 - Requires Node.js to build
 - Needs JavaScript to run
 
-We just added Python as a middleman. Congratulations, we played ourselves.
+We added Python as a middleman. Python, the language. As a middleman. Congratulations, we played ourselves.
 
 ---
 
@@ -251,8 +250,9 @@ If you're interested in reflex code, here's the project which was migrated:
   <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
 </svg>
 
-
-<span class="ml-2 text-lg font-semibold capitalize">TryOn Dash Reflex Code</span>
+<span class="ml-2 text-lg font-semibold capitalize">
+  TryOn Dash Reflex Code
+</span>
 
 </a>
 </div>
