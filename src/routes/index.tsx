@@ -85,6 +85,88 @@ function Section({
   )
 }
 
+function Sparkline({
+  data,
+  color = 'currentColor',
+  height = 32
+}: {
+  data: { value: number }[],
+  color?: string,
+  height?: number
+}) {
+  if (!data || data.length < 2) return <div style={{ height }} />
+
+  const values = data.map(d => d.value)
+  const min = Math.min(...values)
+  const max = Math.max(...values)
+  const range = max - min || 1
+
+  const width = 100
+  const points = values.map((v, i) => {
+    const x = (i / (values.length - 1)) * width
+    const y = height - ((v - min) / range) * height
+    return `${x},${y}`
+  }).join(' ')
+
+  return (
+    <svg
+      viewBox={`0 0 ${width} ${height}`}
+      className="w-full h-8 overflow-visible opacity-50 group-hover:opacity-100 transition-opacity"
+      preserveAspectRatio="none"
+    >
+      <polyline
+        fill="none"
+        stroke={color}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        points={points}
+      />
+    </svg>
+  )
+}
+
+function StatCard({
+  label,
+  samples,
+  unit,
+  type = 'sum',
+  format = (v: number) => v.toLocaleString()
+}: {
+  label: string,
+  samples?: { value: number | string, startDate?: string, endDate: string }[],
+  unit: string,
+  type?: 'sum' | 'avg' | 'latest',
+  format?: (v: number) => string
+}) {
+  const processedData = (samples || []).map(s => {
+    let val = Number(s.value)
+    if (isNaN(val) && s.startDate) {
+      const start = new Date(s.startDate).getTime()
+      const end = new Date(s.endDate).getTime()
+      val = (end - start) / (1000 * 60 * 60)
+    }
+    return { ...s, value: isNaN(val) ? 0 : val }
+  })
+
+  const values = processedData.map(s => s.value)
+
+  let mainValue = 0
+  if (type === 'sum') mainValue = values.reduce((a, b) => a + b, 0)
+  else if (type === 'avg') mainValue = values.length ? values.reduce((a, b) => a + b, 0) / values.length : 0
+  else if (type === 'latest') mainValue = processedData.length ? [...processedData].sort((a, b) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime())[0].value : 0
+
+  return (
+    <div className="group flex flex-col gap-2 p-2 rounded-lg border border-border/50 hover:border-primary/50 transition-colors">
+      <div className="flex justify-between items-baseline">
+        <span className="text-[10px] uppercase tracking-widest text-primary">{label}</span>
+        <span className="text-xs font-medium">{format(mainValue)} <span className="text-[10px] text-muted-foreground font-normal">{unit}</span></span>
+      </div>
+      <Sparkline data={processedData} color="var(--primary)" />
+    </div>
+  )
+}
+
 function App() {
   const { posts, projects, health } = Route.useLoaderData()
 
@@ -252,34 +334,24 @@ function App() {
       </Section>
 
       <Section title="healthstat">
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <div className="flex flex-col gap-1">
-            <span className="text-[10px] uppercase tracking-widest text-primary">steps</span>
-            <span className="text-lg font-semibold">{health.steps?.toLocaleString() ?? 0}</span>
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-[10px] uppercase tracking-widest text-primary">energy</span>
-            <span className="text-lg font-semibold">{health.activeEnergy ?? 0} <span className="text-xs font-normal text-muted-foreground">kcal</span></span>
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-[10px] uppercase tracking-widest text-primary">spO2</span>
-            <span className="text-lg font-semibold">{health.spO2 ?? 0}<span className="text-xs font-normal text-muted-foreground">%</span></span>
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-[10px] uppercase tracking-widest text-primary">heart rate</span>
-            <span className="text-lg font-semibold">{health.heartRate ?? 0} <span className="text-xs font-normal text-muted-foreground">bpm</span></span>
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-[10px] uppercase tracking-widest text-primary">distance</span>
-            <span className="text-lg font-semibold">{health.distance?.toFixed(2) ?? 0} <span className="text-xs font-normal text-muted-foreground">km</span></span>
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-[10px] uppercase tracking-widest text-primary">sleep</span>
-            <span className="text-lg font-semibold">{health.sleep?.toFixed(1) ?? 0} <span className="text-xs font-normal text-muted-foreground">hrs</span></span>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <StatCard label="steps" samples={health.steps} unit="steps" type="sum" />
+          <StatCard label="energy" samples={health.activeEnergy} unit="kcal" type="sum" format={(v) => v.toFixed(0)} />
+          <StatCard label="heart rate" samples={health.heartRate?.map(s => {
+            const start = new Date(s.startDate).getTime()
+            const end = new Date(s.endDate).getTime()
+            const minutes = (end - start) / (1000 * 180)
+            return {
+              ...s,
+              value: minutes > 0 ? Number(s.value) / minutes : Number(s.value)
+            }
+          })} unit="bpm" type="avg" format={(v) => v.toFixed(0)} />
+          <StatCard label="distance" samples={health.distance} unit="km" type="sum" format={(v) => v.toFixed(2)} />
+          <StatCard label="sleep" samples={health.sleep} unit="hrs" type="sum" format={(v) => v.toFixed(1)} />
+          <StatCard label="spO2" samples={health.spO2} unit="%" type="avg" format={(v) => v.toFixed(1)} />
         </div>
         {health.updatedAt && (
-          <p className="text-[10px] italic text-muted-foreground mt-2">
+          <p className="text-[10px] italic text-muted-foreground mt-4">
             last updated: {new Date(health.updatedAt).toLocaleString()}
           </p>
         )}
