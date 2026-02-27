@@ -2,6 +2,7 @@ import LayersIcon from '@/components/ui/layers-icon'
 import PenIcon from '@/components/ui/pen-icon'
 import CalendarIcon from '@/components/ui/calendar-icon'
 import { getBlogIndex, getProjectIndex } from '@/lib/content.server'
+import { getHealthData } from '@/lib/health.server'
 import { formatDate } from '@/lib/format'
 import {
   contactLinks,
@@ -13,14 +14,16 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
   loader: async () => {
-    const [posts, projects] = await Promise.all([
+    const [posts, projects, health] = await Promise.all([
       getBlogIndex(),
       getProjectIndex(),
+      getHealthData(),
     ])
 
     return {
       posts,
       projects,
+      health,
     }
   },
   head: () => {
@@ -83,7 +86,7 @@ function Section({
 }
 
 function App() {
-  const { posts, projects } = Route.useLoaderData()
+  const { posts, projects, health } = Route.useLoaderData()
 
   return (
     <div className="flex flex-col gap-8">
@@ -246,6 +249,40 @@ function App() {
             </Link>
           </div>
         </div>
+      </Section>
+
+      <Section title="healthstat">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="flex flex-col gap-1">
+            <span className="text-[10px] uppercase tracking-widest text-primary">steps</span>
+            <span className="text-lg font-semibold">{health.steps?.toLocaleString() ?? 0}</span>
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className="text-[10px] uppercase tracking-widest text-primary">energy</span>
+            <span className="text-lg font-semibold">{health.activeEnergy ?? 0} <span className="text-xs font-normal text-muted-foreground">kcal</span></span>
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className="text-[10px] uppercase tracking-widest text-primary">spO2</span>
+            <span className="text-lg font-semibold">{health.spO2 ?? 0}<span className="text-xs font-normal text-muted-foreground">%</span></span>
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className="text-[10px] uppercase tracking-widest text-primary">heart rate</span>
+            <span className="text-lg font-semibold">{health.heartRate ?? 0} <span className="text-xs font-normal text-muted-foreground">bpm</span></span>
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className="text-[10px] uppercase tracking-widest text-primary">distance</span>
+            <span className="text-lg font-semibold">{health.distance?.toFixed(2) ?? 0} <span className="text-xs font-normal text-muted-foreground">km</span></span>
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className="text-[10px] uppercase tracking-widest text-primary">sleep</span>
+            <span className="text-lg font-semibold">{health.sleep?.toFixed(1) ?? 0} <span className="text-xs font-normal text-muted-foreground">hrs</span></span>
+          </div>
+        </div>
+        {health.updatedAt && (
+          <p className="text-[10px] italic text-muted-foreground mt-2">
+            last updated: {new Date(health.updatedAt).toLocaleString()}
+          </p>
+        )}
       </Section>
 
       <Section title="contact">

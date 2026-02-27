@@ -20,6 +20,7 @@ import { Route as SitemapXmlRouteImport } from './routes/sitemap.xml'
 import { Route as ProjectsSlugRouteImport } from './routes/projects/$slug'
 import { Route as OgSiteRouteImport } from './routes/og/site'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
+import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as OgProjectsSlugRouteImport } from './routes/og/projects/$slug'
 import { Route as OgBlogSlugRouteImport } from './routes/og/blog/$slug'
 
@@ -78,6 +79,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiHealthRoute = ApiHealthRouteImport.update({
+  id: '/api/health',
+  path: '/api/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OgProjectsSlugRoute = OgProjectsSlugRouteImport.update({
   id: '/og/projects/$slug',
   path: '/og/projects/$slug',
@@ -95,6 +101,7 @@ export interface FileRoutesByFullPath {
   '/readme': typeof ReadmeRoute
   '/resume': typeof ResumeRoute
   '/rss': typeof RssRoute
+  '/api/health': typeof ApiHealthRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/og/site': typeof OgSiteRoute
   '/projects/$slug': typeof ProjectsSlugRoute
@@ -110,6 +117,7 @@ export interface FileRoutesByTo {
   '/readme': typeof ReadmeRoute
   '/resume': typeof ResumeRoute
   '/rss': typeof RssRoute
+  '/api/health': typeof ApiHealthRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/og/site': typeof OgSiteRoute
   '/projects/$slug': typeof ProjectsSlugRoute
@@ -126,6 +134,7 @@ export interface FileRoutesById {
   '/readme': typeof ReadmeRoute
   '/resume': typeof ResumeRoute
   '/rss': typeof RssRoute
+  '/api/health': typeof ApiHealthRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/og/site': typeof OgSiteRoute
   '/projects/$slug': typeof ProjectsSlugRoute
@@ -143,6 +152,7 @@ export interface FileRouteTypes {
     | '/readme'
     | '/resume'
     | '/rss'
+    | '/api/health'
     | '/blog/$slug'
     | '/og/site'
     | '/projects/$slug'
@@ -158,6 +168,7 @@ export interface FileRouteTypes {
     | '/readme'
     | '/resume'
     | '/rss'
+    | '/api/health'
     | '/blog/$slug'
     | '/og/site'
     | '/projects/$slug'
@@ -173,6 +184,7 @@ export interface FileRouteTypes {
     | '/readme'
     | '/resume'
     | '/rss'
+    | '/api/health'
     | '/blog/$slug'
     | '/og/site'
     | '/projects/$slug'
@@ -189,6 +201,7 @@ export interface RootRouteChildren {
   ReadmeRoute: typeof ReadmeRoute
   ResumeRoute: typeof ResumeRoute
   RssRoute: typeof RssRoute
+  ApiHealthRoute: typeof ApiHealthRoute
   BlogSlugRoute: typeof BlogSlugRoute
   OgSiteRoute: typeof OgSiteRoute
   ProjectsSlugRoute: typeof ProjectsSlugRoute
@@ -278,6 +291,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/health': {
+      id: '/api/health'
+      path: '/api/health'
+      fullPath: '/api/health'
+      preLoaderRoute: typeof ApiHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/og/projects/$slug': {
       id: '/og/projects/$slug'
       path: '/og/projects/$slug'
@@ -301,6 +321,7 @@ const rootRouteChildren: RootRouteChildren = {
   ReadmeRoute: ReadmeRoute,
   ResumeRoute: ResumeRoute,
   RssRoute: RssRoute,
+  ApiHealthRoute: ApiHealthRoute,
   BlogSlugRoute: BlogSlugRoute,
   OgSiteRoute: OgSiteRoute,
   ProjectsSlugRoute: ProjectsSlugRoute,
