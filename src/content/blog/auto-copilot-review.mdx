@@ -1,0 +1,57 @@
+---
+title: 'Auto Copilot Review: Outsourcing My Insecurities to an LLM on Every Git Add'
+date: '2025-12-25'
+summary: 'Because hitting `git commit -m "fix maybe?"` requires too much confidence in my own code.'
+tags:
+  - 'VS Code'
+  - 'AI'
+  - 'Extension'
+categories:
+  - 'Dev Story'
+  - 'Projects'
+image: '/auto-copilot-review.png'
+---
+
+# Auto Copilot Review: Outsourcing My Insecurities to an LLM on Every Git Add
+
+> Writing code is fun. Reviewing code is boring. Reviewing your own code is functionally impossible because you already convinced yourself it was correct an hour ago.
+
+You know that exact moment before you finalize a commit? The moment where your cursor hovers over the 'Commit' button in VS Code, and you get that cold, creeping dread that you definitely left a `console.log("here")` somewhere or broke a type definition in a file you vaguely remember touching?
+
+Normally, you have two choices:
+1. Manually scroll through the diff, lie to yourself that it looks fine, and send it.
+2. Explicitly open GitHub Copilot Chat, copy-paste your diff, and ask it to review it.
+
+Number 1 leads to embarrassing PR comments. Number 2 breaks your flow entirely and feels like a chore.
+
+What if there was a Number 3?
+
+## Making Staging Aggressively Helpful
+
+I decided the moment I stage a file (`git add`), my editor should immediately, silently judge me. 
+
+So I built a VS Code extension that hooks directly into the Git API. Every single time you stage a file, **Auto Copilot Review** wakes up, grabs the diff of your staged changes, and shoves them straight into the GitHub Copilot Chat view with a "review this diff" command.
+
+It happens entirely magically in the background.
+
+## The "Oh God Slow Down" Problem (Debouncing)
+
+My first iteration was eager. Too eager. 
+
+I tend to stage files by rapidly clicking the '+' icon next to 5 different files in a row. 
+
+In V1 of the extension, this resulted in 5 identical, overlapping requests hitting the Copilot API in the span of a second, causing the Chat UI to have a panic attack and aggressively flash 5 different competing code reviews at the same time.
+
+It turns out that teaching a machine to instantaneously review your code requires teaching a machine *patience*. 
+
+I added a configurable debounce timer (defaulting to 5 seconds). Now, you can rapidly stage as many files as you want. Once you stop moving for 5 seconds, it gathers everything up into one neat, tidy package and fires a single review request. 
+
+## The Results
+
+It actually works phenomenally well. I stage files, glance over at the Copilot chat panel, and within seconds there's a neat breakdown of my logic flaws, typos, and forgotten debug statements waiting for me. 
+
+It feels like having a highly pedantic junior developer sitting permanently on your shoulder, eagerly waiting for you to prep a commit so they can point out your mistakes before you push them to master. 
+
+It is completely frictionless. It requires zero clicks the moment it’s installed. It just exists, watching, reviewing, and saving me from PR embarrassment.
+
+If you have a Copilot subscription and a complete lack of faith in your own late-night coding sessions, [install the extension here](https://github.com/Mic-360/auto-copilot-review). You're welcome.

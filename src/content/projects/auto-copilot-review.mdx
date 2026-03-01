@@ -1,0 +1,56 @@
+---
+title: 'Auto Copilot Review'
+date: '2025-12-25'
+summary: 'A VS Code extension that automatically triggers GitHub Copilot to review staged changes.'
+stack:
+  - 'TypeScript'
+  - 'VS Code API'
+links:
+  - label: 'GitHub'
+    url: 'https://github.com/Mic-360/auto-copilot-review'
+tags:
+  - 'vscode'
+  - 'extension'
+  - 'ai'
+  - 'workflow'
+categories:
+  - 'tooling'
+image: '/auto-copilot-review.png'
+---
+
+# Auto Copilot Review
+
+A frictionless VS Code extension that seamlessly integrates GitHub Copilot Chat into the Git workflow by automatically triggering AI code reviews immediately upon staging files.
+
+## The problem
+
+Code reviews represent a crucial but delayed feedback loop. Waiting for a peer review or actively remembering to prompt an AI for a review breaks development flow. Developers need instantaneous, automated feedback *before* the commit is finalized to catch bugs, typos, and logic errors early.
+
+## The solution
+
+Auto Copilot Review instruments the VS Code Git API to watch for staged files. When changes are staged, it uses a configurable debounce timer before automatically prompting GitHub Copilot Chat to review the diff. 
+
+### Key Features
+- **Automatic Execution:** Completely transparent workflow integration; staging a file is the only trigger needed.
+- **Smart Debouncing:** Implements a configurable delay (default 5 seconds) to prevent spamming Copilot with duplicate requests during rapid, multi-file staging operations.
+- **Complete Control:** Includes a command palette toggle (`Toggle Auto Copilot Review`) to easily disable the feature during pair programming or when working on sensitive code.
+
+## Highlights
+
+- **Zero Overhead:** Works entirely in the background, only utilizing resources precisely when code is staged.
+- **High Configurability:** Settings exposed directly via the standard VS Code `settings.json` interface for seamless user customization (`autoReview.enabled`, `autoReview.delay`).
+
+## Architecture
+
+The extension acts as a bridge between two existing VS Code capabilities: the built-in Git extension API and the GitHub Copilot Chat extension interface.
+- It registers a filesystem watcher on the repository's index.
+- Uses RxJS or simple timeout debouncing to collate rapid staging events.
+- Synthesizes the diff and programmatically dispatches a chat command to the Copilot Chat view, injecting the context seamlessly.
+
+## What I learned
+
+Building this extension required deep diving into the VS Code extension API, specifically around event listeners for internal Git abstractions and inter-extension communication. Orchestrating the timing to ensure Copilot received the correct context without interfering with the developer's immediate typing or staging actions was an exercise in precise debouncing and UX optimization.
+
+---
+
+If you'd like a walkthrough or have feedback, reach out or check the repository.
