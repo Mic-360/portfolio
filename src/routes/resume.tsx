@@ -1,4 +1,4 @@
-import { getResume } from '@/lib/content.server'
+import { getResume } from '@/lib/content'
 import { siteMeta } from '@/lib/site-data'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import FileDescriptionIcon from '@/components/ui/file-description-icon'

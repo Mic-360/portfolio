@@ -1,4 +1,4 @@
-import { getProjectBySlug } from '@/lib/content.server'
+import { getProjectBySlug } from '@/lib/content'
 import { formatDate } from '@/lib/format'
 import { siteMeta } from '@/lib/site-data'
 import { createFileRoute, Link } from '@tanstack/react-router'

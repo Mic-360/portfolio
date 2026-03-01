@@ -1,5 +1,5 @@
 import PenIcon from '@/components/ui/pen-icon'
-import { getBlogIndex } from '@/lib/content.server'
+import { getBlogIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
 import { siteMeta } from '@/lib/site-data'
 import { createFileRoute, Link } from '@tanstack/react-router'

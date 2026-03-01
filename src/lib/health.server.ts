@@ -1,4 +1,5 @@
-import { createServerFn } from '@tanstack/react-start'
+// NOTE: This file should only be imported from server-side code or via
+// dynamic import() inside createServerFn handlers (see health.ts).
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { z } from 'zod'
@@ -45,15 +46,6 @@ async function writeHealthData(data: HealthData) {
     return updatedData
 }
 
-export const getHealthData = createServerFn({ method: 'GET' }).handler(
-    async () => readHealthData(),
-)
-
-export const updateHealthData = createServerFn({ method: 'POST' })
-    .inputValidator(healthDataSchema)
-    .handler(async ({ data }) => {
-        return writeHealthData(data)
-    })
-
 export const getHealthDataInternal = readHealthData
 export const writeHealthDataInternal = writeHealthData
+

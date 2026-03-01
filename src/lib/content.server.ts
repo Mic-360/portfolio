@@ -1,5 +1,6 @@
 // Content server for MDX processing with syntax highlighting
-import { createServerFn } from '@tanstack/react-start'
+// NOTE: This file should only be imported from server-side code or via
+// dynamic import() inside createServerFn handlers (see content.ts).
 import matter from 'gray-matter'
 import fs from 'node:fs/promises'
 import path from 'node:path'
@@ -362,41 +363,6 @@ async function readProjectPost(slug: string): Promise<ProjectPost | null> {
     return null
   }
 }
-
-export const getBlogIndex = createServerFn({ method: 'GET' }).handler(
-  async () => readBlogIndex(),
-)
-
-export const getBlogPostBySlug = createServerFn({ method: 'GET' })
-  .inputValidator(z.object({ slug: z.string() }))
-  .handler(async ({ data }) => readBlogPost(data.slug))
-
-export const getProjectIndex = createServerFn({ method: 'GET' }).handler(
-  async () => readProjectIndex(),
-)
-
-export const getResume = createServerFn({ method: 'GET' }).handler(async () => {
-  const filePath = path.join(process.cwd(), 'src', 'content', 'resume.tex')
-  try {
-    const latexSource = await fs.readFile(filePath, 'utf-8')
-    const { parseLatexResume } = await import('./latex-parser')
-    const resume = parseLatexResume(latexSource)
-
-    return {
-      html: resume.html,
-      title: resume.title,
-      summary: resume.summary,
-      date: resume.date,
-    }
-  } catch (error) {
-    console.error('Error reading resume:', error)
-    return null
-  }
-})
-
-export const getProjectBySlug = createServerFn({ method: 'GET' })
-  .inputValidator(z.object({ slug: z.string() }))
-  .handler(async ({ data }) => readProjectPost(data.slug))
 
 export const getBlogIndexInternal = readBlogIndex
 export const getBlogPostsWithHtmlInternal = readBlogPostsWithHtml

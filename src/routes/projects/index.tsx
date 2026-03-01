@@ -1,5 +1,5 @@
 import LayersIcon from '@/components/ui/layers-icon'
-import { getProjectIndex } from '@/lib/content.server'
+import { getProjectIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
 import { siteMeta } from '@/lib/site-data'
 import { createFileRoute, Link } from '@tanstack/react-router'

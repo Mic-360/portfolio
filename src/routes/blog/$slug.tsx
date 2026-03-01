@@ -1,4 +1,4 @@
-import { getBlogPostBySlug } from '@/lib/content.server'
+import { getBlogPostBySlug } from '@/lib/content'
 import { formatDate } from '@/lib/format'
 import { siteMeta } from '@/lib/site-data'
 import { Link, createFileRoute } from '@tanstack/react-router'

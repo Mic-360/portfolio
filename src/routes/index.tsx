@@ -1,6 +1,6 @@
 import CalendarIcon from '@/components/ui/calendar-icon'
-import { getBlogIndex, getProjectIndex } from '@/lib/content.server'
-import { getHealthData } from '@/lib/health.server'
+import { getBlogIndex, getProjectIndex } from '@/lib/content'
+import { getHealthData } from '@/lib/health'
 import { formatDate } from '@/lib/format'
 import {
   contactLinks,
