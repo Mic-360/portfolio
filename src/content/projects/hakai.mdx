@@ -1,0 +1,59 @@
+---
+title: 'Hakai'
+date: '2026-03-01'
+summary: 'A blazing-fast, Rust-powered directory destroyer to find and obliterate build artifacts.'
+stack:
+  - 'Rust'
+  - 'Bun'
+  - 'Tokio'
+  - 'Rayon'
+links:
+  - label: 'GitHub'
+    url: 'https://github.com/Mic-360/hakai'
+tags:
+  - 'rust'
+  - 'cli'
+  - 'performance'
+categories:
+  - 'tooling'
+image: '/hakai-logo.png'
+---
+
+# hakai (破壊)
+
+An exceptionally fast directory destroyer designed to find and obliterate heavy build artifact folders like `node_modules`, `target`, and `__pycache__`.
+
+## The problem
+
+Developers often accumulate gigabytes of obsolete build artifacts across numerous projects. Existing tools like `npkill` suffer from performance bottlenecks: slow sequential scans on large directory trees, single-threaded deletion that blocks the UI, and compatibility issues on Windows Git Bash.
+
+## The solution
+
+`hakai` is a high-performance rewrite utilizing a dual-architecture approach: **Rust** for the intense filesystem operations and **Bun** for a rapid, interactive Terminal UI.
+
+### Key Features
+- **Parallel Scanning:** Uses a `rayon` thread pool to scan directory trees across all CPU cores, completing searches up to 15x faster than Node-based alternatives.
+- **Concurrent Deletion:** Employs the `tokio` async runtime to safely delete up to 8 directories simultaneously without blocking the scan or the UI.
+- **Interactive TUI:** Built with Bun, the TUI provides a diff-based flicker-free rendering experience with vim keybinds, multi-select, and regex-powered filtering.
+- **Risk Analysis:** Intelligently flags system-level directories, global package manager locations, and orphaned `node_modules` to prevent accidental destructive actions.
+
+## Highlights
+
+- **Unmatched Speed:** Capable of scanning 50k directories in under a second and calculating folder sizes concurrently.
+- **Cross-Platform Resiliency:** Perfectly handles native paths across Windows, macOS, and Linux, specifically fixing TTY issues common to Windows Git Bash.
+- **Automation Ready:** Supports headless mode with JSON or streaming JSON output for seamless integration into CI pipelines or automation scripts.
+
+## Architecture
+
+The system is decoupled to maximize the strengths of each language:
+- **Rust Core (`hakai-core`):** A compiled binary that manages all I/O and CPU-bound work (parallel traversal, concurrent deletion, size calculations, and risk analysis).
+- **Bun TUI (`hakai-tui`):** A frontend process that handles the interactive UI, rendering, and user input.
+The two processes communicate via a highly efficient, newline-delimited JSON IPC protocol over stdin/stdout pipes, ensuring the heavy lifting never impacts UI responsiveness.
+
+## What I learned
+
+Creating `hakai` provided deep insights into cross-process communication (IPC) between a compiled systems language (Rust) and an optimized Javascript runtime (Bun). Implementing the concurrent scanner via `rayon` and async deletion with `tokio` highlighted the complexities of managing filesystem locks and highly parallel I/O operations without crashing the OS file descriptor limits.
+
+---
+
+If you'd like a walkthrough or have feedback, reach out or check the repository.
