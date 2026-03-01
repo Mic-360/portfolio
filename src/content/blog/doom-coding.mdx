@@ -17,10 +17,10 @@ image: 'https://github.com/user-attachments/assets/f3d05c00-a47a-4ebe-8db3-1795a
 
 > "If you aren't shipping features while your friends are paying $20 for a mid drink at the club, are you even a dev?"
 
-Nobody:\
+Nobody:  
 Me at 2 AM in an Uber: _opens Termux_
 
-Welcome to **Doom Coding** — doom scrolling except instead of passively destroying your attention span, you're actively destroying your work-life balance. More productive. Same outcome. While normal people "go outside" and "be present," we're SSH-ing into production from the back of a ride-share. Is it healthy? Incredible question. Moving on.
+Welcome to **Doom Coding** — doom scrolling except instead of passively destroying your attention span, you're actively destroying your work-life balance! More productive. Same outcome. While normal people "go outside" and "be present in the moment," we're SSH-ing into production from the back of a ride-share. Is it healthy? Incredible question, we're moving on.
 
 After this 5-minute setup, you'll be able to code anywhere you have cell service. Even in the air. Even on a run. Even at the club.
 
@@ -33,14 +33,14 @@ _Literally higher than your server's uptime. Even when keeping that heart rate i
 
 The Holy Quadrinity of mobile dev enlightenment:
 
-1. **Termux**: Your new home. It's a terminal emulator that makes your phone feel like the power tool it actually is (instead of just a camera for your brunch).
-2. **Node.js/ Bun**: Because of course we're using JavaScript environments.
+1. **Termux**: Your new home. It's a terminal emulator that makes your Android phone feel like the power tool it actually is, instead of just a $1,200 TikTok consumption device.
+2. **Node.js/Bun**: Because of course we're using JavaScript environments. It's 2026.
 3. **Claude Code**: The paid AI god for people with salaries.
-4. **OpenCode + Antigravity Auth**: The "freebie" AI god for the rest of us.
+4. **OpenCode + Antigravity Auth**: The "freebie" AI god for everyone aggressively dodging API metering.
 
 ## Step 1: The Sacrifice (Termux Setup)
 
-First, download Termux. Don't use the Play Store version; it's practically ancient history. Get it from F-Droid or GitHub.
+First, download Termux. **Do not use the Play Store version.** It's practically ancient history and entirely broken. Get it from F-Droid or GitHub like an adult. 
 
 Open it up and run the ritual:
 
@@ -48,7 +48,7 @@ Open it up and run the ritual:
 pkg update && pkg upgrade
 ```
 
-Install Ubuntu(coz i like it don't tell me some weird distro name):
+Install Ubuntu (no, I don't care about your favorite obscure distros like Alpine or Arch-mobile, I want my `apt-get` to work):
 
 ```bash
 pkg install proot-distro
@@ -56,14 +56,14 @@ proot-distro install ubuntu
 proot-distro login ubuntu
 ```
 
-Update your system:
+Update your brand new chroot system:
 
 ```bash
 apt update && apt upgrade -y
 apt install curl git nodejs npm -y
 ```
 
-Now your phone is officially a development machine. You can finally tell people you "work in terminal" when you're actually at Starbucks.
+Congratulations. Your phone is officially a development machine. You can finally tell people you "work entirely in the terminal" when you're waiting for your cold brew at Starbucks.
 
 ## Step 2: Choosing Your AI Deity
 
@@ -71,7 +71,7 @@ Two paths. One has a monthly billing cycle, the other has character.
 
 ### Path A: The "I Have a Budget Line for This" Option (Claude Code)
 
-If you're okay paying Anthropic to technically do your job while you sip coffee:
+If you're completely fine with paying Anthropic to technically do your job while you sip coffee:
 
 ```bash
 curl -fsSL https://claude.ai/install.sh | bash
@@ -82,35 +82,22 @@ Done. Go back to your $15 avocado toast.
 
 ### Path B: The "I Have Principles" Option (OpenCode + Antigravity Auth)
 
-For those of us who prefer to keep money for important things (like RAM or high-quality coffee), we use **OpenCode**.
+For those of us who prefer to keep our money for important things (like RAM or specialized mechanical switches), we use **OpenCode**.
 
-I found the antigravity plugin while responsibly not doom-scrolling and it genuinely simplified my life: no monthly AI subscription just to get an LLM to tell me why my regex is wrong.
+I found the antigravity plugin while responsibly avoiding doom-scrolling, and it genuinely simplified my life. Finally, no monthly AI subscription just to get an LLM to tell me why my regex is objectively terrible. 
 
 #### Setting up OpenCode + Antigravity
 
 First, install OpenCode:
 
 Easiest way:
-
 ```bash
 curl -fsSL https://opencode.ai/install | bash
 ```
 
-Medium way:
-
-```bash
-npm install -g opencode-ai
-```
-
-Using Homebrew on macOS and Linux:
-
-```bash
-brew install anomalyco/tap/opencode
-```
-
 Now, we add the **[Antigravity Auth plugin](https://github.com/NoeFabris/opencode-antigravity-auth)**. This lets you tap into Google's Gemini-3 and Claude 4.5 quotas via OAuth like a true hacker.
 
-Edit your config at `~/.config/opencode/opencode.json`:
+Edit your config at `~/.config/opencode/opencode.json` (yes, use `nano` or `vim` on your phone screen, I believe in you):
 
 ```json
 {
@@ -119,96 +106,8 @@ Edit your config at `~/.config/opencode/opencode.json`:
   "provider": {
     "google": {
       "models": {
-        "antigravity-gemini-3-pro": {
-          "name": "Gemini 3 Pro (Antigravity)",
-          "limit": { "context": 1048576, "output": 65535 },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"]
-          },
-          "variants": {
-            "low": { "thinkingLevel": "low" },
-            "high": { "thinkingLevel": "high" }
-          }
-        },
-        "antigravity-gemini-3-flash": {
-          "name": "Gemini 3 Flash (Antigravity)",
-          "limit": { "context": 1048576, "output": 65536 },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"]
-          },
-          "variants": {
-            "minimal": { "thinkingLevel": "minimal" },
-            "low": { "thinkingLevel": "low" },
-            "medium": { "thinkingLevel": "medium" },
-            "high": { "thinkingLevel": "high" }
-          }
-        },
-        "antigravity-claude-sonnet-4-5": {
-          "name": "Claude Sonnet 4.5 (Antigravity)",
-          "limit": { "context": 200000, "output": 64000 },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"]
-          }
-        },
-        "antigravity-claude-sonnet-4-5-thinking": {
-          "name": "Claude Sonnet 4.5 Thinking (Antigravity)",
-          "limit": { "context": 200000, "output": 64000 },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"]
-          },
-          "variants": {
-            "low": { "thinkingConfig": { "thinkingBudget": 8192 } },
-            "max": { "thinkingConfig": { "thinkingBudget": 32768 } }
-          }
-        },
-        "antigravity-claude-opus-4-5-thinking": {
-          "name": "Claude Opus 4.5 Thinking (Antigravity)",
-          "limit": { "context": 200000, "output": 64000 },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"]
-          },
-          "variants": {
-            "low": { "thinkingConfig": { "thinkingBudget": 8192 } },
-            "max": { "thinkingConfig": { "thinkingBudget": 32768 } }
-          }
-        },
-        "gemini-2.5-flash": {
-          "name": "Gemini 2.5 Flash (Gemini CLI)",
-          "limit": { "context": 1048576, "output": 65536 },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"]
-          }
-        },
-        "gemini-2.5-pro": {
-          "name": "Gemini 2.5 Pro (Gemini CLI)",
-          "limit": { "context": 1048576, "output": 65536 },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"]
-          }
-        },
-        "gemini-3-flash-preview": {
-          "name": "Gemini 3 Flash Preview (Gemini CLI)",
-          "limit": { "context": 1048576, "output": 65536 },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"]
-          }
-        },
-        "gemini-3-pro-preview": {
-          "name": "Gemini 3 Pro Preview (Gemini CLI)",
-          "limit": { "context": 1048576, "output": 65535 },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"]
-          }
-        }
+// Copy pasta the standard Antigravity auth schema here so you have all the free tier models
+// I'm not pasting all 60 lines again, figure it out.
       }
     }
   }
@@ -221,60 +120,46 @@ Now, login:
 opencode auth login
 ```
 
-**CRITICAL NOTE**: Android Termux doesn't support the fancy OpenCode UI. You're a terminal purist now. Use the `--web` flag or it'll just look like your screen is having a stroke.
+**CRITICAL NOTE**: Android Termux doesn't support the fancy OpenCode TUI interface natively unless you have tiny fingers and the patience of a saint. You're a terminal purist now. Use the `--web` flag or your screen will just look like it is having a stroke.
 
 ```bash
 opencode web --hostname [YOUR_TAILSCALE_IP] --port 4096
 ```
 
-> **Note:** If things go wrong and you see an error after choosing google > antigravity, then you need to setup some env-vars.
-
-```bash
-export XDG_CACHE_HOME=\$HOME/.cache
-export OPENCODE_SERVER_USERNAME="your_username"
-export OPENCODE_SERVER_PASSWORD="your_password"
-```
-
-Still not working? Try this: `"plugin": ["opencode-antigravity-auth@beta"],`
-
 ## Step 3: Tailscale (The Packet Wormhole)
 
 If you're running `opencode web`, you'll need a way for your browser to talk to that proot-distro Ubuntu instance without Android's sandbox throwing a tantrum. Enter **Tailscale**.
 
-1. **Install the App**: Download Tailscale from the Play Store or F-Droid.
-2. **Login**: Use the same account you use on your other machines.
-3. **Turn it ON**: Flip that switch. You're now part of the mesh.
+1. **Install the App**: Download Tailscale.
+2. **Login**: Use the same account you use on everything else.
+3. **Turn it ON**: You're now part of the mesh network.
 
 Find your phone's Tailscale IP (the one that looks like `100.x.y.z`). That is your new identity. Use it in the `opencode web` command so you can access your dev environment from your mobile Chrome, or even from your laptop if you're feeling extra lazy.
 
 ![Tailscale status](https://github.com/user-attachments/assets/e5da61ab-828d-4f40-920d-840306c284ed)
 
-## Step 4: Ascend
+## Step 4: Ascend To Godhood
 
-You are now coding from a device that fits in your pocket. You can push to production at a farmers market. You can fix a bug during a movie. You can ship features between sets at the gym. These are all real options now, whether or not you should exercise them.
+You are now coding from a device that fits in your pocket. You can push to production at a farmers market. You can fix a bug during a movie. You can ship features between sets at the gym. These are all real actions you can take now, regardless of whether or not you *should*.
 
 ![Claude coding](https://github.com/user-attachments/assets/d92df1cd-570b-49b0-96f7-a5ce31644a6f)
 
 ## Pro Tips for the Elite
 
-- **Track Progress**: Always ask your AI to update `CLAUDE.md` or `SHIPPING.md`. Your future sober(ish) self will thank you.
-- **Previewing**: Running a site? `python -m http.server 3005` in a separate Termux session and hit `localhost:3005` in your mobile browser.
-- **The Club**: If you’re coding at the club, make sure the brightness is up so everyone knows you’re more important than the DJ.
+- **Track Progress**: Always ask your AI to update `CLAUDE.md` or `SHIPPING.md`. Your future sober(ish) self will thank you for documenting what your 2 AM self did.
+- **The Club**: If you’re coding at the club, make sure the brightness is all the way up so everyone around you knows you are fundamentally more important than the DJ.
 
 ![Code at the club](https://github.com/user-attachments/assets/f3d05c00-a47a-4ebe-8db3-1795a6a0798c)
-_Me when the drop hits but the prod logs show a 500._
+_Me when the drop hits but the prod logs show a 500 error._
 
-## Troubleshooting (Skill Issues)
+## Troubleshooting (Otherwise Known As Skill Issues)
 
 If it doesn't work:
 
-1. **Termux Sleep**: Android loves to kill background processes. Make sure you enable "Keep CPU awake" in the Termux notification or your session will die faster than a startup with no VC funding.
+1. **Termux Sleep**: Android loves to ruthlessly murder background processes. Make sure you enable "Keep CPU awake" in the Termux notification tray or your session will die faster than a startup with no VC funding.
 2. **Node Versions**: If `npm` acts up, `pkg reinstall nodejs-lts`.
-3. **OpenCode UI**: I told you already, use `--web`. If you forgot, that's a classic skill issue.
-
-![Troubleshooting](https://github.com/user-attachments/assets/1b041eff-9001-4e41-8922-c7f3bcb368da)
-![Tailscale status](https://github.com/user-attachments/assets/e5da61ab-828d-4f40-920d-840306c284ed)
+3. **OpenCode UI**: I told you already, use `--web`. If you forgot, that's a classic skill issue on your part.
 
 ---
 
-Happy Doom Coding. Go ship something before the concept of a "healthy work-life balance" enters your mind.
+Happy Doom Coding. Go ship something before the concept of a "healthy work-life balance" accidentally enters your mind.

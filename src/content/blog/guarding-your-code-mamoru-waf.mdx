@@ -14,37 +14,41 @@ image: '/blog/mamoru-banner.png'
 
 # Guarding Your Code: The Rise of Mamoru-WAF
 
-> "Security shouldn't be a luxury for hobbyists; it should be as easy as running a single binary."
+> "Security shouldn't be a luxury for hobbyists, but big tech definitely thinks it should be."
 
-Hot take: if configuring your WAF requires a 40-page enterprise PDF, a Redis cluster, and a dedicated DevOps engineer on standby — it was never built for you. It was built for a $2M-budget company with annual compliance audits. You are a solo dev. Different audience. Different budget. Same bots targeting your login endpoint.
+Hot take: if configuring your WAF requires a 40-page enterprise PDF, an external Redis cluster for rate limiting, and a dedicated DevOps engineer crying in a corner — it was never built for you. It was built for a $2M-budget enterprise with annual compliance audits. You are a solo dev building a Next.js side project. Different audience. Different budget. 
 
-And yet the WAF market looked at hobbyists and went: "figure it out or go unprotected." Cool. Incredibly thoughtful.
+Unfortunately, the exact same bots are currently probing your API for SQL injection vulnerabilities.
 
-Enter **Mamoru-WAF**. Single binary. Zero external dependencies. Running in 60 seconds. If sqlmap is currently probing your side project right now, there is genuinely no excuse left after this post.
+The WAF market looked at hobbyists and basically went: "figure it out or go unprotected, also that'll be $200/month." Cool. Incredibly thoughtful of them.
+
+Enter **Mamoru-WAF**. Built in Go. Single binary. Zero external dependencies. Running in 60 seconds. If `sqlmap` is currently scanning your side project right now, there is genuinely no excuse left after this post.
 
 ![Mamoru-kun Mascot](/blog/mamoru-mascot.png)
 
 ## Who Asked for Enterprise WAFs? (Not You)
 
-Let's price this out. Cloudflare WAF: $200/month before features. AWS WAF: charged per rule, per request, per configuration change. ModSecurity with Apache: enjoy reading the documentation, I'll be over here.
+Let's price this out real quick:
+- Cloudflare WAF: $200/month before you even look at the features list.
+- AWS WAF: Charged per rule, per request, per configuration change. You basically pay them every time someone tries to hack you. Great business model.
+- ModSecurity with Apache: Free! Just enjoy reading the 300-page documentation while configuring your regex rules manually.
 
 **Mamoru-WAF:** `go build -o mamoru ./cmd/server`. Done. You're protected.
 
-No Redis for rate limiting. No Postgres for logging. No YAML config that reads like legal boilerplate. Just Go, a `rules.yaml` you can understand in 5 minutes, and Mamoru-kun — who is clearly more invested in your security posture than whatever you're running right now.
+No Redis required. No Postgres database spanning three Availability Zones just to store some logs. No YAML config that reads like a legally binding contract. Just Go, a `rules.yaml` you can understand while exhausted, and Mamoru-kun — who is definitively more invested in your security posture than whatever SaaS tool you're currently ignoring emails from.
 
 ## The Part Where It Does Real Security
 
-Nobody:\
-Enterprise WAF vendors: "Have you completed our 14-step onboarding wizard?"
+Nobody:  
+Enterprise WAF vendors: "Have you completed our 14-step onboarding wizard and talked to Sales?"
 
-Here's what's actually running under the hood — and yes, it cares about your OWASP Top 10 more than the SaaS tool that sent you a welcome email:
+Here's what's actually running under the hood in Mamoru (and yes, it actually protects against the OWASP Top 10):
 
-- **Regex Pattern Matching:** Catches SQLi (`union`, `select`, `drop`, `sleep`), XSS (`<script>`, `onerror=`), and path traversal (`../`) before your backend ever sees a request.
-- **Token-Bucket Rate Limiting:** Per-IP, per-path, configurable globally. Your `/api/login` will not survive 500 requests per second anymore. Good.
-- **Body Inspection:** POST request bodies get the full treatment. Your text fields cannot be injection vectors.
-- **Fail-Safe Mode:** Rule engine crashes — choose "Fail-Open" for uptime priority or "Block" when security actually matters.
+- **Regex Pattern Matching:** Catches SQLi (`union`, `select`, `drop`, `sleep`), XSS (`<script>`, `onerror=`), and path traversal (`../`) before your backend even knows a request happened.
+- **Token-Bucket Rate Limiting:** Per-IP, per-path, configurable globally. Your poorly optimized `/api/login` endpoint will not survive 500 requests per second anymore. Good. Let the bots hit the WAF firewall instead.
+- **Body Inspection:** POST request bodies get the full treatment. Your "contact us" form cannot be an attack vector anymore.
 
-The `AtomicEngine` handles **hot reload**. Edit `rules.yaml` live, updates apply in **2 seconds** without dropping any active connections. Realtime security config changes on a hobby budget. Completely unhinged in the best way.
+The `AtomicEngine` handles **hot reload**. You can literally edit `rules.yaml` live, and the updates apply in **2 seconds** without dropping any active connections. Realtime security config changes on a hobby budget. Completely unhinged in the best way possible.
 
 ```go
 // The Rule interface: Simple, powerful, and modular.
@@ -52,32 +56,32 @@ type Rule interface {
     Name() string
     Evaluate(r *http.Request) (blocked bool, reason string)
 }
+// You can literally write your own rule in 5 lines of Go. Try doing that in AWS WAF without a PhD.
 ```
 
 ## The Part Nobody Expected: A Gorgeous TUI
 
-Nobody asked for a WAF with a sage-green terminal dashboard. Nobody asked, and yet here it is, and it absolutely slaps.
+Have you ever looked at a WAF log? It's a wall of scrolling, unreadable JSON that actively hurts your eyes. So I fixed that too.
 
-Built with Bubble Tea, the TUI is a real command center — not "a wall of scrolling JSON you can't parse at 3 AM." Organized panels. Actual hotkeys. Real-time visibility.
+Nobody asked for a WAF with a Catppuccin sage-green terminal dashboard. Nobody asked, and yet I built it, and it absolutely slaps. Built with Bubble Tea, the TUI is a real command center:
 
-| Feature                  | What It Does                                                                                      |
+| Feature                  | What It Actually Does                                                                             |
 | ------------------------ | ------------------------------------------------------------------------------------------------- |
-| **Live Event Log**       | Blocked requests in real-time with reason, IP, and timestamp. You see exactly what's hitting you. |
-| **Backend Health**       | Your proxied services — are they alive? This panel has the answer.                                |
-| **Interactive Hotkeys**  | `r` to reload rules live. `d` to toggle detect mode. `q` when you've seen enough.                 |
-| **Zero Performance Hit** | Non-blocking event bus. Adds visibility, not latency.                                             |
+| **Live Event Log**       | Blocked requests hit the screen in real-time with reason, IP, and timestamp. You see exactly who is trying to hack you. |
+| **Backend Health**       | Your proxied services — are they alive? This panel actually has the answer.                       |
+| **Interactive Hotkeys**  | `r` to reload rules live. `d` to toggle detect mode. `q` when you've seen enough and want to go sleep. |
 
 ![Mamoru Banner](/blog/mamoru-banner.png)
 
 ## The Hot Take Conclusion
 
-Your side project with 50 users still gets bot-scanned. Your login endpoints still get brute-forced. Your text inputs are probed for SQL injection every single day. "I'm just a hobby project" is not a threat model.
+Your side project with 50 daily active users still gets bot-scanned. "I'm just a hobby project" is not a valid threat model. 
 
-You do not need a $200/month WAF. You need a single Go binary, a YAML file, and 60 seconds.
+You do not need a $200/month enterprise subscription. You need a single Go binary, a YAML file, and 60 seconds of your time.
 
 - **Get Started:** `go build -o mamoru ./cmd/server`
-- **Contribute:** Implement new rules in `internal/rules/` — the `Rule` interface is literally 2 methods
-- **Deploy:** 15MB Docker image. Free tier. No more excuses.
+- **Contribute:** Implement new rules in `internal/rules/`. The interface is literally two methods. I dare you to make an excuse.
+- **Deploy:** 15MB Docker image. Free tier friendly. 
 
 ---
 
