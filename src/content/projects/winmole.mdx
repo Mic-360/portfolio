@@ -1,0 +1,57 @@
+---
+title: 'Winmole'
+date: '2026-02-28'
+summary: 'A fast, all-in-one system maintenance CLI toolkit for Windows built with PowerShell and Go.'
+stack:
+  - 'PowerShell'
+  - 'Go'
+  - 'Bubbletea'
+links:
+  - label: 'GitHub'
+    url: 'https://github.com/Mic-360/winmole'
+tags:
+  - 'windows'
+  - 'cli'
+  - 'system-tool'
+categories:
+  - 'tooling'
+image: '/winmole-logo.png'
+---
+
+# Winmole
+
+WiMo (Windows System Optimizer — Mole for Windows) is an all-in-one system maintenance CLI toolkit for Windows. It acts as a comprehensive tool combining the features of common optimization applications into a free, open-source, fast, and colorful terminal experience.
+
+## The problem
+
+Windows accumulates temporary files, browser caches, and orphaned application data over time. Built-in cleanup tools are often slow and lack extreme detail, while third-party tools are frequently bloated or paid. There was a need for a unified, fast, and safe terminal-based solution for system maintenance and building artifact cleanup.
+
+## The solution
+
+WiMo is built with PowerShell for system integration and Go for real-time, interactive TUI dashboards. It features a persistent interactive menu, parallel scanning, and .NET-accelerated file operations.
+
+### Key Features
+- **Deep System Cleanup:** Safely removes temp files, browser caches, and Windows Update leftovers with a 4-layer safe delete system (protected paths, user data patterns, recycle bin fallback, and dry-run).
+- **Interactive Uninstaller:** Merges applications from the Windows Registry, `winget`, and local programs into a unified interface for complete removal.
+- **Visual Disk Analyzer & Live Status:** Utilizes Go binaries built with Bubble Tea for rich terminal UIs, offering real-time directory scanning and system health dashboards.
+- **Build Artifact Purge:** Concurrently cleans project build artifacts (like `node_modules`, `target`, and `__pycache__`) across directories using runspace pools for parallel execution.
+
+## Highlights
+
+- **Performance Overhaul:** Uses `System.IO.Directory.EnumerateFiles/EnumerateDirectories` instead of `Get-ChildItem` for significantly faster directory walking.
+- **Parallel Execution:** Employs PowerShell runspace pools for concurrent size calculation and deletion, drastically reducing wait times.
+- **Seamless TUI:** A split-pane persistent menu with vim-style navigation mapping providing a fluid user experience even in constrained terminal widths.
+
+## Architecture
+
+The project splits responsibilities effectively:
+- **PowerShell (`wimo.ps1`)**: Handles the core logic, argument parsing, file operations, and the split-pane menu.
+- **Go (`analyze/main.go`, `status/main.go`)**: Powers the high-performance TUIs using goroutines to handle live updates and concurrent directory scanning quickly and with minimal UI blocking.
+
+## What I learned
+
+Integrating Go with PowerShell to handle specific TUI capabilities highlighted the strengths of compiling separate targeted binaries to solve specific UI performance concerns within a broader scripting environment. Developing the 4-layer safe delete system underscored the complexities of writing robust file operation logic on Windows, where system permissions and user data boundaries are paramount.
+
+---
+
+If you'd like a walkthrough or have feedback, reach out or check the repository.
