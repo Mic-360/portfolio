@@ -1,0 +1,335 @@
+%% ============================================================
+%%  ATS-OPTIMISED MAANG / MNC RÉSUMÉ TEMPLATE
+%%  Engine: pdflatex
+%%  ATS: Workday · Taleo · Greenhouse · Lever · iCIMS
+%%  Target: Google · Amazon · Meta · Apple · Netflix · Microsoft
+%%          + Atlassian · Stripe · Flipkart · Swiggy · Razorpay
+%% ============================================================
+\documentclass{bhaumic}
+\newcommand{\medium}{\fontsize{10pt}{12pt}\selectfont}
+
+\hypersetup{
+  pdftitle  = {[Full Name] — Software Development Engineer},
+  pdfauthor = {[Full Name]},
+  pdfsubject= {SDE Resume — Full-Stack, Cloud, Distributed Systems},
+  pdfkeywords={
+    Software Engineer, SDE, Software Development Engineer,
+    Full-Stack Developer, Cloud Engineer, Backend Engineer,
+    Distributed Systems, Microservices, System Design,
+    REST API, GraphQL, gRPC, Event-Driven Architecture,
+    TypeScript, Java, Python, Go, JavaScript, Kotlin,
+    Next.js, React, Spring Boot, Node.js, Express.js, Flask,
+    AWS, EC2, S3, Lambda, VPC, IAM, CloudFront, GCP, GKE,
+    Docker, Kubernetes, Terraform, GitHub Actions, Jenkins,
+    PostgreSQL, MongoDB, Redis, MySQL, Elasticsearch,
+    CI/CD, DevOps, Observability, Prometheus, Grafana, ELK,
+    Agile, Scrum, TDD, SOLID, Object-Oriented Design,
+    Data Structures, Algorithms, LeetCode, Performance Optimisation
+  }
+}
+
+\begin{document}
+
+%% ════════════════════════════════════════════════════════════
+%%  HEADER
+%%  ↳ Replace bracketed fields with your own information
+%% ════════════════════════════════════════════════════════════
+\makeheader
+  {[First Name]}{[Last Name]}
+  {Software Development Engineer \textbar{} Full-Stack \textbar{} Cloud-Native \textbar{} Distributed Systems}
+  {+91 XXXXX XXXXX}
+  {yourname@email.com}
+  {github.com/yourusername}
+  {linkedin.com/in/yourprofile}
+
+
+%% ════════════════════════════════════════════════════════════
+%%  PROFESSIONAL SUMMARY
+%%  ↳ ATS: keyword-dense first paragraph; mirrors MAANG JD language
+%%  ↳ Keep to 4–5 sentences; front-load metrics and impact
+%% ════════════════════════════════════════════════════════════
+\ressection{Summary}
+\begin{resumesummary}
+Results-driven \textbf{Software Development Engineer} with \textbf{[X] years} of production experience designing and
+delivering \textbf{scalable, fault-tolerant, cloud-native systems} serving \textbf{millions of concurrent users}.
+Skilled in \textbf{end-to-end system design} — from \textbf{distributed microservices} and \textbf{RESTful / GraphQL API}
+contracts to \textbf{CI/CD pipeline automation} and \textbf{real-time observability}.
+Demonstrated impact across latency reduction, reliability (\textgreater 99.9\% availability), and engineering
+velocity via data-driven optimisation.
+Practitioner of \textbf{agile / scrum methodologies}, test-driven development, \textbf{SOLID} design principles,
+and rigorous code review culture.
+Seeking to apply deep technical ownership, \textbf{customer-obsessed} engineering, and a bias for
+\textbf{high-impact delivery} to large-scale distributed-system challenges at a top-tier technology company.
+\end{resumesummary}
+
+
+%% ════════════════════════════════════════════════════════════
+%%  TECHNICAL SKILLS
+%%  ↳ Placed immediately after summary — ATS assigns higher keyword
+%%    weight the earlier a term appears in the document.
+%%  ↳ Customise rows to match the target JD's exact terminology.
+%% ════════════════════════════════════════════════════════════
+\ressection{Skills}
+\begin{skilltable}
+  \skillrow{Languages}
+    {Java, Python, Go, TypeScript, JavaScript, C++, Kotlin, Dart, Bash}
+  \skillrow{Backend \& APIs}
+    {Spring Boot, Node.js, Express.js, Flask, Django, RESTful APIs, GraphQL, gRPC, WebSockets}
+  \skillrow{Frontend}
+    {Next.js, React, React Native, Flutter, Tailwind CSS, Webpack, Vite}
+  \skillrow{Databases}
+    {PostgreSQL, MySQL, MongoDB, Redis, Prisma ORM, Elasticsearch, Cassandra}
+  \skillrow{Cloud}
+    {AWS (EC2, S3, Lambda, CloudFront, VPC), GCP/GKE, Docker, Kubernetes, Terraform, Serverless}
+  \skillrow{DevOps \& CI/CD}
+    {GitHub Actions, Jenkins, ArgoCD, Blue-Green / Canary Deployments, Infrastructure as Code}
+  \skillrow{Observability}
+    {Prometheus, Grafana, ELK Stack, OpenTelemetry, Datadog, Jest, Pytest, JUnit, Integration Testing}
+  \skillrow{Architecture}
+    {Microservices, Event-Driven Architecture, System Design, Distributed Systems, SOLID, Agile/Scrum}
+\end{skilltable}
+
+
+%% ════════════════════════════════════════════════════════════
+%%  EXPERIENCE
+%%  ↳ STAR format: Action Verb → Context → Metric
+%%  ↳ Bold every technology noun (keyword density for ATS)
+%%  ↳ Lead every bullet with a strong action verb
+%%  ↳ Every bullet must contain at least one quantified metric
+%%  ↳ Mirror language directly from the target job description
+%% ════════════════════════════════════════════════════════════
+\ressection{Experience}
+
+%% ── ROLE 1 (Most Recent) ─────────────────────────────────
+\expentry
+  {Software Development Engineer II}          %% Job title — match JD exactly
+  {[Company Name — e.g. Stripe / Atlassian]}  %% Employer
+  {Jan 2024 – Present}                        %% Dates
+  {Full-time}                                 %% Employment type
+  {
+    \begin{resbullets}
+      \item \textbf{Architected and owned} a \textbf{distributed event-driven microservices platform}
+            processing \textbf{50M+ events/day} using \textbf{Apache Kafka, Java (Spring Boot),
+            PostgreSQL, and Kubernetes} — reducing end-to-end pipeline latency by \textbf{42\%}
+            (p99: 620 ms → 360 ms) at peak throughput.
+
+      \item Redesigned \textbf{RESTful API} layer with \textbf{OpenAPI 3.0} contracts and
+            \textbf{gRPC} for internal service-to-service communication, cutting
+            inter-service round-trip overhead by \textbf{35\%} and eliminating
+            an entire class of schema-drift regressions detected in CI via contract testing.
+
+      \item Led migration of \textbf{12 legacy monolith modules} to independently deployable
+            \textbf{Docker / Kubernetes} microservices with \textbf{Blue-Green deployments},
+            achieving \textbf{zero-downtime releases} and improving deployment frequency
+            from bi-weekly to \textbf{multiple times per day}.
+
+      \item Implemented \textbf{distributed caching} with \textbf{Redis Cluster} (read-through
+            + write-behind patterns), reducing \textbf{PostgreSQL} read load by \textbf{68\%}
+            and lowering p95 dashboard response time from \textbf{480 ms to 155 ms}
+            under \textbf{10,000+ concurrent sessions}.
+
+      \item Built and maintained \textbf{Prometheus + Grafana + OpenTelemetry} observability
+            stack with automated \textbf{SLO/SLA dashboards} and PagerDuty breach alerting,
+            cutting \textbf{MTTD by 65\%} and \textbf{MTTR by 40\%} over two quarters.
+
+      \item Enforced \textbf{Role-Based Access Control (RBAC)} with \textbf{OAuth 2.0 / JWT}
+            across all service boundaries; led quarterly security review cycles aligned
+            with \textbf{OWASP Top 10}, eliminating all critical findings in two consecutive audits.
+    \end{resbullets}
+  }
+
+%% ── ROLE 2 ───────────────────────────────────────────────
+\expentry
+  {Software Development Engineer I}
+  {[Company Name — e.g. Razorpay / Swiggy]}
+  {Jun 2022 – Dec 2023}
+  {Full-time}
+  {
+    \begin{resbullets}
+      \item Delivered \textbf{end-to-end product features} for a \textbf{high-throughput
+            payment processing service} handling \textbf{\$2B+ annualised GMV}; implemented
+            \textbf{idempotent state-machine transaction flows} with \textbf{at-least-once
+            Kafka delivery}, achieving \textbf{100\% reconciliation accuracy} and
+            eliminating duplicate-charge incidents in production.
+
+      \item Reduced \textbf{CI/CD pipeline runtime by 48\%} by parallelising test suites,
+            introducing \textbf{Turborepo} remote caching in a \textbf{monorepo}, and
+            migrating from Jenkins to \textbf{GitHub Actions} with matrix builds —
+            improving developer experience and cutting time-to-merge by \textbf{30\%}.
+
+      \item Designed \textbf{multi-tenant data isolation} using compound-indexed
+            \textbf{PostgreSQL} schemas and row-level security policies,
+            enabling \textbf{10× growth in tenant count} with zero cross-tenant
+            data leakage incidents.
+
+      \item Mentored \textbf{4 junior engineers} on system design, code review best
+            practices, and \textbf{TDD}, increasing team-wide test coverage from
+            \textbf{52\% to 87\%} over two sprint cycles.
+
+      \item Mentored \textbf{4 junior engineers} on system design, code review best
+            practices, and \textbf{TDD}, increasing team-wide test coverage from
+            \textbf{52\% to 87\%} over two sprint cycles.
+    \end{resbullets}
+  }
+
+%% ── INTERNSHIP / EARLY ROLE ──────────────────────────────
+\expentry
+  {Software Engineering Intern}
+  {[Company Name]}
+  {May 2021 – Jul 2021}
+  {Internship}
+  {
+    \begin{resbullets}
+      \item Built \textbf{[feature / module]} using \textbf{[Tech Stack]} that
+            \textbf{[verb + outcome]} resulting in \textbf{[quantified metric — e.g. 20\% faster
+            page loads, X\% reduction in error rate]}.
+
+      \item Collaborated with cross-functional squads across \textbf{product, design, and QA}
+            in an \textbf{Agile / Scrum} environment; delivered \textbf{[X] story points}
+            across \textbf{[N] sprints} with \textbf{100\% on-time sprint completion}.
+
+      \item Collaborated with cross-functional squads across \textbf{product, design, and QA}
+            in an \textbf{Agile / Scrum} environment; delivered \textbf{[X] story points}
+            across \textbf{[N] sprints} with \textbf{100\% on-time sprint completion}.
+    \end{resbullets}
+  }
+
+
+%% ════════════════════════════════════════════════════════════
+%%  PROJECTS
+%%  ↳ Tech-stack subtitle = ATS keyword row even if bullets don't repeat
+%%  ↳ Each project should demonstrate a distinct system-design theme
+%% ════════════════════════════════════════════════════════════
+\ressection{Projects}
+
+%% ── PROJECT 1: Distributed / Backend ─────────────────────
+\begin{samepage}
+\projentry
+  {[Project Name] — Real-Time Distributed Notification / Messaging Engine}
+  {Go \textbullet{} Apache Kafka \textbullet{} WebSockets \textbullet{} PostgreSQL \textbullet{} Redis \textbullet{} Docker \textbullet{} Kubernetes (HPA)}
+  {GitHub}
+  {https://github.com/yourusername/project-repo}
+  {
+    \begin{resbullets}
+      \item Designed a \textbf{Kafka-backed event-driven microservice} in \textbf{Go}
+            supporting fan-out delivery to \textbf{[N]+ WebSocket subscribers} with
+            \textbf{at-least-once delivery}, consumer-group partitioning,
+            and dead-letter-queue retry for guaranteed message durability.
+
+      \item Deployed on \textbf{Kubernetes} with \textbf{Horizontal Pod Autoscaler (HPA)},
+            demonstrating \textbf{queue-based load levelling}, back-pressure handling,
+            and graceful degradation under \textbf{[X]× traffic spikes} in load tests.
+    \end{resbullets}
+  }
+\end{samepage}
+
+%% ── PROJECT 2: Full-Stack / SaaS ──────────────────────────
+\begin{samepage}
+\projentry
+  {[Project Name] — Scalable Multi-Tenant SaaS Platform}
+  {Next.js 15 \textbullet{} TypeScript \textbullet{} tRPC \textbullet{} Redis \textbullet{} MongoDB \textbullet{} AWS \textbullet{} Docker \textbullet{} Prometheus}
+  {Live Demo}
+  {https://your-live-demo-url.vercel.app/}
+  {
+    \begin{resbullets}
+      \item Architected a \textbf{horizontally scalable, multi-tenant SaaS platform}
+            with an \textbf{isolated query-namespace data model} enabling zero-downtime
+            tenant onboarding without schema migrations.
+
+      \item Built an \textbf{idempotent transactional pipeline} with compound-index-optimised
+            queries, role-scoped \textbf{OAuth 2.0}, and a \textbf{Redis read-through cache}
+            delivering \textbf{sub-100 ms p95 latency} under \textbf{[N]+ concurrent users}.
+
+      \item Deployed containerised services on \textbf{AWS (EC2, S3, Lambda, VPC)}
+            attaining \textbf{\textgreater 99.5\% availability} with proactive
+            \textbf{Prometheus} SLO breach alerting.
+    \end{resbullets}
+  }
+\end{samepage}
+
+%% ── PROJECT 3: Mobile / Cross-Platform ────────────────────
+\begin{samepage}
+\projentry
+  {[Project Name] — Cross-Platform Mobile / PWA Application}
+  {Flutter \textbullet{} [REST / GraphQL] API \textbullet{} OAuth 2.0 \textbullet{} Riverpod \textbullet{} Material Design 3 \textbullet{} PWA}
+  {GitHub}
+  {https://github.com/yourusername/project-repo}
+  {
+    \begin{resbullets}
+      \item Shipped a \textbf{cross-platform Flutter application} (Android + PWA) with
+            \textbf{[key feature]}; integrated a \textbf{[Third-Party / Internal] API}
+            via \textbf{OAuth 2.0} with silent token refresh achieving
+            \textbf{\textgreater 99\% session reliability} across network interruptions.
+
+      \item Reduced \textbf{[operation]} latency to \textbf{\textless 120 ms} using
+            \textbf{[optimisation technique]}, maintaining a responsive
+            \textbf{Material 3 UI} powered by \textbf{Riverpod} reactive state
+            with \textbf{zero UI jank} on mid-range Android devices.
+    \end{resbullets}
+  }
+\end{samepage}
+
+
+%% ════════════════════════════════════════════════════════════
+%%  EDUCATION
+%% ════════════════════════════════════════════════════════════
+\ressection{Education}
+
+\eduentry
+  {B.Tech / B.E. — Computer Science \& Engineering}
+  {[University / Institute Name] — [City, State]}
+  {[Start Year] – [End Year]}
+  {CGPA: [X.X] / 10.0  \textbar{}  Percentage: [XX\%]}
+\vspace{1pt}
+{\small\color{bodytext}%
+  \textbf{Relevant Coursework:}
+  Data Structures \& Algorithms \textbullet{}
+  Operating Systems \textbullet{}
+  Database Management Systems \textbullet{}
+  Distributed Systems \textbullet{}
+  Computer Networks \textbullet{}
+  Machine Learning \textbullet{}
+  Software Engineering \textbullet{}
+  Object-Oriented Design \textbullet{}
+  Design \& Analysis of Algorithms
+}\\[1pt]
+{\small\color{bodytext}%
+  \textbf{Activities \& Leadership:}
+  [e.g., Technical Lead — Open-Source Dev Club; mentored [N]+ juniors on full-stack architecture and Git workflows.]
+}
+\vspace{2pt}
+
+
+%% ════════════════════════════════════════════════════════════
+%%  CERTIFICATIONS
+%%  ↳ ATS authority signal — each cert title is a keyword multiplier
+%%  ↳ List only completed / in-progress credentials relevant to target JD
+%% ════════════════════════════════════════════════════════════
+\ressection{Certifications}
+\certrow
+  {AWS Certified Solutions Architect — Associate}
+  {Amazon Web Services}
+  {In Progress}
+  {2025}
+\certrow
+  {AWS Certified Cloud Practitioner}
+  {Amazon Web Services}
+  {Completed}
+  {2024}
+\certrow
+  {Meta Back-End Developer Professional Certificate}
+  {Coursera / Meta}
+  {Completed}
+  {2024}
+\certrow
+  {System Design: High-Level \& Low-Level Design}
+  {Educative.io — Grokking the System Design Interview}
+  {Completed}
+  {2024}
+\certrow
+  {Data Structures \& Algorithms — [N]+ problems (LeetCode / Codeforces)}
+  {Competitive Programming}
+  {Ongoing}
+  {2022}
+
+\end{document}
