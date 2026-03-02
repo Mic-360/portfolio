@@ -1,4 +1,4 @@
-import { socialLinks } from '@/lib/site-data'
+import { gravatar, socialLinks } from '@/lib/site-data'
 import { Link } from '@tanstack/react-router'
 import GithubIcon from './ui/github-icon'
 import InstagramIcon from './ui/instagram-icon'
@@ -97,17 +97,35 @@ export default function Footer() {
             )
           })}
       </ul>
-      <p className="mt-6 text-xs uppercase tracking-[0.2em] text-muted-foreground">
-        © {new Date().getFullYear()} mit licensed · built with TanStack Start ·{' '}
+      <div className="mt-6 flex items-end justify-between gap-4">
+        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          © {new Date().getFullYear()} mit licensed · built with TanStack Start
+          ·{' '}
+          <a
+            href={gravatar.profileUrl}
+            target="_blank"
+            rel="noopener noreferrer me"
+            className="hover:text-primary transition-colors"
+          >
+            gravatar
+          </a>
+        </p>
         <a
-          href="https://gravatar.com/bhaumic"
+          href={gravatar.profileUrl}
           target="_blank"
           rel="noopener noreferrer me"
-          className="hover:text-primary transition-colors"
+          className="shrink-0"
+          title="Scan to view Gravatar profile"
         >
-          gravatar
+          <img
+            src={gravatar.qrCodeUrl}
+            alt="Gravatar QR Code"
+            width={56}
+            height={56}
+            className="rounded-md opacity-60 hover:opacity-100 transition-opacity"
+          />
         </a>
-      </p>
+      </div>
     </footer>
   )
 }
