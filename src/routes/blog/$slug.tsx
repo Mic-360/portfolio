@@ -1,6 +1,6 @@
 import { getBlogPostBySlug } from '@/lib/content'
 import { formatDate } from '@/lib/format'
-import { siteMeta } from '@/lib/site-data'
+import { gravatar, siteImages, siteMeta } from '@/lib/site-data'
 import { Link, createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/blog/$slug')({
@@ -97,7 +97,48 @@ function BlogPost() {
     author: {
       '@type': 'Person',
       name: siteMeta.siteName,
+      url: siteMeta.baseUrl,
+      image: [
+        `${siteMeta.baseUrl}${siteImages.profilePhoto}`,
+        gravatar.avatarUrl,
+      ],
     },
+    publisher: {
+      '@type': 'Person',
+      name: siteMeta.siteName,
+      url: siteMeta.baseUrl,
+      image: [
+        `${siteMeta.baseUrl}${siteImages.profilePhoto}`,
+        gravatar.avatarUrl,
+      ],
+    },
+    keywords: [...post.categories, ...post.tags].join(', '),
+    inLanguage: 'en-US',
+  }
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: siteMeta.baseUrl,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Blog',
+        item: `${siteMeta.baseUrl}/blog`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: post.title,
+        item: canonicalUrl,
+      },
+    ],
   }
 
   return (
@@ -106,6 +147,12 @@ function BlogPost() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(blogJsonLd),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLd),
         }}
       />
       <header className="flex flex-col gap-2">
