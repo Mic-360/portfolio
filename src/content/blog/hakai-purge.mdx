@@ -25,9 +25,9 @@ Yes. But honestly, my hatred wasn't fully optimized yet.
 
 You wait.
 
-You watch it sequentially crawl the directories. You watch the size calculations happen sequentially. You select a 5GB folder to delete, and the entire UI locks up while Node.js tries desperately to delete via thousands of blocking I/O calls. 
+You watch it sequentially crawl the directories. You watch the size calculations happen sequentially. You select a 5GB folder to delete, and the entire UI locks up while Node.js tries desperately to delete via thousands of blocking I/O calls.
 
-This is unacceptable. This is a waste of human potential. 
+This is unacceptable. This is a waste of human potential.
 
 Enter **hakai (破壊)**.
 
@@ -37,7 +37,7 @@ Enter **hakai (破壊)**.
 
 The problem with fast file operations is that JavaScript isn't meant for it. So I reached for the ultimate meme language of our generation: **Rust**.
 
-Rust is fast. Blazingly fast, as they say. I used the `rayon` crate for parallel scanning, effectively utilizing every CPU core I had to blast through directory trees simultaneously. 
+Rust is fast. Blazingly fast, as they say. I used the `rayon` crate for parallel scanning, effectively utilizing every CPU core I had to blast through directory trees simultaneously.
 
 But I didn't want a static, boring CLI output. I wanted the rich, interactive TUI experience. And building complex TUIs in Rust can get messy quickly.
 
@@ -47,13 +47,13 @@ So I made a choice that will likely infuriate purists.
 
 The filesystem engine—the core that does the scanning, size calculation, async deletion (via `tokio`), and risk analysis—is written in compiled Rust.
 
-The interface—the part that looks pretty, handles keybinds, diff-based rendering, and regex search—is written in **Bun**. 
+The interface—the part that looks pretty, handles keybinds, diff-based rendering, and regex search—is written in **Bun**.
 
 Why Bun? Because it starts up in under 50ms, is natively fast, and I already knew how to build TUIs in TS.
 
-To connect them, I built a brutal, efficient newline-delimited JSON Inter-Process Communication (IPC) protocol. 
+To connect them, I built a brutal, efficient newline-delimited JSON Inter-Process Communication (IPC) protocol.
 
-The Rust engine scans 8,000 directories a second and fires a relentless barrage of JSON down `stdout`. 
+The Rust engine scans 8,000 directories a second and fires a relentless barrage of JSON down `stdout`.
 The Bun frontend catches the stream on `stdin`, parses it effortlessly, and renders the TUI at 60fps.
 
 It is a beautiful, chaotic marriage.
@@ -62,11 +62,11 @@ It is a beautiful, chaotic marriage.
 
 Here are the results of this completely unhinged architecture:
 
-| Operation                | npkill (Node)   | hakai (Rust+Bun) | Gain       |
-| ------------------------ | --------------- | ---------------- | ---------- |
-| Scan 50k dirs            | ~8–12s          | <1s              | **10–15×** |
-| Size calculation         | Sequential      | Parallel         | **8–12×**  |
-| Delete 5GB folder        | ~45s (blocks)   | Async (smooth)   | **4–6×**   |
+| Operation         | npkill (Node) | hakai (Rust+Bun) | Gain       |
+| ----------------- | ------------- | ---------------- | ---------- |
+| Scan 50k dirs     | ~8–12s        | <1s              | **10–15×** |
+| Size calculation  | Sequential    | Parallel         | **8–12×**  |
+| Delete 5GB folder | ~45s (blocks) | Async (smooth)   | **4–6×**   |
 
 When you tell `hakai` to delete 100 folders at once via multi-select, it deletes up to 8 of them concurrently via async tokio tasks. It finishes before you can even move your hand back to your mouse.
 

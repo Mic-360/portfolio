@@ -16,7 +16,7 @@ image: '/blog/mamoru-banner.png'
 
 > "Security shouldn't be a luxury for hobbyists, but big tech definitely thinks it should be."
 
-Hot take: if configuring your WAF requires a 40-page enterprise PDF, an external Redis cluster for rate limiting, and a dedicated DevOps engineer crying in a corner — it was never built for you. It was built for a $2M-budget enterprise with annual compliance audits. You are a solo dev building a Next.js side project. Different audience. Different budget. 
+Hot take: if configuring your WAF requires a 40-page enterprise PDF, an external Redis cluster for rate limiting, and a dedicated DevOps engineer crying in a corner — it was never built for you. It was built for a $2M-budget enterprise with annual compliance audits. You are a solo dev building a Next.js side project. Different audience. Different budget.
 
 Unfortunately, the exact same bots are currently probing your API for SQL injection vulnerabilities.
 
@@ -29,6 +29,7 @@ Enter **Mamoru-WAF**. Built in Go. Single binary. Zero external dependencies. Ru
 ## Who Asked for Enterprise WAFs? (Not You)
 
 Let's price this out real quick:
+
 - Cloudflare WAF: $200/month before you even look at the features list.
 - AWS WAF: Charged per rule, per request, per configuration change. You basically pay them every time someone tries to hack you. Great business model.
 - ModSecurity with Apache: Free! Just enjoy reading the 300-page documentation while configuring your regex rules manually.
@@ -65,23 +66,23 @@ Have you ever looked at a WAF log? It's a wall of scrolling, unreadable JSON tha
 
 Nobody asked for a WAF with a Catppuccin sage-green terminal dashboard. Nobody asked, and yet I built it, and it absolutely slaps. Built with Bubble Tea, the TUI is a real command center:
 
-| Feature                  | What It Actually Does                                                                             |
-| ------------------------ | ------------------------------------------------------------------------------------------------- |
-| **Live Event Log**       | Blocked requests hit the screen in real-time with reason, IP, and timestamp. You see exactly who is trying to hack you. |
-| **Backend Health**       | Your proxied services — are they alive? This panel actually has the answer.                       |
-| **Interactive Hotkeys**  | `r` to reload rules live. `d` to toggle detect mode. `q` when you've seen enough and want to go sleep. |
+| Feature                 | What It Actually Does                                                                                                   |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| **Live Event Log**      | Blocked requests hit the screen in real-time with reason, IP, and timestamp. You see exactly who is trying to hack you. |
+| **Backend Health**      | Your proxied services — are they alive? This panel actually has the answer.                                             |
+| **Interactive Hotkeys** | `r` to reload rules live. `d` to toggle detect mode. `q` when you've seen enough and want to go sleep.                  |
 
 ![Mamoru Banner](/blog/mamoru-banner.png)
 
 ## The Hot Take Conclusion
 
-Your side project with 50 daily active users still gets bot-scanned. "I'm just a hobby project" is not a valid threat model. 
+Your side project with 50 daily active users still gets bot-scanned. "I'm just a hobby project" is not a valid threat model.
 
 You do not need a $200/month enterprise subscription. You need a single Go binary, a YAML file, and 60 seconds of your time.
 
 - **Get Started:** `go build -o mamoru ./cmd/server`
 - **Contribute:** Implement new rules in `internal/rules/`. The interface is literally two methods. I dare you to make an excuse.
-- **Deploy:** 15MB Docker image. Free tier friendly. 
+- **Deploy:** 15MB Docker image. Free tier friendly.
 
 ---
 

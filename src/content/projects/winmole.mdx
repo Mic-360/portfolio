@@ -31,6 +31,7 @@ Windows accumulates temporary files, browser caches, and orphaned application da
 WiMo is built with PowerShell for system integration and Go for real-time, interactive TUI dashboards. It features a persistent interactive menu, parallel scanning, and .NET-accelerated file operations.
 
 ### Key Features
+
 - **Deep System Cleanup:** Safely removes temp files, browser caches, and Windows Update leftovers with a 4-layer safe delete system (protected paths, user data patterns, recycle bin fallback, and dry-run).
 - **Interactive Uninstaller:** Merges applications from the Windows Registry, `winget`, and local programs into a unified interface for complete removal.
 - **Visual Disk Analyzer & Live Status:** Utilizes Go binaries built with Bubble Tea for rich terminal UIs, offering real-time directory scanning and system health dashboards.
@@ -45,6 +46,7 @@ WiMo is built with PowerShell for system integration and Go for real-time, inter
 ## Architecture
 
 The project splits responsibilities effectively:
+
 - **PowerShell (`wimo.ps1`)**: Handles the core logic, argument parsing, file operations, and the split-pane menu.
 - **Go (`analyze/main.go`, `status/main.go`)**: Powers the high-performance TUIs using goroutines to handle live updates and concurrent directory scanning quickly and with minimal UI blocking.
 

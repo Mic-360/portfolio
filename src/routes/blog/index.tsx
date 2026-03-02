@@ -62,7 +62,9 @@ function BlogIndex() {
             className="group flex flex-col gap-1"
           >
             <div className="flex flex-wrap items-center gap-2 text-base uppercase tracking-[0.2em] text-primary">
-              <span className='text-[10px] text-secondary'>{formatDate(post.date)}</span>
+              <span className="text-[10px] text-secondary">
+                {formatDate(post.date)}
+              </span>
               <span className="h-px w-8 bg-primary/60"></span>
               <span>{post.title}</span>
             </div>

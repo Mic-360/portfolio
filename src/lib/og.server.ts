@@ -1,28 +1,28 @@
 import { siteMeta } from './site-data'
 
 type OgImageOptions = {
-	title: string
-	description?: string
-	label?: string
-	date?: string
+  title: string
+  description?: string
+  label?: string
+  date?: string
 }
 
 function escapeXml(input: string) {
-	return input
-		.replace(/&/g, '&amp;')
-		.replace(/"/g, '&quot;')
-		.replace(/</g, '&lt;')
-		.replace(/>/g, '&gt;')
-		.replace(/'/g, '&apos;')
+  return input
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/'/g, '&apos;')
 }
 
 function buildOgSvg({ title, description, label, date }: OgImageOptions) {
-	const safeTitle = escapeXml(title)
-	const safeDescription = description ? escapeXml(description) : ''
-	const safeLabel = label ? escapeXml(label) : ''
-	const safeDate = date ? escapeXml(date) : ''
+  const safeTitle = escapeXml(title)
+  const safeDescription = description ? escapeXml(description) : ''
+  const safeLabel = label ? escapeXml(label) : ''
+  const safeDate = date ? escapeXml(date) : ''
 
-	return `<?xml version="1.0" encoding="UTF-8"?>
+  return `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
@@ -47,22 +47,22 @@ function buildOgSvg({ title, description, label, date }: OgImageOptions) {
 }
 
 export async function createOgImageResponse(options: OgImageOptions) {
-	const svg = buildOgSvg(options)
-	const { Resvg } = await import('@resvg/resvg-js')
-	const resvg = new Resvg(svg, {
-		fitTo: {
-			mode: 'width',
-			value: 1200,
-		},
-	})
-	const pngData = resvg.render()
-	const pngBuffer = pngData.asPng()
-	const pngBody = new Uint8Array(pngBuffer)
+  const svg = buildOgSvg(options)
+  const { Resvg } = await import('@resvg/resvg-js')
+  const resvg = new Resvg(svg, {
+    fitTo: {
+      mode: 'width',
+      value: 1200,
+    },
+  })
+  const pngData = resvg.render()
+  const pngBuffer = pngData.asPng()
+  const pngBody = new Uint8Array(pngBuffer)
 
-	return new Response(pngBody, {
-		headers: {
-			'Content-Type': 'image/png',
-			'Cache-Control': 'public, max-age=86400, s-maxage=86400',
-		},
-	})
+  return new Response(pngBody, {
+    headers: {
+      'Content-Type': 'image/png',
+      'Cache-Control': 'public, max-age=86400, s-maxage=86400',
+    },
+  })
 }

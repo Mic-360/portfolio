@@ -17,7 +17,7 @@ image: '/winmole-logo.png'
 
 > If you want a job done right, write a dual-language CLI tool that does exactly what the OS should have done natively 10 years ago.
 
-You know what’s great about Windows? The registry. Actually, no, that’s a lie. Nothing is great about the registry. 
+You know what’s great about Windows? The registry. Actually, no, that’s a lie. Nothing is great about the registry.
 
 You know what else is great? The built-in disk cleanup tool that proudly proclaims it freed up 2MB of space while your `node_modules` and hidden `AppData` caches secretly hoard 40GB of JSON files detailing your every sin.
 
@@ -27,9 +27,9 @@ My C: drive was turning red. The international color for "you are out of space a
 
 Normally, standard protocol dictates downloading a third-party cleaner. So I looked. And I found them. The "free" cleaners that come bundled with three toolbars, limit you to deleting 500MB before demanding a subscription, and use an interface modeled after a 2004 slot machine.
 
-Or you have the "pro" tools that cost $40 a year to do something the OS should natively do: delete temporary files accurately. 
+Or you have the "pro" tools that cost $40 a year to do something the OS should natively do: delete temporary files accurately.
 
-I looked at macOS. They have CleanMyMac. They have DaisyDisk. They have iStat Menus. Beautiful, fast, reliable. 
+I looked at macOS. They have CleanMyMac. They have DaisyDisk. They have iStat Menus. Beautiful, fast, reliable.
 
 I looked back at Windows. I looked at my red C: drive bar.
 
@@ -39,7 +39,7 @@ I looked back at Windows. I looked at my red C: drive bar.
 
 I wanted an all-in-one system optimizer. But not a GUI. GUIs are for people who don't know the thrill of accidentally typing `rm -rf /` in the wrong terminal window. I wanted a fast, colorful CLI toolkit.
 
-So I built WiMo using **PowerShell and Go**. 
+So I built WiMo using **PowerShell and Go**.
 
 Why both? Because PowerShell is basically the native language of the Windows API, but its TUI capabilities are roughly equivalent to arranging rocks in the mud. Go, on the other hand, with the Bubble Tea framework, allows you to build incredibly slick, responsive, real-time terminal dashboards.
 
@@ -54,17 +54,17 @@ wimo status
 
 ## The "Purge" Command Was Born of Pure Spite
 
-Let's talk about `wimo purge`. 
+Let's talk about `wimo purge`.
 
-Do you know how much disk space is wasted by `node_modules` folders in projects you haven't touched since 2023? Or Rust `target` directories? Or Python `__pycache__`? 
+Do you know how much disk space is wasted by `node_modules` folders in projects you haven't touched since 2023? Or Rust `target` directories? Or Python `__pycache__`?
 
-I wrote `wimo purge` specifically to hunt these down. It uses PowerShell runspace pools to run concurrently on up to 16 threads. It finds them, calculates their sizes in parallel, and eliminates them efficiently. 
+I wrote `wimo purge` specifically to hunt these down. It uses PowerShell runspace pools to run concurrently on up to 16 threads. It finds them, calculates their sizes in parallel, and eliminates them efficiently.
 
 It is the digital equivalent of hiring a very aggressive, highly parallelized cleaning crew that strictly hates JavaScript dependencies.
 
 ## A UI That Doesn't Look Like A Syntax Error
 
-Because I refuse to look at standard terminal output, WiMo features a persistent split-pane interactive menu. It has vim-style navigation (`j` to go down, `k` to go up). It has a muted Catppuccin-inspired sage green palette. 
+Because I refuse to look at standard terminal output, WiMo features a persistent split-pane interactive menu. It has vim-style navigation (`j` to go down, `k` to go up). It has a muted Catppuccin-inspired sage green palette.
 
 When you run `wimo analyze`, the Go binary takes over, rendering a gorgeous, fast directory tree analyzer that updates in real-time as it scans. It makes looking at your chaotic filesystem actually enjoyable.
 
@@ -73,8 +73,8 @@ When you run `wimo analyze`, the Go binary takes over, rendering a gorgeous, fas
 Could I have just gone right-click -> delete on the folders? Yes.
 Could I have just bought a larger SSD? Probably for cheaper than the time this took to build.
 
-But now I have a tool that completely uninstalls apps (fetching from the Registry AND Winget AND local programs), cleans deep system caches, flushes DNS, clears icon caches, provides a real-time system dashboard, and obliterates `node_modules` — all from a single command. 
+But now I have a tool that completely uninstalls apps (fetching from the Registry AND Winget AND local programs), cleans deep system caches, flushes DNS, clears icon caches, provides a real-time system dashboard, and obliterates `node_modules` — all from a single command.
 
-And it didn't try to install a search toolbar on my browser. 
+And it didn't try to install a search toolbar on my browser.
 
 I consider that a massive win. Check out the [Winmole repo here](https://github.com/Mic-360/winmole).

@@ -1,9 +1,9 @@
-import { gravatar, socialLinks } from '@/lib/site-data'
 import { Link } from '@tanstack/react-router'
 import GithubIcon from './ui/github-icon'
 import InstagramIcon from './ui/instagram-icon'
 import LinkedinIcon from './ui/linkedin-icon'
 import TwitterIcon from './ui/twitter-icon'
+import { gravatar, socialLinks } from '@/lib/site-data'
 
 const iconMap = {
   github: GithubIcon,
@@ -26,26 +26,6 @@ function RssIcon() {
       <path d="M4 11a9 9 0 0 1 9 9" />
       <path d="M4 4a16 16 0 0 1 16 16" />
       <circle cx="5" cy="19" r="1" fill="currentColor" />
-    </svg>
-  )
-}
-
-// AC Insignia SVG Component
-function AcInsignia() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="h-6 w-6 opacity-30 transition-opacity hover:opacity-80"
-      aria-hidden="true"
-    >
-      <path d="M12 2L2 22h3.5L8 16h8l2.5 6H22L12 2z" />
-      <path d="M12 22v-6" />
-      <circle cx="12" cy="16" r="1.5" />
     </svg>
   )
 }
