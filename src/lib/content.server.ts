@@ -9,11 +9,11 @@ import rehypeStringify from 'rehype-stringify'
 import remarkGfm from 'remark-gfm'
 import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
-import type { Highlighter } from 'shiki'
 import { createHighlighter } from 'shiki'
 import { unified } from 'unified'
 import { visit } from 'unist-util-visit'
 import { z } from 'zod'
+import type { Highlighter } from 'shiki'
 
 // Shiki highlighter instance (cached)
 let highlighterPromise: Promise<Highlighter> | null = null

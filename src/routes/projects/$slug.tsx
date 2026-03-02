@@ -1,7 +1,7 @@
+import { Link, createFileRoute } from '@tanstack/react-router'
 import { getProjectBySlug } from '@/lib/content'
 import { formatDate } from '@/lib/format'
 import { gravatar, siteImages, siteMeta } from '@/lib/site-data'
-import { createFileRoute, Link } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/projects/$slug')({
   loader: async ({ params }) => ({

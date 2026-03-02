@@ -1,6 +1,6 @@
-import { forwardRef, useImperativeHandle, useCallback } from 'react'
-import type { AnimatedIconHandle, AnimatedIconProps } from './types'
+import { forwardRef, useCallback, useImperativeHandle } from 'react'
 import { motion, useAnimate } from 'motion/react'
+import type { AnimatedIconHandle, AnimatedIconProps } from './types'
 
 const InstagramIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
   (

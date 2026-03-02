@@ -1,7 +1,7 @@
+import { Link, createFileRoute } from '@tanstack/react-router'
 import FileDescriptionIcon from '@/components/ui/file-description-icon'
 import { getResume } from '@/lib/content'
 import { siteMeta } from '@/lib/site-data'
-import { createFileRoute, Link } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/resume')({
   loader: async () => ({

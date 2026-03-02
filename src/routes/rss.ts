@@ -1,6 +1,6 @@
+import { createFileRoute } from '@tanstack/react-router'
 import { getBlogPostsWithHtmlInternal } from '@/lib/content.server'
 import { siteMeta } from '@/lib/site-data'
-import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/rss')({
   server: {

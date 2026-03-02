@@ -1,5 +1,5 @@
-import { gravatar, siteImages, siteMeta } from '@/lib/site-data'
 import { Link, createFileRoute } from '@tanstack/react-router'
+import { gravatar, siteImages, siteMeta } from '@/lib/site-data'
 
 export const Route = createFileRoute('/bento')({
   head: () => {

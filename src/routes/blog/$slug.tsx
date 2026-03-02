@@ -1,7 +1,7 @@
+import { Link, createFileRoute } from '@tanstack/react-router'
 import { getBlogPostBySlug } from '@/lib/content'
 import { formatDate } from '@/lib/format'
 import { gravatar, siteImages, siteMeta } from '@/lib/site-data'
-import { Link, createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/blog/$slug')({
   loader: async ({ params }) => ({

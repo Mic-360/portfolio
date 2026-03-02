@@ -53,7 +53,7 @@ function Sparkline({
     color = 'currentColor',
     height = 32
 }: {
-    data: { value: number }[],
+    data: Array<{ value: number }>,
     color?: string,
     height?: number
 }) {
@@ -97,7 +97,7 @@ function StatCard({
     format = (v: number) => v.toLocaleString()
 }: {
     label: string,
-    samples?: { value: number | string, startDate?: string, endDate: string }[],
+    samples?: Array<{ value: number | string, startDate?: string, endDate: string }>,
     unit: string,
     type?: 'sum' | 'avg' | 'latest',
     format?: (v: number) => string

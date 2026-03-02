@@ -41,7 +41,7 @@ function extractMetadataBhaumic(body: string): {
     }
 
     let pos = (headerMatch.index ?? 0) + headerMatch[0].length
-    const args: string[] = []
+    const args: Array<string> = []
     for (let i = 0; i < 7; i++) {
         const [content, nextPos] = extractBraceGroup(body, pos)
         args.push(content)
@@ -222,7 +222,7 @@ function processCommandSimple(
  * Parse \begin{cvitems} or \begin{resbullets} into a list
  */
 function parseBulletItems(content: string): string {
-    const items: string[] = []
+    const items: Array<string> = []
     const lines = content.split('\n')
 
     for (const line of lines) {
@@ -291,7 +291,7 @@ function parseCertRow(
  * Parse \begin{skilltable} or \begin{cvskills} blocks
  */
 function parseSkillsBlock(content: string): string {
-    const skills: string[] = []
+    const skills: Array<string> = []
     const regex = /\\(?:cvskill|skillrow)\s*\{/g
     let match: RegExpExecArray | null
 
@@ -315,7 +315,7 @@ function parseSkillsBlock(content: string): string {
  * Parse \begin{cvhonors} block (russell)
  */
 function parseCvHonorsBlock(content: string): string {
-    const honors: string[] = []
+    const honors: Array<string> = []
     const regex = /\\cvhonor\s*\n?\s*\{/g
     let match: RegExpExecArray | null
 
@@ -340,7 +340,7 @@ function parseCvHonorsBlock(content: string): string {
  * Parse \certrow commands in a section (bhaumic)
  */
 function parseCertRowsBlock(content: string): string {
-    const certs: string[] = []
+    const certs: Array<string> = []
     const regex = /\\certrow\s*\n?\s*\{/g
     let match: RegExpExecArray | null
 
@@ -375,14 +375,14 @@ function extractBullets(description: string): string {
  * Parse \begin{cventries}...\end{cventries} block (russell)
  */
 function parseCvEntriesBlock(content: string): string {
-    const entries: string[] = []
+    const entries: Array<string> = []
     const regex = /\\cventry\s*\n?\s*\{/g
     let match: RegExpExecArray | null
 
     while ((match = regex.exec(content)) !== null) {
         const entryStart = match.index
         let pos = content.indexOf('{', entryStart)
-        const args: string[] = []
+        const args: Array<string> = []
 
         for (let i = 0; i < 5; i++) {
             while (pos < content.length && /\s/.test(content[pos]) && content[pos] !== '{') pos++
@@ -425,13 +425,13 @@ ${descHtml}
  * Parse \expentry commands (bhaumic): {title}{company}{dates}{type}{bullets}
  */
 function parseExpEntries(content: string): string {
-    const entries: string[] = []
+    const entries: Array<string> = []
     const regex = /\\expentry\s*\n?\s*\{/g
     let match: RegExpExecArray | null
 
     while ((match = regex.exec(content)) !== null) {
         let pos = content.lastIndexOf('{', match.index + match[0].length - 1)
-        const args: string[] = []
+        const args: Array<string> = []
 
         for (let i = 0; i < 5; i++) {
             while (pos < content.length && /\s/.test(content[pos]) && content[pos] !== '{') pos++
@@ -471,13 +471,13 @@ ${descHtml}
  * Parse \projentry commands (bhaumic): {description}{name}{linkLabel}{linkUrl}{bullets}
  */
 function parseProjEntries(content: string): string {
-    const entries: string[] = []
+    const entries: Array<string> = []
     const regex = /\\projentry\s*\n?\s*\{/g
     let match: RegExpExecArray | null
 
     while ((match = regex.exec(content)) !== null) {
         let pos = content.lastIndexOf('{', match.index + match[0].length - 1)
-        const args: string[] = []
+        const args: Array<string> = []
 
         for (let i = 0; i < 5; i++) {
             while (pos < content.length && /\s/.test(content[pos]) && content[pos] !== '{') pos++
@@ -520,13 +520,13 @@ ${descHtml}
  * Plus any trailing coursework text
  */
 function parseEduEntries(content: string): string {
-    const entries: string[] = []
+    const entries: Array<string> = []
     const regex = /\\eduentry\s*\n?\s*\{/g
     let match: RegExpExecArray | null
 
     while ((match = regex.exec(content)) !== null) {
         let pos = content.lastIndexOf('{', match.index + match[0].length - 1)
-        const args: string[] = []
+        const args: Array<string> = []
 
         for (let i = 0; i < 4; i++) {
             while (pos < content.length && /\s/.test(content[pos]) && content[pos] !== '{') pos++
@@ -592,10 +592,10 @@ function parseBody(
     },
     docClass: 'bhaumic' | 'russell',
 ): string {
-    const htmlParts: string[] = []
+    const htmlParts: Array<string> = []
 
     // Build the header
-    const contactParts: string[] = []
+    const contactParts: Array<string> = []
     if (meta.email) {
         contactParts.push(`<a href="mailto:${meta.email}" class="cv-social-link"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>${meta.email}</a>`)
     }
@@ -618,7 +618,7 @@ function parseBody(
     const sectionCmd = docClass === 'bhaumic' ? 'ressection' : 'cvsection'
     const sectionRegex = new RegExp(`\\\\${sectionCmd}\\{([^}]*)\\}`, 'g')
     let sectionMatch: RegExpExecArray | null
-    const sections: { title: string; startIdx: number }[] = []
+    const sections: Array<{ title: string; startIdx: number }> = []
 
     while ((sectionMatch = sectionRegex.exec(body)) !== null) {
         sections.push({

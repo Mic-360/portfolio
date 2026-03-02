@@ -1,3 +1,4 @@
+import { Link, createFileRoute } from '@tanstack/react-router'
 import CalendarIcon from '@/components/ui/calendar-icon'
 import { getBlogIndex, getProjectIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
@@ -11,7 +12,6 @@ import {
   siteInfo,
   siteMeta,
 } from '@/lib/site-data'
-import { Link, createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
   loader: async () => {

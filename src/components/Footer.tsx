@@ -1,9 +1,9 @@
-import { gravatar, socialLinks } from '@/lib/site-data'
 import { Link } from '@tanstack/react-router'
 import GithubIcon from './ui/github-icon'
 import InstagramIcon from './ui/instagram-icon'
 import LinkedinIcon from './ui/linkedin-icon'
 import TwitterIcon from './ui/twitter-icon'
+import { gravatar, socialLinks } from '@/lib/site-data'
 
 const iconMap = {
   github: GithubIcon,
