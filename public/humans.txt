@@ -1,0 +1,16 @@
+/* TEAM */
+Name: Bhaumic Singh
+Role: Full Stack Software Engineer
+Site: https://bhaumicsingh.dev
+Photo: https://bhaumicsingh.dev/favicon-256x256.png
+Gravatar: https://gravatar.com/bhaumic
+GitHub: https://github.com/Mic-360
+Twitter: https://x.com/bhaumicsingh
+LinkedIn: https://www.linkedin.com/in/bhaumic/
+Location: Prayagraj, India
+
+/* SITE */
+Built with: TanStack Start, React, TypeScript, Tailwind CSS
+Hosted on: Cloudflare
+Standards: HTML5, CSS3, RSS 2.0, Sitemap XML
+Software: VS Code, Node.js

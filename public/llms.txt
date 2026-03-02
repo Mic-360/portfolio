@@ -1,0 +1,59 @@
+# Bhaumic Singh
+
+> Full stack software engineer building web, android, AI, and cloud products with bleeding edge technologies.
+
+## About
+
+Bhaumic Singh (भौमिक सिंह) is a full stack software engineer based in Prayagraj, India. Currently working at KarkhanaHub.com building fast, reliable systems for modern web and android products. Graduate from ITER, SOA University.
+
+## Images
+
+- Profile Photo: https://bhaumicsingh.dev/favicon-256x256.png
+- Banner: https://bhaumicsingh.dev/space-shooter.png
+- Banner (Animated): https://bhaumicsingh.dev/space-shooter.gif
+- Gravatar Avatar: https://gravatar.com/avatar/bhaumic?s=256
+
+## Expertise
+
+- Web Development: React, TypeScript, TanStack, Next.js, Node.js, Svelte, SolidJS
+- Android Development: Flutter, Dart, Kotlin
+- Cloud & DevOps: AWS, GCP, Azure, Cloudflare, Terraform, Docker, Jenkins
+- AI/ML: Python, model integration, AI-powered applications
+- Systems: Go, Rust, C++
+- Databases: Redis, PostgreSQL, SQL
+
+## Links
+
+- Portfolio: https://bhaumicsingh.dev
+- Blog: https://bhaumicsingh.dev/blog
+- Projects: https://bhaumicsingh.dev/projects
+- Resume: https://bhaumicsingh.dev/resume
+- GitHub: https://github.com/Mic-360
+- LinkedIn: https://www.linkedin.com/in/bhaumic/
+- Twitter/X: https://x.com/bhaumicsingh
+- Gravatar: https://gravatar.com/bhaumic
+- Gravatar Domain: https://bhaumicsingh.bio
+- RSS Feed: https://bhaumicsingh.dev/rss
+
+## Blog Posts
+
+- [Doom Coding](https://bhaumicsingh.dev/blog/doom-coding)
+- [Auto Copilot Review](https://bhaumicsingh.dev/blog/auto-copilot-review)
+- [From React to Reflex](https://bhaumicsingh.dev/blog/from-react-to-reflex)
+- [Guarding Your Code: Mamoru WAF](https://bhaumicsingh.dev/blog/guarding-your-code-mamoru-waf)
+- [Hakai Purge](https://bhaumicsingh.dev/blog/hakai-purge)
+- [Material3 Expressive Flutter](https://bhaumicsingh.dev/blog/material3-expressive-flutter)
+- [Screenshot to Solution](https://bhaumicsingh.dev/blog/screenshot-to-solution)
+- [Spotify Looper Mastery](https://bhaumicsingh.dev/blog/spotify-looper-mastery)
+- [Tabineko Mouse Gestures](https://bhaumicsingh.dev/blog/tabineko-mouse-gestures)
+- [WinMole System Utility](https://bhaumicsingh.dev/blog/winmole-system-utility)
+
+## Projects
+
+- [AI Feedbacks](https://bhaumicsingh.dev/projects/ai-feedbacks)
+- [Auto Copilot Review](https://bhaumicsingh.dev/projects/auto-copilot-review)
+- [Hakai](https://bhaumicsingh.dev/projects/hakai)
+- [Mamoru WAF](https://bhaumicsingh.dev/projects/mamoru-waf)
+- [Spotify Looper](https://bhaumicsingh.dev/projects/spotify-looper)
+- [Tabineko](https://bhaumicsingh.dev/projects/tabineko)
+- [WinMole](https://bhaumicsingh.dev/projects/winmole)
