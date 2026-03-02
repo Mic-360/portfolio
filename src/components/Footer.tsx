@@ -60,7 +60,7 @@ export default function Footer() {
         <div className="h-px w-full bg-linear-to-r from-transparent via-border to-transparent" />
       </div>
 
-      <ul className="flex flex-wrap items-center gap-4 lowercase">
+      <ul className="flex flex-wrap items-center gap-4 lowercase justify-center">
         <li>
           <Link
             to="/rss"
