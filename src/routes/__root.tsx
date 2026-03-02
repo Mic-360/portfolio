@@ -166,8 +166,36 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       {
         rel: 'alternate',
         type: 'application/rss+xml',
-        title: 'RSS',
+        title: 'Bhaumic Singh — RSS Feed',
         href: '/rss',
+      },
+      {
+        rel: 'me',
+        href: gravatar.profileUrl,
+      },
+      {
+        rel: 'me',
+        href: 'https://github.com/Mic-360',
+      },
+      {
+        rel: 'me',
+        href: 'https://x.com/bhaumicsingh',
+      },
+      {
+        rel: 'me',
+        href: 'https://www.linkedin.com/in/bhaumic/',
+      },
+      {
+        rel: 'author',
+        href: '/humans.txt',
+      },
+      {
+        rel: 'preconnect',
+        href: 'https://gravatar.com',
+      },
+      {
+        rel: 'dns-prefetch',
+        href: 'https://gravatar.com',
       },
     ],
   }),
