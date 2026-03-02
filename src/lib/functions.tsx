@@ -43,6 +43,7 @@ function Section({
           title
         )}
       </h2>
+      <div className="animus-sync-bar mb-2" />
       {children}
     </section>
   )
@@ -135,7 +136,7 @@ function StatCard({
       : 0
 
   return (
-    <div className="group flex flex-col gap-2 p-2 rounded-lg border border-border/50 hover:border-primary/50 transition-colors">
+    <div className="group animus-corner flex flex-col gap-2 p-2 rounded-lg border border-border/50 hover:border-primary/50 transition-colors">
       <div className="flex justify-between items-baseline">
         <span className="text-[10px] uppercase tracking-widest text-primary">
           {label}

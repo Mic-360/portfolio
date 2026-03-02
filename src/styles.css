@@ -7,37 +7,37 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #f2dfbc;
-  --foreground: #61440a;
-  --card: #f1e3c7;
-  --card-foreground: #64430d;
-  --popover: #f1e3c7;
-  --popover-foreground: #64430d;
-  --primary: #a3a85c;
-  --primary-foreground: #fff6f8;
-  --secondary: #e7d5b3;
-  --secondary-foreground: #7f602c;
-  --muted: #e4cea5;
-  --muted-foreground: #815f2d;
-  --accent: #e0cfac;
-  --accent-foreground: #2c2024;
-  --destructive: #f9281d;
-  --border: #bfa780;
-  --input: #bfa780;
-  --ring: #815f2d;
-  --chart-1: #ed5f1a;
-  --chart-2: #1cb6a6;
-  --chart-3: #0e6977;
-  --chart-4: #fdc010;
-  --chart-5: #f68c10;
-  --sidebar: #e7d2a8;
-  --sidebar-foreground: #61440a;
-  --sidebar-primary: #2c2024;
-  --sidebar-primary-foreground: #fff6f8;
-  --sidebar-accent: #dac59b;
-  --sidebar-accent-foreground: #2c2024;
-  --sidebar-border: #e1e1e1;
-  --sidebar-ring: #a1a1a1;
+  --background: #eee3c8;
+  --foreground: #3d3024;
+  --card: #f0e6cf;
+  --card-foreground: #4a3a28;
+  --popover: #f0e6cf;
+  --popover-foreground: #4a3a28;
+  --primary: #7a9a65;
+  --primary-foreground: #f8f6f0;
+  --secondary: #e2d4ad;
+  --secondary-foreground: #6b5637;
+  --muted: #dccfa3;
+  --muted-foreground: #7a6340;
+  --accent: #d9c99e;
+  --accent-foreground: #2c2420;
+  --destructive: #c0392b;
+  --border: #c4a87a;
+  --input: #c4a87a;
+  --ring: #7a9a65;
+  --chart-1: #c0392b;
+  --chart-2: #7a9a65;
+  --chart-3: #2c6e6f;
+  --chart-4: #c9a84c;
+  --chart-5: #8b6f47;
+  --sidebar: #e5d6b2;
+  --sidebar-foreground: #3d3024;
+  --sidebar-primary: #2c2420;
+  --sidebar-primary-foreground: #f8f6f0;
+  --sidebar-accent: #d4c496;
+  --sidebar-accent-foreground: #2c2420;
+  --sidebar-border: #c4a87a;
+  --sidebar-ring: #7a9a65;
 
   --font-sans: 'Inter', sans-serif;
   --font-serif: 'Geist Serif', serif;
@@ -56,37 +56,37 @@
 }
 
 [data-theme='dark'] {
-  --background: #1a1512;
-  --foreground: #e9d4b3;
-  --card: #26201d;
-  --card-foreground: #e9d4b3;
-  --popover: #26201d;
-  --popover-foreground: #e9d4b3;
-  --primary: #abdf6f;
-  --primary-foreground: #fff6f8;
-  --secondary: #3d332b;
-  --secondary-foreground: #e7d5b3;
-  --muted: #2b2523;
-  --muted-foreground: #bfa780;
-  --accent: #3d332b;
-  --accent-foreground: #e0cfac;
-  --destructive: #f9281d;
-  --border: #3d332b;
-  --input: #3d332b;
-  --ring: #abdf6f;
-  --chart-1: #ed5f1a;
-  --chart-2: #1cb6a6;
-  --chart-3: #0e6977;
-  --chart-4: #fdc010;
-  --chart-5: #f68c10;
-  --sidebar: #211c18;
-  --sidebar-foreground: #e9d4b3;
-  --sidebar-primary: #abdf6f;
-  --sidebar-primary-foreground: #fff6f8;
-  --sidebar-accent: #3d332b;
-  --sidebar-accent-foreground: #e0cfac;
-  --sidebar-border: #3d332b;
-  --sidebar-ring: #abdf6f;
+  --background: #111210;
+  --foreground: #ddd0b0;
+  --card: #1a1b18;
+  --card-foreground: #ddd0b0;
+  --popover: #1a1b18;
+  --popover-foreground: #ddd0b0;
+  --primary: #8fb374;
+  --primary-foreground: #f0efe8;
+  --secondary: #2a2d26;
+  --secondary-foreground: #c9bda0;
+  --muted: #222420;
+  --muted-foreground: #9a8e74;
+  --accent: #2a2d26;
+  --accent-foreground: #d4c8a5;
+  --destructive: #c0392b;
+  --border: #2e3128;
+  --input: #2e3128;
+  --ring: #8fb374;
+  --chart-1: #c0392b;
+  --chart-2: #8fb374;
+  --chart-3: #2c6e6f;
+  --chart-4: #c9a84c;
+  --chart-5: #8b6f47;
+  --sidebar: #161714;
+  --sidebar-foreground: #ddd0b0;
+  --sidebar-primary: #8fb374;
+  --sidebar-primary-foreground: #f0efe8;
+  --sidebar-accent: #2a2d26;
+  --sidebar-accent-foreground: #d4c8a5;
+  --sidebar-border: #2e3128;
+  --sidebar-ring: #8fb374;
 
   --shadow-2xs: 0 1px 3px 0px rgb(0 0 0 / 0.05);
   --shadow-xs: 0 1px 3px 0px rgb(0 0 0 / 0.05);
@@ -179,6 +179,10 @@
   }
 }
 
+/* ═══════════════════════════════════════════════════════
+   Animus Interface — Assassin's Creed Inspired
+   ═══════════════════════════════════════════════════════ */
+
 .animus-corner {
   position: relative;
 }
@@ -187,23 +191,23 @@
 .animus-corner::after {
   content: '';
   position: absolute;
-  width: 10px;
-  height: 10px;
-  border: 1px solid rgb(var(--primary));
-  transition: all 0.3s ease;
-  opacity: 0.5;
+  width: 12px;
+  height: 12px;
+  border: 1px solid var(--primary);
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  opacity: 0.4;
 }
 
 .animus-corner::before {
-  top: 0;
-  left: 0;
+  top: -1px;
+  left: -1px;
   border-right: none;
   border-bottom: none;
 }
 
 .animus-corner::after {
-  bottom: 0;
-  right: 0;
+  bottom: -1px;
+  right: -1px;
   border-left: none;
   border-top: none;
 }
@@ -211,9 +215,117 @@
 .animus-corner:hover::before,
 .animus-corner:hover::after {
   opacity: 1;
-  width: 15px;
-  height: 15px;
-  box-shadow: 0 0 5px rgb(var(--primary) / 0.5);
+  width: 18px;
+  height: 18px;
+  filter: drop-shadow(0 0 4px color-mix(in oklab, var(--primary) 40%, transparent));
+}
+
+/* Animus scan line overlay — apply to containers for subtle effect */
+.animus-scanlines {
+  position: relative;
+  overflow: hidden;
+}
+
+.animus-scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg,
+      transparent,
+      transparent 2px,
+      color-mix(in oklab, var(--primary) 3%, transparent) 2px,
+      color-mix(in oklab, var(--primary) 3%, transparent) 4px);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.animus-scanlines:hover::after {
+  opacity: 1;
+}
+
+/* AC Game card styling */
+.ac-game-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  border-left: 2px solid transparent;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border-radius: 0 0.25rem 0.25rem 0;
+}
+
+.ac-game-card:hover {
+  border-left-color: var(--primary);
+  background: color-mix(in oklab, var(--primary) 5%, transparent);
+}
+
+.ac-game-card .ac-game-era {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.ac-game-card:hover .ac-game-era {
+  opacity: 1;
+  box-shadow: 0 0 6px currentColor;
+}
+
+/* Animus-style divider */
+.animus-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0.3;
+}
+
+.animus-divider::before,
+.animus-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--primary), transparent);
+}
+
+.animus-divider .diamond {
+  width: 4px;
+  height: 4px;
+  transform: rotate(45deg);
+  background: var(--primary);
+}
+
+/* Sync progress bar (decorative) */
+@keyframes animus-sync {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+.animus-sync-bar {
+  position: relative;
+  height: 1px;
+  background: color-mix(in oklab, var(--primary) 15%, transparent);
+  overflow: hidden;
+  border-radius: 1px;
+}
+
+.animus-sync-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  animation: animus-sync 3s ease-in-out infinite;
 }
 
 @layer base {
@@ -528,12 +640,10 @@
 .mdx-content hr {
   border: none;
   height: 1px;
-  background: linear-gradient(
-    to right,
-    transparent,
-    var(--border),
-    transparent
-  );
+  background: linear-gradient(to right,
+      transparent,
+      var(--border),
+      transparent);
   margin: 2rem 0;
 }
 

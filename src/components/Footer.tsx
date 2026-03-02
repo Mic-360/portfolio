@@ -1,9 +1,9 @@
+import { gravatar, socialLinks } from '@/lib/site-data'
 import { Link } from '@tanstack/react-router'
 import GithubIcon from './ui/github-icon'
 import InstagramIcon from './ui/instagram-icon'
 import LinkedinIcon from './ui/linkedin-icon'
 import TwitterIcon from './ui/twitter-icon'
-import { gravatar, socialLinks } from '@/lib/site-data'
 
 const iconMap = {
   github: GithubIcon,
@@ -33,11 +33,9 @@ function RssIcon() {
 export default function Footer() {
   return (
     <footer className="relative mx-auto w-full max-w-2xl p-4 text-sm text-primary">
-      {/* Separator with Diamond */}
-      <div className="mb-6 flex items-center justify-center gap-2 opacity-50">
-        <div className="h-px w-full bg-linear-to-r from-transparent via-border to-transparent" />
-        <div className="h-1.5 w-1.5 rotate-45 bg-primary/50" />
-        <div className="h-px w-full bg-linear-to-r from-transparent via-border to-transparent" />
+      {/* Animus-style Separator */}
+      <div className="animus-divider mb-6">
+        <span className="diamond" />
       </div>
 
       <ul className="flex flex-wrap items-center gap-4 lowercase justify-center">

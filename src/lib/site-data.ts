@@ -33,7 +33,7 @@ export const siteMeta = {
   siteName: 'Bhaumic Singh',
   locale: 'en_US',
   twitterHandle: '@bhaumicsingh',
-  themeColor: '#1e1e2e',
+  themeColor: '#111210',
   alternateUrls: {
     gravatar: 'https://gravatar.com/bhaumic',
     gravatarDomain: 'https://bhaumicsingh.bio',
