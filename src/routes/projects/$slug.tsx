@@ -1,6 +1,6 @@
 import { getProjectBySlug } from '@/lib/content'
 import { formatDate } from '@/lib/format'
-import { siteMeta } from '@/lib/site-data'
+import { gravatar, siteImages, siteMeta } from '@/lib/site-data'
 import { createFileRoute, Link } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/projects/$slug')({
@@ -91,6 +91,41 @@ function ProjectDetail() {
     image: imageUrl,
     url: canonicalUrl,
     keywords: [...project.categories, ...project.tags].join(', '),
+    author: {
+      '@type': 'Person',
+      name: siteMeta.siteName,
+      url: siteMeta.baseUrl,
+      image: [
+        `${siteMeta.baseUrl}${siteImages.profilePhoto}`,
+        gravatar.avatarUrl,
+      ],
+    },
+    inLanguage: 'en-US',
+  }
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: siteMeta.baseUrl,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Projects',
+        item: `${siteMeta.baseUrl}/projects`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: project.title,
+        item: canonicalUrl,
+      },
+    ],
   }
 
   return (
@@ -99,6 +134,12 @@ function ProjectDetail() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(projectJsonLd),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLd),
         }}
       />
       <header className="flex flex-col gap-2">
