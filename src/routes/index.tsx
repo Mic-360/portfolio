@@ -1,15 +1,17 @@
 import CalendarIcon from '@/components/ui/calendar-icon'
 import { getBlogIndex, getProjectIndex } from '@/lib/content'
-import { getHealthData } from '@/lib/health'
 import { formatDate } from '@/lib/format'
+import { Section, StatCard } from '@/lib/functions'
+import { getHealthData } from '@/lib/health'
 import {
   contactLinks,
+  gravatar,
   previousRoles,
+  siteImages,
   siteInfo,
   siteMeta,
 } from '@/lib/site-data'
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { Section, StatCard } from '@/lib/functions'
 
 export const Route = createFileRoute('/')({
   loader: async () => {
@@ -43,13 +45,17 @@ export const Route = createFileRoute('/')({
         { property: 'og:image:width', content: '1200' },
         { property: 'og:image:height', content: '630' },
         { property: 'og:image:type', content: 'image/png' },
+        { property: 'og:image:alt', content: title },
         { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: title },
         { name: 'twitter:description', content: description },
         { name: 'twitter:image', content: imageUrl },
         { name: 'twitter:image:alt', content: title },
       ],
-      links: [{ rel: 'canonical', href: canonicalUrl }],
+      links: [
+        { rel: 'canonical', href: canonicalUrl },
+        { rel: 'image_src', href: `${siteMeta.baseUrl}${siteImages.banner}` },
+      ],
     }
   },
   component: App,
@@ -62,16 +68,32 @@ function App() {
     <div className="flex flex-col gap-8">
       <section className="flex flex-col gap-3">
         <div className="flex flex-col sm:flex-row item-center justify-between">
-          <div className="flex flex-col gap-1">
-            <h1 className="text-2xl font-semibold italic">
-              {siteInfo.name} ~{' '}
-              <span className="text-sm mb-1 align-bottom inline-flex leading-4">
-                {siteInfo.nativeName}
-              </span>
-            </h1>
-            <p className="text-xs tracking-tight border w-fit p-0.5 rounded-xs text-primary font-sans border-border">
-              {siteInfo.tagline}
-            </p>
+          <div className="flex items-center gap-3">
+            <a
+              href={gravatar.profileUrl}
+              target="_blank"
+              rel="noopener noreferrer me"
+              className="shrink-0"
+            >
+              <img
+                src={siteImages.profilePhoto}
+                alt={`${siteInfo.name} — Profile Photo`}
+                width={48}
+                height={48}
+                className="w-12 h-12 rounded-full border border-primary/40 shadow-md"
+              />
+            </a>
+            <div className="flex flex-col gap-1">
+              <h1 className="text-2xl font-semibold italic">
+                {siteInfo.name} ~{' '}
+                <span className="text-sm mb-1 align-bottom inline-flex leading-4">
+                  {siteInfo.nativeName}
+                </span>
+              </h1>
+              <p className="text-xs tracking-tight border w-fit p-0.5 rounded-xs text-primary font-sans border-border">
+                {siteInfo.tagline}
+              </p>
+            </div>
           </div>
           <div className="flex flex-col sm:items-end text-[10px] sm:text-xs uppercase tracking-[0.3em] text-primary mt-1.5">
             <span>{siteInfo.location}</span>
@@ -171,7 +193,9 @@ function App() {
               className="group flex flex-col gap-1"
             >
               <div className="flex flex-wrap items-center gap-2 text-base uppercase tracking-[0.2em] text-primary">
-                <span className="text-[10px] text-secondary-foreground">{formatDate(post.date)}</span>
+                <span className="text-[10px] text-secondary-foreground">
+                  {formatDate(post.date)}
+                </span>
                 <span className="h-px w-8 bg-primary/60"></span>
                 <span>{post.title}</span>
               </div>
@@ -203,7 +227,9 @@ function App() {
                   <div className="flex flex-wrap items-center gap-2 text-base uppercase tracking-[0.2em] text-primary">
                     <span>{project.title}</span>
                     <span className="h-px w-4 sm:w-8 bg-primary/60"></span>
-                    <span className="text-[10px] text-secondary-foreground">{formatDate(project.date)}</span>
+                    <span className="text-[10px] text-secondary-foreground">
+                      {formatDate(project.date)}
+                    </span>
                   </div>
                   <p className="text-xs text-secondary-foreground group-hover:text-foreground">
                     {project.summary}
@@ -223,20 +249,56 @@ function App() {
 
       <Section title="healthstat">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <StatCard label="steps" samples={health.steps} unit="steps" type="sum" />
-          <StatCard label="energy" samples={health.activeEnergy} unit="kcal" type="sum" format={(v) => v.toFixed(0)} />
-          <StatCard label="heart rate" samples={health.heartRate?.map(s => {
-            const start = new Date(s.startDate).getTime()
-            const end = new Date(s.endDate).getTime()
-            const minutes = (end - start) / (1000 * 180)
-            return {
-              ...s,
-              value: minutes > 0 ? Number(s.value) / minutes : Number(s.value)
-            }
-          })} unit="bpm" type="avg" format={(v) => v.toFixed(0)} />
-          <StatCard label="distance" samples={health.distance} unit="km" type="sum" format={(v) => v.toFixed(2)} />
-          <StatCard label="sleep" samples={health.sleep} unit="hrs" type="sum" format={(v) => v.toFixed(1)} />
-          <StatCard label="spO2" samples={health.spO2} unit="%" type="avg" format={(v) => v.toFixed(1)} />
+          <StatCard
+            label="steps"
+            samples={health.steps}
+            unit="steps"
+            type="sum"
+          />
+          <StatCard
+            label="energy"
+            samples={health.activeEnergy}
+            unit="kcal"
+            type="sum"
+            format={(v) => v.toFixed(0)}
+          />
+          <StatCard
+            label="heart rate"
+            samples={health.heartRate?.map((s) => {
+              const start = new Date(s.startDate).getTime()
+              const end = new Date(s.endDate).getTime()
+              const minutes = (end - start) / (1000 * 180)
+              return {
+                ...s,
+                value:
+                  minutes > 0 ? Number(s.value) / minutes : Number(s.value),
+              }
+            })}
+            unit="bpm"
+            type="avg"
+            format={(v) => v.toFixed(0)}
+          />
+          <StatCard
+            label="distance"
+            samples={health.distance}
+            unit="km"
+            type="sum"
+            format={(v) => v.toFixed(2)}
+          />
+          <StatCard
+            label="sleep"
+            samples={health.sleep}
+            unit="hrs"
+            type="sum"
+            format={(v) => v.toFixed(1)}
+          />
+          <StatCard
+            label="spO2"
+            samples={health.spO2}
+            unit="%"
+            type="avg"
+            format={(v) => v.toFixed(1)}
+          />
         </div>
         {health.updatedAt && (
           <p className="text-[10px] italic text-muted-foreground mt-4">
@@ -267,7 +329,10 @@ function App() {
             className="underline decoration-primary pl-1 inline-flex items-center gap-1 group"
           >
             calendly
-            <CalendarIcon size={16} className="inline-block mr-1 mb-0.5 text-teal-500" />
+            <CalendarIcon
+              size={16}
+              className="inline-block mr-1 mb-0.5 text-teal-500"
+            />
           </a>
           .
         </p>
