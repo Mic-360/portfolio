@@ -226,10 +226,70 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     name: siteMeta.siteName,
     url: siteMeta.baseUrl,
     description: siteMeta.defaultDescription,
+    inLanguage: 'en-US',
     publisher: {
       '@type': 'Person',
       name: siteInfo.name,
+      url: siteMeta.baseUrl,
+      image: `${siteMeta.baseUrl}${siteImages.profilePhoto}`,
+      sameAs: [
+        'https://github.com/Mic-360',
+        'https://x.com/bhaumicsingh',
+        'https://www.linkedin.com/in/bhaumic/',
+        'https://www.instagram.com/bhaumic.singh/',
+        gravatar.profileUrl,
+        gravatar.verifiedDomain,
+      ],
     },
+  }
+
+  const personJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: siteInfo.name,
+    alternateName: ['Bhaumic', 'भौमिक सिंह'],
+    url: siteMeta.baseUrl,
+    image: [
+      `${siteMeta.baseUrl}${siteImages.profilePhoto}`,
+      gravatar.avatarUrl,
+    ],
+    jobTitle: siteInfo.currentRole,
+    worksFor: {
+      '@type': 'Organization',
+      name: siteInfo.currentCompany,
+      url: siteInfo.currentCompanyUrl,
+    },
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Prayagraj',
+      addressRegion: 'Uttar Pradesh',
+      addressCountry: 'IN',
+    },
+    alumniOf: {
+      '@type': 'CollegeOrUniversity',
+      name: 'ITER, SOA University',
+    },
+    knowsAbout: [
+      'Web Development',
+      'Android Development',
+      'Artificial Intelligence',
+      'Cloud Computing',
+      'DevOps',
+      'React',
+      'TypeScript',
+      'Flutter',
+      'Go',
+      'Rust',
+      'Python',
+    ],
+    sameAs: [
+      'https://github.com/Mic-360',
+      'https://x.com/bhaumicsingh',
+      'https://www.linkedin.com/in/bhaumic/',
+      'https://www.instagram.com/bhaumic.singh/',
+      gravatar.profileUrl,
+      gravatar.verifiedDomain,
+    ],
   }
 
   return (
@@ -240,6 +300,12 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(websiteJsonLd),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(personJsonLd),
           }}
         />
       </head>
