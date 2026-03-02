@@ -1,10 +1,9 @@
+import { socialLinks } from '@/lib/site-data'
 import { Link } from '@tanstack/react-router'
 import GithubIcon from './ui/github-icon'
 import InstagramIcon from './ui/instagram-icon'
 import LinkedinIcon from './ui/linkedin-icon'
 import TwitterIcon from './ui/twitter-icon'
-import { socialLinks } from '@/lib/site-data'
-import ThemeToggle from './ThemeToggle'
 
 const iconMap = {
   github: GithubIcon,
@@ -99,7 +98,15 @@ export default function Footer() {
           })}
       </ul>
       <p className="mt-6 text-xs uppercase tracking-[0.2em] text-muted-foreground">
-        © {new Date().getFullYear()} mit licensed · built with TanStack Start
+        © {new Date().getFullYear()} mit licensed · built with TanStack Start ·{' '}
+        <a
+          href="https://gravatar.com/bhaumic"
+          target="_blank"
+          rel="noopener noreferrer me"
+          className="hover:text-primary transition-colors"
+        >
+          gravatar
+        </a>
       </p>
     </footer>
   )
