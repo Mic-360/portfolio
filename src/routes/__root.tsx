@@ -38,6 +38,16 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       },
       {
         name: 'robots',
+        content:
+          'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
+      },
+      {
+        name: 'googlebot',
+        content:
+          'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
+      },
+      {
+        name: 'bingbot',
         content: 'index, follow',
       },
       {
@@ -57,7 +67,51 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: siteMeta.twitterHandle,
       },
       {
-        title: 'Bhaumik Singh — Portfolio',
+        title: 'Bhaumic Singh — Portfolio',
+      },
+      {
+        name: 'author',
+        content: siteInfo.name,
+      },
+      {
+        name: 'creator',
+        content: siteInfo.name,
+      },
+      {
+        name: 'publisher',
+        content: siteInfo.name,
+      },
+      {
+        name: 'keywords',
+        content: siteMeta.keywords,
+      },
+      {
+        name: 'geo.region',
+        content: 'IN-UP',
+      },
+      {
+        name: 'geo.placename',
+        content: siteInfo.location,
+      },
+      {
+        property: 'profile:first_name',
+        content: 'Bhaumic',
+      },
+      {
+        property: 'profile:last_name',
+        content: 'Singh',
+      },
+      {
+        property: 'profile:username',
+        content: 'bhaumic',
+      },
+      {
+        name: 'color-scheme',
+        content: 'dark light',
+      },
+      {
+        name: 'format-detection',
+        content: 'telephone=no',
       },
     ],
     links: [
