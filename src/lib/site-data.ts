@@ -4,7 +4,7 @@ export type SocialLink = {
 }
 
 export const siteInfo = {
-  name: 'Bhaumik Singh',
+  name: 'Bhaumic Singh',
   nativeName: 'भौमिक सिंह',
   tagline: 'android, ai, cloud, web, design, devops',
   buildLine: 'bleeding edge things.',
@@ -20,18 +20,44 @@ export const siteInfo = {
   interests:
     'I enjoy building, deploying, and designing experiments with code and bleeding edge technology — and occasional anime binge.',
   calendlyUrl: 'https://calendly.com/bhaumic/connect-with-bhaumic',
+  email: 'bhaumic@bhaumicsingh.dev',
+  githubUsername: 'Mic-360',
 }
 
 export const siteMeta = {
-  baseUrl: 'https://bhaumiksingh.com',
-  defaultTitle: 'Bhaumik Singh — Software Engineer',
+  baseUrl: 'https://bhaumicsingh.dev',
+  defaultTitle: 'Bhaumic Singh — Software Engineer',
   defaultDescription:
-    'Full stack software engineer building web, android, ai, and cloud products with a love for modern web systems.',
+    'Bhaumic Singh is a full stack software engineer specializing in web, android, AI, and cloud products. Building bleeding edge systems with modern technologies.',
   defaultImage: '/og/site',
-  siteName: 'Bhaumik Singh',
+  siteName: 'Bhaumic Singh',
   locale: 'en_US',
   twitterHandle: '@bhaumicsingh',
   themeColor: '#1e1e2e',
+  alternateUrls: {
+    gravatar: 'https://gravatar.com/bhaumic',
+    gravatarDomain: 'https://bhaumicsingh.bio',
+  },
+  keywords:
+    'Bhaumic Singh, software engineer, full stack developer, web developer, android developer, AI engineer, cloud engineer, DevOps, React, TypeScript, Flutter, Dart, Go, Rust, Python, portfolio',
+}
+
+export const siteImages = {
+  profilePhoto: '/favicon-256x256.png',
+  banner: '/space-shooter.png',
+  bannerAnimated: '/space-shooter.gif',
+  icon: '/icon.png',
+  appleTouchIcon: '/apple-touch-icon.png',
+  favicon: '/favicon.ico',
+}
+
+export const gravatar = {
+  profileSlug: 'bhaumic',
+  profileUrl: 'https://gravatar.com/bhaumic',
+  avatarUrl: 'https://gravatar.com/avatar/bhaumic?s=256',
+  cardUrl: 'https://gravatar.com/bhaumic.card',
+  qrCodeUrl: 'https://gravatar.com/bhaumic.qr',
+  verifiedDomain: 'https://bhaumicsingh.bio',
 }
 
 export const previousRoles = [
