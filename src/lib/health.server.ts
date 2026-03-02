@@ -1,10 +1,17 @@
 // NOTE: This file should only be imported from server-side code or via
 // dynamic import() inside createServerFn handlers (see health.ts).
-import fs from 'node:fs/promises'
-import path from 'node:path'
 import { z } from 'zod'
 
-const HEALTH_FILE = path.join(process.cwd(), 'src', 'content', 'health.json')
+const HEALTH_SOURCES: Record<string, string> = import.meta.glob(
+    '../content/health.json',
+    {
+        eager: true,
+        query: '?raw',
+        import: 'default',
+    },
+)
+
+let inMemoryHealthData: HealthData | null = null
 
 export const healthSampleSchema = z.object({
     value: z.union([z.number(), z.string()]),
@@ -27,25 +34,42 @@ export const healthDataSchema = z.object({
 
 export type HealthData = z.infer<typeof healthDataSchema>
 
-async function readHealthData(): Promise<HealthData> {
+function getBundledHealthData(): HealthData {
+    const raw = Object.values(HEALTH_SOURCES)[0]
+    if (!raw) {
+        return {}
+    }
+
     try {
-        const raw = await fs.readFile(HEALTH_FILE, 'utf-8')
         return healthDataSchema.parse(JSON.parse(raw))
+    } catch (error) {
+        console.error('Error parsing bundled health data:', error)
+        return {}
+    }
+}
+
+function readHealthData(): HealthData {
+    try {
+        if (inMemoryHealthData) {
+            return inMemoryHealthData
+        }
+
+        return getBundledHealthData()
     } catch (error) {
         console.error('Error reading health data:', error)
         return {}
     }
 }
 
-async function writeHealthData(data: HealthData) {
+function writeHealthData(data: HealthData) {
     const updatedData = {
         ...data,
         updatedAt: new Date().toISOString(),
     }
-    await fs.writeFile(HEALTH_FILE, JSON.stringify(updatedData, null, 2))
-    return updatedData
+
+    inMemoryHealthData = healthDataSchema.parse(updatedData)
+    return inMemoryHealthData
 }
 
 export const getHealthDataInternal = readHealthData
 export const writeHealthDataInternal = writeHealthData
-

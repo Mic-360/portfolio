@@ -2,8 +2,6 @@
 // NOTE: This file should only be imported from server-side code or via
 // dynamic import() inside createServerFn handlers (see content.ts).
 import matter from 'gray-matter'
-import fs from 'node:fs/promises'
-import path from 'node:path'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeRaw from 'rehype-raw'
 import rehypeSlug from 'rehype-slug'
@@ -79,8 +77,32 @@ export type ProjectPost = ProjectMeta & {
   html: string
 }
 
-const BLOG_DIR = path.join(process.cwd(), 'src', 'content', 'blog')
-const PROJECT_DIR = path.join(process.cwd(), 'src', 'content', 'projects')
+const BLOG_POST_SOURCES: Record<string, string> = import.meta.glob(
+  '../content/blog/*.mdx',
+  {
+    eager: true,
+    query: '?raw',
+    import: 'default',
+  },
+)
+
+const PROJECT_POST_SOURCES: Record<string, string> = import.meta.glob(
+  '../content/projects/*.mdx',
+  {
+    eager: true,
+    query: '?raw',
+    import: 'default',
+  },
+)
+
+const RESUME_SOURCES: Record<string, string> = import.meta.glob(
+  '../content/resume.tex',
+  {
+    eager: true,
+    query: '?raw',
+    import: 'default',
+  },
+)
 
 const blogFrontmatterSchema = z.object({
   title: z.string(),
@@ -113,13 +135,22 @@ const projectFrontmatterSchema = z.object({
     .optional(),
 })
 
-async function readMdxFile(filePath: string) {
-  const raw = await fs.readFile(filePath, 'utf-8')
-  return matter(raw)
+function readMdxSource(source: string) {
+  return matter(source)
+}
+
+function getResumeSource() {
+  return Object.values(RESUME_SOURCES)[0] ?? null
 }
 
 function slugFromFile(fileName: string) {
   return fileName.replace(/\.mdx?$/, '')
+}
+
+function fileNameFromGlobPath(filePath: string) {
+  const normalized = filePath.replace(/\\/g, '/')
+  const fileName = normalized.split('/').pop()
+  return fileName ?? filePath
 }
 
 function normalizeStack(stack?: Array<string> | string) {
@@ -248,16 +279,17 @@ async function renderMdxToHtml(content: string) {
 }
 
 async function readBlogIndex(): Promise<Array<BlogMeta>> {
-  const files = await fs.readdir(BLOG_DIR)
+  const files = Object.entries(BLOG_POST_SOURCES)
   const entries = await Promise.all(
     files
-      .filter((file) => file.endsWith('.mdx'))
-      .map(async (file) => {
-        const { data } = await readMdxFile(path.join(BLOG_DIR, file))
+      .filter(([filePath]) => filePath.endsWith('.mdx'))
+      .map(([filePath, source]) => {
+        const { data } = readMdxSource(source)
         const frontmatter = blogFrontmatterSchema.parse(data)
+        const fileName = fileNameFromGlobPath(filePath)
 
         return {
-          slug: slugFromFile(file),
+          slug: slugFromFile(fileName),
           title: frontmatter.title,
           date: frontmatter.date,
           summary: frontmatter.summary,
@@ -274,9 +306,19 @@ async function readBlogIndex(): Promise<Array<BlogMeta>> {
 }
 
 async function readBlogPost(slug: string): Promise<BlogPost | null> {
-  const filePath = path.join(BLOG_DIR, `${slug}.mdx`)
+  const match = Object.entries(BLOG_POST_SOURCES).find(([filePath]) => {
+    const fileName = fileNameFromGlobPath(filePath)
+    return slugFromFile(fileName) === slug
+  })
+
+  if (!match) {
+    return null
+  }
+
+  const [, source] = match
+
   try {
-    const { data, content } = await readMdxFile(filePath)
+    const { data, content } = readMdxSource(source)
     const frontmatter = blogFrontmatterSchema.parse(data)
     const html = await renderMdxToHtml(content)
 
@@ -296,12 +338,12 @@ async function readBlogPost(slug: string): Promise<BlogPost | null> {
 }
 
 async function readBlogPostsWithHtml(): Promise<Array<BlogPost>> {
-  const files = await fs.readdir(BLOG_DIR)
+  const files = Object.keys(BLOG_POST_SOURCES)
   const entries = await Promise.all(
     files
       .filter((file) => file.endsWith('.mdx'))
       .map(async (file) => {
-        const slug = slugFromFile(file)
+        const slug = slugFromFile(fileNameFromGlobPath(file))
         const post = await readBlogPost(slug)
         return post
       }),
@@ -313,16 +355,17 @@ async function readBlogPostsWithHtml(): Promise<Array<BlogPost>> {
 }
 
 async function readProjectIndex(): Promise<Array<ProjectMeta>> {
-  const files = await fs.readdir(PROJECT_DIR)
+  const files = Object.entries(PROJECT_POST_SOURCES)
   const entries = await Promise.all(
     files
-      .filter((file) => file.endsWith('.mdx'))
-      .map(async (file) => {
-        const { data } = await readMdxFile(path.join(PROJECT_DIR, file))
+      .filter(([filePath]) => filePath.endsWith('.mdx'))
+      .map(([filePath, source]) => {
+        const { data } = readMdxSource(source)
         const frontmatter = projectFrontmatterSchema.parse(data)
+        const fileName = fileNameFromGlobPath(filePath)
 
         return {
-          slug: slugFromFile(file),
+          slug: slugFromFile(fileName),
           title: frontmatter.title,
           date: frontmatter.date,
           summary: frontmatter.summary,
@@ -341,9 +384,19 @@ async function readProjectIndex(): Promise<Array<ProjectMeta>> {
 }
 
 async function readProjectPost(slug: string): Promise<ProjectPost | null> {
-  const filePath = path.join(PROJECT_DIR, `${slug}.mdx`)
+  const match = Object.entries(PROJECT_POST_SOURCES).find(([filePath]) => {
+    const fileName = fileNameFromGlobPath(filePath)
+    return slugFromFile(fileName) === slug
+  })
+
+  if (!match) {
+    return null
+  }
+
+  const [, source] = match
+
   try {
-    const { data, content } = await readMdxFile(filePath)
+    const { data, content } = readMdxSource(source)
     const frontmatter = projectFrontmatterSchema.parse(data)
     const html = await renderMdxToHtml(content)
 
@@ -369,3 +422,25 @@ export const getBlogPostsWithHtmlInternal = readBlogPostsWithHtml
 export const getProjectIndexInternal = readProjectIndex
 export const getBlogPostBySlugInternal = readBlogPost
 export const getProjectBySlugInternal = readProjectPost
+
+export async function getResumeInternal() {
+  const latexSource = getResumeSource()
+  if (!latexSource) {
+    return null
+  }
+
+  try {
+    const { parseLatexResume } = await import('./latex-parser')
+    const resume = parseLatexResume(latexSource)
+
+    return {
+      html: resume.html,
+      title: resume.title,
+      summary: resume.summary,
+      date: resume.date,
+    }
+  } catch (error) {
+    console.error('Error parsing resume:', error)
+    return null
+  }
+}

@@ -70,22 +70,6 @@ export const getProjectBySlug = createServerFn({ method: 'GET' })
     })
 
 export const getResume = createServerFn({ method: 'GET' }).handler(async () => {
-    const fs = await import('node:fs/promises')
-    const path = await import('node:path')
-    const filePath = path.join(process.cwd(), 'src', 'content', 'resume.tex')
-    try {
-        const latexSource = await fs.readFile(filePath, 'utf-8')
-        const { parseLatexResume } = await import('./latex-parser')
-        const resume = parseLatexResume(latexSource)
-
-        return {
-            html: resume.html,
-            title: resume.title,
-            summary: resume.summary,
-            date: resume.date,
-        }
-    } catch (error) {
-        console.error('Error reading resume:', error)
-        return null
-    }
+    const { getResumeInternal } = await import('./content.server')
+    return getResumeInternal()
 })
