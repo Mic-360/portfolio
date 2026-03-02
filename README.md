@@ -1,4 +1,4 @@
-# Bhaumik Singh — Portfolio
+# Bhaumic Singh — Portfolio
 
 A minimalist, high-performance personal portfolio built with the bleeding edge **TanStack Start** (SSR) ecosystem. It features a typesafe routing system, MDX-powered content, and a sleek dark-first design.
 
@@ -64,4 +64,4 @@ yarn preview
 
 ## 📝 License
 
-This project is [MIT](./LICENSE) licensed. Built with ❤️ by [Bhaumik Singh](https://bhaumiksingh.com).
+This project is [MIT](./LICENSE) licensed. Built with ❤️ by [Bhaumic Singh](https://bhaumicsingh.dev).
