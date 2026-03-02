@@ -1,10 +1,10 @@
-import { createFileRoute } from '@tanstack/react-router'
 import { writeHealthDataInternal } from '@/lib/health.server'
+import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/api/health')({
     server: {
         handlers: {
-            GET: async () => {
+            GET: () => {
                 return Response.json({
                     status: 'ok',
                     message: 'Server is healthy',

@@ -1,9 +1,9 @@
+import { gravatar, socialLinks } from '@/lib/site-data'
 import { Link } from '@tanstack/react-router'
 import GithubIcon from './ui/github-icon'
 import InstagramIcon from './ui/instagram-icon'
 import LinkedinIcon from './ui/linkedin-icon'
 import TwitterIcon from './ui/twitter-icon'
-import { gravatar, socialLinks } from '@/lib/site-data'
 
 const iconMap = {
   github: GithubIcon,
@@ -76,7 +76,6 @@ export default function Footer() {
           .filter((link) => link.label !== 'rss')
           .map((link) => {
             const Icon = iconMap[link.label as keyof typeof iconMap]
-            if (!Icon) return null
 
             return (
               <li key={link.label}>

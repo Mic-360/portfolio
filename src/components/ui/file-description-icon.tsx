@@ -1,5 +1,5 @@
-import { forwardRef, useCallback, useImperativeHandle } from 'react'
 import { motion, useAnimate } from 'motion/react'
+import { forwardRef, useCallback, useImperativeHandle } from 'react'
 import type { AnimatedIconHandle, AnimatedIconProps } from './types'
 
 const FileDescriptionIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
@@ -33,7 +33,7 @@ const FileDescriptionIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
       )
     }, [animate])
 
-    const stop = useCallback(async () => {
+    const stop = useCallback(() => {
       animate(
         '.file-fold, .file-lines',
         {
