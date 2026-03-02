@@ -30,13 +30,31 @@ export const Route = createFileRoute('/sitemap/xml')({
 						loc: `${siteMeta.baseUrl}/blog`,
 						lastmod: latestBlogDate,
 						changefreq: 'weekly',
-						priority: '0.8',
+						priority: '0.9',
 					},
 					{
 						loc: `${siteMeta.baseUrl}/projects`,
 						lastmod: latestProjectDate,
 						changefreq: 'monthly',
+						priority: '0.9',
+					},
+					{
+						loc: `${siteMeta.baseUrl}/resume`,
+						lastmod: new Date().toISOString(),
+						changefreq: 'monthly',
 						priority: '0.8',
+					},
+					{
+						loc: `${siteMeta.baseUrl}/readme`,
+						lastmod: new Date().toISOString(),
+						changefreq: 'monthly',
+						priority: '0.6',
+					},
+					{
+						loc: `${siteMeta.baseUrl}/bento`,
+						lastmod: new Date().toISOString(),
+						changefreq: 'monthly',
+						priority: '0.5',
 					},
 					...posts.map((post) => ({
 						loc: `${siteMeta.baseUrl}/blog/${post.slug}`,
@@ -54,7 +72,8 @@ export const Route = createFileRoute('/sitemap/xml')({
 
 				const body =
 					`<?xml version="1.0" encoding="UTF-8"?>\n` +
-					`<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+					`<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n` +
+					`        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n` +
 					urls
 						.map(
 							(url) =>
