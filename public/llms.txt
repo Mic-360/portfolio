@@ -8,7 +8,7 @@ Bhaumic Singh (भौमिक सिंह) is a full stack software engineer b
 
 ## Images
 
-- Profile Photo: https://bhaumicsingh.dev/favicon-256x256.png
+- Profile Photo: https://bhaumicsingh.dev/profile.png
 - Banner: https://bhaumicsingh.dev/space-shooter.png
 - Banner (Animated): https://bhaumicsingh.dev/space-shooter.gif
 - Gravatar Avatar: https://gravatar.com/avatar/bhaumic?s=256

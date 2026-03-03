@@ -2,7 +2,7 @@
 Name: Bhaumic Singh
 Role: Full Stack Software Engineer
 Site: https://bhaumicsingh.dev
-Photo: https://bhaumicsingh.dev/favicon-256x256.png
+Photo: https://bhaumicsingh.dev/profile.png
 Gravatar: https://gravatar.com/bhaumic
 GitHub: https://github.com/Mic-360
 Twitter: https://x.com/bhaumicsingh

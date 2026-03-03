@@ -20,7 +20,7 @@ export const siteInfo = {
   interests:
     'I enjoy building, deploying, and designing experiments with code and bleeding edge technology — and occasional anime binge.',
   calendlyUrl: 'https://calendly.com/bhaumic/connect-with-bhaumic',
-  email: 'bhaumic@bhaumicsingh.dev',
+  email: 'bhaumiksingh2000@gmail.com',
   githubUsername: 'Mic-360',
 }
 
@@ -43,7 +43,7 @@ export const siteMeta = {
 }
 
 export const siteImages = {
-  profilePhoto: '/favicon-256x256.png',
+  profilePhoto: '/profile.png',
   banner: '/space-shooter.png',
   bannerAnimated: '/space-shooter.gif',
   icon: '/icon.png',
