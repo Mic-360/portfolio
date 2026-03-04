@@ -1,0 +1,245 @@
+---
+title: 'Tryon Modal'
+date: '2025-02-11'
+summary: 'An AI-powered Virtual Try-On WooCommerce plugin that lets shoppers upload a photo and see garments on themselves — built with PHP, Google Gemini, vanilla JS, and a session-aware modal UI with full admin configuration and security hardening.'
+stack:
+  - 'PHP'
+  - 'JavaScript'
+  - 'Google Gemini'
+  - 'WooCommerce'
+  - 'MySQL'
+links:
+  - label: 'GitHub'
+    url: 'https://github.com/Mic-360/tryon-modal'
+tags:
+  - 'ai'
+  - 'e-commerce'
+  - 'woocommerce'
+  - 'php'
+  - 'computer-vision'
+categories:
+  - 'tooling'
+  - 'web'
+image: '/tryon-preview.png'
+---
+
+# Tryon Modal — AI Virtual Try-On for WooCommerce
+
+An AI-powered virtual fitting room that integrates directly into WooCommerce product pages. Shoppers upload a photo, select a product, and receive a generated try-on composite via Google Gemini — all inside a non-intrusive modal that never takes them away from the page.
+
+## The Problem
+
+Online fashion retail has a fundamental UX gap: customers cannot visualize how a garment will look on their specific body before purchasing. This leads to speculative multi-size buying and return rates that run 20–40% in fashion e-commerce — a logistics, sustainability, and margin problem for every store that ships clothes.
+
+Existing solutions are either SaaS subscriptions with per-try pricing, enterprise integrations requiring custom APIs, or computer vision systems that demand training data and GPU infrastructure. None of them target WooCommerce stores operating in the SMB segment.
+
+![Tryon Modal](/tryon-preview.png)
+
+## The Solution
+
+Tryon Modal is a self-contained WordPress plugin that adds a **Virtual Try-On** call-to-action to any WooCommerce product page. The entire experience is modal-first: no new pages, no app downloads, no account creation. The plugin uses Google Gemini's multimodal API for image generation and stores session history in a custom database table for repeat-visit context.
+
+---
+
+## Architecture
+
+```
+Browser (Product Page)
+   │
+   └── "Virtual Try-On" button click
+         │
+         ▼
+   Nano Tryon Modal (vanilla JS)
+         │
+         ├── Drag-and-drop photo upload (FileReader API)
+         ├── Garment image fetched from product meta
+         │
+         ▼
+   AJAX → wp-admin/admin-ajax.php
+         │
+         └── TryonModal_Ajax::handle_tryon()
+               │
+               ├── Nonce verification (CSRF)
+               ├── MIME type validation (upload security)
+               ├── Base64 encode both images
+               │
+               ▼
+         TryonModal_Gemini::generate_tryon()
+               │
+               ├── Build multimodal prompt (garment-category-aware)
+               ├── POST → generativelanguage.googleapis.com
+               │         (Google Gemini API)
+               │
+               ▼
+         Response → base64 result image
+               │
+               ├── Save session to wp_tryon_sessions
+               └── Return JSON to modal
+                     │
+                     ▼
+               Modal renders result image
+               ├── Download button
+               └── Add to Cart button
+```
+
+### Component Map
+
+| Component | File | Responsibility |
+|---|---|---|
+| Plugin bootstrap | `tryon-modal.php` | Register hooks, HPOS compatibility |
+| Admin settings | `includes/class-admin.php` | API key config, Garment Mapper UI |
+| Gemini API handler | `includes/class-gemini.php` | Secure API communication |
+| AJAX handler | `includes/class-ajax.php` | Upload handling, session write, response |
+| Database | `includes/class-database.php` | Table creation, session CRUD |
+| Modal UI | `assets/js/modal.js` | Upload UX, transitions, result rendering |
+| Styles | `assets/css/modal.css` | Namespaced `.nano-tryon-*` CSS |
+
+---
+
+## Key Design Decisions
+
+### Why Google Gemini Instead of a Custom Model?
+
+Training a garment-aware virtual try-on model from scratch requires labeled image datasets, GPU infrastructure, and months of iteration. Gemini's multimodal API already understands clothing, body proportion, and image composition. The engineering effort shifts from model training to **prompt engineering and API integration** — a dramatically lower barrier for a plugin targeting SMB e-commerce stores.
+
+The result quality is directly tied to:
+1. The garment category passed in the prompt (Top vs. Dress vs. Outerwear)
+2. The clarity and composition of the user's uploaded photo
+3. The quality of the product's garment image
+
+### Why a Garment Mapper?
+
+Generic image prompts produce generic results. The Gemini prompt changes meaningfully based on garment type — a "top" has different compositional guidance than a "full-length dress" or a "structured jacket." The **Garment Mapper** is an admin UI that lets shop owners bulk-tag product images with garment categories. This metadata is stored in product meta and passed to the API handler at request time, improving output consistency without requiring per-request manual input.
+
+### Why a Custom Session Table?
+
+WordPress's native option system and post meta are designed for key-value persistence, not relational try-on history scoped per user per garment. The dedicated `wp_tryon_sessions` table supports:
+- Indexed queries by user ID and timestamp
+- Storing image paths without BLOB overhead (paths only, files on disk)
+- Clean pagination for the user-facing history view
+- Truncation policies without affecting core WordPress data
+
+### Why Modal-First, Not a New Page?
+
+Redirecting users away from the product page during a purchase decision is a conversion killer. The try-on experience needs to be zero-friction: the shopper should be able to complete the try-on and click **Add to Cart** without navigating anywhere. The modal pattern achieves this — it overlays the product page, returns focus to it when dismissed, and keeps the user in the purchase funnel throughout.
+
+---
+
+## Security Model
+
+Any plugin that accepts user-uploaded files and communicates with an external API presents real attack surfaces. The following measures are implemented throughout:
+
+| Threat | Mitigation |
+|---|---|
+| CSRF | WordPress nonce verification on every AJAX action |
+| XSS | `esc_html()`, `esc_url()`, `wp_kses_post()` on all output |
+| SQL injection | `$wpdb->prepare()` on every database query |
+| Malicious uploads | MIME type validation + extension whitelist before processing |
+| API key exposure | Key stored in `wp_options`, never rendered to the client |
+| HTTPS enforcement | All Gemini API calls made over TLS; stored API key excluded from AJAX responses |
+
+HPOS (High-Performance Order Storage) compatibility is declared via `woocommerce_cart_hash_key` feature flag, ensuring the plugin works on stores that have migrated away from the legacy `wp_posts`-based order storage.
+
+---
+
+## User Workflow
+
+### Shopper Experience
+
+1. **Product Page** — A **Virtual Try-On** button appears below the Add to Cart button on any product with garment mapping configured.
+2. **Modal Opens** — The modal bootstraps on first click (lazy-loaded). The upload zone is presented.
+3. **Upload** — Shopper drags and drops or clicks to select a photo. FileReader API generates a live preview before any upload occurs.
+4. **Processing** — The photo and garment image are sent to the backend via AJAX. A spinner state displays while Gemini processes.
+5. **Result** — The generated try-on composite fades into the result pane.
+6. **Action** — Shopper downloads the result image or clicks **Add to Cart** directly from the modal.
+
+### Admin Experience
+
+1. **Settings Page** — Enter the Gemini API key. Configure default garment category as fallback.
+2. **Garment Mapper** — Browse all products with images. Assign garment categories (Top, Bottom, Dress, Outerwear, Activewear) per product. Bulk-assign by category filter.
+3. **Session Log** — View try-on history across all users: timestamp, product, session status.
+
+---
+
+## Database Schema
+
+```sql
+CREATE TABLE wp_tryon_sessions (
+  id            BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  user_id       BIGINT(20) UNSIGNED NOT NULL,
+  product_id    BIGINT(20) UNSIGNED NOT NULL,
+  user_image    VARCHAR(500)        NOT NULL,
+  result_image  VARCHAR(500)        NOT NULL,
+  garment_type  VARCHAR(50)         NOT NULL,
+  status        ENUM('pending','complete','failed') DEFAULT 'pending',
+  created_at    DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_user   (user_id),
+  KEY idx_product (product_id)
+);
+```
+
+---
+
+## Gemini API Integration
+
+The `TryonModal_Gemini` class wraps all communication with the Google AI Studio endpoint. The request is a multimodal `generateContent` call that passes:
+
+- A structured system prompt describing the try-on task and garment category
+- The user's photo as base64-encoded inline image data
+- The product's garment image as base64-encoded inline image data
+
+```php
+private function buildTryOnPrompt(string $garmentCategory): string {
+    return "You are a virtual fitting room AI. Generate a photorealistic image 
+            showing the person in the first photo wearing the {$garmentCategory} 
+            shown in the second photo. Preserve the person's face, skin tone, 
+            body proportions, and pose. Ensure the garment fits naturally.";
+}
+```
+
+The response image is returned as base64, saved to the uploads directory, its path stored in the session table, and the URL returned to the modal via JSON.
+
+---
+
+## Frontend: The Modal
+
+The modal is zero-dependency vanilla JavaScript. It lazy-initializes on the first button click, meaning the product page incurs zero JavaScript or CSS overhead for users who never open it.
+
+Key interaction details:
+
+- **Drag and drop** uses the HTML5 `dragover` / `drop` event model with `FileReader` for client-side preview
+- **Upload progress** uses `XMLHttpRequest` with `upload.onprogress` for a live progress indicator
+- **Transitions** are CSS `opacity` + `transform` animations triggered by class toggling — no JS animation loops
+- **Result fade-in** is a CSS keyframe animation triggered when the response JSON is received
+- **Add to Cart** submits the WooCommerce form via `fetch()` without page reload
+
+All CSS classes are namespaced under `.nano-tryon-` to prevent conflicts with any theme. Every style is overridable without touching plugin files.
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Language | PHP 8.1+ |
+| Platform | WordPress + WooCommerce |
+| AI | Google Gemini (multimodal via AI Studio) |
+| Frontend | Vanilla JavaScript + CSS |
+| Database | MySQL via `$wpdb` |
+| Upload handling | WordPress Media Library + custom MIME validation |
+| Security | WP nonces, `$wpdb->prepare()`, `esc_*` helpers |
+
+---
+
+## What I Learned
+
+**Prompt engineering is a real engineering discipline.** The difference between a passable try-on output and a good one came entirely from how the garment category is described in the prompt. Vague prompts produce vague composites. Precise, contextual prompts — specifying garment type, fit style, and photorealism requirements — produce outputs users actually trust.
+
+**WordPress's security primitives are solid when you actually use them.** Nonces, `$wpdb->prepare()`, and the `esc_*` family of functions cover almost every common attack surface for a plugin. The problem is most developers bypass them for convenience. Writing them correctly from the start is cheaper than patching a CVE later.
+
+**Modal-first is the right pattern for in-purchase-funnel tools.** Any UX flow that takes the user away from the product page during a purchase decision has a dropout risk. Keeping the try-on entirely within a modal overlay means the Add to Cart button is always reachable — which is the entire point.
+
+---
+
+Tryon Modal demonstrates that production-quality AI features don't require custom models or SaaS infrastructure. A well-integrated third-party API, a clean modal UX, and good security hygiene are enough to deliver a real feature to real users on real stores.
