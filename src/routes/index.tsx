@@ -159,8 +159,8 @@ function App() {
       <Section title="previous">
         <div className="flex flex-col gap-2">
           {previousRoles.map((role) => (
-            <div key={role.company} className="flex flex-wrap gap-2">
-              <a
+            <div key={role.company} className="flex flex-wrap justify-between gap-2">
+              <div className='flex flex-wrap gap-2 items-center'><a
                 href={role.url}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -175,9 +175,11 @@ function App() {
                 )}
                 {role.company}
               </a>
-              <span className="text-primary">~</span>
-              <span>{role.role}</span>
-              <span className="text-primary">[{role.location}]</span>
+                <span className="text-primary">~</span>
+                <span>{role.role}</span>
+                <span className="text-primary">[{role.location}]</span>
+              </div>
+              <span>[{role.duration}]</span>
             </div>
           ))}
         </div>
