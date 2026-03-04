@@ -1,0 +1,313 @@
+---
+title: 'MiniShinobi — Self-Hosted Deployment Platform'
+date: '2026-03-04'
+summary: 'A self-hosted Vercel-like deployment platform that runs entirely inside Termux on a rooted Android device — featuring GitHub OAuth, real-time build logs via SSE, Cloudflare Tunnels, PM2 process management, and a build queue optimized for low-resource ARM hardware.'
+stack:
+  - 'Node.js'
+  - 'Express'
+  - 'React'
+  - 'Vite'
+  - 'sql.js'
+  - 'Nginx'
+  - 'Cloudflare'
+  - 'PM2'
+links:
+  - label: 'GitHub'
+    url: 'https://github.com/Mic-360/MiniShinobi'
+tags:
+  - 'self-hosted'
+  - 'devops'
+  - 'android'
+  - 'deployment'
+  - 'cloudflare'
+categories:
+  - 'infrastructure'
+  - 'tooling'
+image: '/mini-shinobi.png'
+---
+
+# MiniShinobi — Self-Hosted Deployment Platform
+
+A mini-Vercel that runs inside [Termux](https://termux.dev) on a rooted Android phone. Connect your GitHub repos, click **Deploy**, and your projects go live via Cloudflare Tunnels — all from a device that fits in your pocket.
+
+> **Zero native compilation.** The entire stack uses pure-JavaScript packages, which means no C++ addon compilation nightmares on ARM Termux.
+
+## The Problem
+
+Cloud hosting platforms are convenient but either expensive at scale or heavily limited on free tiers. The alternative — a traditional VPS — requires ongoing maintenance, costs a monthly fee, and wastes a perfectly good rooted Android device sitting in a drawer.
+
+MiniShinobi turns that idle hardware into a real, production-grade deployment server. Self-contained. Zero monthly cost. Complete control.
+
+## The Solution
+
+MiniShinobi is an end-to-end deployment platform with a React dashboard, an Express API backend, GitHub OAuth authentication, real-time build streaming, and automatic Cloudflare Tunnel provisioning — all orchestrated by PM2 and proxied through Nginx, running on a Snapdragon 660 with 4 GB of RAM.
+
+---
+
+## Architecture
+
+```
+Internet
+   │
+   ▼
+Cloudflare (yourdomain.com)
+   │  DNS → Cloudflare Tunnel
+   ▼
+cloudflared daemon (Termux)  ◄────────────────────────────────┐
+   │                                                           │
+   ├── dashboard.yourdomain.com  → localhost:4000 (Nginx)     │
+   ├── *.yourdomain.com          → localhost:PORT (apps)      │
+                                                                │
+Nginx (port 4000) ──► Express Backend (port 3000, Node.js)    │
+                                                                │
+Express Backend                                                 │
+   ├── GitHub OAuth (login)                                     │
+   ├── sql.js SQLite DB                                         │
+   ├── REST API (/api/*)                                        │
+   ├── SSE stream (/api/deployments/:id/logs)                   │
+   └── Deployment Engine                                        │
+         ├── git clone                                          │
+         ├── install command                                     │
+         ├── build command                                      │
+         ├── serve output                                       │
+         └── cloudflared named tunnel ──────────────────────────┘
+```
+
+The dashboard is a React SPA served as a static build by Nginx. Nginx acts as the single ingress point, forwarding API calls to Express while serving static assets directly — so the frontend never appears on a port that's publicly reachable.
+
+### Port Map
+
+| Service | Port |
+|---------|------|
+| Nginx (reverse proxy) | 4000 |
+| Express backend API | 3000 |
+| Deployed apps | 5000–5999 (auto-assigned) |
+
+---
+
+## Key Design Decisions
+
+### Why sql.js Instead of better-sqlite3?
+
+Native Node.js addons like `better-sqlite3` require C++ compilation during `npm install`. ARM Termux frequently fails this step for multiple packages, making the entire setup fragile and architecture-dependent.
+
+`sql.js` is SQLite compiled to WebAssembly. It installs cleanly on any architecture, requires zero native tooling, and runs in pure JavaScript. The trade-off is that the entire database must be loaded into memory and explicitly flushed to disk on every write — acceptable for a personal deployment server with modest data volumes.
+
+| Typical Dependency | MiniShinobi Alternative | Why |
+|---|---|---|
+| `better-sqlite3` | `sql.js` | WebAssembly SQLite — zero native compilation |
+| `connect-sqlite3` | `session-file-store` | Pure JS, stores sessions as JSON files |
+| `node-pty` | `child_process.spawn` | Built-in Node.js, no native deps |
+
+### Why a Build Queue?
+
+A Snapdragon 660 with 4 GB of RAM can run serving traffic continuously, but `npm install` + `npm run build` for a React app can push memory usage close to the limit — especially if multiple deploys trigger simultaneously. The build queue serializes all deployments: only one build runs at a time, and subsequent deploys wait. This prevents OOM kills and keeps the server stable.
+
+### Why Cloudflare Tunnels?
+
+Residential and mobile internet connections don't have static public IPs, and port forwarding requires router-level configuration that isn't always possible. Cloudflare Tunnels solve both problems: the `cloudflared` daemon maintains an outbound connection to Cloudflare's edge, which routes inbound traffic back through the tunnel. No public IP. No open ports. No router config. Every deployed project gets its own named subdomain with automatic HTTPS.
+
+---
+
+## Deployment Flow
+
+When you click **Deploy Now**, the engine executes this exact sequence:
+
+```
+POST /api/deployments/project/:id/deploy
+  │
+  ├── INSERT deployments row (status: queued)
+  ├── Return 202 { deploymentId } immediately
+  └── queueDeploy(deploymentId) runs in the background
+        │
+        ├── [wait if another build is already running]
+        ├── 1. git clone --depth 1 <repo_url> into buildDir
+        ├── 2. read commit SHA and message, save to DB
+        ├── 3. sh -c "<install_command>"
+        ├── 4. sh -c "<build_command>"
+        ├── 5. getFreePort() picks next open port in 5000–5999
+        ├── 6a. output_dir exists → serve -s ./output -l PORT (static)
+        │   6b. no output_dir    → npm start with PORT env var (Node app)
+        ├── 7. cloudflared tunnel route dns + update config.yml
+        └── 8. UPDATE deployments SET status='ready', tunnel_url=...
+```
+
+All stdout/stderr from every step is:
+- Line-buffered and written to the `logs` table in real time
+- Pushed live to all connected SSE clients (the log viewer in the dashboard)
+- Replayed from DB for any client that connects after the build finishes
+
+---
+
+## Features
+
+- **GitHub OAuth Login** — Sign in with your GitHub account via Passport.js
+- **Project Management** — Import GitHub repos with custom build commands per project
+- **One-Click Deploy** — Clone → Install → Build → Serve, fully automated
+- **Live Build Logs** — Real-time streaming via Server-Sent Events (SSE)
+- **Cloudflare Tunnels** — Every deployment gets a unique public URL automatically
+- **Named Subdomains** — Projects deployed to `project-slug.yourdomain.com`
+- **Build Queue** — Serialized builds preventing OOM on resource-constrained devices
+- **PM2 Integration** — Auto-restart, log rotation, and process monitoring
+- **Static & Dynamic Apps** — Serves static builds with `serve`, Node apps with `npm start`
+- **Mobile-First Architecture** — Optimized for low-resource ARM devices
+
+---
+
+## Visual Workflow
+
+| Step 1: Login | Step 2: Dashboard |
+| :---: | :---: |
+| ![Login](/project/image-1.png) | ![Dashboard](/project/image-2.png) |
+| **Authentication via GitHub OAuth** | **Overview of all your projects** |
+
+| Step 3: Create Project | Step 4: Configure |
+| :---: | :---: |
+| ![New Project](/project/image-3.png) | ![Configuration](/project/image-4.png) |
+| **Add a new repository** | **Setup build and install commands** |
+
+| Step 5: Build Logs | Step 6: Ready |
+| :---: | :---: |
+| ![Build Logs](/project/image-5.png) | ![Ready](/project/image-6.png) |
+| **Real-time deployment monitoring** | **Successful deployment status** |
+
+| Step 7: Live App |
+| :---: |
+| ![Live App](/project/image-7.png) |
+| **Your project live on your domain** |
+
+---
+
+## Project Structure
+
+```
+minishinobi/
+├── ecosystem.config.js          PM2 process manager config
+├── nginx/
+│   └── nginx.conf               Nginx reverse proxy config
+├── cloudflared/
+│   └── config.yml               Cloudflare tunnel config template
+├── backend/
+│   ├── .env                     Environment variables (gitignored)
+│   ├── .env.example             Template for .env
+│   ├── package.json
+│   ├── db/
+│   │   ├── schema.sql           SQLite schema (runs on every boot)
+│   │   ├── minishinobi.sqlite   Database file (gitignored)
+│   │   └── sessions/            Session files (gitignored)
+│   └── src/
+│       ├── app.js               Express entrypoint + boot sequence
+│       ├── db.js                sql.js loader + disk persistence
+│       ├── dbHelpers.js         prepare().get/all/run() wrapper
+│       ├── deployer.js          Build + serve + tunnel engine
+│       ├── portManager.js       Free port finder (5000–5999)
+│       └── routes/
+│           ├── auth.js          GitHub OAuth routes
+│           ├── projects.js      CRUD for projects
+│           └── deployments.js   Deploy, logs SSE, stop
+├── frontend/
+│   ├── package.json
+│   ├── index.html               SPA entry point
+│   ├── vite.config.js           Vite config with dev proxy
+│   ├── public/
+│   │   └── mini-shinobi.png     Logo
+│   └── src/
+│       ├── main.jsx
+│       ├── App.jsx              Router + auth guard
+│       ├── api.js               Axios API client
+│       ├── index.css            Tailwind + theme
+│       ├── context/
+│       │   └── AuthContext.jsx  Auth state provider
+│       ├── components/
+│       │   ├── Layout.jsx       App shell with nav
+│       │   └── ui/              Badge, Button, Input, Modal
+│       └── pages/
+│           ├── Login.jsx        GitHub OAuth login
+│           ├── Dashboard.jsx    Project list + create
+│           ├── Project.jsx      Deployments list
+│           └── Deployment.jsx   Live build logs
+├── deployments/                 Git clones + build artifacts (gitignored)
+├── tunnels/                     Tunnel state (gitignored)
+└── logs/                        PM2 logs (gitignored)
+```
+
+---
+
+## API Reference
+
+All endpoints require an active GitHub OAuth session.
+
+### Auth
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/auth/github` | Initiate GitHub OAuth login |
+| GET | `/auth/github/callback` | GitHub OAuth callback |
+| GET | `/auth/me` | Get current user info |
+| POST | `/auth/logout` | Logout |
+
+### Projects
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/projects` | List all projects |
+| POST | `/api/projects` | Create a new project |
+| DELETE | `/api/projects/:id` | Delete a project |
+
+### Deployments
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/deployments/project/:projectId` | List deployments for a project |
+| POST | `/api/deployments/project/:projectId/deploy` | Trigger a new deployment |
+| GET | `/api/deployments/:id` | Get deployment details |
+| GET | `/api/deployments/:id/logs` | SSE stream of build logs |
+| DELETE | `/api/deployments/:id` | Stop a running deployment |
+
+### Health
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/health` | Health check endpoint |
+
+---
+
+## Database Schema
+
+MiniShinobi uses SQLite via `sql.js` (WebAssembly). The schema is applied on every boot with `CREATE TABLE IF NOT EXISTS`:
+
+| Table | Purpose |
+|-------|---------|
+| `users` | GitHub OAuth users |
+| `projects` | Imported repositories with build config |
+| `deployments` | Build history, status, tunnel URLs, PIDs |
+| `logs` | Build log lines (stdout/stderr/system) |
+
+---
+
+## Tech Stack
+
+| Component | Technology |
+|-----------|-----------|
+| Runtime | Node.js (LTS) |
+| Database | sql.js (WebAssembly SQLite) |
+| Sessions | session-file-store (JSON files) |
+| Auth | GitHub OAuth via Passport |
+| Frontend | React + Vite + Tailwind CSS |
+| Reverse Proxy | Nginx |
+| Tunneling | Cloudflare Tunnels (`cloudflared`) |
+| Process Manager | PM2 |
+
+---
+
+## What I Learned
+
+**Constraints produce creativity.** Every major architectural decision in MiniShinobi was driven by a constraint: no native compilation → sql.js. No public IP → Cloudflare Tunnels. Limited RAM → serialized build queue. Working within hard constraints forces you to understand your tools more deeply than convenience-driven choices ever would.
+
+**SSE is underrated.** Server-Sent Events feel like the forgotten middle child between polling and WebSockets. But for one-directional, line-by-line log streaming, SSE is exactly right — no library required, easy to replay from a database, and works perfectly in every browser.
+
+**PM2 is production infrastructure, not a dev tool.** Auto-restart policies, log rotation, and process monitoring on a phone running Termux is legitimately solid. The `ecosystem.config.js` approach is the right way to define a multi-process system as code.
+
+---
+
+MiniShinobi proves that "self-hosted" doesn't require a VPS or a Raspberry Pi. Sometimes the server is already in your pocket, waiting to be put to work.

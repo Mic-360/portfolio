@@ -1,0 +1,107 @@
+---
+title: 'I Built Vercel on a Phone. A Rooted Android Phone.'
+date: '2026-03-04'
+summary: 'Normal people pay $20/month for Vercel. I built the entire thing on a Snapdragon 660 with 4 GB of RAM running in a terminal emulator. This is normal behavior.'
+tags:
+  - 'Android'
+  - 'Node.js'
+  - 'Self-Hosted'
+  - 'DevOps'
+  - 'Cloudflare'
+categories:
+  - 'Dev Story'
+  - 'Projects'
+image: '/blog/mini-shinobi-dashboard.png'
+---
+
+# I Built Vercel on a Phone. A Rooted Android Phone.
+
+> Normal people: *pays $20/month for hobby project hosting*
+> Me: *roots phone, installs Termux, rewrites deployment infrastructure from scratch*
+
+Both valid life choices. I am not here to judge. I am here to explain the decisions that led to me configuring Nginx on a Snapdragon 660 at midnight.
+
+## The Inciting Incident
+
+I wanted to host some side projects. Free tiers exist. Vercel exists. Railway exists. Render exists.
+
+I had a rooted Android phone sitting in a drawer.
+
+You can probably guess where this is going.
+
+## Introducing MiniShinobi
+
+It's a self-hosted, Vercel-like deployment platform. It runs entirely inside [Termux](https://termux.dev) on a rooted Android device. You connect a GitHub repo, click **Deploy**, and your project goes live via Cloudflare Tunnels — all from a device that charges next to your bed at night.
+
+![MiniShinobi Dashboard](/blog/mini-shinobi-dashboard.png)
+
+Is this the most resource-efficient way to host a side project? No. Is it the most *interesting*? Absolutely yes.
+
+## "We'll just use SQLite"
+
+The first design decision was the database. On a normal server you'd reach for PostgreSQL. On ARM Termux you can't compile `better-sqlite3` because native Node addon compilation on ARM is genuinely a nightmare. So instead I'm running `sql.js` — SQLite compiled to WebAssembly — which means zero native compilation, zero segfaults, and one very cursed runtime.
+
+```js
+// sql.js: the cursed WebAssembly SQLite
+// Does it run on a phone? Yes.
+// Should it? Unclear.
+const SQL = await initSqlJs({ wasmBinary })
+const db = new SQL.Database(existingBuffer)
+```
+
+Every write flushes the entire database to disk as a Buffer. This is fine. The database is small. The phone has 4 GB of RAM. Everything is fine.
+
+## "We'll just use child_process"
+
+On a real server, you'd reach for `node-pty` to get a proper terminal. On ARM Termux, `node-pty` requires native compilation. You know that story by now.
+
+So the entire deployment engine — `git clone`, `npm install`, `npm run build`, `serve`, you name it — runs through Node's built-in `child_process.spawn`. Every byte of stdout and stderr is line-buffered and streamed live to the browser via Server-Sent Events.
+
+Is it elegant? No. Does it work? The phone is literally serving projects to the open internet right now. So.
+
+## "We'll just use PM2"
+
+This is the part where I discovered that PM2 is actually great and I should have been using it everywhere. Four processes. One config file. One command.
+
+```bash
+pm2 start ecosystem.config.js
+```
+
+Nginx wakes up. Express wakes up. cloudflared wakes up. Everything wakes up. On a phone.
+
+## The Build Queue
+
+Here's a subtle one. 4 GB of RAM sounds fine until you're running `npm run build` for a React app and the OOM killer shows up to the party uninvited.
+
+So there's a build queue. Serialized. One build at a time. If you click Deploy on two projects simultaneously, one waits. It's not exciting. It's the correct engineering decision for a device with less RAM than most laptops have VRAM.
+
+I added 1 GB of swap too.
+
+```bash
+su -c "dd if=/dev/zero of=/data/swapfile bs=1M count=1024"
+su -c "mkswap /data/swapfile && swapon /data/swapfile"
+```
+
+Don't look at me like that.
+
+## Cloudflare Tunnels Are Genuinely Incredible
+
+Okay real talk for a second. `cloudflared` is magic. You run one daemon, configure a YAML file, and your `localhost:PORT` is suddenly reachable at `your-project.yourdomain.com` over HTTPS with a valid certificate.
+
+No port forwarding. No public IP. No router configuration. Just a rooted Android phone, a cloudflared binary, and a domain you paid $12/year for.
+
+Every deployment gets its own named tunnel. Every project gets its own subdomain. The phone sitting in my drawer is serving things over the real internet.
+
+## Does It Actually Work?
+
+The build logs stream in real-time. The deployments go live. The GitHub OAuth flow works. Static sites and Node apps both deploy. The subdomains resolve. The SSL certificates are valid.
+
+I'm running this on a Snapdragon 660 · 4 GB RAM · PixelExperience Android 13. The phone is also charging. It's also playing a lo-fi playlist in the background.
+
+Did I need to build this? No. Do I have a deployment dashboard running on my old rooted phone that cost me exactly $0/month to operate? Yes.
+
+That's just engineering, bro.
+
+---
+
+MiniShinobi is open source. If you have a rooted Android phone gathering dust and too much free time, you know what to do. The README has every command you need. I've already done the part where you discover why you shouldn't do this, so you get to skip to the part where it works.
