@@ -38,59 +38,100 @@ export const Route = createFileRoute('/projects/')({
   component: ProjectsIndex,
 })
 
+import { motion } from 'motion/react'
+
 function ProjectsIndex() {
   const { projects } = Route.useLoaderData()
 
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  }
+
+  const item = {
+    hidden: { opacity: 0, y: 10 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+  }
+
   return (
-    <section className="flex flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-2xl font-semibold italic">
-          <LayersIcon size={20} className="inline-block mr-1" />
-          Projects
-        </h1>
+    <motion.section
+      variants={container}
+      initial="hidden"
+      animate="show"
+      className="flex flex-col gap-8"
+    >
+      <motion.header variants={item} className="flex flex-col gap-2">
+        <div className="flex items-center justify-between mr-6">
+          <h1 className="text-2xl font-bold italic">
+            <LayersIcon size={20} className="inline-block mr-2" />
+            projects
+          </h1>
+          <Link to="/" className="group inline-flex items-center gap-1 italic text-muted-foreground hover:text-primary transition-colors duration-300 mb-2">
+            <span className="transform group-hover:-translate-x-1 transition-transform duration-300">←</span>
+            back
+          </Link>
+        </div>
         <p className="text-muted-foreground">
-          A short list of work across products with full‑stack builds of web and
+          a short list of work across products with full‑stack builds of web and
           android apps using AI or integrating AI.
         </p>
-      </div>
-      <div className="flex flex-col gap-6">
+      </motion.header>
+
+      <div className="flex flex-col gap-10">
         {projects.map((project) => (
-          <div
+          <motion.div
             key={project.slug}
-            className="flex flex-col sm:flex-row items-center gap-2"
+            variants={item}
+            className="flex flex-col sm:flex-row items-center gap-6"
           >
-            <img
-              src={project.image}
-              alt={project.title}
-              className="object-center rounded aspect-video w-full sm:w-64 h-44"
-            />
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              className="w-full sm:w-64 h-44 shrink-0 overflow-hidden rounded-lg shadow-md"
+            >
+              <img
+                src={project.image}
+                alt={project.title}
+                className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+              />
+            </motion.div>
             <Link
               to="/projects/$slug"
               params={{ slug: project.slug }}
-              className="group flex flex-col gap-1"
+              className="group flex flex-col gap-2 flex-1"
             >
-              <div className="flex flex-wrap items-center gap-2 text-base uppercase tracking-[0.2em] text-primary">
+              <div className="flex flex-wrap items-center gap-3 text-base uppercase tracking-[0.2em] text-primary font-bold">
                 <span>{project.title}</span>
-                <span className="h-px w-8 bg-primary/60"></span>
-                <span className="text-[10px] text-secondary">
+                <span className="h-px w-6 bg-primary/40 group-hover:bg-primary transition-colors"></span>
+                <span className="text-[10px] text-muted-foreground font-normal">
                   {formatDate(project.date)}
                 </span>
               </div>
-              <p className="text-sm text-muted-foreground group-hover:text-foreground">
+              <p className="text-sm text-muted-foreground group-hover:text-foreground transition-colors leading-relaxed">
                 {project.summary}
               </p>
               {project.stack.length > 0 && (
-                <p className="text-[0.65rem] uppercase tracking-[0.2em] text-primary/80">
-                  {project.stack.join(' · ')}
-                </p>
+                <div className="flex flex-wrap gap-2 mt-1">
+                  {project.stack.map((tech) => (
+                    <span key={tech} className="text-[9px] uppercase tracking-[0.2em] px-2 py-0.5 rounded-sm bg-muted/30 text-primary/60 border border-border/30">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
               )}
             </Link>
-          </div>
+          </motion.div>
         ))}
       </div>
-      <Link to="/" className="mr-2 inline-flex items-center gap-1 italic">
-        ← back
+      <Link to="/" className="group inline-flex items-center gap-1 italic text-muted-foreground hover:text-primary transition-colors duration-300 mb-2">
+        <span className="transform group-hover:-translate-x-1 transition-transform duration-300">←</span>
+        back
       </Link>
-    </section>
+    </motion.section>
   )
 }
+
