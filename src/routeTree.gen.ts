@@ -13,6 +13,7 @@ import { Route as RssRouteImport } from './routes/rss'
 import { Route as ResumeRouteImport } from './routes/resume'
 import { Route as ReadmeRouteImport } from './routes/readme'
 import { Route as BentoRouteImport } from './routes/bento'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
@@ -23,6 +24,7 @@ import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as OgProjectsSlugRouteImport } from './routes/og/projects/$slug'
 import { Route as OgBlogSlugRouteImport } from './routes/og/blog/$slug'
+import { Route as ApiGravatarIdentifierRouteImport } from './routes/api/gravatar.$identifier'
 
 const RssRoute = RssRouteImport.update({
   id: '/rss',
@@ -42,6 +44,11 @@ const ReadmeRoute = ReadmeRouteImport.update({
 const BentoRoute = BentoRouteImport.update({
   id: '/bento',
   path: '/bento',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -94,9 +101,15 @@ const OgBlogSlugRoute = OgBlogSlugRouteImport.update({
   path: '/og/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiGravatarIdentifierRoute = ApiGravatarIdentifierRouteImport.update({
+  id: '/api/gravatar/$identifier',
+  path: '/api/gravatar/$identifier',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/bento': typeof BentoRoute
   '/readme': typeof ReadmeRoute
   '/resume': typeof ResumeRoute
@@ -108,11 +121,13 @@ export interface FileRoutesByFullPath {
   '/sitemap/xml': typeof SitemapXmlRoute
   '/blog/': typeof BlogIndexRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/api/gravatar/$identifier': typeof ApiGravatarIdentifierRoute
   '/og/blog/$slug': typeof OgBlogSlugRoute
   '/og/projects/$slug': typeof OgProjectsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/bento': typeof BentoRoute
   '/readme': typeof ReadmeRoute
   '/resume': typeof ResumeRoute
@@ -124,12 +139,14 @@ export interface FileRoutesByTo {
   '/sitemap/xml': typeof SitemapXmlRoute
   '/blog': typeof BlogIndexRoute
   '/projects': typeof ProjectsIndexRoute
+  '/api/gravatar/$identifier': typeof ApiGravatarIdentifierRoute
   '/og/blog/$slug': typeof OgBlogSlugRoute
   '/og/projects/$slug': typeof OgProjectsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/bento': typeof BentoRoute
   '/readme': typeof ReadmeRoute
   '/resume': typeof ResumeRoute
@@ -141,6 +158,7 @@ export interface FileRoutesById {
   '/sitemap/xml': typeof SitemapXmlRoute
   '/blog/': typeof BlogIndexRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/api/gravatar/$identifier': typeof ApiGravatarIdentifierRoute
   '/og/blog/$slug': typeof OgBlogSlugRoute
   '/og/projects/$slug': typeof OgProjectsSlugRoute
 }
@@ -148,6 +166,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/bento'
     | '/readme'
     | '/resume'
@@ -159,11 +178,13 @@ export interface FileRouteTypes {
     | '/sitemap/xml'
     | '/blog/'
     | '/projects/'
+    | '/api/gravatar/$identifier'
     | '/og/blog/$slug'
     | '/og/projects/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/bento'
     | '/readme'
     | '/resume'
@@ -175,11 +196,13 @@ export interface FileRouteTypes {
     | '/sitemap/xml'
     | '/blog'
     | '/projects'
+    | '/api/gravatar/$identifier'
     | '/og/blog/$slug'
     | '/og/projects/$slug'
   id:
     | '__root__'
     | '/'
+    | '/about'
     | '/bento'
     | '/readme'
     | '/resume'
@@ -191,12 +214,14 @@ export interface FileRouteTypes {
     | '/sitemap/xml'
     | '/blog/'
     | '/projects/'
+    | '/api/gravatar/$identifier'
     | '/og/blog/$slug'
     | '/og/projects/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   BentoRoute: typeof BentoRoute
   ReadmeRoute: typeof ReadmeRoute
   ResumeRoute: typeof ResumeRoute
@@ -208,6 +233,7 @@ export interface RootRouteChildren {
   SitemapXmlRoute: typeof SitemapXmlRoute
   BlogIndexRoute: typeof BlogIndexRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
+  ApiGravatarIdentifierRoute: typeof ApiGravatarIdentifierRoute
   OgBlogSlugRoute: typeof OgBlogSlugRoute
   OgProjectsSlugRoute: typeof OgProjectsSlugRoute
 }
@@ -240,6 +266,13 @@ declare module '@tanstack/react-router' {
       path: '/bento'
       fullPath: '/bento'
       preLoaderRoute: typeof BentoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -312,11 +345,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OgBlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/gravatar/$identifier': {
+      id: '/api/gravatar/$identifier'
+      path: '/api/gravatar/$identifier'
+      fullPath: '/api/gravatar/$identifier'
+      preLoaderRoute: typeof ApiGravatarIdentifierRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   BentoRoute: BentoRoute,
   ReadmeRoute: ReadmeRoute,
   ResumeRoute: ResumeRoute,
@@ -328,6 +369,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapXmlRoute: SitemapXmlRoute,
   BlogIndexRoute: BlogIndexRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
+  ApiGravatarIdentifierRoute: ApiGravatarIdentifierRoute,
   OgBlogSlugRoute: OgBlogSlugRoute,
   OgProjectsSlugRoute: OgProjectsSlugRoute,
 }
