@@ -1,7 +1,6 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
-import FileDescriptionIcon from '@/components/ui/file-description-icon'
 import { getResume } from '@/lib/content'
-import { siteMeta } from '@/lib/site-data'
+import { siteInfo, siteMeta } from '@/lib/site-data'
 
 export const Route = createFileRoute('/resume')({
   loader: async () => ({
@@ -37,68 +36,131 @@ export const Route = createFileRoute('/resume')({
   component: ResumePage,
 })
 
+import { motion } from 'motion/react'
+
 function ResumePage() {
   const { resume } = Route.useLoaderData()
 
   if (!resume) {
     return (
-      <section className="flex flex-col gap-4">
+      <motion.section
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="flex flex-col gap-4"
+      >
         <h1 className="text-2xl font-semibold italic">Resume not found</h1>
-      </section>
+      </motion.section>
     )
   }
 
-  return (
-    <article className="flex flex-col gap-6">
-      <header className="flex flex-col gap-4 sr-only">
-        <h1 className="text-2xl font-semibold italic">
-          <FileDescriptionIcon size={24} className="inline-block mr-2" />
-          Resume
-        </h1>
-        <hr className="border-border" />
-      </header>
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  }
 
-      <div
-        className="latex-content flex flex-col gap-1 text-foreground"
+  const item = {
+    hidden: { opacity: 0, y: 10 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  }
+
+  return (
+    <motion.article
+      variants={container}
+      initial="hidden"
+      animate="show"
+      className="flex flex-col gap-10"
+    >
+
+      <motion.div
+        variants={item}
+        className="latex-content flex flex-col gap-1 text-foreground leading-relaxed"
         dangerouslySetInnerHTML={{ __html: resume.html }}
       />
 
-      <a
-        href="/Resume-web.pdf"
-        download
-        className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-primary hover:text-white transition-colors"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="w-3.5 h-3.5"
-        >
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-          <polyline points="7 10 12 15 17 10" />
-          <line x1="12" y1="15" x2="12" y2="3" />
-        </svg>
-        Download PDF
-      </a>
+      {/* Connect With Me Section */}
+      <motion.section variants={item} className="flex flex-col gap-10 text-center bg-primary/5 p-10 rounded-4xl border-2 border-primary/10 shadow-inner relative overflow-hidden">
+        <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-50 pointer-events-none" />
+        <div className="relative z-10 flex flex-col gap-4">
+          <motion.h2 variants={item} className="text-3xl font-bold tracking-tight">
+            Let's Connect!
+          </motion.h2>
+          <motion.p variants={item} className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions.
+          </motion.p>
+          <motion.div variants={item} className="flex justify-center gap-4 mt-6">
+            <a
+              href={siteInfo.calendlyUrl}
+              className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-black text-sm font-bold uppercase tracking-widest hover:scale-105 transition-transform shadow-lg hover:shadow-primary/20"
+            >
+              Get in Touch
+              <span className="transform group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+            <a
+              href="https://www.linkedin.com/in/bhaumic"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border text-foreground text-sm font-bold uppercase tracking-widest hover:bg-primary/10 hover:border-primary transition-colors shadow-lg hover:shadow-primary/20"
+            >
+              LinkedIn
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="w-4 h-4"
+              >
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+            </a>
+          </motion.div>
+        </div>
+      </motion.section>
 
-      <footer className="flex flex-col gap-4">
-        <p className="text-xs text-muted-foreground italic">
-          Last updated:{' '}
-          {new Date(resume.date).toLocaleDateString('en-US', {
-            month: 'long',
-            year: 'numeric',
-          })}
-        </p>
-        <Link to="/" className="mr-2 inline-flex items-center gap-1 italic">
-          ← back
+      <motion.div variants={item} className="flex items-center justify-center">
+        <a
+          href="/Resume-web.pdf"
+          download
+          className="group flex items-center gap-3 text-lg italic text-primary"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="w-4 h-4"
+          >
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          Download PDF
+        </a>
+      </motion.div>
+
+      <motion.footer variants={item}>
+        <Link to="/" className="group inline-flex items-center gap-2 italic text-muted-foreground hover:text-primary transition-colors text-md">
+          <span className="transform group-hover:-translate-x-1 transition-transform">←</span>
+          back
         </Link>
-      </footer>
-    </article>
+      </motion.footer>
+    </motion.article>
   )
 }
+
