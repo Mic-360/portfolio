@@ -1,7 +1,8 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { getProjectBySlug } from '@/lib/content'
 import { formatDate } from '@/lib/format'
-import { gravatar, siteImages, siteMeta } from '@/lib/site-data'
+import { siteMeta } from '@/lib/site-data'
+import { motion } from 'motion/react'
 
 export const Route = createFileRoute('/projects/$slug')({
   loader: async ({ params }) => ({
@@ -95,10 +96,6 @@ function ProjectDetail() {
       '@type': 'Person',
       name: siteMeta.siteName,
       url: siteMeta.baseUrl,
-      image: [
-        `${siteMeta.baseUrl}${siteImages.profilePhoto}`,
-        gravatar.avatarUrl,
-      ],
     },
     inLanguage: 'en-US',
   }
@@ -128,8 +125,28 @@ function ProjectDetail() {
     ],
   }
 
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  }
+
+  const item = {
+    hidden: { opacity: 0, y: 10 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  }
+
   return (
-    <article className="flex flex-col gap-6">
+    <motion.article
+      variants={container}
+      initial="hidden"
+      animate="show"
+      className="flex flex-col gap-8 pb-12"
+    >
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -142,53 +159,75 @@ function ProjectDetail() {
           __html: JSON.stringify(breadcrumbJsonLd),
         }}
       />
-      <header className="flex flex-col gap-2">
-        <h1 className="text-xl font-semibold italic">{project.title}</h1>
-        <p className="text-xs uppercase tracking-[0.2em] text-primary">
-          {formatDate(project.date)}
-        </p>
-        <p className="text-muted-foreground">{project.summary}</p>
-        {(project.categories.length > 0 || project.tags.length > 0) && (
-          <p className="text-[0.65rem] uppercase tracking-[0.2em] text-primary/80">
-            {[...project.categories, ...project.tags].join(' · ')}
-          </p>
-        )}
-      </header>
-      <div className="flex flex-wrap gap-2 text-xs uppercase tracking-[0.2em] text-primary">
-        {project.stack.map((item) => (
-          <span
-            key={item}
-            className="rounded-full border border-primary/40 px-3 py-1"
-          >
-            {item}
-          </span>
-        ))}
-      </div>
-      {project.links.length > 0 && (
-        <div className="flex flex-wrap gap-4">
-          {project.links.map((link) => (
-            <a
-              key={link.url}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline decoration-primary underline-offset-4"
-            >
-              {link.label}
-            </a>
-          ))}
+
+      <header className="flex flex-col gap-4">
+        <motion.div variants={item}>
+          <Link to="/projects" className="group inline-flex items-center gap-1 italic text-muted-foreground hover:text-primary transition-colors duration-300">
+            <span className="transform group-hover:-translate-x-1 transition-transform duration-300">←</span>
+            back to projects
+          </Link>
+        </motion.div>
+
+        <div className="space-y-2">
+          <motion.h1 variants={item} className="text-4xl font-black italic tracking-tighter text-foreground uppercase">
+            {project.title}
+          </motion.h1>
+          <motion.p variants={item} className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary">
+            {formatDate(project.date)}
+          </motion.p>
         </div>
-      )}
-      <div
-        className="mdx-content flex flex-col gap-4 text-foreground"
+
+        <motion.p variants={item} className="text-xl leading-relaxed text-foreground/80 font-medium italic max-w-2xl">
+          {project.summary}
+        </motion.p>
+
+        {project.stack.length > 0 && (
+          <motion.div variants={item} className="flex flex-wrap gap-2">
+            {project.stack.map((tech) => (
+              <span
+                key={tech}
+                className="text-[9px] uppercase tracking-[0.2em] px-3 py-1 rounded-sm border border-primary/30 bg-primary/5 text-primary/80"
+              >
+                {tech}
+              </span>
+            ))}
+          </motion.div>
+        )}
+
+        {project.links.length > 0 && (
+          <motion.div variants={item} className="flex flex-wrap gap-6 mt-2">
+            {project.links.map((link) => (
+              <a
+                key={link.url}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[10px] uppercase tracking-[0.2em] font-black underline decoration-primary underline-offset-10 hover:text-primary transition-all duration-300 hover:decoration-4"
+              >
+                {link.label} ↗
+              </a>
+            ))}
+          </motion.div>
+        )}
+        <motion.div variants={item} className="animus-sync-bar mt-4 opacity-30" />
+      </header>
+
+      <motion.div
+        variants={item}
+        className="mdx-content flex flex-col gap-6 text-foreground leading-relaxed text-lg"
         dangerouslySetInnerHTML={{ __html: project.html }}
       />
-      <Link
-        to="/projects"
-        className="text-xs uppercase tracking-[0.2em] text-primary hover:text-primary/80"
-      >
-        back to projects
-      </Link>
-    </article>
+
+      <motion.footer variants={item} className="pt-12 border-t border-border/50">
+        <Link
+          to="/projects"
+          className="group inline-flex items-center gap-2 italic text-muted-foreground hover:text-primary transition-colors duration-300 text-sm"
+        >
+          <span className="transform group-hover:-translate-x-1 transition-transform duration-300">←</span>
+          see more projects
+        </Link>
+      </motion.footer>
+    </motion.article>
   )
 }
+
