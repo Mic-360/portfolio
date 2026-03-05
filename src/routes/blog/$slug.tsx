@@ -1,7 +1,8 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { getBlogPostBySlug } from '@/lib/content'
 import { formatDate } from '@/lib/format'
-import { gravatar, siteImages, siteMeta } from '@/lib/site-data'
+import { siteMeta } from '@/lib/site-data'
+import { motion } from 'motion/react'
 
 export const Route = createFileRoute('/blog/$slug')({
   loader: async ({ params }) => ({
@@ -98,19 +99,11 @@ function BlogPost() {
       '@type': 'Person',
       name: siteMeta.siteName,
       url: siteMeta.baseUrl,
-      image: [
-        `${siteMeta.baseUrl}${siteImages.profilePhoto}`,
-        gravatar.avatarUrl,
-      ],
     },
     publisher: {
       '@type': 'Person',
       name: siteMeta.siteName,
       url: siteMeta.baseUrl,
-      image: [
-        `${siteMeta.baseUrl}${siteImages.profilePhoto}`,
-        gravatar.avatarUrl,
-      ],
     },
     keywords: [...post.categories, ...post.tags].join(', '),
     inLanguage: 'en-US',
@@ -141,8 +134,28 @@ function BlogPost() {
     ],
   }
 
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  }
+
+  const item = {
+    hidden: { opacity: 0, y: 10 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  }
+
   return (
-    <article className="flex flex-col gap-4">
+    <motion.article
+      variants={container}
+      initial="hidden"
+      animate="show"
+      className="flex flex-col gap-8 pb-12"
+    >
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -155,28 +168,55 @@ function BlogPost() {
           __html: JSON.stringify(breadcrumbJsonLd),
         }}
       />
-      <header className="flex flex-col gap-2">
-        <h1 className="text-xl font-semibold italic">{post.title}</h1>
-        <p className="text-xs uppercase tracking-[0.2em] text-primary">
-          {formatDate(post.date)}
-        </p>
-        <p className="text-muted-foreground">{post.summary}</p>
+      <header className="flex flex-col gap-4 text-left">
+        <motion.div variants={item}>
+          <Link to="/blog" className="group inline-flex items-center gap-1 italic text-muted-foreground hover:text-primary transition-colors duration-300">
+            <span className="transform group-hover:-translate-x-1 transition-transform duration-300">←</span>
+            back to blog
+          </Link>
+        </motion.div>
+
+        <div className="space-y-2">
+          <motion.h1 variants={item} className="text-3xl font-black italic tracking-tighter text-foreground uppercase">
+            {post.title}
+          </motion.h1>
+          <motion.p variants={item} className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary">
+            {formatDate(post.date)}
+          </motion.p>
+        </div>
+
+        <motion.p variants={item} className="text-lg leading-relaxed text-foreground/80 font-medium italic">
+          {post.summary}
+        </motion.p>
+
         {(post.categories.length > 0 || post.tags.length > 0) && (
-          <p className="text-[0.65rem] uppercase tracking-[0.2em] text-primary/80">
-            {[...post.categories, ...post.tags].join(' · ')}
-          </p>
+          <motion.div variants={item} className="flex flex-wrap gap-2">
+            {[...post.categories, ...post.tags].map((tag) => (
+              <span key={tag} className="text-[9px] uppercase tracking-[0.2em] px-2 py-0.5 rounded-sm bg-muted text-primary/60 border border-border/30">
+                {tag}
+              </span>
+            ))}
+          </motion.div>
         )}
+        <motion.div variants={item} className="animus-sync-bar mt-2 opacity-30" />
       </header>
-      <div
-        className="mdx-content flex flex-col gap-1 text-foreground"
+
+      <motion.div
+        variants={item}
+        className="mdx-content flex flex-col gap-1 text-foreground leading-relaxed"
         dangerouslySetInnerHTML={{ __html: post.html }}
       />
-      <Link
-        to="/blog"
-        className="text-xs uppercase tracking-[0.2em] text-primary hover:text-primary/80"
-      >
-        back to blog
-      </Link>
-    </article>
+
+      <motion.footer variants={item} className="pt-10 border-t border-border/50">
+        <Link
+          to="/blog"
+          className="group inline-flex items-center gap-1 italic text-muted-foreground hover:text-primary transition-colors duration-300"
+        >
+          <span className="transform group-hover:-translate-x-1 transition-transform duration-300">←</span>
+          more writings
+        </Link>
+      </motion.footer>
+    </motion.article>
   )
 }
+
