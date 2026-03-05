@@ -1,7 +1,16 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
+import { getGravatarProfile } from '@/lib/gravatar-profile'
+import { gravatarConfig } from '@/config/gravatar'
 import { gravatar, siteImages, siteMeta } from '@/lib/site-data'
+import GravatarProfileCard from '@/components/gravatar/GravatarProfileCard'
 
 export const Route = createFileRoute('/bento')({
+  loader: async () => {
+    const profile = await getGravatarProfile({
+      data: gravatarConfig.slug,
+    })
+    return { profile }
+  },
   head: () => {
     const title = `Bento | ${siteMeta.defaultTitle}`
     const description = 'My social profile and links in a bento grid layout.'
@@ -36,6 +45,8 @@ export const Route = createFileRoute('/bento')({
 })
 
 function BentoPage() {
+  const { profile } = Route.useLoaderData()
+
   return (
     <article className="flex flex-col gap-6 min-h-[80vh]">
       <header className="flex flex-col gap-4">
@@ -46,144 +57,16 @@ function BentoPage() {
         <hr className="border-border" />
       </header>
 
-      {/* Gravatar Profile Card — Landscape */}
+      {/* Gravatar Profile Card — Dynamic */}
       <section className="flex flex-col gap-4">
         <h2 className="text-lg font-semibold italic">gravatar profile</h2>
-        <div className="w-full overflow-hidden rounded-xl border border-border shadow-xl">
-          {/* Header banner */}
-          <div
-            className="h-28 sm:h-36 w-full bg-cover bg-center"
-            style={{
-              backgroundImage:
-                'url("https://1.gravatar.com/userimage/278000758/f3c4768967ed81f37d82c1eb047437f5?size=1024")',
-              backgroundColor: '#2b3529',
-            }}
-          />
-          {/* Card body */}
-          <div className="relative bg-card px-5 pb-5 pt-0">
-            {/* Avatar overlapping banner */}
-            <a
-              href="https://bhaumicsingh.bio"
-              target="_blank"
-              rel="noopener noreferrer me"
-              className="-mt-12 mb-3 block w-fit"
-            >
-              <img
-                src="https://0.gravatar.com/avatar/9d1ad3fa2c8c3005a20431664d94c8fc11498c95528b5f0457731bcd365f0829?s=256&d=initials"
-                alt="Bhaumic Singh"
-                width={96}
-                height={96}
-                className="h-24 w-24 rounded-full border-4 border-card shadow-lg"
-              />
-            </a>
-
-            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-              {/* Info */}
-              <div className="flex flex-col gap-1">
-                <a
-                  href="https://bhaumicsingh.bio"
-                  target="_blank"
-                  rel="noopener noreferrer me"
-                  className="group"
-                >
-                  <h3 className="text-lg font-bold group-hover:text-primary transition-colors">
-                    Bhaumic Singh
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Software Engineer
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    Prayagraj, India
-                  </p>
-                </a>
-                <p className="mt-2 text-sm italic text-foreground/80">
-                  A developer who loves to build.
-                </p>
-              </div>
-
-              {/* Social icons */}
-              <div className="flex items-center gap-3">
-                <a
-                  href="https://bhaumicsingh.bio"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title="Gravatar"
-                >
-                  <img
-                    src="https://s.gravatar.com/icons/gravatar.svg"
-                    alt="Gravatar"
-                    width={28}
-                    height={28}
-                    className="opacity-70 hover:opacity-100 transition-opacity invert dark:invert-0"
-                  />
-                </a>
-                <a
-                  href="https://x.com/bhaumicsingh"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title="X"
-                >
-                  <img
-                    src="https://s.gravatar.com/icons/x.svg"
-                    alt="X"
-                    width={28}
-                    height={28}
-                    className="opacity-70 hover:opacity-100 transition-opacity invert dark:invert-0"
-                  />
-                </a>
-                <a
-                  href="https://www.linkedin.com/in/bhaumic"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title="LinkedIn"
-                >
-                  <img
-                    src="https://s.gravatar.com/icons/linkedin.svg"
-                    alt="LinkedIn"
-                    width={28}
-                    height={28}
-                    className="opacity-70 hover:opacity-100 transition-opacity invert dark:invert-0"
-                  />
-                </a>
-                <a
-                  href="https://github.com/Mic-360"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title="GitHub"
-                >
-                  <img
-                    src="https://s.gravatar.com/icons/github.svg"
-                    alt="GitHub"
-                    width={28}
-                    height={28}
-                    className="opacity-70 hover:opacity-100 transition-opacity invert dark:invert-0"
-                  />
-                </a>
-              </div>
-            </div>
-
-            {/* Footer row */}
-            <div className="mt-4 flex items-center justify-between border-t border-border pt-3 text-xs text-muted-foreground">
-              <a
-                href="https://bhaumicsingh.bio"
-                target="_blank"
-                rel="noopener noreferrer me"
-                className="hover:text-primary transition-colors"
-                title="https://bhaumicsingh.bio"
-              >
-                bhaumicsingh.bio
-              </a>
-              <a
-                href="https://bhaumicsingh.bio"
-                target="_blank"
-                rel="noopener noreferrer me"
-                className="hover:text-primary transition-colors"
-              >
-                View profile →
-              </a>
-            </div>
-          </div>
-        </div>
+        {profile ? (
+          <GravatarProfileCard profile={profile} />
+        ) : (
+          <p className="text-sm text-muted-foreground italic">
+            unable to load gravatar profile.
+          </p>
+        )}
       </section>
 
       <div className="relative w-full overflow-hidden rounded-xl border border-border bg-card shadow-2xl h-[85vh] min-h-125 md:h-200">
