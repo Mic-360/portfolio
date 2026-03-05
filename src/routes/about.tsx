@@ -226,3 +226,333 @@ function AboutPage() {
         </article>
     )
 }
+import { Link, createFileRoute } from '@tanstack/react-router'
+import { getGravatarProfile } from '@/lib/gravatar-profile'
+import { gravatarConfig } from '@/config/gravatar'
+import { gravatar, siteMeta } from '@/lib/site-data'
+import GravatarAvatar from '@/components/gravatar/GravatarAvatar'
+import GravatarSocialLinks from '@/components/gravatar/GravatarSocialLinks'
+import GravatarGallery from '@/components/gravatar/GravatarGallery'
+import type { GravatarInterest, GravatarLink } from '@/types/gravatar'
+
+export const Route = createFileRoute('/about')({
+    loader: async () => {
+        const profile = await getGravatarProfile({
+            data: gravatarConfig.slug,
+        })
+        return { profile }
+    },
+    head: () => {
+        const title = `About | ${siteMeta.defaultTitle}`
+        const description =
+            'Learn more about Bhaumic Singh — software engineer, builder, and technology enthusiast. Identity powered by Gravatar.'
+        const canonicalUrl = `${siteMeta.baseUrl}/about`
+
+        return {
+            meta: [
+                { title },
+                { name: 'description', content: description },
+                { property: 'og:title', content: title },
+                { property: 'og:description', content: description },
+                { property: 'og:type', content: 'profile' },
+                { property: 'og:url', content: canonicalUrl },
+                {
+                    property: 'og:image',
+                    content: `${siteMeta.baseUrl}${siteMeta.defaultImage}`,
+                },
+                { name: 'twitter:card', content: 'summary' },
+                { name: 'twitter:title', content: title },
+                { name: 'twitter:description', content: description },
+            ],
+            links: [{ rel: 'canonical', href: canonicalUrl }],
+        }
+    },
+    component: AboutPage,
+})
+
+function AboutPage() {
+    const { profile } = Route.useLoaderData()
+
+    if (!profile) {
+        return (
+            <article className="flex flex-col gap-6 min-h-[60vh]">
+                <header className="flex flex-col gap-4">
+                    <h1 className="text-2xl font-semibold italic">about</h1>
+                    <p className="text-muted-foreground">
+                        unable to load profile data. please try again later.
+                    </p>
+                </header>
+                <Link to="/" className="inline-flex items-center gap-1 italic">
+                    ← back
+                </Link>
+            </article>
+        )
+    }
+
+    return (
+        <article className="flex flex-col gap-6">
+            {/* Minimal nav */}
+            <Link
+                to="/"
+                className="inline-flex items-center gap-1 italic text-muted-foreground hover:text-foreground transition-colors text-xs"
+            >
+                ← back
+            </Link>
+
+            {/* ── Hero Card ─────────────────────────────────── */}
+            <div className="animus-corner rounded-xl border border-border/50 overflow-hidden">
+                {/* Header banner */}
+                {profile.header_image ? (
+                    <div
+                        className="h-32 sm:h-40 w-full bg-cover bg-center"
+                        style={{
+                            background: profile.header_image,
+                            backgroundColor: profile.background_color || '#2b3529',
+                        }}
+                    />
+                ) : (
+                    <div
+                        className="h-32 sm:h-40 w-full"
+                        style={{
+                            background:
+                                'linear-gradient(135deg, color-mix(in oklab, var(--primary) 30%, transparent) 0%, color-mix(in oklab, var(--accent) 20%, transparent) 100%)',
+                        }}
+                    />
+                )}
+
+                <div className="relative px-5 pb-6 pt-0 bg-card">
+                    {/* Avatar overlapping the banner */}
+                    <a
+                        href={profile.profile_url}
+                        target="_blank"
+                        rel="noopener noreferrer me"
+                        className="-mt-14 mb-4 block w-fit group"
+                    >
+                        <GravatarAvatar
+                            hash={profile.hash}
+                            size={112}
+                            alt={profile.display_name}
+                            className="w-28 h-28 border-4 border-card shadow-lg group-hover:shadow-primary/20 transition-shadow duration-300"
+                        />
+                    </a>
+
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                        <div className="flex flex-col gap-1.5">
+                            <h1 className="text-2xl font-bold italic">
+                                {profile.display_name}
+                            </h1>
+                            {profile.job_title && (
+                                <p className="text-sm text-muted-foreground">
+                                    {profile.job_title}
+                                    {profile.company && (
+                                        <>
+                                            {' '}
+                                            at{' '}
+                                            <span className="font-medium text-foreground/90">
+                                                {profile.company}
+                                            </span>
+                                        </>
+                                    )}
+                                </p>
+                            )}
+                            {profile.pronunciation && (
+                                <p className="text-[11px] text-muted-foreground/70 italic">
+                                    /{profile.pronunciation}/
+                                </p>
+                            )}
+                        </div>
+
+                        {profile.location && (
+                            <div className="flex items-center gap-1.5 text-primary">
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                    className="w-3.5 h-3.5"
+                                >
+                                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                                    <circle cx="12" cy="10" r="3" />
+                                </svg>
+                                <span className="text-xs uppercase tracking-[0.2em]">
+                                    {profile.location}
+                                </span>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Bio */}
+                    {profile.description && (
+                        <blockquote className="mt-5 border-l-2 border-primary/40 pl-4 text-sm italic text-foreground/80 leading-relaxed">
+                            {profile.description}
+                        </blockquote>
+                    )}
+                </div>
+            </div>
+
+            {/* ── Two-column grid ───────────────────────────── */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Verified Accounts */}
+                {profile.verified_accounts &&
+                    profile.verified_accounts.length > 0 && (
+                        <div className="animus-corner rounded-lg border border-border/50 p-4 bg-card/50 flex flex-col gap-3">
+                            <h2 className="text-[10px] uppercase tracking-[0.3em] text-primary font-semibold">
+                                verified accounts
+                            </h2>
+                            <div className="animus-sync-bar" />
+                            <GravatarSocialLinks
+                                accounts={profile.verified_accounts}
+                                iconSize={24}
+                                className="flex-wrap"
+                            />
+                        </div>
+                    )}
+
+                {/* Quick Info */}
+                <div className="animus-corner rounded-lg border border-border/50 p-4 bg-card/50 flex flex-col gap-3">
+                    <h2 className="text-[10px] uppercase tracking-[0.3em] text-primary font-semibold">
+                        identity
+                    </h2>
+                    <div className="animus-sync-bar" />
+                    <div className="flex flex-col gap-2 text-xs">
+                        {profile.pronouns && (
+                            <div className="flex justify-between">
+                                <span className="text-muted-foreground">pronouns</span>
+                                <span>{profile.pronouns}</span>
+                            </div>
+                        )}
+                        {profile.registration_date && (
+                            <div className="flex justify-between">
+                                <span className="text-muted-foreground">member since</span>
+                                <span>
+                                    {new Date(profile.registration_date).toLocaleDateString(
+                                        'en-US',
+                                        { year: 'numeric', month: 'short' },
+                                    )}
+                                </span>
+                            </div>
+                        )}
+                        {profile.last_profile_edit && (
+                            <div className="flex justify-between">
+                                <span className="text-muted-foreground">last synced</span>
+                                <span>
+                                    {new Date(profile.last_profile_edit).toLocaleDateString(
+                                        'en-US',
+                                        { year: 'numeric', month: 'short', day: 'numeric' },
+                                    )}
+                                </span>
+                            </div>
+                        )}
+                        <div className="flex justify-between">
+                            <span className="text-muted-foreground">source</span>
+                            <a
+                                href={profile.profile_url}
+                                target="_blank"
+                                rel="noopener noreferrer me"
+                                className="text-primary hover:underline underline-offset-2"
+                            >
+                                gravatar ↗
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* ── Interests ─────────────────────────────────── */}
+            {profile.interests && profile.interests.length > 0 && (
+                <div className="animus-corner rounded-lg border border-border/50 p-4 bg-card/50 flex flex-col gap-3">
+                    <h2 className="text-[10px] uppercase tracking-[0.3em] text-primary font-semibold">
+                        interests
+                    </h2>
+                    <div className="animus-sync-bar" />
+                    <div className="flex flex-wrap gap-2">
+                        {profile.interests.map((interest: GravatarInterest) => (
+                            <span
+                                key={interest.id}
+                                className="px-2.5 py-1 text-xs rounded-full border border-border/60 bg-background hover:border-primary/50 hover:bg-primary/5 transition-all duration-200 cursor-default"
+                            >
+                                {interest.name}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* ── Links ─────────────────────────────────────── */}
+            {profile.links && profile.links.length > 0 && (
+                <div className="animus-corner rounded-lg border border-border/50 p-4 bg-card/50 flex flex-col gap-3">
+                    <h2 className="text-[10px] uppercase tracking-[0.3em] text-primary font-semibold">
+                        links
+                    </h2>
+                    <div className="animus-sync-bar" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {profile.links.map((link: GravatarLink) => (
+                            <a
+                                key={link.url}
+                                href={link.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group flex items-center gap-2 rounded-md px-3 py-2 text-xs border border-transparent hover:border-border/50 hover:bg-card transition-all duration-200"
+                            >
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                    className="w-3.5 h-3.5 text-primary shrink-0"
+                                >
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                    <polyline points="15 3 21 3 21 9" />
+                                    <line x1="10" y1="14" x2="21" y2="3" />
+                                </svg>
+                                <span className="group-hover:text-primary transition-colors truncate">
+                                    {link.label}
+                                </span>
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* ── Gallery ────────────────────────────────────── */}
+            {profile.gallery && profile.gallery.length > 0 && (
+                <div className="animus-corner rounded-lg border border-border/50 p-4 bg-card/50 flex flex-col gap-3">
+                    <h2 className="text-[10px] uppercase tracking-[0.3em] text-primary font-semibold">
+                        gallery
+                    </h2>
+                    <div className="animus-sync-bar" />
+                    <GravatarGallery images={profile.gallery} />
+                </div>
+            )}
+
+            {/* ── Footer ─────────────────────────────────────── */}
+            <footer className="flex items-center justify-between text-[10px] text-muted-foreground/60 italic pt-2">
+                <span>
+                    identity synced from{' '}
+                    <a
+                        href={gravatar.profileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer me"
+                        className="hover:text-primary transition-colors"
+                    >
+                        gravatar
+                    </a>
+                </span>
+                <a
+                    href={gravatar.qrCodeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="opacity-40 hover:opacity-100 transition-opacity"
+                >
+                    <img
+                        src={gravatar.qrCodeUrl}
+                        alt="QR Code"
+                        width={36}
+                        height={36}
+                        className="rounded"
+                    />
+                </a>
+            </footer>
+        </article>
+    )
+}
