@@ -1,7 +1,7 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { getGravatarProfile } from '@/lib/gravatar-profile'
 import { gravatarConfig } from '@/config/gravatar'
-import { gravatar, siteImages, siteMeta } from '@/lib/site-data'
+import { siteImages, siteMeta } from '@/lib/site-data'
 import GravatarProfileCard from '@/components/gravatar/GravatarProfileCard'
 
 export const Route = createFileRoute('/bento')({
@@ -48,28 +48,11 @@ function BentoPage() {
   const { profile } = Route.useLoaderData()
 
   return (
-    <article className="flex flex-col gap-6 min-h-[80vh]">
-      <header className="flex flex-col gap-4">
-        <h1 className="text-2xl font-semibold italic">my bento</h1>
-        <p className="text-muted-foreground">
-          all my links and socials in one box.
-        </p>
-        <hr className="border-border" />
-      </header>
-
-      {/* Gravatar Profile Card — Dynamic */}
-      <section className="flex flex-col gap-4">
-        <h2 className="text-lg font-semibold italic">gravatar profile</h2>
-        {profile ? (
-          <GravatarProfileCard profile={profile} />
-        ) : (
-          <p className="text-sm text-muted-foreground italic">
-            unable to load gravatar profile.
-          </p>
-        )}
-      </section>
-
-      <div className="relative w-full overflow-hidden rounded-xl border border-border bg-card shadow-2xl h-[85vh] min-h-125 md:h-200">
+    <article className="flex flex-col gap-6 min-h-screen">
+      <Link to="/" className="mr-2 inline-flex items-center gap-1 italic">
+        ← back
+      </Link>
+      <div className="relative w-full overflow-hidden rounded-xl border border-border bg-card shadow-2xl h-[800vh]">
         <iframe
           src="https://avely.me/bhaumic"
           className="absolute inset-0 w-full h-full border-0 [zoom:1] md:[zoom:1.5]"
@@ -79,24 +62,17 @@ function BentoPage() {
         />
       </div>
 
-      <footer className="mt-4 flex flex-wrap justify-center gap-4">
-        <a
-          href="https://avely.me/bhaumic"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-xs italic text-muted-foreground hover:text-primary transition-colors"
-        >
-          view original at avely.me/bhaumic ↗
-        </a>
-        <a
-          href={gravatar.profileUrl}
-          target="_blank"
-          rel="noopener noreferrer me"
-          className="text-xs italic text-muted-foreground hover:text-primary transition-colors"
-        >
-          gravatar profile ↗
-        </a>
-      </footer>
+      {/* Gravatar Profile Card — Dynamic */}
+      <section className="flex flex-col gap-4">
+        {profile ? (
+          <GravatarProfileCard profile={profile} />
+        ) : (
+          <p className="text-sm text-muted-foreground italic">
+            unable to load gravatar profile.
+          </p>
+        )}
+      </section>
+
       <Link to="/" className="mr-2 inline-flex items-center gap-1 italic">
         ← back
       </Link>
