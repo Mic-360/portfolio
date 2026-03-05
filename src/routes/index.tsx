@@ -1,9 +1,12 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import CalendarIcon from '@/components/ui/calendar-icon'
+import GravatarAvatar from '@/components/gravatar/GravatarAvatar'
 import { getBlogIndex, getProjectIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
 import { Section, StatCard } from '@/lib/functions'
 import { getHealthData } from '@/lib/health'
+import { hashEmail } from '@/lib/gravatar'
+import { gravatarConfig } from '@/config/gravatar'
 import {
   contactLinks,
   gravatar,
@@ -15,16 +18,18 @@ import {
 
 export const Route = createFileRoute('/')({
   loader: async () => {
-    const [posts, projects, health] = await Promise.all([
+    const [posts, projects, health, avatarHash] = await Promise.all([
       getBlogIndex(),
       getProjectIndex(),
       getHealthData(),
+      hashEmail(gravatarConfig.email),
     ])
 
     return {
       posts,
       projects,
       health,
+      avatarHash,
     }
   },
   head: () => {
@@ -62,7 +67,7 @@ export const Route = createFileRoute('/')({
 })
 
 function App() {
-  const { posts, projects, health } = Route.useLoaderData()
+  const { posts, projects, health, avatarHash } = Route.useLoaderData()
 
   return (
     <div className="flex flex-col gap-8">
@@ -75,12 +80,11 @@ function App() {
               rel="noopener noreferrer me"
               className="shrink-0"
             >
-              <img
-                src={siteImages.profilePhoto}
+              <GravatarAvatar
+                hash={avatarHash}
+                size={48}
                 alt={`${siteInfo.name} — Profile Photo`}
-                width={48}
-                height={48}
-                className="w-12 h-12 rounded-full border border-primary/40 shadow-md"
+                className="w-12 h-12"
               />
             </a>
             <div className="flex flex-col gap-1">
