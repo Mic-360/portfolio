@@ -30,6 +30,8 @@ function RssIcon() {
   )
 }
 
+import { motion } from 'motion/react'
+
 export default function Footer() {
   return (
     <footer className="relative mx-auto w-full max-w-2xl p-4 text-sm text-primary">
@@ -40,15 +42,20 @@ export default function Footer() {
 
       <ul className="flex flex-wrap items-center gap-4 lowercase justify-center">
         <li>
-          <Link
-            to="/rss"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-primary transition hover:text-primary/80 hover:animate-pulse-slow"
-            aria-label="rss"
+          <motion.div
+            whileHover={{ y: -3, scale: 1.1 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 10 }}
           >
-            <RssIcon />
-          </Link>
+            <Link
+              to="/rss"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-primary transition hover:text-primary/80"
+              aria-label="rss"
+            >
+              <RssIcon />
+            </Link>
+          </motion.div>
         </li>
         {socialLinks
           .filter((link) => link.label !== 'rss')
@@ -57,7 +64,7 @@ export default function Footer() {
 
             return (
               <li key={link.label}>
-                <a
+                <motion.a
                   href={link.url}
                   target={link.url.startsWith('http') ? '_blank' : undefined}
                   rel={
@@ -65,11 +72,13 @@ export default function Footer() {
                       ? 'noopener noreferrer'
                       : undefined
                   }
-                  className="flex items-center gap-2 text-primary transition hover:text-primary/80 hover:animate-pulse-slow"
+                  whileHover={{ y: -3, scale: 1.1 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+                  className="flex items-center gap-2 text-primary transition hover:text-primary/80"
                   aria-label={link.label}
                 >
                   <Icon size={20} className="text-primary" />
-                </a>
+                </motion.a>
               </li>
             )
           })}
@@ -87,10 +96,11 @@ export default function Footer() {
             gravatar
           </a>
         </p>
-        <a
+        <motion.a
           href={'/about'}
           className="shrink-0"
           title="Scan to view Gravatar profile"
+          whileHover={{ scale: 1.05 }}
         >
           <img
             src={gravatar.qrCodeUrl}
@@ -99,8 +109,9 @@ export default function Footer() {
             height={56}
             className="rounded-md opacity-60 hover:opacity-100 transition-opacity"
           />
-        </a>
+        </motion.a>
       </div>
     </footer>
   )
 }
+
