@@ -1,3 +1,4 @@
+import { motion } from 'motion/react'
 import CurrentIcon from '@/components/ui/current-icon'
 import HealthstatIcon from '@/components/ui/healthstat-icon'
 import LayersIcon from '@/components/ui/layers-icon'
@@ -12,7 +13,13 @@ function Section({
   children: React.ReactNode
 }) {
   return (
-    <section className="flex flex-col gap-2 my-4">
+    <motion.section
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="flex flex-col gap-2 my-4"
+    >
       <h2 className="font-semibold italic text-2xl underline underline-offset-2 decoration-primary flex items-center">
         {title === 'blogs' ? (
           <>
@@ -45,7 +52,7 @@ function Section({
       </h2>
       <div className="animus-sync-bar mb-2" />
       {children}
-    </section>
+    </motion.section>
   )
 }
 
@@ -80,7 +87,11 @@ function Sparkline({
       className="w-full h-8 overflow-visible opacity-50 group-hover:opacity-100 transition-opacity"
       preserveAspectRatio="none"
     >
-      <polyline
+      <motion.polyline
+        initial={{ pathLength: 0 }}
+        whileInView={{ pathLength: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1.5, ease: "easeInOut" }}
         fill="none"
         stroke={color}
         strokeWidth="1.5"
@@ -130,13 +141,16 @@ function StatCard({
   else
     mainValue = processedData.length
       ? [...processedData].sort(
-          (a, b) =>
-            new Date(b.endDate).getTime() - new Date(a.endDate).getTime(),
-        )[0].value
+        (a, b) =>
+          new Date(b.endDate).getTime() - new Date(a.endDate).getTime(),
+      )[0].value
       : 0
 
   return (
-    <div className="group animus-corner flex flex-col gap-2 p-2 rounded-lg border border-border/50 hover:border-primary/50 transition-colors">
+    <motion.div
+      whileHover={{ y: -2, transition: { duration: 0.2 } }}
+      className="group animus-corner flex flex-col gap-2 p-2 rounded-lg border border-border/50 hover:border-primary/50 transition-colors"
+    >
       <div className="flex justify-between items-baseline">
         <span className="text-[10px] uppercase tracking-widest text-primary">
           {label}
@@ -149,7 +163,7 @@ function StatCard({
         </span>
       </div>
       <Sparkline data={processedData} color="var(--primary)" />
-    </div>
+    </motion.div>
   )
 }
 
