@@ -88,9 +88,7 @@ export default function Footer() {
           </a>
         </p>
         <a
-          href={gravatar.profileUrl}
-          target="_blank"
-          rel="noopener noreferrer me"
+          href={'/about'}
           className="shrink-0"
           title="Scan to view Gravatar profile"
         >
