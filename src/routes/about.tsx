@@ -91,18 +91,8 @@ function AboutPage() {
             initial="hidden"
             animate="visible"
             variants={containerVariants}
-            className="flex flex-col gap-6 pb-20 max-w-2xl mx-auto"
+            className="flex flex-col gap-6 max-w-2xl mx-auto"
         >
-            <motion.header variants={itemVariants} className="flex flex-col gap-4">
-                <Link
-                    to="/"
-                    className="group inline-flex items-center gap-1 italic text-muted-foreground hover:text-primary transition-colors duration-300"
-                >
-                    <span className="transform group-hover:-translate-x-1 transition-transform duration-300">←</span>
-                    back
-                </Link>
-            </motion.header>
-
             {/* Main Profile Card - Gravatar Style */}
             <motion.section
                 variants={itemVariants}
@@ -267,6 +257,14 @@ function AboutPage() {
                     </a>
                 </div>
             </motion.footer>
+
+            <Link
+                to="/"
+                className="group inline-flex items-center gap-1 italic text-muted-foreground hover:text-primary transition-colors duration-300"
+            >
+                <span className="transform group-hover:-translate-x-1 transition-transform duration-300">←</span>
+                back
+            </Link>
         </motion.article>
     )
 }
