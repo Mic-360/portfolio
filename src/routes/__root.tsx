@@ -11,6 +11,7 @@ import { gravatar, siteImages, siteInfo, siteMeta } from '../config/site-data'
 import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
+import { FeedbackHandler } from '../components/FeedbackHandler'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -292,6 +293,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         />
       </head>
       <body className="bg-background text-foreground antialiased">
+        <FeedbackHandler />
         <main className="mx-auto w-full max-w-2xl p-4 text-sm lowercase">
           {children}
         </main>
