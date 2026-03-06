@@ -1,4 +1,4 @@
-import { gravatar, socialLinks } from '@/lib/site-data'
+import { gravatar, socialLinks } from '@/config/site-data'
 import { Link } from '@tanstack/react-router'
 import GithubIcon from './ui/github-icon'
 import InstagramIcon from './ui/instagram-icon'

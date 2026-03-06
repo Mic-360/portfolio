@@ -3,7 +3,7 @@ import {
   getBlogIndexInternal,
   getProjectIndexInternal,
 } from '@/lib/content.server'
-import { siteMeta } from '@/lib/site-data'
+import { siteMeta } from '@/config/site-data'
 
 export const Route = createFileRoute('/sitemap/xml')({
   server: {

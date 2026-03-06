@@ -6,7 +6,7 @@ import {
 } from '@tanstack/react-router'
 
 import Footer from '../components/Footer'
-import { gravatar, siteImages, siteInfo, siteMeta } from '../lib/site-data'
+import { gravatar, siteImages, siteInfo, siteMeta } from '../config/site-data'
 
 import appCss from '../styles.css?url'
 

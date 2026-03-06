@@ -2,7 +2,7 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import LayersIcon from '@/components/ui/layers-icon'
 import { getProjectIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
-import { siteMeta } from '@/lib/site-data'
+import { siteMeta } from '@/config/site-data'
 
 export const Route = createFileRoute('/projects/')({
   loader: async () => ({

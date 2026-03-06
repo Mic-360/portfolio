@@ -1,7 +1,7 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { getGravatarProfile } from '@/lib/gravatar-profile'
 import { gravatarConfig } from '@/config/gravatar'
-import { siteMeta } from '@/lib/site-data'
+import { siteMeta } from '@/config/site-data'
 import GravatarAvatar from '@/components/gravatar/GravatarAvatar'
 import GravatarSocialLinks from '@/components/gravatar/GravatarSocialLinks'
 import GravatarGallery from '@/components/gravatar/GravatarGallery'

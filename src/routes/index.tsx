@@ -3,7 +3,7 @@ import CalendarIcon from '@/components/ui/calendar-icon'
 import GravatarAvatar from '@/components/gravatar/GravatarAvatar'
 import { getBlogIndex, getProjectIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
-import { Section, StatCard } from '@/lib/functions'
+import { Section, StatCard } from '@/components/functions'
 import { getHealthData } from '@/lib/health'
 import { hashEmail } from '@/lib/gravatar'
 import { gravatarConfig } from '@/config/gravatar'
@@ -14,7 +14,7 @@ import {
   siteImages,
   siteInfo,
   siteMeta,
-} from '@/lib/site-data'
+} from '@/config/site-data'
 
 export const Route = createFileRoute('/')({
   loader: async () => {

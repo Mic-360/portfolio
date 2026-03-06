@@ -1,7 +1,7 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { getBlogPostBySlug } from '@/lib/content'
 import { formatDate } from '@/lib/format'
-import { siteMeta } from '@/lib/site-data'
+import { siteMeta } from '@/config/site-data'
 import { motion } from 'motion/react'
 
 export const Route = createFileRoute('/blog/$slug')({

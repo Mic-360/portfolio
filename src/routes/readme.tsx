@@ -1,6 +1,6 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import type { ImgHTMLAttributes } from 'react'
-import { siteImages, siteMeta } from '@/lib/site-data'
+import { siteImages, siteMeta } from '@/config/site-data'
 
 export const Route = createFileRoute('/readme')({
   head: () => {

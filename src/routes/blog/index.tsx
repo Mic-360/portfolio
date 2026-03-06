@@ -2,7 +2,7 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import PenIcon from '@/components/ui/pen-icon'
 import { getBlogIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
-import { siteMeta } from '@/lib/site-data'
+import { siteMeta } from '@/config/site-data'
 
 export const Route = createFileRoute('/blog/')({
   loader: async () => ({

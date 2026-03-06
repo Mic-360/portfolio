@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { createOgImageResponse } from '@/lib/og.server'
-import { siteInfo, siteMeta } from '@/lib/site-data'
+import { siteInfo, siteMeta } from '@/config/site-data'
 
 export const Route = createFileRoute('/og/site')({
   server: {

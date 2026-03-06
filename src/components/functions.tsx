@@ -50,7 +50,7 @@ function Section({
           title
         )}
       </h2>
-      <div className="animus-sync-bar mb-2" />
+      {title !== '' && <div className="animus-sync-bar mb-2" />}
       {children}
     </motion.section>
   )

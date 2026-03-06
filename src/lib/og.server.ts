@@ -1,4 +1,4 @@
-import { siteMeta } from './site-data'
+import { siteMeta } from '../config/site-data'
 
 type OgImageOptions = {
   title: string
