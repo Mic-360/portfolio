@@ -9,11 +9,11 @@ export function FeedbackHandler() {
     useEffect(() => {
         const handleClick = (e: MouseEvent) => {
             const target = e.target as HTMLElement
-            // Filter for interactive elements to provide a meaningful feedback experience
             const interactiveElement = target.closest('button, a, [role="button"], input[type="submit"], input[type="button"]')
 
             if (interactiveElement) {
-                triggerFeedback()
+                const isLink = interactiveElement.tagName === 'A' || interactiveElement.getAttribute('role') === 'button'
+                triggerFeedback(isLink ? 'selection' : 'light')
             }
         }
 
@@ -24,6 +24,5 @@ export function FeedbackHandler() {
         }
     }, [triggerFeedback])
 
-    // This component doesn't render anything
     return null
 }

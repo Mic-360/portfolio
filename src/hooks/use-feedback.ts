@@ -1,27 +1,37 @@
 import { useCallback } from 'react'
 import { useWebHaptics } from 'web-haptics/react'
 
+let sharedAudioContext: AudioContext | null = null
+
 export function useFeedback() {
     const haptic = useWebHaptics()
 
-    const playSyntheticClick = useCallback(() => {
+    const playSyntheticClick = useCallback((frequency = 400, volume = 0.1) => {
         if (typeof window === 'undefined') return
 
         try {
-            const AudioContextClass = (window.AudioContext || (window as any).webkitAudioContext)
-            if (!AudioContextClass) return
+            if (!sharedAudioContext) {
+                const AudioContextClass = (window.AudioContext || (window as any).webkitAudioContext)
+                if (AudioContextClass) {
+                    sharedAudioContext = new AudioContextClass()
+                }
+            }
 
-            const context = new AudioContextClass()
+            if (!sharedAudioContext) return
 
-            // Create a short, clicky sound
+            if (sharedAudioContext.state === 'suspended') {
+                sharedAudioContext.resume()
+            }
+
+            const context = sharedAudioContext
             const oscillator = context.createOscillator()
             const gain = context.createGain()
 
             oscillator.type = 'sine'
-            oscillator.frequency.setValueAtTime(400, context.currentTime)
+            oscillator.frequency.setValueAtTime(frequency, context.currentTime)
             oscillator.frequency.exponentialRampToValueAtTime(1, context.currentTime + 0.1)
 
-            gain.gain.setValueAtTime(0.1, context.currentTime)
+            gain.gain.setValueAtTime(volume, context.currentTime)
             gain.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.1)
 
             oscillator.connect(gain)
@@ -29,11 +39,6 @@ export function useFeedback() {
 
             oscillator.start()
             oscillator.stop(context.currentTime + 0.1)
-
-            // Cleanup context after sound finishes to save resources
-            setTimeout(() => {
-                context.close().catch(() => { })
-            }, 200)
         } catch (e) {
             console.error('Failed to play synthetic click', e)
         }
@@ -46,7 +51,16 @@ export function useFeedback() {
         if (isMobile) {
             haptic.trigger(type)
         } else {
-            playSyntheticClick()
+            switch (type) {
+                case 'selection':
+                    playSyntheticClick(600, 0.08)
+                    break
+                case 'error':
+                    playSyntheticClick(150, 0.15)
+                    break
+                default:
+                    playSyntheticClick(400, 0.1)
+            }
         }
     }, [haptic, playSyntheticClick])
 
