@@ -21,6 +21,10 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   beforeLoad: () => {
     if (typeof document !== 'undefined') {
       document.documentElement.setAttribute('lang', 'en')
+      // Disable native scroll restoration to ensure we have full control
+      if ('scrollRestoration' in window.history) {
+        window.history.scrollRestoration = 'manual'
+      }
     }
   },
 

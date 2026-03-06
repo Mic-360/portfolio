@@ -11,6 +11,7 @@ export const getRouter = (rqContext: any) => {
       ...rqContext,
     },
     defaultPreload: 'intent',
+    scrollRestoration: true,
   })
 
   return router
