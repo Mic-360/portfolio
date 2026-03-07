@@ -146,33 +146,55 @@ function ReadmePage() {
       </motion.section>
 
       {/* Languages and Tools Section */}
-      <motion.section variants={item} className="flex flex-col gap-8 text-center py-8">
-        <h2 className="text-2xl font-black italic uppercase tracking-tighter">
+      <motion.section variants={item} className="flex flex-col gap-8 text-center py-8 relative">
+        <motion.div
+          className="absolute inset-0 m-auto w-60 h-60 lg:w-80 lg:h-80 bg-primary/40 rounded-full blur-[100px] pointer-events-none z-0"
+          animate={{
+            x: [0, 40, -40, 0],
+            y: [0, -40, 40, 0],
+            scale: [1, 1.1, 0.9, 1],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <h2 className="text-2xl font-black italic uppercase tracking-tighter relative z-10">
           <span className="text-primary mr-2">/</span>
           Languages and Tools
         </h2>
-        <div className="flex flex-wrap justify-center gap-6 md:gap-8">
+        <div className="flex flex-wrap justify-center gap-6 md:gap-8 relative z-10">
           {[
             { src: 'nextjs/nextjs-original.svg', alt: 'Next.js' },
+            { src: 'react/react-original.svg', alt: 'React' },
             { src: 'nodejs/nodejs-original.svg', alt: 'Node.js' },
+            { src: 'bun/bun-original.svg', alt: 'Bun' },
             { src: 'git/git-original.svg', alt: 'Git' },
             { src: 'amazonwebservices/amazonwebservices-plain-wordmark.svg', alt: 'AWS' },
-            { src: 'azuredevops/azuredevops-original.svg', alt: 'Azure DevOps' },
             { src: 'cloudflare/cloudflare-original.svg', alt: 'Cloudflare' },
-            { src: 'cloudflareworkers/cloudflareworkers-original.svg', alt: 'Cloudflare Workers' },
             { src: 'typescript/typescript-original.svg', alt: 'TypeScript' },
             { src: 'android/android-plain.svg', alt: 'Android' },
-            { src: 'dart/dart-original.svg', alt: 'Dart' },
+            { src: 'cplusplus/cplusplus-original.svg', alt: 'C++' },
             { src: 'flutter/flutter-original.svg', alt: 'Flutter' },
             { src: 'googlecloud/googlecloud-original.svg', alt: 'Google Cloud' },
-            { src: 'html5/html5-plain.svg', alt: 'HTML5' },
-            { src: 'css3/css3-plain.svg', alt: 'CSS3' },
             { src: 'python/python-original.svg', alt: 'Python' },
             { src: 'ubuntu/ubuntu-original.svg', alt: 'Ubuntu' },
             { src: 'java/java-original.svg', alt: 'Java' },
             { src: 'csharp/csharp-original.svg', alt: 'C#' },
             { src: 'gitlab/gitlab-original.svg', alt: 'Gitlab' },
             { src: 'go/go-original.svg', alt: 'Go' },
+            { src: 'rust/rust-original.svg', alt: 'Rust' },
+            { src: 'terraform/terraform-original.svg', alt: 'Terraform' },
+            { src: 'svelte/svelte-original.svg', alt: 'Svelte' },
+            { src: 'astro/astro-original.svg', alt: 'Astro' },
+            { src: 'redis/redis-original.svg', alt: 'Redis' },
+            { src: 'llvm/llvm-original.svg', alt: 'LLVM' },
+            { src: 'kubernetes/kubernetes-original.svg', alt: 'Kubernetes' },
+            { src: 'jupyter/jupyter-original-wordmark.svg', alt: 'Jupyter' },
+            { src: 'grafana/grafana-original.svg', alt: 'Grafana' },
+            { src: 'graphql/graphql-plain.svg', alt: 'GraphQL' },
+            { src: 'githubactions/githubactions-original.svg', alt: 'GitHub Actions' },
             { src: 'firebase/firebase-original.svg', alt: 'Firebase' },
           ].map((icon) => (
             <motion.div
