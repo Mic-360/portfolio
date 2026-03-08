@@ -7,6 +7,7 @@ import { Section, StatCard } from '@/components/functions'
 import { getHealthData } from '@/lib/health'
 import { hashEmail } from '@/lib/gravatar'
 import { gravatarConfig } from '@/config/gravatar'
+import GitHubHeatmap from '@/components/GitHubHeatmap'
 import {
   contactLinks,
   gravatar,
@@ -172,13 +173,9 @@ function App() {
           <div className="flex flex-col gap-4">
             <Link
               to="/readme"
-              className="block overflow-hidden rounded-lg p-2 transition-all hover:border-primary/50 hover:shadow-lg"
+              className="block overflow-hidden transition-all hover:border-primary/50"
             >
-              <img
-                src="https://ghchart.rshah.org/Mic-360"
-                alt="Mic-360 GitHub Contributions"
-                className="w-full h-auto rounded-md"
-              />
+              <GitHubHeatmap username="Mic-360" />
             </Link>
             <p className="text-xs italic text-muted-foreground">
               click the graph to view my full github readme.
