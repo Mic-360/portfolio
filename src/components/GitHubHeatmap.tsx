@@ -33,13 +33,13 @@ export default function GitHubHeatmap({ username }: GitHubHeatmapProps) {
             const width = window.innerWidth;
             let newSettings;
             if (width < 414) {
-                newSettings = { range: 2, cellSize: 18 };
+                newSettings = { range: 3, cellSize: 20 };
             } else if (width < 480) {
-                newSettings = { range: 4, cellSize: 16 };
+                newSettings = { range: 4, cellSize: 18 };
             } else if (width < 640) {
                 newSettings = { range: 6, cellSize: 14 };
             } else if (width < 850) {
-                newSettings = { range: 10, cellSize: 10 };
+                newSettings = { range: 10, cellSize: 10.8 };
             } else {
                 newSettings = { range: 12, cellSize: 8.8 };
             }
@@ -147,8 +147,8 @@ export default function GitHubHeatmap({ username }: GitHubHeatmapProps) {
                         includeBlank: true,
                         itemSelector: '#cal-heatmap-legend',
                         radius: 2,
-                        width: responsive.cellSize,
-                        height: responsive.cellSize,
+                        width: 10,
+                        height: 10,
                         gutter: 3,
                     },
                 ],
@@ -230,7 +230,7 @@ export default function GitHubHeatmap({ username }: GitHubHeatmapProps) {
                     </button>
                 </div>
 
-                <div className="flex items-center gap-2 text-[10px] text-muted-foreground font-medium">
+                <div className="hidden md:flex items-center gap-2 text-[10px] text-muted-foreground font-medium">
                     <span className="opacity-60">Less</span>
                     <div id="cal-heatmap-legend" className="flex items-center"></div>
                     <span className="opacity-60">More</span>
