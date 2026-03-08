@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import CalendarIcon from '@/components/ui/calendar-icon'
 import GravatarAvatar from '@/components/gravatar/GravatarAvatar'
@@ -71,6 +72,11 @@ import { motion } from 'motion/react'
 
 function App() {
   const { posts, projects, health, avatarHash } = Route.useLoaderData()
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   const container = {
     hidden: { opacity: 0 },
@@ -342,7 +348,7 @@ function App() {
               format={(v) => v.toFixed(1)}
             />
           </div>
-          {health.updatedAt && (
+          {health.updatedAt && isMounted && (
             <p className="text-[10px] italic text-muted-foreground mt-4">
               last updated: {new Date(health.updatedAt).toLocaleString()}
             </p>
