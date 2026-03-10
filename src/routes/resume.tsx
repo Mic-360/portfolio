@@ -1,6 +1,7 @@
+import { motion } from 'motion/react'
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { getResume } from '@/lib/content'
 import { siteInfo, siteMeta } from '@/config/site-data'
+import { getResume } from '@/lib/content'
 
 export const Route = createFileRoute('/resume')({
   loader: async () => ({
@@ -25,10 +26,13 @@ export const Route = createFileRoute('/resume')({
         { property: 'og:image', content: imageUrl },
         { property: 'og:image:width', content: '1200' },
         { property: 'og:image:height', content: '630' },
+        { property: 'og:image:type', content: 'image/png' },
+        { property: 'og:image:alt', content: title },
         { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: title },
         { name: 'twitter:description', content: description },
         { name: 'twitter:image', content: imageUrl },
+        { name: 'twitter:image:alt', content: title },
       ],
       links: [{ rel: 'canonical', href: canonicalUrl }],
     }
@@ -36,7 +40,6 @@ export const Route = createFileRoute('/resume')({
   component: ResumePage,
 })
 
-import { motion } from 'motion/react'
 
 function ResumePage() {
   const { resume } = Route.useLoaderData()
@@ -75,7 +78,6 @@ function ResumePage() {
       animate="show"
       className="flex flex-col gap-10"
     >
-
       <motion.div
         variants={item}
         className="latex-content flex flex-col gap-1 text-foreground leading-relaxed"
@@ -83,22 +85,37 @@ function ResumePage() {
       />
 
       {/* Connect With Me Section */}
-      <motion.section variants={item} className="flex flex-col gap-10 text-center bg-primary/5 p-10 rounded-4xl border-2 border-primary/10 shadow-inner relative overflow-hidden">
+      <motion.section
+        variants={item}
+        className="flex flex-col gap-10 text-center bg-primary/5 p-10 rounded-4xl border-2 border-primary/10 shadow-inner relative overflow-hidden"
+      >
         <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-50 pointer-events-none" />
         <div className="relative z-10 flex flex-col gap-4">
-          <motion.h2 variants={item} className="text-3xl font-bold tracking-tight">
+          <motion.h2
+            variants={item}
+            className="text-3xl font-bold tracking-tight"
+          >
             Let's Connect!
           </motion.h2>
-          <motion.p variants={item} className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions.
+          <motion.p
+            variants={item}
+            className="text-lg text-muted-foreground max-w-2xl mx-auto"
+          >
+            I'm always open to discussing new projects, creative ideas, or
+            opportunities to be part of your visions.
           </motion.p>
-          <motion.div variants={item} className="flex justify-center gap-4 mt-6">
+          <motion.div
+            variants={item}
+            className="flex justify-center gap-4 mt-6"
+          >
             <a
               href={siteInfo.calendlyUrl}
               className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-black text-sm font-bold uppercase tracking-widest hover:scale-105 transition-transform shadow-lg hover:shadow-primary/20"
             >
               Get in Touch
-              <span className="transform group-hover:translate-x-1 transition-transform">→</span>
+              <span className="transform group-hover:translate-x-1 transition-transform">
+                →
+              </span>
             </a>
             <a
               href="https://www.linkedin.com/in/bhaumic"
@@ -155,12 +172,16 @@ function ResumePage() {
       </motion.div>
 
       <motion.footer variants={item}>
-        <Link to="/" className="group inline-flex items-center gap-2 italic text-muted-foreground hover:text-primary transition-colors text-md">
-          <span className="transform group-hover:-translate-x-1 transition-transform">←</span>
+        <Link
+          to="/"
+          className="group inline-flex items-center gap-2 italic text-muted-foreground hover:text-primary transition-colors text-md"
+        >
+          <span className="transform group-hover:-translate-x-1 transition-transform">
+            ←
+          </span>
           back
         </Link>
       </motion.footer>
     </motion.article>
   )
 }
-

@@ -1,8 +1,8 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
+import { motion } from 'motion/react'
+import { siteMeta } from '@/config/site-data'
 import { getProjectBySlug } from '@/lib/content'
 import { formatDate } from '@/lib/format'
-import { siteMeta } from '@/config/site-data'
-import { motion } from 'motion/react'
 
 export const Route = createFileRoute('/projects/$slug')({
   loader: async ({ params }) => ({
@@ -41,6 +41,7 @@ export const Route = createFileRoute('/projects/$slug')({
         { property: 'og:image:width', content: '1200' },
         { property: 'og:image:height', content: '630' },
         { property: 'og:image:type', content: 'image/png' },
+        { property: 'og:image:alt', content: project.title },
         { property: 'article:published_time', content: project.date },
         { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: title },
@@ -162,22 +163,36 @@ function ProjectDetail() {
 
       <header className="flex flex-col gap-4">
         <motion.div variants={item}>
-          <Link to="/projects" className="group inline-flex items-center gap-1 italic text-muted-foreground hover:text-primary transition-colors duration-300">
-            <span className="transform group-hover:-translate-x-1 transition-transform duration-300">←</span>
+          <Link
+            to="/projects"
+            className="group inline-flex items-center gap-1 italic text-muted-foreground hover:text-primary transition-colors duration-300"
+          >
+            <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
+              ←
+            </span>
             back to projects
           </Link>
         </motion.div>
 
         <div className="space-y-2">
-          <motion.h1 variants={item} className="text-4xl font-black italic tracking-tighter text-foreground uppercase">
+          <motion.h1
+            variants={item}
+            className="text-4xl font-black italic tracking-tighter text-foreground uppercase"
+          >
             {project.title}
           </motion.h1>
-          <motion.p variants={item} className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary">
+          <motion.p
+            variants={item}
+            className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary"
+          >
             {formatDate(project.date)}
           </motion.p>
         </div>
 
-        <motion.p variants={item} className="text-xl leading-relaxed text-foreground/80 font-medium italic max-w-2xl">
+        <motion.p
+          variants={item}
+          className="text-xl leading-relaxed text-foreground/80 font-medium italic max-w-2xl"
+        >
           {project.summary}
         </motion.p>
 
@@ -209,7 +224,10 @@ function ProjectDetail() {
             ))}
           </motion.div>
         )}
-        <motion.div variants={item} className="animus-sync-bar mt-4 opacity-30" />
+        <motion.div
+          variants={item}
+          className="animus-sync-bar mt-4 opacity-30"
+        />
       </header>
 
       <motion.div
@@ -218,16 +236,20 @@ function ProjectDetail() {
         dangerouslySetInnerHTML={{ __html: project.html }}
       />
 
-      <motion.footer variants={item} className="pt-12 border-t border-border/50">
+      <motion.footer
+        variants={item}
+        className="pt-12 border-t border-border/50"
+      >
         <Link
           to="/projects"
           className="group inline-flex items-center gap-2 italic text-muted-foreground hover:text-primary transition-colors duration-300 text-sm"
         >
-          <span className="transform group-hover:-translate-x-1 transition-transform duration-300">←</span>
+          <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
+            ←
+          </span>
           see more projects
         </Link>
       </motion.footer>
     </motion.article>
   )
 }
-

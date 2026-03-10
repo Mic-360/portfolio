@@ -1,8 +1,9 @@
+import { motion } from 'motion/react'
+import { Link, createFileRoute } from '@tanstack/react-router'
 import PenIcon from '@/components/ui/pen-icon'
 import { siteMeta } from '@/config/site-data'
 import { getBlogIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
-import { Link, createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/blog/')({
   loader: async () => ({
@@ -38,7 +39,6 @@ export const Route = createFileRoute('/blog/')({
   component: BlogIndex,
 })
 
-import { motion } from 'motion/react'
 
 function BlogIndex() {
   const { posts } = Route.useLoaderData()

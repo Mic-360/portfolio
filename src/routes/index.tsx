@@ -1,3 +1,6 @@
+import { Link, createFileRoute } from '@tanstack/react-router'
+import { motion } from 'motion/react'
+import { useEffect, useState } from 'react'
 import { Section, StatCard } from '@/components/functions'
 import GitHubHeatmap from '@/components/GitHubHeatmap'
 import GravatarAvatar from '@/components/gravatar/GravatarAvatar'
@@ -15,8 +18,6 @@ import { getBlogIndex, getProjectIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
 import { hashEmail } from '@/lib/gravatar'
 import { getHealthData } from '@/lib/health'
-import { Link, createFileRoute } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
 
 export const Route = createFileRoute('/')({
   loader: async () => {
@@ -85,7 +86,6 @@ function sanitizeSamples<T extends { value: number | string }>(
   })
 }
 
-import { motion } from 'motion/react'
 
 function App() {
   const { posts, projects, health, avatarHash } = Route.useLoaderData()
@@ -141,7 +141,7 @@ function App() {
                 </span>
               </h1>
               <h2 className="text-xs tracking-tight border w-fit p-0.5 rounded-xs text-primary font-sans border-border">
-                {siteInfo.currentRole} & Web Developer | {siteInfo.tagline}
+                {siteInfo.tagline}
               </h2>
             </div>
           </div>
@@ -335,7 +335,7 @@ function App() {
             />
             <StatCard
               label="heart rate"
-              samples={sanitizeSamples(health.heartRate)?.map((s) => {
+              samples={sanitizeSamples(health.heartRate).map((s) => {
                 const start = new Date(s.startDate).getTime()
                 const end = new Date(s.endDate).getTime()
                 const minutes = (end - start) / (1000 * 180)

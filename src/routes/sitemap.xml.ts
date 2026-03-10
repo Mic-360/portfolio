@@ -1,9 +1,9 @@
+import { createFileRoute } from '@tanstack/react-router'
 import { siteMeta } from '@/config/site-data'
 import {
   getBlogIndexInternal,
   getProjectIndexInternal,
 } from '@/lib/content.server'
-import { createFileRoute } from '@tanstack/react-router'
 
 type SitemapImage = {
   loc: string
@@ -39,42 +39,49 @@ export const Route = createFileRoute('/sitemap/xml')({
             lastmod: new Date().toISOString(),
             changefreq: 'weekly',
             priority: '1.0',
+            images: [],
           },
           {
             loc: `${siteMeta.baseUrl}/blog`,
             lastmod: latestBlogDate,
             changefreq: 'weekly',
             priority: '0.9',
+            images: [],
           },
           {
             loc: `${siteMeta.baseUrl}/projects`,
             lastmod: latestProjectDate,
             changefreq: 'monthly',
             priority: '0.9',
+            images: [],
           },
           {
             loc: `${siteMeta.baseUrl}/about`,
             lastmod: new Date().toISOString(),
             changefreq: 'monthly',
             priority: '0.7',
+            images: [],
           },
           {
             loc: `${siteMeta.baseUrl}/resume`,
             lastmod: new Date().toISOString(),
             changefreq: 'monthly',
             priority: '0.8',
+            images: [],
           },
           {
             loc: `${siteMeta.baseUrl}/readme`,
             lastmod: new Date().toISOString(),
             changefreq: 'monthly',
             priority: '0.6',
+            images: [],
           },
           {
             loc: `${siteMeta.baseUrl}/bento`,
             lastmod: new Date().toISOString(),
             changefreq: 'monthly',
             priority: '0.5',
+            images: [],
           },
           ...posts.map((post) => ({
             loc: `${siteMeta.baseUrl}/blog/${post.slug}`,
@@ -118,7 +125,7 @@ export const Route = createFileRoute('/sitemap/xml')({
                 `    <lastmod>${new Date(url.lastmod).toISOString()}</lastmod>\n` +
                 `    <changefreq>${url.changefreq}</changefreq>\n` +
                 `    <priority>${url.priority}</priority>\n` +
-                ((url.images || [])
+                ((url.images)
                   .map(
                     (image) =>
                       `    <image:image>\n` +

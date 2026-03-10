@@ -1,7 +1,7 @@
+import { createFileRoute } from '@tanstack/react-router'
 import { getBlogPostBySlugInternal } from '@/lib/content.server'
 import { formatDate } from '@/lib/format'
 import { createOgImageResponse } from '@/lib/og.server'
-import { createFileRoute } from '@tanstack/react-router'
 
 function withCrawlerHeaders(response: Response) {
   const headers = new Headers(response.headers)

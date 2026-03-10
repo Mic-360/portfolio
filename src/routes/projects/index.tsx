@@ -1,8 +1,9 @@
+import { motion } from 'motion/react'
+import { Link, createFileRoute } from '@tanstack/react-router'
 import LayersIcon from '@/components/ui/layers-icon'
 import { siteMeta } from '@/config/site-data'
 import { getProjectIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
-import { Link, createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/projects/')({
   loader: async () => ({
@@ -38,7 +39,6 @@ export const Route = createFileRoute('/projects/')({
   component: ProjectsIndex,
 })
 
-import { motion } from 'motion/react'
 
 function ProjectsIndex() {
   const { projects } = Route.useLoaderData()

@@ -1,8 +1,8 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
+import { motion } from 'motion/react'
+import { siteMeta } from '@/config/site-data'
 import { getBlogPostBySlug } from '@/lib/content'
 import { formatDate } from '@/lib/format'
-import { siteMeta } from '@/config/site-data'
-import { motion } from 'motion/react'
 
 export const Route = createFileRoute('/blog/$slug')({
   loader: async ({ params }) => ({
@@ -41,6 +41,7 @@ export const Route = createFileRoute('/blog/$slug')({
         { property: 'og:image:width', content: '1200' },
         { property: 'og:image:height', content: '630' },
         { property: 'og:image:type', content: 'image/png' },
+        { property: 'og:image:alt', content: post.title },
         { property: 'article:published_time', content: post.date },
         { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: title },
@@ -170,35 +171,55 @@ function BlogPost() {
       />
       <header className="flex flex-col gap-4 text-left">
         <motion.div variants={item}>
-          <Link to="/blog" className="group inline-flex items-center gap-1 italic text-muted-foreground hover:text-primary transition-colors duration-300">
-            <span className="transform group-hover:-translate-x-1 transition-transform duration-300">←</span>
+          <Link
+            to="/blog"
+            className="group inline-flex items-center gap-1 italic text-muted-foreground hover:text-primary transition-colors duration-300"
+          >
+            <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
+              ←
+            </span>
             back to blog
           </Link>
         </motion.div>
 
         <div className="space-y-2">
-          <motion.h1 variants={item} className="text-3xl font-black italic tracking-tighter text-foreground uppercase">
+          <motion.h1
+            variants={item}
+            className="text-3xl font-black italic tracking-tighter text-foreground uppercase"
+          >
             {post.title}
           </motion.h1>
-          <motion.p variants={item} className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary">
+          <motion.p
+            variants={item}
+            className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary"
+          >
             {formatDate(post.date)}
           </motion.p>
         </div>
 
-        <motion.p variants={item} className="text-lg leading-relaxed text-foreground/80 font-medium italic">
+        <motion.p
+          variants={item}
+          className="text-lg leading-relaxed text-foreground/80 font-medium italic"
+        >
           {post.summary}
         </motion.p>
 
         {(post.categories.length > 0 || post.tags.length > 0) && (
           <motion.div variants={item} className="flex flex-wrap gap-2">
             {[...post.categories, ...post.tags].map((tag) => (
-              <span key={tag} className="text-[9px] uppercase tracking-[0.2em] px-2 py-0.5 rounded-sm bg-muted text-primary/60 border border-border/30">
+              <span
+                key={tag}
+                className="text-[9px] uppercase tracking-[0.2em] px-2 py-0.5 rounded-sm bg-muted text-primary/60 border border-border/30"
+              >
                 {tag}
               </span>
             ))}
           </motion.div>
         )}
-        <motion.div variants={item} className="animus-sync-bar mt-2 opacity-30" />
+        <motion.div
+          variants={item}
+          className="animus-sync-bar mt-2 opacity-30"
+        />
       </header>
 
       <motion.div
@@ -207,16 +228,20 @@ function BlogPost() {
         dangerouslySetInnerHTML={{ __html: post.html }}
       />
 
-      <motion.footer variants={item} className="pt-10 border-t border-border/50">
+      <motion.footer
+        variants={item}
+        className="pt-10 border-t border-border/50"
+      >
         <Link
           to="/blog"
           className="group inline-flex items-center gap-1 italic text-muted-foreground hover:text-primary transition-colors duration-300"
         >
-          <span className="transform group-hover:-translate-x-1 transition-transform duration-300">←</span>
+          <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
+            ←
+          </span>
           more writings
         </Link>
       </motion.footer>
     </motion.article>
   )
 }
-

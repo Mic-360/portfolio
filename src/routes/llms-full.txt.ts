@@ -1,9 +1,9 @@
+import { createFileRoute } from '@tanstack/react-router';
 import { gravatar, siteImages, siteInfo, siteMeta } from '@/config/site-data';
 import {
 	getBlogIndexInternal,
 	getProjectIndexInternal,
 } from '@/lib/content.server';
-import { createFileRoute } from '@tanstack/react-router';
 
 function toBulletList(items: Array<{ title: string; slug: string }>, basePath: string) {
 	if (items.length === 0) {

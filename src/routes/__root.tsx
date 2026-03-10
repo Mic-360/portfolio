@@ -1,18 +1,18 @@
-import { env } from '@/env'
 import {
   HeadContent,
   Link,
   Scripts,
   createRootRouteWithContext,
 } from '@tanstack/react-router'
+import { FeedbackHandler } from '../components/FeedbackHandler'
 
 import Footer from '../components/Footer'
 import { gravatar, siteImages, siteInfo, siteMeta } from '../config/site-data'
 
 import appCss from '../styles.css?url'
-
 import type { QueryClient } from '@tanstack/react-query'
-import { FeedbackHandler } from '../components/FeedbackHandler'
+
+import { env } from '@/env'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -81,6 +81,18 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: 'website',
       },
       {
+        property: 'og:title',
+        content: siteMeta.defaultTitle,
+      },
+      {
+        property: 'og:description',
+        content: siteMeta.defaultDescription,
+      },
+      {
+        property: 'og:url',
+        content: siteMeta.baseUrl,
+      },
+      {
         property: 'og:image',
         content: `${siteMeta.baseUrl}${siteMeta.defaultImage}`,
       },
@@ -91,6 +103,30 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       {
         property: 'og:image:height',
         content: '630',
+      },
+      {
+        property: 'og:image:type',
+        content: 'image/png',
+      },
+      {
+        property: 'og:image:alt',
+        content: siteMeta.defaultTitle,
+      },
+      {
+        name: 'twitter:title',
+        content: siteMeta.defaultTitle,
+      },
+      {
+        name: 'twitter:description',
+        content: siteMeta.defaultDescription,
+      },
+      {
+        name: 'twitter:image',
+        content: `${siteMeta.baseUrl}${siteMeta.defaultImage}`,
+      },
+      {
+        name: 'twitter:image:alt',
+        content: siteMeta.defaultTitle,
       },
       {
         title: 'Bhaumic Singh — Full Stack Software Engineer Portfolio',

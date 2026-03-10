@@ -1,3 +1,4 @@
+import { motion } from 'motion/react'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import type { ImgHTMLAttributes } from 'react'
 import { siteImages, siteMeta } from '@/config/site-data'
@@ -57,7 +58,6 @@ function ReadmeImage({
   )
 }
 
-import { motion } from 'motion/react'
 
 function ReadmePage() {
   const container = {
@@ -308,4 +308,3 @@ function ReadmePage() {
     </motion.article>
   )
 }
-

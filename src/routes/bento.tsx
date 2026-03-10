@@ -1,8 +1,8 @@
+import { Link, createFileRoute } from '@tanstack/react-router'
 import GravatarProfileCard from '@/components/gravatar/GravatarProfileCard'
 import { gravatarConfig } from '@/config/gravatar'
 import { siteMeta } from '@/config/site-data'
 import { getGravatarProfile } from '@/lib/gravatar-profile'
-import { Link, createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/bento')({
   loader: async () => {
