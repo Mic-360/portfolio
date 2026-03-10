@@ -15,6 +15,7 @@ export const Route = createFileRoute('/bento')({
     const title = `Bento | ${siteMeta.defaultTitle}`
     const description = 'My social profile and links in a bento grid layout.'
     const canonicalUrl = `${siteMeta.baseUrl}/bento`
+    const imageUrl = `${siteMeta.baseUrl}${siteMeta.defaultImage}`
 
     return {
       meta: [
@@ -26,16 +27,17 @@ export const Route = createFileRoute('/bento')({
         { property: 'og:url', content: canonicalUrl },
         {
           property: 'og:image',
-          content: `${siteMeta.baseUrl}${siteImages.profilePhoto}`,
+          content: imageUrl,
         },
-        { property: 'og:image:width', content: '256' },
-        { property: 'og:image:height', content: '256' },
-        { name: 'twitter:card', content: 'summary' },
+        { property: 'og:image:width', content: '1200' },
+        { property: 'og:image:height', content: '630' },
+        { property: 'og:image:type', content: 'image/png' },
+        { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: title },
         { name: 'twitter:description', content: description },
         {
           name: 'twitter:image',
-          content: `${siteMeta.baseUrl}${siteImages.profilePhoto}`,
+          content: imageUrl,
         },
       ],
       links: [{ rel: 'canonical', href: canonicalUrl }],
