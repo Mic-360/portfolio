@@ -32,9 +32,13 @@ export const Route = createFileRoute('/about')({
                     property: 'og:image',
                     content: `${siteMeta.baseUrl}${siteMeta.defaultImage}`,
                 },
-                { name: 'twitter:card', content: 'summary' },
+                { name: 'twitter:card', content: 'summary_large_image' },
                 { name: 'twitter:title', content: title },
                 { name: 'twitter:description', content: description },
+                {
+                    name: 'twitter:image',
+                    content: `${siteMeta.baseUrl}${siteMeta.defaultImage}`,
+                },
             ],
             links: [{ rel: 'canonical', href: canonicalUrl }],
         }

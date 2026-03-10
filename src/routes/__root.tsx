@@ -72,6 +72,26 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: siteMeta.twitterHandle,
       },
       {
+        name: 'twitter:card',
+        content: 'summary_large_image',
+      },
+      {
+        property: 'og:type',
+        content: 'website',
+      },
+      {
+        property: 'og:image',
+        content: `${siteMeta.baseUrl}${siteMeta.defaultImage}`,
+      },
+      {
+        property: 'og:image:width',
+        content: '1200',
+      },
+      {
+        property: 'og:image:height',
+        content: '630',
+      },
+      {
         title: 'Bhaumic Singh — Full Stack Software Engineer Portfolio',
       },
       {

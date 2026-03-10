@@ -29,7 +29,7 @@ export const siteMeta = {
   defaultTitle: 'Bhaumic Singh — Software Engineer',
   defaultDescription:
     'Bhaumic Singh is a full stack software engineer specializing in web, android, AI, and cloud products. Building bleeding edge systems with modern technologies.',
-  defaultImage: '/og/site',
+  defaultImage: '/space-shooter.png',
   siteName: 'Bhaumic Singh',
   locale: 'en_US',
   twitterHandle: '@bhaumicsingh',
