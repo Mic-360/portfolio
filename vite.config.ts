@@ -12,32 +12,6 @@ const config = defineConfig({
   server: {
     allowedHosts: ['.trycloudflare.com'],
   },
-  ssr: {
-    external: [
-      '@resvg/resvg-js',
-      '@resvg/resvg-js-win32-x64-msvc',
-      '@resvg/resvg-js-win32-ia32-msvc',
-      '@resvg/resvg-js-win32-arm64-msvc',
-    ],
-  },
-  optimizeDeps: {
-    exclude: [
-      '@resvg/resvg-js',
-      '@resvg/resvg-js-win32-x64-msvc',
-      '@resvg/resvg-js-win32-ia32-msvc',
-      '@resvg/resvg-js-win32-arm64-msvc',
-    ],
-  },
-  build: {
-    rollupOptions: {
-      external: [
-        '@resvg/resvg-js',
-        '@resvg/resvg-js-win32-x64-msvc',
-        '@resvg/resvg-js-win32-ia32-msvc',
-        '@resvg/resvg-js-win32-arm64-msvc',
-      ],
-    },
-  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
