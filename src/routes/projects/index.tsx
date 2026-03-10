@@ -1,8 +1,8 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
 import LayersIcon from '@/components/ui/layers-icon'
+import { siteMeta } from '@/config/site-data'
 import { getProjectIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
-import { siteMeta } from '@/config/site-data'
+import { Link, createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/projects/')({
   loader: async () => ({
@@ -42,6 +42,27 @@ import { motion } from 'motion/react'
 
 function ProjectsIndex() {
   const { projects } = Route.useLoaderData()
+  const collectionJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Projects',
+    description: 'Selected projects across Android, AI, and web.',
+    url: `${siteMeta.baseUrl}/projects`,
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: projects.map((project, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        url: `${siteMeta.baseUrl}/projects/${project.slug}`,
+        name: project.title,
+        description: project.summary,
+        image: project.image
+          ? `${siteMeta.baseUrl}${project.image}`
+          : `${siteMeta.baseUrl}/og/projects/${project.slug}`,
+        datePublished: project.date,
+      })),
+    },
+  }
 
   const container = {
     hidden: { opacity: 0 },
@@ -65,14 +86,25 @@ function ProjectsIndex() {
       animate="show"
       className="flex flex-col gap-8"
     >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(collectionJsonLd),
+        }}
+      />
       <motion.header variants={item} className="flex flex-col gap-2">
         <div className="flex items-center justify-between mr-6">
           <h1 className="text-2xl font-bold italic">
             <LayersIcon size={20} className="inline-block mr-2" />
             projects
           </h1>
-          <Link to="/" className="group inline-flex items-center gap-1 italic text-muted-foreground hover:text-primary transition-colors duration-300 mb-2">
-            <span className="transform group-hover:-translate-x-1 transition-transform duration-300">←</span>
+          <Link
+            to="/"
+            className="group inline-flex items-center gap-1 italic text-muted-foreground hover:text-primary transition-colors duration-300 mb-2"
+          >
+            <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
+              ←
+            </span>
             back
           </Link>
         </div>
