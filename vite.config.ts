@@ -46,6 +46,7 @@ const config = defineConfig({
   plugins: [
     devtools(),
     nitro({
+      compressPublicAssets: true,
       prerender: {
         concurrency: 1, // Avoid hitting rate limits during build
       },

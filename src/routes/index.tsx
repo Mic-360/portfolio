@@ -123,9 +123,9 @@ function App() {
                   {siteInfo.nativeName}
                 </span>
               </h1>
-              <p className="text-xs tracking-tight border w-fit p-0.5 rounded-xs text-primary font-sans border-border">
-                {siteInfo.tagline}
-              </p>
+              <h2 className="text-xs tracking-tight border w-fit p-0.5 rounded-xs text-primary font-sans border-border">
+                {siteInfo.currentRole} & Web Developer | {siteInfo.tagline}
+              </h2>
             </div>
           </div>
           <div className="flex flex-col sm:items-end text-[10px] sm:text-xs uppercase tracking-[0.3em] text-primary mt-1.5">
@@ -157,6 +157,9 @@ function App() {
               <img
                 src="/khub.jpg"
                 alt="KarkhanaHub Logo"
+                width={24}
+                height={24}
+                loading="lazy"
                 className="inline-block w-6 h-6 mr-2 rounded-sm object-cover"
               />
               {siteInfo.currentCompany}
@@ -210,6 +213,9 @@ function App() {
                       <img
                         src={role.icon}
                         alt={role.company}
+                        width={24}
+                        height={24}
+                        loading="lazy"
                         className="inline-block w-6 h-6 mr-1 mb-0.5 rounded-md object-cover"
                       />
                     )}

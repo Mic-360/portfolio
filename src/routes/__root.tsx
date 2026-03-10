@@ -72,7 +72,11 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: siteMeta.twitterHandle,
       },
       {
-        title: 'Bhaumic Singh — Portfolio',
+        title: 'Bhaumic Singh — Full Stack Software Engineer Portfolio',
+      },
+      {
+        name: 'description',
+        content: siteMeta.defaultDescription,
       },
       {
         name: 'author',
@@ -293,6 +297,18 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(personJsonLd),
+          }}
+        />
+        {/* Google Analytics - Replace G-XXXXXXXXXX with actual tracking ID */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-GY82L37E2F" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-GY82L37E2F');
+            `,
           }}
         />
       </head>
