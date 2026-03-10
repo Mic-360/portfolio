@@ -352,7 +352,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           }}
         />
         {/* Google Analytics - Replace G-XXXXXXXXXX with actual tracking ID */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-GY82L37E2F" />
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-GY82L37E2F"
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `
