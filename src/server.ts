@@ -3,9 +3,30 @@ import handler from '@tanstack/react-start/server-entry'
 export default {
   async fetch(req: Request): Promise<Response> {
     const url = new URL(req.url)
+    
+    // 1. Domain Redirects
     if (url.hostname === 'www.bhaumicsingh.dev') {
       url.hostname = 'bhaumicsingh.dev'
       return Response.redirect(url.toString(), 301)
+    }
+
+    // 2. Bot/Scanner Protection
+    // Block common paths for WordPress scanners, etc. to avoid heavy SSR for 404s
+    const blockPaths = [
+      '/wp-admin',
+      '/wp-content',
+      '/wp-includes',
+      '/wordpress',
+      '.php',
+      '.env',
+      '/.git',
+    ]
+    
+    if (blockPaths.some(p => url.pathname.toLowerCase().includes(p))) {
+      return new Response('Blocked', {
+        status: 404, // Use 404 or 410 to discourage bots
+        headers: { 'Content-Type': 'text/plain' }
+      })
     }
 
     const response = await handler.fetch(req)
@@ -13,6 +34,15 @@ export default {
     // Create new headers object to avoid immutable headers error
     const newHeaders = new Headers(response.headers)
     newHeaders.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload')
+
+    // 3. Performance/CDN Caching
+    // Add default caching for HTML pages if not already set
+    if (!newHeaders.has('Cache-Control') && 
+        response.status === 200 && 
+        newHeaders.get('Content-Type')?.includes('text/html')) {
+      // 1 minute client cache, 1 hour CDN cache, 10 min SWR
+      newHeaders.set('Cache-Control', 'public, max-age=60, s-maxage=3600, stale-while-revalidate=600')
+    }
     
     return new Response(response.body, {
       status: response.status,
