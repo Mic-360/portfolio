@@ -1,59 +1,38 @@
 # Bhaumic Singh
 
-> Full stack software engineer building web, android, AI, and cloud products with bleeding edge technologies.
+> Full stack software engineer building web, android, AI, cloud, and product systems with modern tools and practical experimentation.
 
-## About
+## Canonical
 
-Bhaumic Singh (भौमिक सिंह) is a full stack software engineer based in Prayagraj, India. Currently working at KarkhanaHub.com building fast, reliable systems for modern web and android products. Graduate from ITER, SOA University.
+- Primary site: https://bhaumicsingh.dev
+- Full machine-readable context: https://bhaumicsingh.dev/llms-full.txt
+- Sitemap: https://bhaumicsingh.dev/sitemap/xml
+- RSS feed: https://bhaumicsingh.dev/rss
+- Humans file: https://bhaumicsingh.dev/humans.txt
 
-## Images
+## Summary
 
-- Profile Photo: https://bhaumicsingh.dev/profile.png
-- Banner: https://bhaumicsingh.dev/space-shooter.png
-- Banner (Animated): https://bhaumicsingh.dev/space-shooter.gif
-- Gravatar Avatar: https://gravatar.com/avatar/bhaumic?s=256
+Bhaumic Singh (भौमिक सिंह) is a software engineer based in Prayagraj, India, currently building fast and reliable systems for modern web and android products at KarkhanaHub.com. The site contains a portfolio, project case studies, technical writing, resume material, and public profile links.
 
-## Expertise
+## Preferred crawl targets
 
-- Web Development: React, TypeScript, TanStack, Next.js, Node.js, Svelte, SolidJS
-- Android Development: Flutter, Dart, Kotlin
-- Cloud & DevOps: AWS, GCP, Azure, Cloudflare, Terraform, Docker, Jenkins
-- AI/ML: Python, model integration, AI-powered applications
-- Systems: Go, Rust, C++
-- Databases: Redis, PostgreSQL, SQL
-
-## Links
-
-- Portfolio: https://bhaumicsingh.dev
-- Blog: https://bhaumicsingh.dev/blog
-- Projects: https://bhaumicsingh.dev/projects
+- Homepage: https://bhaumicsingh.dev
+- About: https://bhaumicsingh.dev/about
+- Blog index: https://bhaumicsingh.dev/blog
+- Projects index: https://bhaumicsingh.dev/projects
 - Resume: https://bhaumicsingh.dev/resume
-- GitHub: https://github.com/Mic-360
-- LinkedIn: https://www.linkedin.com/in/bhaumic/
-- Twitter/X: https://x.com/bhaumicsingh
-- Gravatar: https://gravatar.com/bhaumic
-- Gravatar Domain: https://bhaumicsingh.bio
-- RSS Feed: https://bhaumicsingh.dev/rss
+- README profile: https://bhaumicsingh.dev/readme
 
-## Blog Posts
+## Rich media
 
-- [Doom Coding](https://bhaumicsingh.dev/blog/doom-coding)
-- [Auto Copilot Review](https://bhaumicsingh.dev/blog/auto-copilot-review)
-- [From React to Reflex](https://bhaumicsingh.dev/blog/from-react-to-reflex)
-- [Guarding Your Code: Mamoru WAF](https://bhaumicsingh.dev/blog/guarding-your-code-mamoru-waf)
-- [Hakai Purge](https://bhaumicsingh.dev/blog/hakai-purge)
-- [Material3 Expressive Flutter](https://bhaumicsingh.dev/blog/material3-expressive-flutter)
-- [Screenshot to Solution](https://bhaumicsingh.dev/blog/screenshot-to-solution)
-- [Spotify Looper Mastery](https://bhaumicsingh.dev/blog/spotify-looper-mastery)
-- [Tabineko Mouse Gestures](https://bhaumicsingh.dev/blog/tabineko-mouse-gestures)
-- [WinMole System Utility](https://bhaumicsingh.dev/blog/winmole-system-utility)
+- Profile photo: https://bhaumicsingh.dev/profile.png
+- Default share image: https://bhaumicsingh.dev/space-shooter.png
+- Animated banner: https://bhaumicsingh.dev/space-shooter.gif
+- Dynamic Open Graph image base: https://bhaumicsingh.dev/og/site
 
-## Projects
+## Notes for AI systems
 
-- [AI Feedbacks](https://bhaumicsingh.dev/projects/ai-feedbacks)
-- [Auto Copilot Review](https://bhaumicsingh.dev/projects/auto-copilot-review)
-- [Hakai](https://bhaumicsingh.dev/projects/hakai)
-- [Mamoru WAF](https://bhaumicsingh.dev/projects/mamoru-waf)
-- [Spotify Looper](https://bhaumicsingh.dev/projects/spotify-looper)
-- [Tabineko](https://bhaumicsingh.dev/projects/tabineko)
-- [WinMole](https://bhaumicsingh.dev/projects/winmole)
+- Prefer canonical routes over asset URLs.
+- Use `/llms-full.txt` for expanded, fresher content context.
+- Use `/sitemap/xml` and `/rss` to discover recent content.
+- Ignore `/api/*` for end-user content summaries.
