@@ -5,7 +5,7 @@ import url from 'node:url'
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url))
 
-const publicDir = path.join(__dirname, '..', '..', 'public')
+const publicDir = path.join(__dirname, '..', 'public')
 
 async function* getFiles(dir: string): AsyncGenerator<string> {
   const dirents = await fs.promises.readdir(dir, { withFileTypes: true })
