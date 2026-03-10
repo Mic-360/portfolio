@@ -219,7 +219,7 @@ function App() {
                 whileHover={{ x: 5 }}
                 className="flex flex-wrap justify-between gap-2"
               >
-                <div className='flex flex-wrap gap-2 items-center'>
+                <div className="flex flex-wrap gap-2 items-center">
                   <a
                     href={role.url}
                     target="_blank"
@@ -322,20 +322,20 @@ function App() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <StatCard
               label="steps"
-              samples={health.steps}
+              samples={sanitizeSamples(health.steps)}
               unit="steps"
               type="sum"
             />
             <StatCard
               label="energy"
-              samples={health.activeEnergy}
+              samples={sanitizeSamples(health.activeEnergy)}
               unit="kcal"
               type="sum"
-              format={(v) => v.toFixed(0)}
+              format={(v) => formatMetricValue(v, 0)}
             />
             <StatCard
               label="heart rate"
-              samples={health.heartRate?.map((s) => {
+              samples={sanitizeSamples(health.heartRate)?.map((s) => {
                 const start = new Date(s.startDate).getTime()
                 const end = new Date(s.endDate).getTime()
                 const minutes = (end - start) / (1000 * 180)
@@ -347,28 +347,28 @@ function App() {
               })}
               unit="bpm"
               type="avg"
-              format={(v) => v.toFixed(0)}
+              format={(v) => formatMetricValue(v, 0)}
             />
             <StatCard
               label="distance"
-              samples={health.distance}
+              samples={sanitizeSamples(health.distance)}
               unit="km"
               type="sum"
-              format={(v) => v.toFixed(2)}
+              format={(v) => formatMetricValue(v, 2)}
             />
             <StatCard
               label="sleep"
-              samples={health.sleep}
+              samples={sanitizeSamples(health.sleep)}
               unit="hrs"
               type="sum"
-              format={(v) => v.toFixed(1)}
+              format={(v) => formatMetricValue(v, 1)}
             />
             <StatCard
               label="spO2"
-              samples={health.spO2}
+              samples={sanitizeSamples(health.spO2)}
               unit="%"
               type="avg"
-              format={(v) => v.toFixed(1)}
+              format={(v) => formatMetricValue(v, 1)}
             />
           </div>
           {health.updatedAt && isMounted && (
