@@ -46,23 +46,16 @@ function buildOgSvg({ title, description, label, date }: OgImageOptions) {
 </svg>`
 }
 
+function createSvgFallbackResponse(svg: string) {
+  return new Response(svg, {
+    headers: {
+      'Content-Type': 'image/svg+xml; charset=utf-8',
+      'Cache-Control': 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=86400',
+    },
+  })
+}
+
 export async function createOgImageResponse(options: OgImageOptions) {
   const svg = buildOgSvg(options)
-  const { Resvg } = await import('@resvg/resvg-js')
-  const resvg = new Resvg(svg, {
-    fitTo: {
-      mode: 'width',
-      value: 1200,
-    },
-  })
-  const pngData = resvg.render()
-  const pngBuffer = pngData.asPng()
-  const pngBody = new Uint8Array(pngBuffer)
-
-  return new Response(pngBody, {
-    headers: {
-      'Content-Type': 'image/png',
-      'Cache-Control': 'public, max-age=86400, s-maxage=86400',
-    },
-  })
+  return createSvgFallbackResponse(svg)
 }
