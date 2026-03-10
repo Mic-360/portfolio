@@ -68,6 +68,23 @@ export const Route = createFileRoute('/')({
   component: App,
 })
 
+function formatMetricValue(value: number, digits = 0) {
+  return Number.isFinite(value) ? value.toFixed(digits) : '0'
+}
+
+function sanitizeSamples<T extends { value: number | string }>(
+  samples?: Array<T>,
+) {
+  return (samples || []).map((sample) => {
+    const numericValue = Number(sample.value)
+
+    return {
+      ...sample,
+      value: Number.isFinite(numericValue) ? numericValue : 0,
+    }
+  })
+}
+
 import { motion } from 'motion/react'
 
 function App() {
