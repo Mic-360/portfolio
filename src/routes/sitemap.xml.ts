@@ -1,9 +1,23 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { siteMeta } from '@/config/site-data'
 import {
   getBlogIndexInternal,
   getProjectIndexInternal,
 } from '@/lib/content.server'
-import { siteMeta } from '@/config/site-data'
+import { createFileRoute } from '@tanstack/react-router'
+
+type SitemapImage = {
+  loc: string
+  caption?: string
+}
+
+function escapeXml(value: string) {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
+}
 
 export const Route = createFileRoute('/sitemap/xml')({
   server: {
@@ -39,6 +53,12 @@ export const Route = createFileRoute('/sitemap/xml')({
             priority: '0.9',
           },
           {
+            loc: `${siteMeta.baseUrl}/about`,
+            lastmod: new Date().toISOString(),
+            changefreq: 'monthly',
+            priority: '0.7',
+          },
+          {
             loc: `${siteMeta.baseUrl}/resume`,
             lastmod: new Date().toISOString(),
             changefreq: 'monthly',
@@ -61,12 +81,28 @@ export const Route = createFileRoute('/sitemap/xml')({
             lastmod: post.date,
             changefreq: 'monthly',
             priority: '0.7',
+            images: [
+              {
+                loc: post.image
+                  ? `${siteMeta.baseUrl}${post.image}`
+                  : `${siteMeta.baseUrl}/og/blog/${post.slug}`,
+                caption: post.title,
+              },
+            ] satisfies Array<SitemapImage>,
           })),
           ...projects.map((project) => ({
             loc: `${siteMeta.baseUrl}/projects/${project.slug}`,
             lastmod: project.date,
             changefreq: 'monthly',
             priority: '0.7',
+            images: [
+              {
+                loc: project.image
+                  ? `${siteMeta.baseUrl}${project.image}`
+                  : `${siteMeta.baseUrl}/og/projects/${project.slug}`,
+                caption: project.title,
+              },
+            ] satisfies Array<SitemapImage>,
           })),
         ]
 
@@ -78,10 +114,21 @@ export const Route = createFileRoute('/sitemap/xml')({
             .map(
               (url) =>
                 `  <url>\n` +
-                `    <loc>${url.loc}</loc>\n` +
+                `    <loc>${escapeXml(url.loc)}</loc>\n` +
                 `    <lastmod>${new Date(url.lastmod).toISOString()}</lastmod>\n` +
                 `    <changefreq>${url.changefreq}</changefreq>\n` +
                 `    <priority>${url.priority}</priority>\n` +
+                ((url.images || [])
+                  .map(
+                    (image) =>
+                      `    <image:image>\n` +
+                      `      <image:loc>${escapeXml(image.loc)}</image:loc>\n` +
+                      (image.caption
+                        ? `      <image:caption>${escapeXml(image.caption)}</image:caption>\n`
+                        : '') +
+                      `    </image:image>\n`,
+                  )
+                  .join('')) +
                 `  </url>`,
             )
             .join('\n') +
