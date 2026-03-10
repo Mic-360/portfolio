@@ -20,6 +20,7 @@ import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as SitemapXmlRouteImport } from './routes/sitemap.xml'
 import { Route as ProjectsSlugRouteImport } from './routes/projects/$slug'
 import { Route as OgSiteRouteImport } from './routes/og/site'
+import { Route as LlmsFullTxtRouteImport } from './routes/llms-full.txt'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as OgProjectsSlugRouteImport } from './routes/og/projects/$slug'
@@ -81,6 +82,11 @@ const OgSiteRoute = OgSiteRouteImport.update({
   path: '/og/site',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LlmsFullTxtRoute = LlmsFullTxtRouteImport.update({
+  id: '/llms-full/txt',
+  path: '/llms-full/txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/blog/$slug',
   path: '/blog/$slug',
@@ -116,6 +122,7 @@ export interface FileRoutesByFullPath {
   '/rss': typeof RssRoute
   '/api/health': typeof ApiHealthRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/llms-full/txt': typeof LlmsFullTxtRoute
   '/og/site': typeof OgSiteRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/sitemap/xml': typeof SitemapXmlRoute
@@ -134,6 +141,7 @@ export interface FileRoutesByTo {
   '/rss': typeof RssRoute
   '/api/health': typeof ApiHealthRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/llms-full/txt': typeof LlmsFullTxtRoute
   '/og/site': typeof OgSiteRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/sitemap/xml': typeof SitemapXmlRoute
@@ -153,6 +161,7 @@ export interface FileRoutesById {
   '/rss': typeof RssRoute
   '/api/health': typeof ApiHealthRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/llms-full/txt': typeof LlmsFullTxtRoute
   '/og/site': typeof OgSiteRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/sitemap/xml': typeof SitemapXmlRoute
@@ -173,6 +182,7 @@ export interface FileRouteTypes {
     | '/rss'
     | '/api/health'
     | '/blog/$slug'
+    | '/llms-full/txt'
     | '/og/site'
     | '/projects/$slug'
     | '/sitemap/xml'
@@ -191,6 +201,7 @@ export interface FileRouteTypes {
     | '/rss'
     | '/api/health'
     | '/blog/$slug'
+    | '/llms-full/txt'
     | '/og/site'
     | '/projects/$slug'
     | '/sitemap/xml'
@@ -209,6 +220,7 @@ export interface FileRouteTypes {
     | '/rss'
     | '/api/health'
     | '/blog/$slug'
+    | '/llms-full/txt'
     | '/og/site'
     | '/projects/$slug'
     | '/sitemap/xml'
@@ -228,6 +240,7 @@ export interface RootRouteChildren {
   RssRoute: typeof RssRoute
   ApiHealthRoute: typeof ApiHealthRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  LlmsFullTxtRoute: typeof LlmsFullTxtRoute
   OgSiteRoute: typeof OgSiteRoute
   ProjectsSlugRoute: typeof ProjectsSlugRoute
   SitemapXmlRoute: typeof SitemapXmlRoute
@@ -317,6 +330,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OgSiteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/llms-full/txt': {
+      id: '/llms-full/txt'
+      path: '/llms-full/txt'
+      fullPath: '/llms-full/txt'
+      preLoaderRoute: typeof LlmsFullTxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/$slug': {
       id: '/blog/$slug'
       path: '/blog/$slug'
@@ -364,6 +384,7 @@ const rootRouteChildren: RootRouteChildren = {
   RssRoute: RssRoute,
   ApiHealthRoute: ApiHealthRoute,
   BlogSlugRoute: BlogSlugRoute,
+  LlmsFullTxtRoute: LlmsFullTxtRoute,
   OgSiteRoute: OgSiteRoute,
   ProjectsSlugRoute: ProjectsSlugRoute,
   SitemapXmlRoute: SitemapXmlRoute,
