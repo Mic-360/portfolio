@@ -149,7 +149,10 @@ function ProjectsIndex() {
               {project.stack.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-1">
                   {project.stack.map((tech) => (
-                    <span key={tech} className="text-[9px] uppercase tracking-[0.2em] px-2 py-0.5 rounded-sm bg-muted/30 text-primary/60 border border-border/30">
+                    <span
+                      key={tech}
+                      className="text-[9px] uppercase tracking-[0.2em] px-2 py-0.5 rounded-sm bg-muted/30 text-primary/60 border border-border/30"
+                    >
                       {tech}
                     </span>
                   ))}
@@ -159,11 +162,15 @@ function ProjectsIndex() {
           </motion.div>
         ))}
       </div>
-      <Link to="/" className="group inline-flex items-center gap-1 italic text-muted-foreground hover:text-primary transition-colors duration-300 mb-2">
-        <span className="transform group-hover:-translate-x-1 transition-transform duration-300">←</span>
+      <Link
+        to="/"
+        className="group inline-flex items-center gap-1 italic text-muted-foreground hover:text-primary transition-colors duration-300 mb-2"
+      >
+        <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
+          ←
+        </span>
         back
       </Link>
     </motion.section>
   )
 }
-
