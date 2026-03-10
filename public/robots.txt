@@ -90,4 +90,4 @@ User-agent: TelegramBot
 Allow: /
 
 # Sitemaps
-Sitemap: https://bhaumicsingh.dev/sitemap.xml
+Sitemap: https://bhaumicsingh.dev/sitemap/xml
