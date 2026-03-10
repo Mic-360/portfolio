@@ -3,7 +3,13 @@ import handler from '@tanstack/react-start/server-entry'
 export default {
   async fetch(req: Request): Promise<Response> {
     const url = new URL(req.url)
-    
+    const pathname = url.pathname.toLowerCase()
+
+    if (pathname === '/llms-full.txt') {
+      url.pathname = '/llms-full/txt'
+      req = new Request(url.toString(), req)
+    }
+
     // 1. Domain Redirects
     if (url.hostname === 'www.bhaumicsingh.dev') {
       url.hostname = 'bhaumicsingh.dev'
