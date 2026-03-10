@@ -1,3 +1,4 @@
+import { env } from '@/env'
 import {
   HeadContent,
   Link,
@@ -28,8 +29,8 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     }
   },
 
-  head: () => ({
-    meta: [
+  head: () => {
+    const meta = [
       {
         charSet: 'utf-8',
       },
@@ -142,74 +143,105 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         name: 'format-detection',
         content: 'telephone=no',
       },
-    ],
-    links: [
-      {
-        rel: 'stylesheet',
-        href: appCss,
-      },
-      {
-        rel: 'icon',
-        type: 'image/x-icon',
-        href: '/favicon.ico',
-      },
-      {
-        rel: 'icon',
-        type: 'image/png',
-        sizes: '192x192',
-        href: '/web-app-manifest-192x192.png',
-      },
-      {
-        rel: 'icon',
-        type: 'image/png',
-        sizes: '512x512',
-        href: '/web-app-manifest-512x512.png',
-      },
-      {
-        rel: 'apple-touch-icon',
-        sizes: '180x180',
-        href: '/apple-touch-icon.png',
-      },
-      {
-        rel: 'manifest',
-        href: '/manifest.json',
-      },
-      {
-        rel: 'alternate',
-        type: 'application/rss+xml',
-        title: 'Bhaumic Singh — RSS Feed',
-        href: '/rss',
-      },
-      {
-        rel: 'me',
-        href: gravatar.profileUrl,
-      },
-      {
-        rel: 'me',
-        href: 'https://github.com/Mic-360',
-      },
-      {
-        rel: 'me',
-        href: 'https://x.com/bhaumicsingh',
-      },
-      {
-        rel: 'me',
-        href: 'https://www.linkedin.com/in/bhaumic/',
-      },
-      {
-        rel: 'author',
-        href: '/humans.txt',
-      },
-      {
-        rel: 'preconnect',
-        href: 'https://gravatar.com',
-      },
-      {
-        rel: 'dns-prefetch',
-        href: 'https://gravatar.com',
-      },
-    ],
-  }),
+    ]
+
+    if (env.VITE_GOOGLE_SITE_VERIFICATION) {
+      meta.push({
+        name: 'google-site-verification',
+        content: env.VITE_GOOGLE_SITE_VERIFICATION,
+      })
+    }
+
+    if (env.VITE_BING_SITE_VERIFICATION) {
+      meta.push({
+        name: 'msvalidate.01',
+        content: env.VITE_BING_SITE_VERIFICATION,
+      })
+    }
+
+    if (env.VITE_YANDEX_SITE_VERIFICATION) {
+      meta.push({
+        name: 'yandex-verification',
+        content: env.VITE_YANDEX_SITE_VERIFICATION,
+      })
+    }
+
+    return {
+      meta,
+      links: [
+        {
+          rel: 'stylesheet',
+          href: appCss,
+        },
+        {
+          rel: 'icon',
+          type: 'image/x-icon',
+          href: '/favicon.ico',
+        },
+        {
+          rel: 'icon',
+          type: 'image/png',
+          sizes: '192x192',
+          href: '/web-app-manifest-192x192.png',
+        },
+        {
+          rel: 'icon',
+          type: 'image/png',
+          sizes: '512x512',
+          href: '/web-app-manifest-512x512.png',
+        },
+        {
+          rel: 'apple-touch-icon',
+          sizes: '180x180',
+          href: '/apple-touch-icon.png',
+        },
+        {
+          rel: 'manifest',
+          href: '/manifest.json',
+        },
+        {
+          rel: 'alternate',
+          type: 'application/rss+xml',
+          title: 'Bhaumic Singh — RSS Feed',
+          href: '/rss',
+        },
+        {
+          rel: 'alternate',
+          type: 'text/plain',
+          title: 'Bhaumic Singh — LLMs full context',
+          href: '/llms-full.txt',
+        },
+        {
+          rel: 'me',
+          href: gravatar.profileUrl,
+        },
+        {
+          rel: 'me',
+          href: 'https://github.com/Mic-360',
+        },
+        {
+          rel: 'me',
+          href: 'https://x.com/bhaumicsingh',
+        },
+        {
+          rel: 'me',
+          href: 'https://www.linkedin.com/in/bhaumic/',
+        },
+        {
+          rel: 'author',
+          href: '/humans.txt',
+        },
+        {
+          rel: 'preconnect',
+          href: 'https://gravatar.com',
+        },
+        {
+          rel: 'dns-prefetch',
+          href: 'https://gravatar.com',
+        },
+      ],
+    }
+  },
 
   notFoundComponent: NotFound,
   shellComponent: RootDocument,
