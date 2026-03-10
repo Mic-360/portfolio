@@ -1,8 +1,8 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
 import PenIcon from '@/components/ui/pen-icon'
+import { siteMeta } from '@/config/site-data'
 import { getBlogIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
-import { siteMeta } from '@/config/site-data'
+import { Link, createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/blog/')({
   loader: async () => ({
@@ -42,6 +42,28 @@ import { motion } from 'motion/react'
 
 function BlogIndex() {
   const { posts } = Route.useLoaderData()
+  const collectionJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Blog',
+    description:
+      'Short, practical notes on building web and android apps, tools, systems, and experiments.',
+    url: `${siteMeta.baseUrl}/blog`,
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: posts.map((post, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        url: `${siteMeta.baseUrl}/blog/${post.slug}`,
+        name: post.title,
+        description: post.summary,
+        image: post.image
+          ? `${siteMeta.baseUrl}${post.image}`
+          : `${siteMeta.baseUrl}/og/blog/${post.slug}`,
+        datePublished: post.date,
+      })),
+    },
+  }
 
   const container = {
     hidden: { opacity: 0 },
@@ -65,14 +87,25 @@ function BlogIndex() {
       animate="show"
       className="flex flex-col gap-8"
     >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(collectionJsonLd),
+        }}
+      />
       <motion.header variants={item} className="flex flex-col gap-2">
         <div className="flex items-center justify-between mr-6">
           <h1 className="text-2xl font-bold italic">
             <PenIcon size={20} className="inline-block mr-2" />
             blog
           </h1>
-          <Link to="/" className="group inline-flex items-center gap-1 italic text-muted-foreground hover:text-primary transition-colors duration-300 mb-2">
-            <span className="transform group-hover:-translate-x-1 transition-transform duration-300">←</span>
+          <Link
+            to="/"
+            className="group inline-flex items-center gap-1 italic text-muted-foreground hover:text-primary transition-colors duration-300 mb-2"
+          >
+            <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
+              ←
+            </span>
             back
           </Link>
         </div>
