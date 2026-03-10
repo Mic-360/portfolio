@@ -1,14 +1,8 @@
-import { useState, useEffect } from 'react'
-import { Link, createFileRoute } from '@tanstack/react-router'
-import CalendarIcon from '@/components/ui/calendar-icon'
-import GravatarAvatar from '@/components/gravatar/GravatarAvatar'
-import { getBlogIndex, getProjectIndex } from '@/lib/content'
-import { formatDate } from '@/lib/format'
 import { Section, StatCard } from '@/components/functions'
-import { getHealthData } from '@/lib/health'
-import { hashEmail } from '@/lib/gravatar'
-import { gravatarConfig } from '@/config/gravatar'
 import GitHubHeatmap from '@/components/GitHubHeatmap'
+import GravatarAvatar from '@/components/gravatar/GravatarAvatar'
+import CalendarIcon from '@/components/ui/calendar-icon'
+import { gravatarConfig } from '@/config/gravatar'
 import {
   contactLinks,
   gravatar,
@@ -17,6 +11,12 @@ import {
   siteInfo,
   siteMeta,
 } from '@/config/site-data'
+import { getBlogIndex, getProjectIndex } from '@/lib/content'
+import { formatDate } from '@/lib/format'
+import { hashEmail } from '@/lib/gravatar'
+import { getHealthData } from '@/lib/health'
+import { Link, createFileRoute } from '@tanstack/react-router'
+import { useEffect, useState } from 'react'
 
 export const Route = createFileRoute('/')({
   loader: async () => {
