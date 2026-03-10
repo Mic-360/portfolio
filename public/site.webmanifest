@@ -1,6 +1,6 @@
 {
-  "name": "Bhaumic Singh",
-  "short_name": "Bhaumic",
+  "name": "Bhaumic Singh — Software Engineer",
+  "short_name": "Bhaumic Singh",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -15,7 +15,7 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#87ae73",
-  "background_color": "#87ae73",
+  "theme_color": "#111210",
+  "background_color": "#111210",
   "display": "standalone"
 }

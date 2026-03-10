@@ -34,10 +34,14 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "theme_color": "#1e1e2e",
-  "background_color": "#1e1e2e",
+  "theme_color": "#111210",
+  "background_color": "#111210",
   "lang": "en",
   "dir": "ltr",
-  "categories": ["portfolio", "technology", "software"],
+  "categories": [
+    "portfolio",
+    "technology",
+    "software"
+  ],
   "id": "bhaumic-singh-portfolio"
 }
