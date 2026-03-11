@@ -104,7 +104,7 @@ function Sparkline({
         initial={{ pathLength: 0 }}
         whileInView={{ pathLength: 1 }}
         viewport={{ once: true }}
-        transition={{ duration: 1.5, ease: "easeInOut" }}
+        transition={{ duration: 1.5, ease: 'easeInOut' }}
         fill="none"
         stroke={color}
         strokeWidth="1.5"
@@ -154,9 +154,9 @@ function StatCard({
   else
     mainValue = processedData.length
       ? [...processedData].sort(
-        (a, b) =>
-          new Date(b.endDate).getTime() - new Date(a.endDate).getTime(),
-      )[0].value
+          (a, b) =>
+            new Date(b.endDate).getTime() - new Date(a.endDate).getTime(),
+        )[0].value
       : 0
 
   return (
