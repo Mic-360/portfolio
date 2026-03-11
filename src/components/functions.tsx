@@ -4,6 +4,7 @@ import HealthstatIcon from '@/components/ui/healthstat-icon'
 import LayersIcon from '@/components/ui/layers-icon'
 import PenIcon from '@/components/ui/pen-icon'
 import PreviousIcon from '@/components/ui/previous-icon'
+import { Link } from '@tanstack/react-router'
 
 function Section({
   title,
@@ -16,21 +17,31 @@ function Section({
     <motion.section
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
       className="flex flex-col gap-2 my-4"
     >
       <h2 className="font-semibold italic text-2xl underline underline-offset-2 decoration-primary flex items-center">
         {title === 'blogs' ? (
-          <>
-            <PenIcon size={20} className="inline-block mr-2" />
-            {title}
-          </>
+          <p className="flex items-baseline justify-between w-full gap-2">
+            <span>
+              <PenIcon size={20} className="inline-block mr-2" />
+              {title}
+            </span>
+            <Link to="/blog" className="text-xs pr-2">
+              view all
+            </Link>
+          </p>
         ) : title === 'projects' ? (
-          <>
-            <LayersIcon size={24} className="inline-block mr-2" />
-            {title}
-          </>
+          <p className="flex items-baseline justify-between w-full gap-2">
+            <span>
+              <LayersIcon size={24} className="inline-block mr-2" />
+              {title}
+            </span>
+            <Link to="/projects" className="text-xs pr-2">
+              view all
+            </Link>
+          </p>
         ) : title === 'current' ? (
           <>
             <CurrentIcon size={24} className="inline-block mr-2" />
@@ -50,7 +61,9 @@ function Section({
           title
         )}
       </h2>
-      {title !== '' && <div className="animus-sync-bar mb-2" />}
+      {title !== '' && title !== 'contact' && (
+        <div className="animus-sync-bar mb-2" />
+      )}
       {children}
     </motion.section>
   )
