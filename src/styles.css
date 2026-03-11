@@ -179,6 +179,15 @@
   }
 }
 
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* ═══════════════════════════════════════════════════════
    Animus Interface — Assassin's Creed Inspired
    ═══════════════════════════════════════════════════════ */
