@@ -2,6 +2,7 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { Section, StatCard } from '@/components/functions'
+import { KeyboardHint } from '@/components/CommandMenu'
 import GitHubHeatmap from '@/components/GitHubHeatmap'
 import GravatarAvatar from '@/components/gravatar/GravatarAvatar'
 import CalendarIcon from '@/components/ui/calendar-icon'
@@ -158,6 +159,7 @@ function App() {
             {siteInfo.buildLine}
           </span>
         </motion.p>
+        <KeyboardHint />
       </motion.section>
 
       <motion.div variants={item}>
