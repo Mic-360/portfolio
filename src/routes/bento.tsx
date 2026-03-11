@@ -54,7 +54,7 @@ function BentoPage() {
       <Link to="/" className="mr-2 inline-flex items-center gap-1 italic">
         ← back
       </Link>
-      <div className="relative w-full overflow-hidden rounded-xl border border-border bg-card shadow-2xl h-[800vh]">
+      <div className="relative w-full overflow-hidden rounded-xl border border-border bg-card shadow-2xl min-h-screen">
         <iframe
           src="https://avely.me/bhaumic"
           className="absolute inset-0 w-full h-full border-0 [zoom:1] md:[zoom:1.5]"
