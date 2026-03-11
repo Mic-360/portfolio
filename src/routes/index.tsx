@@ -253,68 +253,90 @@ function App() {
 
       <motion.div variants={item}>
         <Section title="blogs">
-          <div className="flex flex-col gap-4">
-            {posts.slice(0, 6).map((post) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {posts.slice(0, 6).map((post: BlogMeta) => (
               <Link
                 key={post.slug}
                 to="/blog/$slug"
                 params={{ slug: post.slug }}
-                className="group flex flex-col gap-1 transition-transform duration-300 hover:translate-x-1"
+                className="group ac-game-card animus-corner bg-card/15 border border-border/30 hover:border-primary/50 transition-all duration-300"
               >
-                <div className="flex flex-wrap items-center gap-2 text-base uppercase tracking-[0.2em] text-primary">
-                  <span className="text-[10px] text-secondary-foreground">
+                <div className="flex flex-col gap-1.5">
+                  <span className="text-[9px] text-primary/80 font-mono uppercase tracking-[0.2em]">
                     {formatDate(post.date)}
                   </span>
-                  <span className="h-px w-8 bg-primary/60"></span>
-                  <span>{post.title}</span>
+                  <h3 className="text-base font-bold tracking-tight text-foreground group-hover:text-primary transition-colors">
+                    {post.title}
+                  </h3>
+                  <p className="text-[10px] text-secondary-foreground line-clamp-2 italic leading-relaxed">
+                    {post.summary}
+                  </p>
+                  {post.tags && post.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-1">
+                      {post.tags.slice(0, 3).map((tag) => (
+                        <span key={tag} className="text-[9px] text-muted-foreground font-mono tracking-tighter uppercase">
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                <p className="text-xs text-secondary-foreground group-hover:text-foreground">
-                  {post.summary}
-                </p>
               </Link>
             ))}
           </div>
-          <Link
-            to="/blog"
-            className="text-md uppercase tracking-[0.2em] text-white underline decoration-primary underline-offset-4 mt-2"
-          >
-            Read all blogs
-          </Link>
         </Section>
       </motion.div>
 
       <motion.div variants={item}>
         <Section title="projects">
-          <div className="flex flex-col-reverse md:flex-row items-start justify-between gap-4">
-            <div className="space-y-6">
-              <div className="flex flex-col gap-4">
-                {projects.slice(0, 4).map((project) => (
-                  <Link
-                    key={project.slug}
-                    to="/projects/$slug"
-                    params={{ slug: project.slug }}
-                    className="group flex flex-col gap-1 transition-transform duration-300 hover:translate-x-1"
-                  >
-                    <div className="flex flex-wrap items-center gap-2 text-base uppercase tracking-[0.2em] text-primary">
-                      <span>{project.title}</span>
-                      <span className="h-px w-4 sm:w-8 bg-primary/60"></span>
-                      <span className="text-[10px] text-secondary-foreground">
-                        {formatDate(project.date)}
-                      </span>
-                    </div>
-                    <p className="text-xs text-secondary-foreground group-hover:text-foreground">
-                      {project.summary}
-                    </p>
-                  </Link>
-                ))}
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {projects.slice(0, 4).map((project: ProjectMeta) => (
               <Link
-                to="/projects"
-                className="text-md uppercase tracking-[0.2em] text-white underline decoration-primary underline-offset-4"
+                key={project.slug}
+                to="/projects/$slug"
+                params={{ slug: project.slug }}
+                className="group animus-corner relative h-56 flex flex-col justify-end p-4 rounded-lg border border-border/20 bg-card/10 hover:border-primary/50 transition-all duration-500 overflow-hidden"
               >
-                View all projects
+                {project.image && (
+                  <>
+                    <img 
+                      src={project.image} 
+                      alt={project.title} 
+                      className="absolute inset-0 w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-60 transition-all duration-700 group-hover:scale-105" 
+                    />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent" />
+                  </>
+                )}
+                
+                <div className="relative z-10 flex flex-col gap-2">
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-lg font-bold tracking-tight text-white group-hover:text-primary transition-colors">
+                      {project.title}
+                    </h3>
+                    <span className="text-[9px] text-primary font-mono uppercase tracking-[0.2em]">
+                      {formatDate(project.date)}
+                    </span>
+                  </div>
+                  
+                  <p className="text-xs text-white/70 line-clamp-2 leading-relaxed italic">
+                    {project.summary}
+                  </p>
+                  
+                  {project.stack && project.stack.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mt-1">
+                      {project.stack.slice(0, 4).map((tech) => (
+                        <span 
+                          key={tech} 
+                          className="text-[8px] px-1.5 py-0.5 rounded-xs bg-white/10 text-white/80 border border-white/20 font-mono tracking-tighter backdrop-blur-xs"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </Link>
-            </div>
+            ))}
           </div>
         </Section>
       </motion.div>
