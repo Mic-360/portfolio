@@ -15,10 +15,10 @@ import {
   siteInfo,
   siteMeta,
 } from '@/config/site-data'
-import { getBlogIndex, getProjectIndex } from '@/lib/content'
+import { BlogMeta, ProjectMeta, getBlogIndex, getProjectIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
 import { hashEmail } from '@/lib/gravatar'
-import { getHealthData } from '@/lib/health'
+import { HealthSample, getHealthData } from '@/lib/health'
 
 export const Route = createFileRoute('/')({
   loader: async () => {
@@ -76,14 +76,14 @@ function formatMetricValue(value: number, digits = 0) {
 
 function sanitizeSamples<T extends { value: number | string }>(
   samples?: Array<T>,
-) {
+): Array<T & { value: number }> {
   return (samples || []).map((sample) => {
     const numericValue = Number(sample.value)
 
     return {
       ...sample,
       value: Number.isFinite(numericValue) ? numericValue : 0,
-    }
+    } as T & { value: number }
   })
 }
 
@@ -359,7 +359,7 @@ function App() {
             />
             <StatCard
               label="heart rate"
-              samples={sanitizeSamples(health.heartRate).map((s) => {
+              samples={sanitizeSamples<HealthSample>(health.heartRate).map((s) => {
                 const start = new Date(s.startDate).getTime()
                 const end = new Date(s.endDate).getTime()
                 const minutes = (end - start) / (1000 * 180)
@@ -367,7 +367,7 @@ function App() {
                   ...s,
                   value:
                     minutes > 0 ? Number(s.value) / minutes : Number(s.value),
-                }
+                } as HealthSample & { value: number }
               })}
               unit="bpm"
               type="avg"
