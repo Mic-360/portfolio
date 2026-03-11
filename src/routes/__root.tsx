@@ -7,6 +7,8 @@ import {
 import { FeedbackHandler } from '../components/FeedbackHandler'
 
 import Footer from '../components/Footer'
+import { CommandMenu } from '../components/CommandMenu'
+import { FloatingNavDock } from '../components/FloatingNavDock'
 import { gravatar, siteImages, siteInfo, siteMeta } from '../config/site-data'
 
 import appCss from '../styles.css?url'
@@ -405,10 +407,13 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body className="bg-background text-foreground antialiased">
         <FeedbackHandler />
+        <CommandMenu />
         <main className="mx-auto w-full max-w-2xl p-4 text-sm lowercase">
           {children}
         </main>
         <Footer />
+        <div className="h-20" />
+        <FloatingNavDock />
         <Scripts />
       </body>
     </html>
