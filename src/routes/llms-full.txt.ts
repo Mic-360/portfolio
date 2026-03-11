@@ -36,7 +36,6 @@ export const Route = createFileRoute('/llms-full/txt')({
 - Company: ${siteInfo.currentCompany}
 - Location: ${siteInfo.location}
 - Website: ${siteMeta.baseUrl}
-- Email: ${siteInfo.email}
 
 ## Expertise
 

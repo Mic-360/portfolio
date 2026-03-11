@@ -20,7 +20,6 @@ export const siteInfo = {
   interests:
     'I enjoy building, deploying, and designing experiments with code and bleeding edge technology — and occasional anime binge.',
   calendlyUrl: 'https://calendly.com/bhaumic/connect-with-bhaumic',
-  email: 'bhaumiksingh2000@gmail.com',
   githubUsername: 'Mic-360',
 }
 
