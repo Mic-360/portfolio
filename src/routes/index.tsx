@@ -76,15 +76,8 @@ function formatMetricValue(value: number, digits = 0) {
 
 function sanitizeSamples<T extends { value: number | string }>(
   samples?: Array<T>,
-): Array<T & { value: number }> {
-  return (samples || []).map((sample) => {
-    const numericValue = Number(sample.value)
-
-    return {
-      ...sample,
-      value: Number.isFinite(numericValue) ? numericValue : 0,
-    } as T & { value: number }
-  })
+): Array<T & { value: number | string }> {
+  return (samples || [])
 }
 
 
@@ -383,13 +376,18 @@ function App() {
             <StatCard
               label="heart rate"
               samples={sanitizeSamples<HealthSample>(health.heartRate).map((s) => {
+                const val = Number(s.value)
                 const start = new Date(s.startDate).getTime()
                 const end = new Date(s.endDate).getTime()
-                const minutes = (end - start) / (1000 * 180)
+                const minutes = (end - start) / (1000 * 60)
+                
+                // If value is > 500, it's likely total beats in that period, calculate BPM
+                // Otherwise treat as raw BPM
+                const bpm = val > 300 && minutes > 0 ? val / minutes : val
+                
                 return {
                   ...s,
-                  value:
-                    minutes > 0 ? Number(s.value) / minutes : Number(s.value),
+                  value: bpm,
                 } as HealthSample & { value: number }
               })}
               unit="bpm"

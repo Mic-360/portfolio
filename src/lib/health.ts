@@ -43,3 +43,37 @@ export const updateHealthData = createServerFn({ method: 'POST' })
     const { writeHealthDataInternal } = await import('./health.server')
     return writeHealthDataInternal(data)
   })
+
+// ── Helpers ──────────────────────────────────────────────────────────
+
+/**
+ * Aggregates granular health samples by day for cleaner visualization.
+ */
+export function aggregateByDay(
+  samples: HealthSample[] = [],
+  type: 'sum' | 'avg' = 'sum',
+): Array<HealthSample & { value: number }> {
+  if (!samples.length) return []
+
+  const byDay: Record<string, { total: number; count: number }> = {}
+
+  samples.forEach((s) => {
+    const day = s.startDate.split('T')[0]
+    const val = Number(s.value)
+    if (isNaN(val)) return
+
+    if (!byDay[day]) {
+      byDay[day] = { total: 0, count: 0 }
+    }
+    byDay[day].total += val
+    byDay[day].count++
+  })
+
+  return Object.entries(byDay)
+    .sort(([dateA], [dateB]) => dateA.localeCompare(dateB))
+    .map(([date, { total, count }]) => ({
+      startDate: date,
+      endDate: date,
+      value: type === 'sum' ? total : total / count,
+    }))
+}

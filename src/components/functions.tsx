@@ -71,48 +71,84 @@ function Section({
 
 function Sparkline({
   data,
-  color = 'currentColor',
-  height = 32,
+  color = 'var(--primary)',
+  height = 48,
 }: {
   data: Array<{ value: number }>
   color?: string
   height?: number
 }) {
-  if (data.length < 2) return <div style={{ height }} />
+  const width = 100
+  if (data.length === 0) return <div style={{ height }} className="h-12 w-full bg-primary/2 opacity-20 border border-primary/10 rounded-xs flex items-center justify-center text-[8px] uppercase tracking-tighter">no signal</div>
 
   const values = data.map((d) => d.value)
   const min = Math.min(...values)
   const max = Math.max(...values)
   const range = max - min || 1
 
-  const width = 100
-  const points = values
-    .map((v, i) => {
-      const x = (i / (values.length - 1)) * width
-      const y = height - ((v - min) / range) * height
-      return `${x},${y}`
-    })
-    .join(' ')
+  const pad = 2
+  const points = data.length === 1 
+    ? [{ x: 0, y: height/2 }, { x: width, y: height/2 }]
+    : values.map((v, i) => {
+        const x = (i / (values.length - 1)) * width
+        const y = height - ((v - min) / range) * (height - pad * 2) - pad
+        return { x, y }
+      })
+
+  const linePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x},${p.y}`).join(' ')
 
   return (
-    <svg
-      viewBox={`0 0 ${width} ${height}`}
-      className="w-full h-8 overflow-visible opacity-50 group-hover:opacity-100 transition-opacity"
-      preserveAspectRatio="none"
-    >
-      <motion.polyline
-        initial={{ pathLength: 0 }}
-        whileInView={{ pathLength: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1.5, ease: 'easeInOut' }}
-        fill="none"
-        stroke={color}
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        points={points}
+    <div className="relative overflow-hidden bg-black/40 border border-primary/20 rounded-xs group-hover:border-primary/40 transition-colors">
+      {/* Grid Pattern */}
+      <div className="absolute inset-0 z-0 opacity-10 pointer-events-none" 
+        style={{
+          backgroundImage: `linear-gradient(var(--primary) 1px, transparent 1px), linear-gradient(90deg, var(--primary) 1px, transparent 1px)`,
+          backgroundSize: '10% 25%'
+        }} 
       />
-    </svg>
+      
+      <svg
+        viewBox={`0 0 ${width} ${height}`}
+        className="relative z-10 w-full h-12 overflow-visible transition-all duration-500"
+        preserveAspectRatio="none"
+      >
+        <motion.path
+          initial={{ pathLength: 0, opacity: 0 }}
+          whileInView={{ pathLength: 1, opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.5, ease: 'linear' }}
+          fill="none"
+          stroke={color}
+          strokeWidth="1"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d={linePath}
+          className="drop-shadow-[0_0_2px_var(--primary)]"
+        />
+        
+        {/* Scanning Bit */}
+        <motion.circle
+          initial={{ opacity: 0 }}
+          whileInView={{ 
+            opacity: [0, 1, 0],
+            cx: points.map(p => p.x),
+            cy: points.map(p => p.y)
+          }}
+          viewport={{ once: true }}
+          transition={{ 
+            duration: 1.5, 
+            ease: 'linear',
+            opacity: { duration: 0.2 }
+          }}
+          r="1.5"
+          fill={color}
+          className="drop-shadow-[0_0_5px_var(--primary)]"
+        />
+      </svg>
+      
+      {/* CRT Scanline Effect */}
+      <div className="absolute inset-0 pointer-events-none bg-linear-to-b from-transparent via-primary/5 to-transparent h-[2px] w-full animate-scanline opacity-10" />
+    </div>
   )
 }
 
@@ -143,6 +179,10 @@ function StatCard({
     return { ...s, value: isNaN(val) ? 0 : val }
   })
 
+  // Take only last 20 samples for cleaner graph if there are too many
+  // Take useful window for the instrumental look
+  const graphData = processedData.slice(-40)
+
   const values = processedData.map((s) => s.value)
 
   let mainValue = 0
@@ -156,26 +196,41 @@ function StatCard({
       ? [...processedData].sort(
           (a, b) =>
             new Date(b.endDate).getTime() - new Date(a.endDate).getTime(),
-        )[0].value
+          )[0].value
       : 0
 
   return (
     <motion.div
       whileHover={{ y: -2, transition: { duration: 0.2 } }}
-      className="group animus-corner flex flex-col gap-2 p-2 rounded-lg border border-border/50 hover:border-primary/50 transition-colors"
+      className="group flex flex-col gap-3 p-3 rounded-xs border border-primary/20 bg-background/50 hover:bg-primary/5 transition-all duration-500 relative overflow-hidden"
     >
-      <div className="flex justify-between items-baseline">
-        <span className="text-[10px] uppercase tracking-widest text-primary">
-          {label}
-        </span>
-        <span className="text-xs font-medium">
-          {format(mainValue)}{' '}
-          <span className="text-[10px] text-muted-foreground font-normal">
-            {unit}
+      {/* Decorative HUD corners */}
+      <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-primary/40 group-hover:border-primary transition-colors" />
+      <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-primary/40 group-hover:border-primary transition-colors" />
+      <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-primary/40 group-hover:border-primary transition-colors" />
+      <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-primary/40 group-hover:border-primary transition-colors" />
+
+      <div className="flex justify-between items-start z-10">
+        <div className="flex flex-col gap-0.5">
+          <span className="text-[10px] uppercase font-mono tracking-[0.2em] text-primary/60 group-hover:text-primary/90 transition-colors">
+            {label}
           </span>
-        </span>
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-2xl font-black italic tracking-tighter tabular-nums drop-shadow-[0_0_5px_rgba(122,154,101,0.2)]">
+              {format(mainValue)}
+            </span>
+            <span className="text-[10px] uppercase font-mono tracking-tight text-muted-foreground">
+              {unit}
+            </span>
+          </div>
+        </div>
+        <div className="flex flex-col items-end opacity-40 group-hover:opacity-100 transition-opacity">
+          <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+          <span className="text-[6px] font-mono mt-1">REC</span>
+        </div>
       </div>
-      <Sparkline data={processedData} color="var(--primary)" />
+      
+      <Sparkline data={graphData} color="var(--primary)" />
     </motion.div>
   )
 }
