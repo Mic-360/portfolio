@@ -117,15 +117,18 @@ function ProjectsIndex() {
           __html: JSON.stringify(breadcrumbJsonLd),
         }}
       />
-      <motion.header variants={item} className="flex flex-col gap-2">
-        <div className="flex items-center justify-between mr-6">
-          <h1 className="text-2xl font-bold italic">
-            <LayersIcon size={20} className="inline-block mr-2" />
-            projects
-          </h1>
+      <motion.header variants={item} className="flex flex-col gap-4 mb-2">
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-1">
+            <h1 className="text-3xl font-bold tracking-tight bg-linear-to-r from-foreground to-foreground/70 bg-clip-text text-transparent italic">
+              <LayersIcon size={24} className="inline-block mr-3 text-primary" />
+              projects
+            </h1>
+            <div className="h-0.5 w-12 bg-primary rounded-full" />
+          </div>
           <Link
             to="/"
-            className="group inline-flex items-center gap-1 italic text-muted-foreground hover:text-primary transition-colors duration-300 mb-2"
+            className="animus-corner group px-4 py-1 inline-flex items-center gap-2 italic text-muted-foreground hover:text-primary transition-all duration-500"
           >
             <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
               ←
@@ -133,7 +136,7 @@ function ProjectsIndex() {
             back
           </Link>
         </div>
-        <p className="text-muted-foreground">
+        <p className="text-muted-foreground leading-relaxed max-w-xl">
           a short list of work across products with full‑stack builds of web and
           android apps using AI or integrating AI.
         </p>
@@ -144,39 +147,47 @@ function ProjectsIndex() {
           <motion.div
             key={project.slug}
             variants={item}
-            className="flex flex-col sm:flex-row items-center gap-6"
+            className="flex flex-col sm:flex-row items-stretch gap-6"
           >
             <motion.div
               whileHover={{ scale: 1.02 }}
-              className="w-full sm:w-64 h-44 shrink-0 overflow-hidden rounded-lg shadow-md"
+              className="animus-corner w-full sm:w-64 h-auto shrink-0 overflow-hidden rounded-lg shadow-xl relative group/img"
             >
               <img
                 src={project.image}
                 alt={project.title}
-                className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-110"
               />
+              <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover/img:opacity-100 transition-opacity pointer-events-none" />
             </motion.div>
+            
             <Link
               to="/projects/$slug"
               params={{ slug: project.slug }}
-              className="group flex flex-col gap-2 flex-1"
+              className="ac-game-card animus-scanlines group flex flex-col gap-3 flex-1 p-4 -mx-4 rounded-lg transition-all"
             >
-              <div className="flex flex-wrap items-center gap-3 text-base uppercase tracking-[0.2em] text-primary font-bold">
-                <span>{project.title}</span>
-                <span className="h-px w-6 bg-primary/40 group-hover:bg-primary transition-colors"></span>
-                <span className="text-[10px] text-muted-foreground font-normal">
+              <div className="flex items-center gap-3">
+                <div className="ac-game-era bg-primary" />
+                <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
                   {formatDate(project.date)}
                 </span>
+                <div className="flex-1 animus-sync-bar opacity-20 group-hover:opacity-60 transition-opacity" />
               </div>
-              <p className="text-sm text-muted-foreground group-hover:text-foreground transition-colors leading-relaxed">
+              
+              <h2 className="text-xl font-bold uppercase tracking-wider text-primary group-hover:text-foreground transition-colors duration-300">
+                {project.title}
+              </h2>
+              
+              <p className="text-sm text-muted-foreground/80 group-hover:text-foreground/90 transition-colors leading-relaxed">
                 {project.summary}
               </p>
+
               {project.stack.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-1">
+                <div className="flex flex-wrap gap-2 mt-auto">
                   {project.stack.map((tech) => (
                     <span
                       key={tech}
-                      className="text-[9px] uppercase tracking-[0.2em] px-2 py-0.5 rounded-sm bg-muted/30 text-primary/60 border border-border/30"
+                      className="text-[9px] uppercase tracking-[0.2em] px-2 py-0.5 rounded-sm border border-primary/20 bg-primary/5 text-primary/70 group-hover:border-primary/40 group-hover:bg-primary/10 transition-all"
                     >
                       {tech}
                     </span>
