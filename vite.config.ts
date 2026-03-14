@@ -15,6 +15,8 @@ const config = defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
+      'use-sync-external-store/shim/with-selector':
+        'use-sync-external-store/shim/with-selector.js',
     },
   },
   plugins: [
