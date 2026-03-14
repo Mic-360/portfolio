@@ -4,6 +4,7 @@ import {
   Scripts,
   createRootRouteWithContext,
 } from '@tanstack/react-router'
+import React, { useEffect } from 'react'
 import { FeedbackHandler } from '../components/FeedbackHandler'
 
 import Footer from '../components/Footer'
@@ -314,6 +315,23 @@ function NotFound() {
 }
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    if (
+      typeof window !== 'undefined' &&
+      !navigator.userAgent.includes('Nitro')
+    ) {
+      const cat = `
+   |\\__/,|   (\`\\
+ _.|o o  |_   ) )
+-(((---(((--------`
+      console.log(cat)
+      console.log('Hi there! 👋 You found the easter egg!')
+      console.log(
+        `Looking for a developer? Let's talk: ${siteInfo.calendlyUrl}`,
+      )
+    }
+  }, [])
+
   const websiteJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
