@@ -118,15 +118,18 @@ function BlogIndex() {
           __html: JSON.stringify(breadcrumbJsonLd),
         }}
       />
-      <motion.header variants={item} className="flex flex-col gap-2">
-        <div className="flex items-center justify-between mr-6">
-          <h1 className="text-2xl font-bold italic">
-            <PenIcon size={20} className="inline-block mr-2" />
-            blog
-          </h1>
+      <motion.header variants={item} className="flex flex-col gap-4 mb-2">
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-1">
+            <h1 className="text-3xl font-bold tracking-tight bg-linear-to-r from-foreground to-foreground/70 bg-clip-text text-transparent italic">
+              <PenIcon size={24} className="inline-block mr-3 text-primary" />
+              blog
+            </h1>
+            <div className="h-0.5 w-12 bg-primary rounded-full" />
+          </div>
           <Link
             to="/"
-            className="group inline-flex items-center gap-1 italic text-muted-foreground hover:text-primary transition-colors duration-300 mb-2"
+            className="animus-corner group px-4 py-1 inline-flex items-center gap-2 italic text-muted-foreground hover:text-primary transition-all duration-500"
           >
             <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
               ←
@@ -135,36 +138,41 @@ function BlogIndex() {
           </Link>
         </div>
 
-        <p className="text-muted-foreground">
+        <p className="text-muted-foreground leading-relaxed max-w-xl">
           short, practical notes on building web and android apps, tools,
           systems, and experiments.
         </p>
       </motion.header>
 
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-6">
         {posts.map((post) => (
           <motion.div key={post.slug} variants={item}>
             <Link
               to="/blog/$slug"
               params={{ slug: post.slug }}
-              className="group flex flex-col gap-1 transition-transform duration-300 hover:translate-x-1"
+              className="ac-game-card animus-scanlines group flex flex-col gap-2 p-4 -mx-4 rounded-lg transition-all"
             >
-              <div className="flex flex-wrap items-center gap-3 text-base uppercase tracking-[0.2em] text-primary font-bold">
-                <span className="text-[10px] text-muted-foreground font-normal">
+              <div className="flex items-center gap-3">
+                <div className="ac-game-era bg-primary" />
+                <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
                   {formatDate(post.date)}
                 </span>
-                <span className="h-px w-8 bg-primary/40 group-hover:bg-primary transition-colors"></span>
-                <span>{post.title}</span>
               </div>
-              <p className="text-sm text-muted-foreground group-hover:text-foreground transition-colors leading-relaxed">
+              
+              <h2 className="text-xl font-bold uppercase tracking-wider text-primary group-hover:text-foreground transition-colors duration-300">
+                {post.title}
+              </h2>
+              
+              <p className="text-sm text-muted-foreground/80 group-hover:text-foreground/90 transition-colors leading-relaxed">
                 {post.summary}
               </p>
+
               {(post.categories.length > 0 || post.tags.length > 0) && (
-                <div className="flex flex-wrap gap-2 mt-1">
+                <div className="flex flex-wrap gap-2 mt-2">
                   {[...post.categories, ...post.tags].map((tag) => (
                     <span
                       key={tag}
-                      className="text-[9px] uppercase tracking-[0.2em] px-2 py-0.5 rounded-sm bg-muted/30 text-primary/60"
+                      className="text-[9px] uppercase tracking-[0.2em] px-2 py-0.5 rounded-sm border border-primary/20 bg-primary/5 text-primary/70 group-hover:border-primary/40 group-hover:bg-primary/10 transition-all"
                     >
                       {tag}
                     </span>
