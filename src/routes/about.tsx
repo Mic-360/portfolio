@@ -154,9 +154,9 @@ function AboutPage() {
 
           <div className="flex flex-col gap-6">
             <div className="space-y-1">
-              <h2 className="text-3xl sm:text-4xl font-black tracking-tighter text-foreground uppercase">
+              <h1 className="text-3xl sm:text-4xl font-black tracking-tighter text-foreground uppercase">
                 {profile.display_name}
-              </h2>
+              </h1>
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
                 {profile.job_title && (
                   <p className="text-md font-semibold text-primary italic">

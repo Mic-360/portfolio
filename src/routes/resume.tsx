@@ -71,6 +71,25 @@ function ResumePage() {
     show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   }
 
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: siteMeta.baseUrl,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Resume',
+        item: `${siteMeta.baseUrl}/resume`,
+      },
+    ],
+  }
+
   return (
     <motion.article
       variants={container}
@@ -78,6 +97,12 @@ function ResumePage() {
       animate="show"
       className="flex flex-col gap-10"
     >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLd),
+        }}
+      />
       <motion.div
         variants={item}
         className="latex-content flex flex-col gap-1 text-foreground leading-relaxed"

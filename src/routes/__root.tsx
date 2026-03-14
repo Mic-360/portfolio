@@ -271,6 +271,19 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         },
         {
           rel: 'preconnect',
+          href: 'https://fonts.googleapis.com',
+        },
+        {
+          rel: 'preconnect',
+          href: 'https://fonts.gstatic.com',
+          crossOrigin: 'anonymous',
+        },
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&family=Fira+Code:wght@400;500&display=swap',
+        },
+        {
+          rel: 'preconnect',
           href: 'https://gravatar.com',
         },
         {
