@@ -38,7 +38,7 @@ export const siteMeta = {
     gravatarDomain: 'https://bhaumicsingh.bio',
   },
   keywords:
-    'Bhaumic Singh, software engineer, full stack developer, web developer, android developer, AI engineer, cloud engineer, DevOps, React, TypeScript, Flutter, Dart, Go, Rust, Python, portfolio',
+    'Bhaumic Singh, React Developer, Next.js Expert, Flutter Developer, Rust Engineer, Full Stack Software Engineer, Software Engineer India, bleeding edge products, android developer, AI engineer, cloud engineer, DevOps',
 }
 
 export const siteImages = {

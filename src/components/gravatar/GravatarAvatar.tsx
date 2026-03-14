@@ -14,6 +14,8 @@ interface GravatarAvatarProps {
     alt?: string
     /** Additional CSS classes. */
     className?: string
+    /** Rel attribute for the image. */
+    rel?: string
 }
 
 /**
@@ -25,6 +27,7 @@ export default function GravatarAvatar({
     fallback = gravatarConfig.defaults.defaultImage,
     alt = 'Avatar',
     className,
+    rel,
 }: GravatarAvatarProps) {
     const options: AvatarOptions = {
         size,
@@ -48,6 +51,7 @@ export default function GravatarAvatar({
                 'rounded-full border border-primary/40 shadow-md',
                 className,
             )}
+            rel={rel}
         />
     )
 }

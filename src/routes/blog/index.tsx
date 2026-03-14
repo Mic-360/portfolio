@@ -65,6 +65,25 @@ function BlogIndex() {
     },
   }
 
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: siteMeta.baseUrl,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Blog',
+        item: `${siteMeta.baseUrl}/blog`,
+      },
+    ],
+  }
+
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -91,6 +110,12 @@ function BlogIndex() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(collectionJsonLd),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLd),
         }}
       />
       <motion.header variants={item} className="flex flex-col gap-2">

@@ -69,7 +69,7 @@ export default function Footer() {
                   target={link.url.startsWith('http') ? '_blank' : undefined}
                   rel={
                     link.url.startsWith('http')
-                      ? 'noopener noreferrer'
+                      ? 'noopener noreferrer me'
                       : undefined
                   }
                   whileHover={{ y: -3, scale: 1.1 }}

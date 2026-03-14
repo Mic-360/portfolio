@@ -154,6 +154,7 @@ function App() {
                 size={48}
                 alt={`${siteInfo.name} — Profile Photo`}
                 className="w-12 h-12"
+                rel="me"
               />
             </a>
             <div className="flex flex-col gap-1">
@@ -434,6 +435,7 @@ function App() {
                 <Link
                   to={link.url}
                   className="underline decoration-primary underline-offset-4"
+                  rel="me"
                 >
                   {link.label}
                 </Link>
@@ -444,7 +446,7 @@ function App() {
             <a
               href={siteInfo.calendlyUrl}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener noreferrer me"
               className="underline decoration-primary pl-1 inline-flex items-center gap-1 group"
             >
               calendly

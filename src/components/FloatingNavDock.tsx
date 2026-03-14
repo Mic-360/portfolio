@@ -37,11 +37,13 @@ export function FloatingNavDock() {
       title: 'GitHub',
       icon: <IconBrandGithub className="h-full w-full text-foreground" />,
       href: `/readme`,
+      rel: 'me',
     },
     {
       title: 'Bento',
       icon: <IconBox className="h-full w-full text-foreground" />,
       href: '/bento',
+      rel: 'me',
     },
     {
       title: 'About',
@@ -52,6 +54,7 @@ export function FloatingNavDock() {
       title: 'Contact',
       icon: <IconMessage className="h-full w-full text-foreground" />,
       href: siteInfo.calendlyUrl,
+      rel: 'me',
     },
   ]
 
