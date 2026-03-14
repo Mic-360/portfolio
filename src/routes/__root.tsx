@@ -5,6 +5,7 @@ import {
   createRootRouteWithContext,
 } from '@tanstack/react-router'
 import React, { useEffect } from 'react'
+import { getCalApi } from '@calcom/embed-react'
 import { FeedbackHandler } from '../components/FeedbackHandler'
 
 import Footer from '../components/Footer'
@@ -316,6 +317,20 @@ function NotFound() {
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   useEffect(() => {
+    ;(async function () {
+      const cal = await getCalApi({ namespace: 'connect' })
+      cal('ui', {
+        cssVarsPerTheme: {
+          light: { 'cal-brand': '#7a9a65' },
+          dark: { 'cal-brand': '#7a9a65' },
+        },
+        hideEventTypeDetails: false,
+        layout: 'week_view',
+      })
+    })()
+  }, [])
+
+  useEffect(() => {
     if (
       typeof window !== 'undefined' &&
       !navigator.userAgent.includes('Nitro')
@@ -326,9 +341,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 -(((---(((--------`
       console.log(cat)
       console.log('Hi there! 👋 You found the easter egg!')
-      console.log(
-        `Looking for a developer? Let's talk: ${siteInfo.calendlyUrl}`,
-      )
+      console.log(`Looking for a developer? Let's talk: https://cal.com/${siteInfo.calLink}`)
     }
   }, [])
 

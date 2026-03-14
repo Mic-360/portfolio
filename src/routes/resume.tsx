@@ -133,15 +133,17 @@ function ResumePage() {
             variants={item}
             className="flex justify-center gap-4 mt-6"
           >
-            <a
-              href={siteInfo.calendlyUrl}
-              className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-black text-sm font-bold uppercase tracking-widest hover:scale-105 transition-transform shadow-lg hover:shadow-primary/20"
+            <button
+              data-cal-namespace="connect"
+              data-cal-link={siteInfo.calLink}
+              data-cal-config='{"layout":"week_view","useSlotsViewOnSmallScreen":"true"}'
+              className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-black text-sm font-bold uppercase tracking-widest hover:scale-105 transition-transform shadow-lg hover:shadow-primary/20 cursor-pointer"
             >
               Get in Touch
               <span className="transform group-hover:translate-x-1 transition-transform">
                 →
               </span>
-            </a>
+            </button>
             <a
               href="https://www.linkedin.com/in/bhaumic"
               target="_blank"

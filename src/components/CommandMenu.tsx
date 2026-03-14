@@ -214,7 +214,7 @@ export function CommandMenu() {
         {/* ── Actions ── */}
         <CommandGroup heading="Actions">
           <CommandItem
-            onSelect={() => handleNavigate(siteInfo.calendlyUrl)}
+            onSelect={() => handleNavigate(`https://cal.com/${siteInfo.calLink}`)}
           >
             <Calendar />
             <span>book a call</span>

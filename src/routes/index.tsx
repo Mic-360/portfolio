@@ -443,18 +443,18 @@ function App() {
               </span>
             ))}
             or book a call with me on
-            <a
-              href={siteInfo.calendlyUrl}
-              target="_blank"
-              rel="noopener noreferrer me"
-              className="underline decoration-primary pl-1 inline-flex items-center gap-1 group"
+            <button
+              data-cal-namespace="connect"
+              data-cal-link={siteInfo.calLink}
+              data-cal-config='{"layout":"week_view","useSlotsViewOnSmallScreen":"true"}'
+              className="underline decoration-primary pl-1 inline-flex items-center gap-1 group cursor-pointer"
             >
-              calendly
+              cal.com
               <CalendarIcon
                 size={16}
-                className="inline-block mr-1 mb-0.5 text-teal-500"
+                className="inline-block mr-1 mb-0.5 text-primary"
               />
-            </a>
+            </button>
             .
           </p>
         </Section>

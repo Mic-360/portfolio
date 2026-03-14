@@ -53,7 +53,7 @@ export function FloatingNavDock() {
     {
       title: 'Contact',
       icon: <IconMessage className="h-full w-full text-foreground" />,
-      href: siteInfo.calendlyUrl,
+      href: `https://cal.com/${siteInfo.calLink}`,
       rel: 'me',
     },
   ]
