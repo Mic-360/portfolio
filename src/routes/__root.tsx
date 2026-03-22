@@ -1,22 +1,22 @@
+import { getCalApi } from '@calcom/embed-react'
 import {
   HeadContent,
   Link,
   Scripts,
   createRootRouteWithContext,
 } from '@tanstack/react-router'
-import React, { Suspense, useCallback, useEffect, useState } from 'react'
 import { AnimatePresence } from 'motion/react'
-import { getCalApi } from '@calcom/embed-react'
-import { useKonamiCode } from '../hooks/useKonamiCode'
+import React, { Suspense, useCallback, useEffect, useState } from 'react'
 import { FeedbackHandler } from '../components/FeedbackHandler'
+import { useKonamiCode } from '../hooks/useKonamiCode'
 
-import Footer from '../components/Footer'
 import { CommandMenu } from '../components/CommandMenu'
 import { FloatingNavDock } from '../components/FloatingNavDock'
+import Footer from '../components/Footer'
 import { gravatar, siteImages, siteInfo, siteMeta } from '../config/site-data'
 
-import appCss from '../styles.css?url'
 import type { QueryClient } from '@tanstack/react-query'
+import appCss from '../styles.css?url'
 
 import { env } from '@/env'
 
@@ -324,17 +324,26 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   useKonamiCode(useCallback(() => setShowDoom(true), []))
 
   useEffect(() => {
-    ;(async function () {
-      const cal = await getCalApi({ namespace: 'connect' })
-      cal('ui', {
-        cssVarsPerTheme: {
-          light: { 'cal-brand': '#7a9a65' },
-          dark: { 'cal-brand': '#7a9a65' },
-        },
-        hideEventTypeDetails: false,
-        layout: 'week_view',
-      })
-    })()
+    // Defer Cal.com initialization to next frame to avoid blocking first paint
+    const timeoutId = requestIdleCallback(
+      async () => {
+        try {
+          const cal = await getCalApi({ namespace: 'connect' })
+          cal('ui', {
+            cssVarsPerTheme: {
+              light: { 'cal-brand': '#7a9a65' },
+              dark: { 'cal-brand': '#7a9a65' },
+            },
+            hideEventTypeDetails: false,
+            layout: 'week_view',
+          })
+        } catch (error) {
+          console.error('Failed to initialize Cal.com:', error)
+        }
+      },
+      { timeout: 3000 },
+    )
+    return () => cancelIdleCallback(timeoutId)
   }, [])
 
   useEffect(() => {
@@ -348,7 +357,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 -(((---(((--------`
       console.log(cat)
       console.log('Hi there! 👋 You found the easter egg!')
-      console.log(`Looking for a developer? Let's talk: https://cal.com/${siteInfo.calLink}`)
+      console.log(
+        `Looking for a developer? Let's talk: https://cal.com/${siteInfo.calLink}`,
+      )
     }
   }, [])
 
@@ -469,10 +480,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Suspense fallback={null}>
           <AnimatePresence>
             {showDoom && (
-              <DoomEasterEgg
-                key="doom"
-                onClose={() => setShowDoom(false)}
-              />
+              <DoomEasterEgg key="doom" onClose={() => setShowDoom(false)} />
             )}
           </AnimatePresence>
         </Suspense>
