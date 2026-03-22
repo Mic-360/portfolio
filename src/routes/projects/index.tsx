@@ -39,7 +39,6 @@ export const Route = createFileRoute('/projects/')({
   component: ProjectsIndex,
 })
 
-
 function ProjectsIndex() {
   const { projects } = Route.useLoaderData()
   const collectionJsonLd = {
@@ -121,7 +120,10 @@ function ProjectsIndex() {
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
             <h1 className="text-3xl font-bold tracking-tight bg-linear-to-r from-foreground to-foreground/70 bg-clip-text text-transparent italic">
-              <LayersIcon size={24} className="inline-block mr-3 text-primary" />
+              <LayersIcon
+                size={24}
+                className="inline-block mr-3 text-primary"
+              />
               projects
             </h1>
             <div className="h-0.5 w-12 bg-primary rounded-full" />
@@ -160,7 +162,7 @@ function ProjectsIndex() {
               />
               <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover/img:opacity-100 transition-opacity pointer-events-none" />
             </motion.div>
-            
+
             <Link
               to="/projects/$slug"
               params={{ slug: project.slug }}
@@ -173,11 +175,11 @@ function ProjectsIndex() {
                 </span>
                 <div className="flex-1 animus-sync-bar opacity-20 group-hover:opacity-60 transition-opacity" />
               </div>
-              
+
               <h2 className="text-xl font-bold uppercase tracking-wider text-primary group-hover:text-foreground transition-colors duration-300">
                 {project.title}
               </h2>
-              
+
               <p className="text-sm text-muted-foreground/80 group-hover:text-foreground/90 transition-colors leading-relaxed">
                 {project.summary}
               </p>

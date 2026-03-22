@@ -4,8 +4,8 @@ import path from 'node:path'
 // NOTE: This file should only be imported from server-side code or via
 // dynamic import() inside createServerFn handlers (see gravatar-profile.ts).
 
-import { gravatarConfig } from '@/config/gravatar'
 import type { GravatarProfile } from '@/types/gravatar'
+import { gravatarConfig } from '@/config/gravatar'
 import { gravatarProfileSchema } from '@/types/gravatar'
 
 // ── In-memory cache ──────────────────────────────────────────────────
@@ -38,7 +38,10 @@ function setCache(key: string, data: GravatarProfile): void {
 // ── Build-time file cache (persists across parallel SSR processes) ─────
 const BUILD_CACHE_DIR = path.join(process.cwd(), '.tanstack', 'cache')
 
-function getBuildCached(key: string, allowStale = false): GravatarProfile | null {
+function getBuildCached(
+  key: string,
+  allowStale = false,
+): GravatarProfile | null {
   try {
     const cacheFile = path.join(BUILD_CACHE_DIR, `gravatar-${key}.json`)
     if (fs.existsSync(cacheFile)) {
@@ -89,9 +92,14 @@ export async function fetchGravatarProfileInternal(
     return pendingRequest
   }
 
-  const staleCached = getCached(identifier, true) ?? getBuildCached(identifier, true)
+  const staleCached =
+    getCached(identifier, true) ?? getBuildCached(identifier, true)
 
-  const request = fetchGravatarProfileWithRetry(identifier, retries, staleCached)
+  const request = fetchGravatarProfileWithRetry(
+    identifier,
+    retries,
+    staleCached,
+  )
   requestsInFlight.set(identifier, request)
 
   try {
@@ -125,7 +133,9 @@ async function fetchGravatarProfileWithRetry(
 
       if (res.status === 429) {
         const retryAfter = res.headers.get('Retry-After')
-        const waitMs = retryAfter ? parseInt(retryAfter) * 1000 : 2000 * Math.pow(2, attempt)
+        const waitMs = retryAfter
+          ? parseInt(retryAfter) * 1000
+          : 2000 * Math.pow(2, attempt)
         console.warn(`Gravatar API rate limited. Retrying in ${waitMs}ms...`)
         if (attempt < retries) {
           await new Promise((resolve) => setTimeout(resolve, waitMs))

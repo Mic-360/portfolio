@@ -1,9 +1,11 @@
-import { gravatar, socialLinks } from '@/config/site-data'
 import { Link } from '@tanstack/react-router'
+import { motion } from 'motion/react'
 import GithubIcon from './ui/github-icon'
 import InstagramIcon from './ui/instagram-icon'
 import LinkedinIcon from './ui/linkedin-icon'
 import TwitterIcon from './ui/twitter-icon'
+
+import { gravatar, socialLinks } from '@/config/site-data'
 
 const iconMap = {
   github: GithubIcon,
@@ -29,8 +31,6 @@ function RssIcon() {
     </svg>
   )
 }
-
-import { motion } from 'motion/react'
 
 export default function Footer() {
   return (
@@ -114,4 +114,3 @@ export default function Footer() {
     </footer>
   )
 }
-

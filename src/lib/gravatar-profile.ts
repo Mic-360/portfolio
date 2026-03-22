@@ -8,18 +8,16 @@ import { z } from 'zod'
 // ── Types ────────────────────────────────────────────────────────────
 
 export type {
-    GravatarProfile,
-    VerifiedAccount,
-    GalleryImage,
+  GravatarProfile,
+  VerifiedAccount,
+  GalleryImage,
 } from '@/types/gravatar'
 
 // ── Server functions (RPC bridge) ────────────────────────────────────
 
 export const getGravatarProfile = createServerFn({ method: 'GET' })
-    .inputValidator(z.string().min(1))
-    .handler(async ({ data: identifier }) => {
-        const { fetchGravatarProfileInternal } = await import(
-            './gravatar.server'
-        )
-        return fetchGravatarProfileInternal(identifier)
-    })
+  .inputValidator(z.string().min(1))
+  .handler(async ({ data: identifier }) => {
+    const { fetchGravatarProfileInternal } = await import('./gravatar.server')
+    return fetchGravatarProfileInternal(identifier)
+  })

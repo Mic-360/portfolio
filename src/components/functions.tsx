@@ -1,10 +1,10 @@
 import { motion } from 'motion/react'
+import { Link } from '@tanstack/react-router'
 import CurrentIcon from '@/components/ui/current-icon'
 import HealthstatIcon from '@/components/ui/healthstat-icon'
 import LayersIcon from '@/components/ui/layers-icon'
 import PenIcon from '@/components/ui/pen-icon'
 import PreviousIcon from '@/components/ui/previous-icon'
-import { Link } from '@tanstack/react-router'
 
 function Section({
   title,
@@ -79,7 +79,15 @@ function Sparkline({
   height?: number
 }) {
   const width = 100
-  if (data.length === 0) return <div style={{ height }} className="h-12 w-full bg-primary/2 opacity-20 border border-primary/10 rounded-xs flex items-center justify-center text-[8px] uppercase tracking-tighter">no signal</div>
+  if (data.length === 0)
+    return (
+      <div
+        style={{ height }}
+        className="h-12 w-full bg-primary/2 opacity-20 border border-primary/10 rounded-xs flex items-center justify-center text-[8px] uppercase tracking-tighter"
+      >
+        no signal
+      </div>
+    )
 
   const values = data.map((d) => d.value)
   const min = Math.min(...values)
@@ -87,26 +95,33 @@ function Sparkline({
   const range = max - min || 1
 
   const pad = 2
-  const points = data.length === 1 
-    ? [{ x: 0, y: height/2 }, { x: width, y: height/2 }]
-    : values.map((v, i) => {
-        const x = (i / (values.length - 1)) * width
-        const y = height - ((v - min) / range) * (height - pad * 2) - pad
-        return { x, y }
-      })
+  const points =
+    data.length === 1
+      ? [
+          { x: 0, y: height / 2 },
+          { x: width, y: height / 2 },
+        ]
+      : values.map((v, i) => {
+          const x = (i / (values.length - 1)) * width
+          const y = height - ((v - min) / range) * (height - pad * 2) - pad
+          return { x, y }
+        })
 
-  const linePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x},${p.y}`).join(' ')
+  const linePath = points
+    .map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x},${p.y}`)
+    .join(' ')
 
   return (
     <div className="relative overflow-hidden bg-black/40 border border-primary/20 rounded-xs group-hover:border-primary/40 transition-colors">
       {/* Grid Pattern */}
-      <div className="absolute inset-0 z-0 opacity-10 pointer-events-none" 
+      <div
+        className="absolute inset-0 z-0 opacity-10 pointer-events-none"
         style={{
           backgroundImage: `linear-gradient(var(--primary) 1px, transparent 1px), linear-gradient(90deg, var(--primary) 1px, transparent 1px)`,
-          backgroundSize: '10% 25%'
-        }} 
+          backgroundSize: '10% 25%',
+        }}
       />
-      
+
       <svg
         viewBox={`0 0 ${width} ${height}`}
         className="relative z-10 w-full h-12 overflow-visible transition-all duration-500"
@@ -125,27 +140,27 @@ function Sparkline({
           d={linePath}
           className="drop-shadow-[0_0_2px_var(--primary)]"
         />
-        
+
         {/* Scanning Bit */}
         <motion.circle
           initial={{ opacity: 0 }}
-          whileInView={{ 
+          whileInView={{
             opacity: [0, 1, 0],
-            cx: points.map(p => p.x),
-            cy: points.map(p => p.y)
+            cx: points.map((p) => p.x),
+            cy: points.map((p) => p.y),
           }}
           viewport={{ once: true }}
-          transition={{ 
-            duration: 1.5, 
+          transition={{
+            duration: 1.5,
             ease: 'linear',
-            opacity: { duration: 0.2 }
+            opacity: { duration: 0.2 },
           }}
           r="1.5"
           fill={color}
           className="drop-shadow-[0_0_5px_var(--primary)]"
         />
       </svg>
-      
+
       {/* CRT Scanline Effect */}
       <div className="absolute inset-0 pointer-events-none bg-linear-to-b from-transparent via-primary/5 to-transparent h-[2px] w-full animate-scanline opacity-10" />
     </div>
@@ -196,7 +211,7 @@ function StatCard({
       ? [...processedData].sort(
           (a, b) =>
             new Date(b.endDate).getTime() - new Date(a.endDate).getTime(),
-          )[0].value
+        )[0].value
       : 0
 
   return (
@@ -229,7 +244,7 @@ function StatCard({
           <span className="text-[6px] font-mono mt-1">REC</span>
         </div>
       </div>
-      
+
       <Sparkline data={graphData} color="var(--primary)" />
     </motion.div>
   )

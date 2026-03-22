@@ -1,30 +1,35 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { gravatar, siteImages, siteInfo, siteMeta } from '@/config/site-data';
+import { createFileRoute } from '@tanstack/react-router'
+import { gravatar, siteImages, siteInfo, siteMeta } from '@/config/site-data'
 import {
-	getBlogIndexInternal,
-	getProjectIndexInternal,
-} from '@/lib/content.server';
+  getBlogIndexInternal,
+  getProjectIndexInternal,
+} from '@/lib/content.server'
 
-function toBulletList(items: Array<{ title: string; slug: string }>, basePath: string) {
-	if (items.length === 0) {
-		return '- none published yet'
-	}
+function toBulletList(
+  items: Array<{ title: string; slug: string }>,
+  basePath: string,
+) {
+  if (items.length === 0) {
+    return '- none published yet'
+  }
 
-	return items
-		.map((item) => `- ${item.title}: ${siteMeta.baseUrl}${basePath}/${item.slug}`)
-		.join('\n')
+  return items
+    .map(
+      (item) => `- ${item.title}: ${siteMeta.baseUrl}${basePath}/${item.slug}`,
+    )
+    .join('\n')
 }
 
 export const Route = createFileRoute('/llms-full/txt')({
-	server: {
-		handlers: {
-			GET: async () => {
-				const [posts, projects] = await Promise.all([
-					getBlogIndexInternal(),
-					getProjectIndexInternal(),
-				])
+  server: {
+    handlers: {
+      GET: async () => {
+        const [posts, projects] = await Promise.all([
+          getBlogIndexInternal(),
+          getProjectIndexInternal(),
+        ])
 
-				const body = `# ${siteInfo.name}
+        const body = `# ${siteInfo.name}
 
 > ${siteMeta.defaultDescription}
 
@@ -88,14 +93,15 @@ ${toBulletList(projects, '/projects')}
 - Open Graph image routes exist for previews, not as primary content.
 `
 
-				return new Response(body, {
-					headers: {
-						'Content-Type': 'text/plain; charset=utf-8',
-						'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
-						'X-Robots-Tag': 'index, follow',
-					},
-				})
-			},
-		},
-	},
+        return new Response(body, {
+          headers: {
+            'Content-Type': 'text/plain; charset=utf-8',
+            'Cache-Control':
+              'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
+            'X-Robots-Tag': 'index, follow',
+          },
+        })
+      },
+    },
+  },
 })

@@ -1,15 +1,15 @@
+import {
+  IconArticle,
+  IconBox,
+  IconBrandGithub,
+  IconFileText,
+  IconFolder,
+  IconHome,
+  IconMessage,
+  IconUser,
+} from '@tabler/icons-react'
 import { FloatingDock } from '@/components/ui/floating-dock'
 import { siteInfo } from '@/config/site-data'
-import {
-  IconBrandGithub,
-  IconHome,
-  IconArticle,
-  IconFolder,
-  IconFileText,
-  IconBox,
-  IconUser,
-  IconMessage,
-} from '@tabler/icons-react'
 
 export function FloatingNavDock() {
   const items = [

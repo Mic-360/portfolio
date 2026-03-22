@@ -84,15 +84,15 @@ Browser (Product Page)
 
 ### Component Map
 
-| Component | File | Responsibility |
-|---|---|---|
-| Plugin bootstrap | `tryon-modal.php` | Register hooks, HPOS compatibility |
-| Admin settings | `includes/class-admin.php` | API key config, Garment Mapper UI |
-| Gemini API handler | `includes/class-gemini.php` | Secure API communication |
-| AJAX handler | `includes/class-ajax.php` | Upload handling, session write, response |
-| Database | `includes/class-database.php` | Table creation, session CRUD |
-| Modal UI | `assets/js/modal.js` | Upload UX, transitions, result rendering |
-| Styles | `assets/css/modal.css` | Namespaced `.nano-tryon-*` CSS |
+| Component          | File                          | Responsibility                           |
+| ------------------ | ----------------------------- | ---------------------------------------- |
+| Plugin bootstrap   | `tryon-modal.php`             | Register hooks, HPOS compatibility       |
+| Admin settings     | `includes/class-admin.php`    | API key config, Garment Mapper UI        |
+| Gemini API handler | `includes/class-gemini.php`   | Secure API communication                 |
+| AJAX handler       | `includes/class-ajax.php`     | Upload handling, session write, response |
+| Database           | `includes/class-database.php` | Table creation, session CRUD             |
+| Modal UI           | `assets/js/modal.js`          | Upload UX, transitions, result rendering |
+| Styles             | `assets/css/modal.css`        | Namespaced `.nano-tryon-*` CSS           |
 
 ---
 
@@ -103,6 +103,7 @@ Browser (Product Page)
 Training a garment-aware virtual try-on model from scratch requires labeled image datasets, GPU infrastructure, and months of iteration. Gemini's multimodal API already understands clothing, body proportion, and image composition. The engineering effort shifts from model training to **prompt engineering and API integration** — a dramatically lower barrier for a plugin targeting SMB e-commerce stores.
 
 The result quality is directly tied to:
+
 1. The garment category passed in the prompt (Top vs. Dress vs. Outerwear)
 2. The clarity and composition of the user's uploaded photo
 3. The quality of the product's garment image
@@ -114,6 +115,7 @@ Generic image prompts produce generic results. The Gemini prompt changes meaning
 ### Why a Custom Session Table?
 
 WordPress's native option system and post meta are designed for key-value persistence, not relational try-on history scoped per user per garment. The dedicated `wp_tryon_sessions` table supports:
+
 - Indexed queries by user ID and timestamp
 - Storing image paths without BLOB overhead (paths only, files on disk)
 - Clean pagination for the user-facing history view
@@ -129,13 +131,13 @@ Redirecting users away from the product page during a purchase decision is a con
 
 Any plugin that accepts user-uploaded files and communicates with an external API presents real attack surfaces. The following measures are implemented throughout:
 
-| Threat | Mitigation |
-|---|---|
-| CSRF | WordPress nonce verification on every AJAX action |
-| XSS | `esc_html()`, `esc_url()`, `wp_kses_post()` on all output |
-| SQL injection | `$wpdb->prepare()` on every database query |
-| Malicious uploads | MIME type validation + extension whitelist before processing |
-| API key exposure | Key stored in `wp_options`, never rendered to the client |
+| Threat            | Mitigation                                                                      |
+| ----------------- | ------------------------------------------------------------------------------- |
+| CSRF              | WordPress nonce verification on every AJAX action                               |
+| XSS               | `esc_html()`, `esc_url()`, `wp_kses_post()` on all output                       |
+| SQL injection     | `$wpdb->prepare()` on every database query                                      |
+| Malicious uploads | MIME type validation + extension whitelist before processing                    |
+| API key exposure  | Key stored in `wp_options`, never rendered to the client                        |
 | HTTPS enforcement | All Gemini API calls made over TLS; stored API key excluded from AJAX responses |
 
 HPOS (High-Performance Order Storage) compatibility is declared via `woocommerce_cart_hash_key` feature flag, ensuring the plugin works on stores that have migrated away from the legacy `wp_posts`-based order storage.
@@ -191,9 +193,9 @@ The `TryonModal_Gemini` class wraps all communication with the Google AI Studio 
 
 ```php
 private function buildTryOnPrompt(string $garmentCategory): string {
-    return "You are a virtual fitting room AI. Generate a photorealistic image 
-            showing the person in the first photo wearing the {$garmentCategory} 
-            shown in the second photo. Preserve the person's face, skin tone, 
+    return "You are a virtual fitting room AI. Generate a photorealistic image
+            showing the person in the first photo wearing the {$garmentCategory}
+            shown in the second photo. Preserve the person's face, skin tone,
             body proportions, and pose. Ensure the garment fits naturally.";
 }
 ```
@@ -220,15 +222,15 @@ All CSS classes are namespaced under `.nano-tryon-` to prevent conflicts with an
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Language | PHP 8.1+ |
-| Platform | WordPress + WooCommerce |
-| AI | Google Gemini (multimodal via AI Studio) |
-| Frontend | Vanilla JavaScript + CSS |
-| Database | MySQL via `$wpdb` |
+| Layer           | Technology                                       |
+| --------------- | ------------------------------------------------ |
+| Language        | PHP 8.1+                                         |
+| Platform        | WordPress + WooCommerce                          |
+| AI              | Google Gemini (multimodal via AI Studio)         |
+| Frontend        | Vanilla JavaScript + CSS                         |
+| Database        | MySQL via `$wpdb`                                |
 | Upload handling | WordPress Media Library + custom MIME validation |
-| Security | WP nonces, `$wpdb->prepare()`, `esc_*` helpers |
+| Security        | WP nonces, `$wpdb->prepare()`, `esc_*` helpers   |
 
 ---
 

@@ -34,7 +34,7 @@ export default {
       '/.git',
     ]
 
-    if (blockPaths.some(p => pathname.includes(p))) {
+    if (blockPaths.some((p) => pathname.includes(p))) {
       return new Response('Blocked', {
         status: 410,
         headers: {
@@ -49,15 +49,23 @@ export default {
 
     // Create new headers object to avoid immutable headers error
     const newHeaders = new Headers(response.headers)
-    newHeaders.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload')
+    newHeaders.set(
+      'Strict-Transport-Security',
+      'max-age=31536000; includeSubDomains; preload',
+    )
 
     // 3. Performance/CDN Caching
     // Add default caching for HTML pages if not already set
-    if (!newHeaders.has('Cache-Control') &&
+    if (
+      !newHeaders.has('Cache-Control') &&
       response.status === 200 &&
-      newHeaders.get('Content-Type')?.includes('text/html')) {
+      newHeaders.get('Content-Type')?.includes('text/html')
+    ) {
       // 1 minute client cache, 1 hour CDN cache, 10 min SWR
-      newHeaders.set('Cache-Control', 'public, max-age=60, s-maxage=3600, stale-while-revalidate=600')
+      newHeaders.set(
+        'Cache-Control',
+        'public, max-age=60, s-maxage=3600, stale-while-revalidate=600',
+      )
     }
 
     if (

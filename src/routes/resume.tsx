@@ -40,7 +40,6 @@ export const Route = createFileRoute('/resume')({
   component: ResumePage,
 })
 
-
 function ResumePage() {
   const { resume } = Route.useLoaderData()
 

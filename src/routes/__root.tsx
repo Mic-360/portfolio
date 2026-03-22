@@ -15,8 +15,8 @@ import { FloatingNavDock } from '../components/FloatingNavDock'
 import Footer from '../components/Footer'
 import { gravatar, siteImages, siteInfo, siteMeta } from '../config/site-data'
 
-import type { QueryClient } from '@tanstack/react-query'
 import appCss from '../styles.css?url'
+import type { QueryClient } from '@tanstack/react-query'
 
 import { env } from '@/env'
 

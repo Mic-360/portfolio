@@ -50,7 +50,7 @@ export const updateHealthData = createServerFn({ method: 'POST' })
  * Aggregates granular health samples by day for cleaner visualization.
  */
 export function aggregateByDay(
-  samples: HealthSample[] = [],
+  samples: Array<HealthSample> = [],
   type: 'sum' | 'avg' = 'sum',
 ): Array<HealthSample & { value: number }> {
   if (!samples.length) return []

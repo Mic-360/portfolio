@@ -39,7 +39,6 @@ export const Route = createFileRoute('/blog/')({
   component: BlogIndex,
 })
 
-
 function BlogIndex() {
   const { posts } = Route.useLoaderData()
   const collectionJsonLd = {
@@ -158,11 +157,11 @@ function BlogIndex() {
                   {formatDate(post.date)}
                 </span>
               </div>
-              
+
               <h2 className="text-xl font-bold uppercase tracking-wider text-primary group-hover:text-foreground transition-colors duration-300">
                 {post.title}
               </h2>
-              
+
               <p className="text-sm text-muted-foreground/80 group-hover:text-foreground/90 transition-colors leading-relaxed">
                 {post.summary}
               </p>

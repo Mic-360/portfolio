@@ -32,10 +32,7 @@ function loadCSS(href: string) {
   document.head.appendChild(l)
 }
 
-function waitForGlobal(
-  name: string,
-  timeout = 10000,
-): Promise<void> {
+function waitForGlobal(name: string, timeout = 10000): Promise<void> {
   return new Promise((resolve, reject) => {
     if ((window as unknown as Record<string, unknown>)[name]) {
       resolve()
@@ -153,9 +150,7 @@ export function DoomEasterEgg({ onClose }: { onClose: () => void }) {
             <p className="font-mono text-2xl uppercase tracking-widest text-red-600 animate-pulse">
               loading doom...
             </p>
-            <p className="font-mono text-xs text-zinc-600">
-              press esc to exit
-            </p>
+            <p className="font-mono text-xs text-zinc-600">press esc to exit</p>
           </motion.div>
         )}
       </AnimatePresence>

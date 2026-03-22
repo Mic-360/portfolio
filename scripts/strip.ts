@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import sharp from 'sharp'
 import url from 'node:url'
+import sharp from 'sharp'
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url))
 
@@ -57,4 +57,3 @@ processImages().catch((err) => {
   console.error('💥 Fatal error:', err)
   process.exit(1)
 })
-

@@ -58,7 +58,6 @@ function ReadmeImage({
   )
 }
 
-
 function ReadmePage() {
   const container = {
     hidden: { opacity: 0 },
@@ -83,7 +82,10 @@ function ReadmePage() {
       className="flex flex-col gap-12"
     >
       {/* Profile Image and GitHub Stats Section */}
-      <motion.section variants={item} className="flex flex-col md:flex-row items-center justify-center gap-10">
+      <motion.section
+        variants={item}
+        className="flex flex-col md:flex-row items-center justify-center gap-10"
+      >
         <motion.div
           whileHover={{ scale: 1.05, rotate: 2 }}
           className="w-40 h-40 shrink-0 relative"
@@ -111,12 +113,15 @@ function ReadmePage() {
       </motion.section>
 
       {/* Summary Cards Section */}
-      <motion.section variants={item} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <motion.section
+        variants={item}
+        className="grid grid-cols-1 md:grid-cols-2 gap-6"
+      >
         {[
-          "repos-per-language",
-          "most-commit-language",
-          "stats",
-          "productive-time?utcOffset=5.30"
+          'repos-per-language',
+          'most-commit-language',
+          'stats',
+          'productive-time?utcOffset=5.30',
         ].map((type) => (
           <motion.div
             key={type}
@@ -135,7 +140,10 @@ function ReadmePage() {
       </motion.section>
 
       {/* Metrics Section */}
-      <motion.section variants={item} className="w-full rounded-2xl overflow-hidden border border-border/50 bg-card/20 p-2">
+      <motion.section
+        variants={item}
+        className="w-full rounded-2xl overflow-hidden border border-border/50 bg-card/20 p-2"
+      >
         <ReadmeImage
           src="https://raw.githubusercontent.com/Mic-360/Mic-360/main/github-metrics.svg"
           alt="Contributions Metrics"
@@ -146,7 +154,10 @@ function ReadmePage() {
       </motion.section>
 
       {/* Languages and Tools Section */}
-      <motion.section variants={item} className="flex flex-col gap-8 text-center py-8 relative">
+      <motion.section
+        variants={item}
+        className="flex flex-col gap-8 text-center py-8 relative"
+      >
         <motion.div
           className="absolute inset-0 m-auto w-60 h-60 lg:w-80 lg:h-80 bg-primary/40 rounded-full blur-[100px] pointer-events-none z-0"
           animate={{
@@ -157,7 +168,7 @@ function ReadmePage() {
           transition={{
             duration: 10,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: 'easeInOut',
           }}
         />
         <h2 className="text-2xl font-black italic uppercase tracking-tighter relative z-10">
@@ -171,13 +182,19 @@ function ReadmePage() {
             { src: 'nodejs/nodejs-original.svg', alt: 'Node.js' },
             { src: 'bun/bun-original.svg', alt: 'Bun' },
             { src: 'git/git-original.svg', alt: 'Git' },
-            { src: 'amazonwebservices/amazonwebservices-plain-wordmark.svg', alt: 'AWS' },
+            {
+              src: 'amazonwebservices/amazonwebservices-plain-wordmark.svg',
+              alt: 'AWS',
+            },
             { src: 'cloudflare/cloudflare-original.svg', alt: 'Cloudflare' },
             { src: 'typescript/typescript-original.svg', alt: 'TypeScript' },
             { src: 'android/android-plain.svg', alt: 'Android' },
             { src: 'cplusplus/cplusplus-original.svg', alt: 'C++' },
             { src: 'flutter/flutter-original.svg', alt: 'Flutter' },
-            { src: 'googlecloud/googlecloud-original.svg', alt: 'Google Cloud' },
+            {
+              src: 'googlecloud/googlecloud-original.svg',
+              alt: 'Google Cloud',
+            },
             { src: 'python/python-original.svg', alt: 'Python' },
             { src: 'ubuntu/ubuntu-original.svg', alt: 'Ubuntu' },
             { src: 'java/java-original.svg', alt: 'Java' },
@@ -194,7 +211,10 @@ function ReadmePage() {
             { src: 'jupyter/jupyter-original-wordmark.svg', alt: 'Jupyter' },
             { src: 'grafana/grafana-original.svg', alt: 'Grafana' },
             { src: 'graphql/graphql-plain.svg', alt: 'GraphQL' },
-            { src: 'githubactions/githubactions-original.svg', alt: 'GitHub Actions' },
+            {
+              src: 'githubactions/githubactions-original.svg',
+              alt: 'GitHub Actions',
+            },
             { src: 'firebase/firebase-original.svg', alt: 'Firebase' },
           ].map((icon) => (
             <motion.div
@@ -215,18 +235,39 @@ function ReadmePage() {
       </motion.section>
 
       {/* Workspace Section */}
-      <motion.section variants={item} className="flex flex-col gap-6 text-center bg-muted/20 p-8 rounded-3xl border border-border/50">
+      <motion.section
+        variants={item}
+        className="flex flex-col gap-6 text-center bg-muted/20 p-8 rounded-3xl border border-border/50"
+      >
         <h4 className="text-sm font-bold uppercase tracking-[0.3em] text-primary">
           My Workspace
         </h4>
         <div className="flex flex-wrap justify-center gap-3">
           {[
-            { src: "https://img.shields.io/badge/Android%2013-3DDC84?style=for-the-badge&logo=android&logoColor=white", alt: "Android" },
-            { src: "https://img.shields.io/badge/asus%20ROG%20Flow-000000?style=for-the-badge&logo=asus&logoColor=white", alt: "Asus" },
-            { src: "https://img.shields.io/badge/windows%2011 insider-%230078D6.svg?&style=for-the-badge&logo=windows&logoColor=white", alt: "Windows" },
-            { src: "https://img.shields.io/badge/Ubuntu%2024.04-E95420?style=for-the-badge&logo=ubuntu&logoColor=white", alt: "Ubuntu" },
-            { src: "https://img.shields.io/badge/AMD%20Ryzen_9_5980HS-ED1C24?style=for-the-badge&logo=amd&logoColor=white", alt: "AMD" },
-            { src: "https://img.shields.io/badge/RAM-32GB-%230071C5.svg?&style=for-the-badge&logoColor=white", alt: "RAM" },
+            {
+              src: 'https://img.shields.io/badge/Android%2013-3DDC84?style=for-the-badge&logo=android&logoColor=white',
+              alt: 'Android',
+            },
+            {
+              src: 'https://img.shields.io/badge/asus%20ROG%20Flow-000000?style=for-the-badge&logo=asus&logoColor=white',
+              alt: 'Asus',
+            },
+            {
+              src: 'https://img.shields.io/badge/windows%2011 insider-%230078D6.svg?&style=for-the-badge&logo=windows&logoColor=white',
+              alt: 'Windows',
+            },
+            {
+              src: 'https://img.shields.io/badge/Ubuntu%2024.04-E95420?style=for-the-badge&logo=ubuntu&logoColor=white',
+              alt: 'Ubuntu',
+            },
+            {
+              src: 'https://img.shields.io/badge/AMD%20Ryzen_9_5980HS-ED1C24?style=for-the-badge&logo=amd&logoColor=white',
+              alt: 'AMD',
+            },
+            {
+              src: 'https://img.shields.io/badge/RAM-32GB-%230071C5.svg?&style=for-the-badge&logoColor=white',
+              alt: 'RAM',
+            },
           ].map((badge) => (
             <motion.div key={badge.alt} whileHover={{ scale: 1.05, y: -2 }}>
               <ReadmeImage
@@ -242,10 +283,15 @@ function ReadmePage() {
       </motion.section>
 
       {/* Connect With Me Section */}
-      <motion.section variants={item} className="flex flex-col gap-10 text-center bg-primary/5 p-10 rounded-4xl border-2 border-primary/10 shadow-inner relative overflow-hidden">
+      <motion.section
+        variants={item}
+        className="flex flex-col gap-10 text-center bg-primary/5 p-10 rounded-4xl border-2 border-primary/10 shadow-inner relative overflow-hidden"
+      >
         <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl" />
         <div className="flex flex-col gap-3 relative z-10">
-          <h2 className="text-3xl font-black italic uppercase tracking-tighter">Connect With Me</h2>
+          <h2 className="text-3xl font-black italic uppercase tracking-tighter">
+            Connect With Me
+          </h2>
           <div className="flex justify-center">
             <ReadmeImage
               src="https://komarev.com/ghpvc/?username=mic-360&style=for-the-badge&color=blueviolet"
@@ -263,10 +309,26 @@ function ReadmePage() {
           </p>
           <div className="flex flex-wrap justify-center gap-6">
             {[
-              { href: "https://www.facebook.com/fb.bhaumic.singh", src: "https://img.shields.io/badge/Facebook-1877F2?style=flat&logo=facebook&logoColor=white&color=black", alt: "Facebook" },
-              { href: "https://www.instagram.com/bhaumic.singh/", src: "https://img.shields.io/badge/Instagram-E4405F?style=flat&logo=instagram&logoColor=white&color=black", alt: "Instagram" },
-              { href: "https://www.linkedin.com/in/bhaumic/", src: "https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white&color=black", alt: "LinkedIn" },
-              { href: "https://x.com/bhaumicsingh", src: "https://img.shields.io/badge/X-000000?style=flat&logo=x&logoColor=white&color=black", alt: "X" },
+              {
+                href: 'https://www.facebook.com/fb.bhaumic.singh',
+                src: 'https://img.shields.io/badge/Facebook-1877F2?style=flat&logo=facebook&logoColor=white&color=black',
+                alt: 'Facebook',
+              },
+              {
+                href: 'https://www.instagram.com/bhaumic.singh/',
+                src: 'https://img.shields.io/badge/Instagram-E4405F?style=flat&logo=instagram&logoColor=white&color=black',
+                alt: 'Instagram',
+              },
+              {
+                href: 'https://www.linkedin.com/in/bhaumic/',
+                src: 'https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white&color=black',
+                alt: 'LinkedIn',
+              },
+              {
+                href: 'https://x.com/bhaumicsingh',
+                src: 'https://img.shields.io/badge/X-000000?style=flat&logo=x&logoColor=white&color=black',
+                alt: 'X',
+              },
             ].map((social) => (
               <motion.a
                 key={social.alt}
@@ -289,7 +351,10 @@ function ReadmePage() {
         </div>
       </motion.section>
 
-      <motion.div variants={item} className="flex justify-center rounded-3xl overflow-hidden border border-border/50 shadow-2xl">
+      <motion.div
+        variants={item}
+        className="flex justify-center rounded-3xl overflow-hidden border border-border/50 shadow-2xl"
+      >
         <ReadmeImage
           src="https://raw.githubusercontent.com/Mic-360/Mic-360/main/space-shooter.gif"
           alt="Space Shooter"
@@ -300,8 +365,13 @@ function ReadmePage() {
       </motion.div>
 
       <motion.footer variants={item}>
-        <Link to="/" className="group inline-flex items-center gap-2 italic text-muted-foreground hover:text-primary transition-colors text-lg">
-          <span className="transform group-hover:-translate-x-1 transition-transform">←</span>
+        <Link
+          to="/"
+          className="group inline-flex items-center gap-2 italic text-muted-foreground hover:text-primary transition-colors text-lg"
+        >
+          <span className="transform group-hover:-translate-x-1 transition-transform">
+            ←
+          </span>
           back
         </Link>
       </motion.footer>

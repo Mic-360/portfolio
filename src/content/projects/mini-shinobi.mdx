@@ -77,11 +77,11 @@ The dashboard is a React SPA served as a static build by Nginx. Nginx acts as th
 
 ### Port Map
 
-| Service | Port |
-|---------|------|
-| Nginx (reverse proxy) | 4000 |
-| Express backend API | 3000 |
-| Deployed apps | 5000–5999 (auto-assigned) |
+| Service               | Port                      |
+| --------------------- | ------------------------- |
+| Nginx (reverse proxy) | 4000                      |
+| Express backend API   | 3000                      |
+| Deployed apps         | 5000–5999 (auto-assigned) |
 
 ---
 
@@ -93,11 +93,11 @@ Native Node.js addons like `better-sqlite3` require C++ compilation during `npm 
 
 `sql.js` is SQLite compiled to WebAssembly. It installs cleanly on any architecture, requires zero native tooling, and runs in pure JavaScript. The trade-off is that the entire database must be loaded into memory and explicitly flushed to disk on every write — acceptable for a personal deployment server with modest data volumes.
 
-| Typical Dependency | MiniShinobi Alternative | Why |
-|---|---|---|
-| `better-sqlite3` | `sql.js` | WebAssembly SQLite — zero native compilation |
-| `connect-sqlite3` | `session-file-store` | Pure JS, stores sessions as JSON files |
-| `node-pty` | `child_process.spawn` | Built-in Node.js, no native deps |
+| Typical Dependency | MiniShinobi Alternative | Why                                          |
+| ------------------ | ----------------------- | -------------------------------------------- |
+| `better-sqlite3`   | `sql.js`                | WebAssembly SQLite — zero native compilation |
+| `connect-sqlite3`  | `session-file-store`    | Pure JS, stores sessions as JSON files       |
+| `node-pty`         | `child_process.spawn`   | Built-in Node.js, no native deps             |
 
 ### Why a Build Queue?
 
@@ -133,6 +133,7 @@ POST /api/deployments/project/:id/deploy
 ```
 
 All stdout/stderr from every step is:
+
 - Line-buffered and written to the `logs` table in real time
 - Pushed live to all connected SSE clients (the log viewer in the dashboard)
 - Replayed from DB for any client that connects after the build finishes
@@ -156,24 +157,24 @@ All stdout/stderr from every step is:
 
 ## Visual Workflow
 
-| Step 1: Login | Step 2: Dashboard |
-| :---: | :---: |
-| ![Login](/project/image-1.png) | ![Dashboard](/project/image-2.png) |
-| **Authentication via GitHub OAuth** | **Overview of all your projects** |
+|            Step 1: Login            |         Step 2: Dashboard          |
+| :---------------------------------: | :--------------------------------: |
+|   ![Login](/project/image-1.png)    | ![Dashboard](/project/image-2.png) |
+| **Authentication via GitHub OAuth** | **Overview of all your projects**  |
 
-| Step 3: Create Project | Step 4: Configure |
-| :---: | :---: |
+|        Step 3: Create Project        |           Step 4: Configure            |
+| :----------------------------------: | :------------------------------------: |
 | ![New Project](/project/image-3.png) | ![Configuration](/project/image-4.png) |
-| **Add a new repository** | **Setup build and install commands** |
+|       **Add a new repository**       |  **Setup build and install commands**  |
 
-| Step 5: Build Logs | Step 6: Ready |
-| :---: | :---: |
-| ![Build Logs](/project/image-5.png) | ![Ready](/project/image-6.png) |
+|         Step 5: Build Logs          |          Step 6: Ready           |
+| :---------------------------------: | :------------------------------: |
+| ![Build Logs](/project/image-5.png) |  ![Ready](/project/image-6.png)  |
 | **Real-time deployment monitoring** | **Successful deployment status** |
 
-| Step 7: Live App |
-| :---: |
-| ![Live App](/project/image-7.png) |
+|           Step 7: Live App           |
+| :----------------------------------: |
+|  ![Live App](/project/image-7.png)   |
 | **Your project live on your domain** |
 
 ---
@@ -239,36 +240,36 @@ All endpoints require an active GitHub OAuth session.
 
 ### Auth
 
-| Method | Path | Description |
-|--------|------|-------------|
-| GET | `/auth/github` | Initiate GitHub OAuth login |
-| GET | `/auth/github/callback` | GitHub OAuth callback |
-| GET | `/auth/me` | Get current user info |
-| POST | `/auth/logout` | Logout |
+| Method | Path                    | Description                 |
+| ------ | ----------------------- | --------------------------- |
+| GET    | `/auth/github`          | Initiate GitHub OAuth login |
+| GET    | `/auth/github/callback` | GitHub OAuth callback       |
+| GET    | `/auth/me`              | Get current user info       |
+| POST   | `/auth/logout`          | Logout                      |
 
 ### Projects
 
-| Method | Path | Description |
-|--------|------|-------------|
-| GET | `/api/projects` | List all projects |
-| POST | `/api/projects` | Create a new project |
-| DELETE | `/api/projects/:id` | Delete a project |
+| Method | Path                | Description          |
+| ------ | ------------------- | -------------------- |
+| GET    | `/api/projects`     | List all projects    |
+| POST   | `/api/projects`     | Create a new project |
+| DELETE | `/api/projects/:id` | Delete a project     |
 
 ### Deployments
 
-| Method | Path | Description |
-|--------|------|-------------|
-| GET | `/api/deployments/project/:projectId` | List deployments for a project |
-| POST | `/api/deployments/project/:projectId/deploy` | Trigger a new deployment |
-| GET | `/api/deployments/:id` | Get deployment details |
-| GET | `/api/deployments/:id/logs` | SSE stream of build logs |
-| DELETE | `/api/deployments/:id` | Stop a running deployment |
+| Method | Path                                         | Description                    |
+| ------ | -------------------------------------------- | ------------------------------ |
+| GET    | `/api/deployments/project/:projectId`        | List deployments for a project |
+| POST   | `/api/deployments/project/:projectId/deploy` | Trigger a new deployment       |
+| GET    | `/api/deployments/:id`                       | Get deployment details         |
+| GET    | `/api/deployments/:id/logs`                  | SSE stream of build logs       |
+| DELETE | `/api/deployments/:id`                       | Stop a running deployment      |
 
 ### Health
 
-| Method | Path | Description |
-|--------|------|-------------|
-| GET | `/health` | Health check endpoint |
+| Method | Path      | Description           |
+| ------ | --------- | --------------------- |
+| GET    | `/health` | Health check endpoint |
 
 ---
 
@@ -276,27 +277,27 @@ All endpoints require an active GitHub OAuth session.
 
 MiniShinobi uses SQLite via `sql.js` (WebAssembly). The schema is applied on every boot with `CREATE TABLE IF NOT EXISTS`:
 
-| Table | Purpose |
-|-------|---------|
-| `users` | GitHub OAuth users |
-| `projects` | Imported repositories with build config |
+| Table         | Purpose                                  |
+| ------------- | ---------------------------------------- |
+| `users`       | GitHub OAuth users                       |
+| `projects`    | Imported repositories with build config  |
 | `deployments` | Build history, status, tunnel URLs, PIDs |
-| `logs` | Build log lines (stdout/stderr/system) |
+| `logs`        | Build log lines (stdout/stderr/system)   |
 
 ---
 
 ## Tech Stack
 
-| Component | Technology |
-|-----------|-----------|
-| Runtime | Node.js (LTS) |
-| Database | sql.js (WebAssembly SQLite) |
-| Sessions | session-file-store (JSON files) |
-| Auth | GitHub OAuth via Passport |
-| Frontend | React + Vite + Tailwind CSS |
-| Reverse Proxy | Nginx |
-| Tunneling | Cloudflare Tunnels (`cloudflared`) |
-| Process Manager | PM2 |
+| Component       | Technology                         |
+| --------------- | ---------------------------------- |
+| Runtime         | Node.js (LTS)                      |
+| Database        | sql.js (WebAssembly SQLite)        |
+| Sessions        | session-file-store (JSON files)    |
+| Auth            | GitHub OAuth via Passport          |
+| Frontend        | React + Vite + Tailwind CSS        |
+| Reverse Proxy   | Nginx                              |
+| Tunneling       | Cloudflare Tunnels (`cloudflared`) |
+| Process Manager | PM2                                |
 
 ---
 

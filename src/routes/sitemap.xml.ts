@@ -125,7 +125,7 @@ export const Route = createFileRoute('/sitemap/xml')({
                 `    <lastmod>${new Date(url.lastmod).toISOString()}</lastmod>\n` +
                 `    <changefreq>${url.changefreq}</changefreq>\n` +
                 `    <priority>${url.priority}</priority>\n` +
-                ((url.images)
+                url.images
                   .map(
                     (image) =>
                       `    <image:image>\n` +
@@ -135,7 +135,7 @@ export const Route = createFileRoute('/sitemap/xml')({
                         : '') +
                       `    </image:image>\n`,
                   )
-                  .join('')) +
+                  .join('') +
                 `  </url>`,
             )
             .join('\n') +

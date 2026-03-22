@@ -1,24 +1,25 @@
 import * as React from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import {
-  Home,
-  User,
+  BookOpen,
+  Bot,
+  Briefcase,
+  Calendar,
+  Command,
   FileText,
   FolderOpen,
-  Briefcase,
-  BookOpen,
   Github,
-  Linkedin,
-  Twitter,
+  Home,
   Instagram,
-  Calendar,
-  Rss,
-  Bot,
+  Linkedin,
   Map,
   Pen,
-  Command,
+  Rss,
+  Twitter,
+  User,
 } from 'lucide-react'
 
+import type { BlogMeta, ProjectMeta } from '@/lib/content'
 import {
   CommandDialog,
   CommandEmpty,
@@ -31,7 +32,6 @@ import {
 } from '@/components/ui/command'
 import { siteInfo, socialLinks } from '@/config/site-data'
 import { getBlogIndex, getProjectIndex } from '@/lib/content'
-import type { BlogMeta, ProjectMeta } from '@/lib/content'
 
 export function CommandMenu() {
   const [open, setOpen] = React.useState(false)
@@ -136,9 +136,7 @@ export function CommandMenu() {
               >
                 <Pen className="shrink-0" />
                 <span className="truncate">{post.title}</span>
-                {i < 9 && (
-                  <CommandShortcut>⌘{i + 1}</CommandShortcut>
-                )}
+                {i < 9 && <CommandShortcut>⌘{i + 1}</CommandShortcut>}
               </CommandItem>
             ))}
           </CommandGroup>
@@ -152,9 +150,7 @@ export function CommandMenu() {
             {projects.map((project) => (
               <CommandItem
                 key={project.slug}
-                onSelect={() =>
-                  handleNavigate(`/projects/${project.slug}`)
-                }
+                onSelect={() => handleNavigate(`/projects/${project.slug}`)}
               >
                 <FolderOpen className="shrink-0" />
                 <span className="truncate">{project.title}</span>
@@ -193,16 +189,12 @@ export function CommandMenu() {
             <span>rss feed</span>
             <CommandShortcut>⌘F</CommandShortcut>
           </CommandItem>
-          <CommandItem
-            onSelect={() => handleNavigate('/llms-full.txt')}
-          >
+          <CommandItem onSelect={() => handleNavigate('/llms-full.txt')}>
             <Bot />
             <span>llms-full.txt</span>
             <CommandShortcut>⌘L</CommandShortcut>
           </CommandItem>
-          <CommandItem
-            onSelect={() => handleNavigate('/sitemap.xml')}
-          >
+          <CommandItem onSelect={() => handleNavigate('/sitemap.xml')}>
             <Map />
             <span>sitemap</span>
             <CommandShortcut>⌘M</CommandShortcut>
@@ -214,7 +206,9 @@ export function CommandMenu() {
         {/* ── Actions ── */}
         <CommandGroup heading="Actions">
           <CommandItem
-            onSelect={() => handleNavigate(`https://cal.com/${siteInfo.calLink}`)}
+            onSelect={() =>
+              handleNavigate(`https://cal.com/${siteInfo.calLink}`)
+            }
           >
             <Calendar />
             <span>book a call</span>

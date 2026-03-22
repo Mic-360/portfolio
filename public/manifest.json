@@ -38,10 +38,6 @@
   "background_color": "#111210",
   "lang": "en",
   "dir": "ltr",
-  "categories": [
-    "portfolio",
-    "technology",
-    "software"
-  ],
+  "categories": ["portfolio", "technology", "software"],
   "id": "bhaumic-singh-portfolio"
 }

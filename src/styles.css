@@ -153,8 +153,12 @@
 }
 
 @keyframes scanline {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(1000%); }
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(1000%);
+  }
 }
 
 @keyframes glitch {
@@ -230,7 +234,9 @@
   opacity: 1;
   width: 18px;
   height: 18px;
-  filter: drop-shadow(0 0 4px color-mix(in oklab, var(--primary) 40%, transparent));
+  filter: drop-shadow(
+    0 0 4px color-mix(in oklab, var(--primary) 40%, transparent)
+  );
 }
 
 /* Animus scan line overlay — apply to containers for subtle effect */
@@ -244,11 +250,13 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: repeating-linear-gradient(0deg,
-      transparent,
-      transparent 2px,
-      color-mix(in oklab, var(--primary) 3%, transparent) 2px,
-      color-mix(in oklab, var(--primary) 3%, transparent) 4px);
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    color-mix(in oklab, var(--primary) 3%, transparent) 2px,
+    color-mix(in oklab, var(--primary) 3%, transparent) 4px
+  );
   opacity: 0;
   transition: opacity 0.4s ease;
 }
@@ -301,7 +309,12 @@
   content: '';
   flex: 1;
   height: 1px;
-  background: linear-gradient(to right, transparent, var(--primary), transparent);
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--primary),
+    transparent
+  );
 }
 
 .animus-divider .diamond {
@@ -653,10 +666,12 @@
 .mdx-content hr {
   border: none;
   height: 1px;
-  background: linear-gradient(to right,
-      transparent,
-      var(--border),
-      transparent);
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--border),
+    transparent
+  );
   margin: 2rem 0;
 }
 

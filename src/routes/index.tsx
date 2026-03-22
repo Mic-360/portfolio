@@ -1,6 +1,10 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { motion } from 'motion/react'
 import { useEffect, useState } from 'react'
+import type {
+  BlogMeta,
+  ProjectMeta} from '@/lib/content';
+import type { HealthSample} from '@/lib/health';
 import { Section, StatCard } from '@/components/functions'
 import { KeyboardHint } from '@/components/CommandMenu'
 import GitHubHeatmap from '@/components/GitHubHeatmap'
@@ -16,14 +20,12 @@ import {
   siteMeta,
 } from '@/config/site-data'
 import {
-  BlogMeta,
-  ProjectMeta,
   getBlogIndex,
   getProjectIndex,
 } from '@/lib/content'
 import { formatDate } from '@/lib/format'
 import { hashEmail } from '@/lib/gravatar'
-import { HealthSample, getHealthData } from '@/lib/health'
+import { getHealthData } from '@/lib/health'
 
 export const Route = createFileRoute('/')({
   loader: async () => {

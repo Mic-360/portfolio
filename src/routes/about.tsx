@@ -52,7 +52,6 @@ export const Route = createFileRoute('/about')({
   component: AboutPage,
 })
 
-
 function AboutPage() {
   const { profile } = Route.useLoaderData()
 
