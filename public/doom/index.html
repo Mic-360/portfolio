@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOOM</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+    }
+    #dos {
+      width: 100%;
+      height: 100%;
+    }
+    .error-screen {
+      display: none;
+      color: #666;
+      font-family: monospace;
+      height: 100vh;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .error-screen code {
+      color: #999;
+      background: #1a1a1a;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+  </style>
+  <link rel="stylesheet" href="https://v8.js-dos.com/latest/js-dos.css">
+</head>
+<body>
+  <div id="dos"></div>
+  <div id="error" class="error-screen">
+    <p>doom bundle not found</p>
+    <p>run: <code>bash scripts/setup-doom.sh</code></p>
+  </div>
+
+  <script>
+    function showError(msg) {
+      document.getElementById("dos").style.display = "none";
+      var err = document.getElementById("error");
+      err.querySelector("p").textContent = msg;
+      err.style.display = "flex";
+    }
+  </script>
+  <script src="https://v8.js-dos.com/latest/js-dos.js" onerror="showError('js-dos CDN failed to load')"></script>
+  <script>
+    (function () {
+      var el = document.getElementById("dos");
+
+      if (typeof Dos === "undefined") {
+        showError("js-dos not loaded - CDN may be blocked or down");
+        return;
+      }
+
+      emulators.pathPrefix = "https://v8.js-dos.com/latest/";
+
+      var p = Dos(el, {
+        url: "doom.jsdos",
+        autoStart: true,
+        kiosk: true,
+        theme: "dark",
+        noNetworking: true,
+        noCloud: true,
+      });
+
+      if (p && typeof p.catch === "function") {
+        p.catch(function (e) {
+          showError("Dos() failed: " + (e.message || e));
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

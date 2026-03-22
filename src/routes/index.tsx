@@ -15,7 +15,12 @@ import {
   siteInfo,
   siteMeta,
 } from '@/config/site-data'
-import { BlogMeta, ProjectMeta, getBlogIndex, getProjectIndex } from '@/lib/content'
+import {
+  BlogMeta,
+  ProjectMeta,
+  getBlogIndex,
+  getProjectIndex,
+} from '@/lib/content'
 import { formatDate } from '@/lib/format'
 import { hashEmail } from '@/lib/gravatar'
 import { HealthSample, getHealthData } from '@/lib/health'
@@ -77,9 +82,8 @@ function formatMetricValue(value: number, digits = 0) {
 function sanitizeSamples<T extends { value: number | string }>(
   samples?: Array<T>,
 ): Array<T & { value: number | string }> {
-  return (samples || [])
+  return samples || []
 }
-
 
 function App() {
   const { posts, projects, health, avatarHash } = Route.useLoaderData()
@@ -290,7 +294,10 @@ function App() {
                   {post.tags && post.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-1">
                       {post.tags.slice(0, 3).map((tag) => (
-                        <span key={tag} className="text-[9px] text-muted-foreground font-mono tracking-tighter uppercase">
+                        <span
+                          key={tag}
+                          className="text-[9px] text-muted-foreground font-mono tracking-tighter uppercase"
+                        >
                           #{tag}
                         </span>
                       ))}
@@ -315,15 +322,15 @@ function App() {
               >
                 {project.image && (
                   <>
-                    <img 
-                      src={project.image} 
-                      alt={project.title} 
-                      className="absolute inset-0 w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-60 transition-all duration-700 group-hover:scale-105" 
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="absolute inset-0 w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-60 transition-all duration-700 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent" />
                   </>
                 )}
-                
+
                 <div className="relative z-10 flex flex-col gap-2">
                   <div className="flex justify-between items-center">
                     <h3 className="text-lg font-bold tracking-tight text-white group-hover:text-primary transition-colors">
@@ -333,16 +340,16 @@ function App() {
                       {formatDate(project.date)}
                     </span>
                   </div>
-                  
+
                   <p className="text-xs text-white/70 line-clamp-2 leading-relaxed italic">
                     {project.summary}
                   </p>
-                  
+
                   {project.stack && project.stack.length > 0 && (
                     <div className="flex flex-wrap gap-1.5 mt-1">
                       {project.stack.slice(0, 4).map((tech) => (
-                        <span 
-                          key={tech} 
+                        <span
+                          key={tech}
                           className="text-[8px] px-1.5 py-0.5 rounded-xs bg-white/10 text-white/80 border border-white/20 font-mono tracking-tighter backdrop-blur-xs"
                         >
                           {tech}
@@ -375,21 +382,23 @@ function App() {
             />
             <StatCard
               label="heart rate"
-              samples={sanitizeSamples<HealthSample>(health.heartRate).map((s) => {
-                const val = Number(s.value)
-                const start = new Date(s.startDate).getTime()
-                const end = new Date(s.endDate).getTime()
-                const minutes = (end - start) / (1000 * 60)
-                
-                // If value is > 500, it's likely total beats in that period, calculate BPM
-                // Otherwise treat as raw BPM
-                const bpm = val > 300 && minutes > 0 ? val / minutes : val
-                
-                return {
-                  ...s,
-                  value: bpm,
-                } as HealthSample & { value: number }
-              })}
+              samples={sanitizeSamples<HealthSample>(health.heartRate).map(
+                (s) => {
+                  const val = Number(s.value)
+                  const start = new Date(s.startDate).getTime()
+                  const end = new Date(s.endDate).getTime()
+                  const minutes = (end - start) / (1000 * 60)
+
+                  // If value is > 500, it's likely total beats in that period, calculate BPM
+                  // Otherwise treat as raw BPM
+                  const bpm = val > 300 && minutes > 0 ? val / minutes : val
+
+                  return {
+                    ...s,
+                    value: bpm,
+                  } as HealthSample & { value: number }
+                },
+              )}
               unit="bpm"
               type="avg"
               format={(v) => formatMetricValue(v, 0)}
@@ -456,6 +465,10 @@ function App() {
             .
           </p>
         </Section>
+        <p className="mt-4 text-center font-mono text-[10px] tracking-widest text-muted-foreground/40 select-none flex items-center gap-1 justify-between">
+          <span>Yes, This portfolio can run DOOM</span>
+          <span className="text-md">Konami Code: ↑ ↑ ↓ ↓ ← → ← → b a</span>
+        </p>
       </motion.div>
     </motion.div>
   )

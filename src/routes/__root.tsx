@@ -4,8 +4,10 @@ import {
   Scripts,
   createRootRouteWithContext,
 } from '@tanstack/react-router'
-import React, { useEffect } from 'react'
+import React, { Suspense, useCallback, useEffect, useState } from 'react'
+import { AnimatePresence } from 'motion/react'
 import { getCalApi } from '@calcom/embed-react'
+import { useKonamiCode } from '../hooks/useKonamiCode'
 import { FeedbackHandler } from '../components/FeedbackHandler'
 
 import Footer from '../components/Footer'
@@ -18,6 +20,8 @@ import type { QueryClient } from '@tanstack/react-query'
 
 import { env } from '@/env'
 
+const DoomEasterEgg = React.lazy(() => import('../components/DoomEasterEgg'))
+
 interface MyRouterContext {
   queryClient: QueryClient
 }
@@ -26,7 +30,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   beforeLoad: () => {
     if (typeof document !== 'undefined') {
       document.documentElement.setAttribute('lang', 'en')
-      // Disable native scroll restoration to ensure we have full control
+      // Disable native scroll restoration
       if ('scrollRestoration' in window.history) {
         window.history.scrollRestoration = 'manual'
       }
@@ -316,6 +320,9 @@ function NotFound() {
 }
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const [showDoom, setShowDoom] = useState(false)
+  useKonamiCode(useCallback(() => setShowDoom(true), []))
+
   useEffect(() => {
     ;(async function () {
       const cal = await getCalApi({ namespace: 'connect' })
@@ -459,6 +466,16 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Footer />
         <div className="h-20" />
         <FloatingNavDock />
+        <Suspense fallback={null}>
+          <AnimatePresence>
+            {showDoom && (
+              <DoomEasterEgg
+                key="doom"
+                onClose={() => setShowDoom(false)}
+              />
+            )}
+          </AnimatePresence>
+        </Suspense>
         <Scripts />
       </body>
     </html>
