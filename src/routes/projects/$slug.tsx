@@ -131,7 +131,7 @@ function ProjectDetail() {
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: 0.08,
       },
     },
   }
@@ -197,15 +197,20 @@ function ProjectDetail() {
         </motion.p>
 
         {project.stack.length > 0 && (
-          <motion.div variants={item} className="flex flex-wrap gap-2">
-            {project.stack.map((tech) => (
-              <span
-                key={tech}
-                className="text-[9px] uppercase tracking-[0.2em] px-3 py-1 rounded-sm border border-primary/30 bg-primary/5 text-primary/80"
-              >
-                {tech}
-              </span>
-            ))}
+          <motion.div variants={item} className="flex flex-col gap-2">
+            <span className="text-[9px] uppercase tracking-[0.3em] text-muted-foreground font-bold">
+              Built with
+            </span>
+            <div className="flex flex-wrap gap-2">
+              {project.stack.map((tech) => (
+                <span
+                  key={tech}
+                  className="text-[9px] uppercase tracking-[0.2em] px-3 py-1 rounded-sm border border-primary/30 bg-primary/5 text-primary/80 hover:bg-primary/10 hover:text-primary transition-colors duration-200"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
           </motion.div>
         )}
 
@@ -217,7 +222,7 @@ function ProjectDetail() {
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[10px] uppercase tracking-[0.2em] font-black underline decoration-primary underline-offset-10 hover:text-primary transition-all duration-300 hover:decoration-4"
+                className="text-[10px] uppercase tracking-[0.2em] font-black underline decoration-primary/60 underline-offset-10 hover:text-primary hover:decoration-primary transition-all duration-300 hover:decoration-4"
               >
                 {link.label} ↗
               </a>
@@ -226,7 +231,7 @@ function ProjectDetail() {
         )}
         <motion.div
           variants={item}
-          className="animus-sync-bar mt-4 opacity-30"
+          className="animus-sync-bar mt-6 opacity-50"
         />
       </header>
 
