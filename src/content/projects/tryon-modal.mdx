@@ -1,247 +1,98 @@
 ---
 title: 'Tryon Modal'
 date: '2025-02-11'
-summary: 'An AI-powered Virtual Try-On WooCommerce plugin that lets shoppers upload a photo and see garments on themselves — built with PHP, Google Gemini, vanilla JS, and a session-aware modal UI with full admin configuration and security hardening.'
+summary: 'A real-time AI virtual try-on module built with React Router v7 and the Twinverse inference engine — supports live webcam capture, photo upload, and multi-model visualization with optimized image compression and a recommendation engine.'
 stack:
-  - 'PHP'
-  - 'JavaScript'
-  - 'Google Gemini'
-  - 'WooCommerce'
-  - 'MySQL'
+  - 'React'
+  - 'React Router v7'
+  - 'Vite'
+  - 'Tailwind CSS'
+  - 'Motion'
+  - 'Twinverse AI'
 links:
   - label: 'GitHub'
     url: 'https://github.com/Mic-360/tryon-modal'
 tags:
   - 'ai'
   - 'e-commerce'
-  - 'woocommerce'
-  - 'php'
+  - 'react'
   - 'computer-vision'
 categories:
-  - 'tooling'
   - 'web'
 image: '/tryon-preview.png'
 ---
 
-# Tryon Modal — AI Virtual Try-On for WooCommerce
+# TwinTry — AI Virtual Try-On Module
 
-An AI-powered virtual fitting room that integrates directly into WooCommerce product pages. Shoppers upload a photo, select a product, and receive a generated try-on composite via Google Gemini — all inside a non-intrusive modal that never takes them away from the page.
+A production-grade virtual try-on experience that lets shoppers see how garments look on their own body — via live webcam or uploaded photo — before committing to a purchase. Powered by the Twinverse AI inference engine and built on React Router v7, TwinTry eliminates the visualization gap that drives return rates in online fashion retail.
 
-## The Problem
+## Overview
 
-Online fashion retail has a fundamental UX gap: customers cannot visualize how a garment will look on their specific body before purchasing. This leads to speculative multi-size buying and return rates that run 20–40% in fashion e-commerce — a logistics, sustainability, and margin problem for every store that ships clothes.
+The fundamental problem with online apparel shopping is that garment fit and appearance are invisible at purchase time. Standard product photography shows clothes on a single model at a single body configuration. Customers compensate by ordering multiple sizes, picking the best fit, and returning the rest — a pattern that drives return rates of 20–40% in fashion e-commerce and generates downstream logistics and environmental costs for every store that ships clothes.
 
-Existing solutions are either SaaS subscriptions with per-try pricing, enterprise integrations requiring custom APIs, or computer vision systems that demand training data and GPU infrastructure. None of them target WooCommerce stores operating in the SMB segment.
-
-![Tryon Modal](/tryon-preview.png)
-
-## The Solution
-
-Tryon Modal is a self-contained WordPress plugin that adds a **Virtual Try-On** call-to-action to any WooCommerce product page. The entire experience is modal-first: no new pages, no app downloads, no account creation. The plugin uses Google Gemini's multimodal API for image generation and stores session history in a custom database table for repeat-visit context.
-
----
+TwinTry addresses this by embedding a full try-on experience directly in the shopping interface. No separate app, no account creation, no navigation away from the product. The shopper captures a selfie or uploads a photo, the Twinverse AI inference engine composites the selected garment onto their image, and the result is displayed within the same session — with a recommendation engine surfacing related products alongside.
 
 ## Architecture
 
+TwinTry is a React single-page application served via React Router v7's file-based routing. The application boundary is narrow by design: the client handles all capture, preview, and display logic; the Twinverse AI V1 API handles inference. This separation means the frontend remains fast and portable regardless of model complexity on the backend.
+
 ```
-Browser (Product Page)
+Browser Session
    │
-   └── "Virtual Try-On" button click
-         │
-         ▼
-   Nano Tryon Modal (vanilla JS)
-         │
-         ├── Drag-and-drop photo upload (FileReader API)
-         ├── Garment image fetched from product meta
-         │
-         ▼
-   AJAX → wp-admin/admin-ajax.php
-         │
-         └── TryonModal_Ajax::handle_tryon()
-               │
-               ├── Nonce verification (CSRF)
-               ├── MIME type validation (upload security)
-               ├── Base64 encode both images
-               │
-               ▼
-         TryonModal_Gemini::generate_tryon()
-               │
-               ├── Build multimodal prompt (garment-category-aware)
-               ├── POST → generativelanguage.googleapis.com
-               │         (Google Gemini API)
-               │
-               ▼
-         Response → base64 result image
-               │
-               ├── Save session to wp_tryon_sessions
-               └── Return JSON to modal
-                     │
-                     ▼
-               Modal renders result image
-               ├── Download button
-               └── Add to Cart button
+   ├── Webcam Capture (react-webcam + smart timer)
+   │     └── 5s / 10s / 15s countdown → frame capture
+   │
+   ├── Photo Upload (FileReader API)
+   │     └── client-side preview → compressed payload
+   │
+   ├── Model Selection
+   │     └── professional model catalogue → swap subject image
+   │
+   └── Twinverse AI V1 API
+         ├── Garment + subject image → inference request
+         ├── Optimized image compression (pre-flight)
+         └── Result composite → display + recommendation engine
 ```
 
-### Component Map
+React Router v7 (the successor to Remix) provides the routing layer, with loader/action patterns keeping data fetching colocated with route components. Vite 5 handles bundling, delivering fast HMR during development and optimized production assets with tree-shaking and code splitting. Motion (Framer Motion) drives all state transitions — modal opens, result fade-ins, and loading states — without custom animation loops.
 
-| Component          | File                          | Responsibility                           |
-| ------------------ | ----------------------------- | ---------------------------------------- |
-| Plugin bootstrap   | `tryon-modal.php`             | Register hooks, HPOS compatibility       |
-| Admin settings     | `includes/class-admin.php`    | API key config, Garment Mapper UI        |
-| Gemini API handler | `includes/class-gemini.php`   | Secure API communication                 |
-| AJAX handler       | `includes/class-ajax.php`     | Upload handling, session write, response |
-| Database           | `includes/class-database.php` | Table creation, session CRUD             |
-| Modal UI           | `assets/js/modal.js`          | Upload UX, transitions, result rendering |
-| Styles             | `assets/css/modal.css`        | Namespaced `.nano-tryon-*` CSS           |
+## Key Features
 
----
+- **Live webcam try-on** — real-time camera feed via `react-webcam`, with 5, 10, and 15-second smart timers for hands-free selfie capture
+- **Photo upload path** — FileReader API generates a client-side preview before any upload occurs, keeping the UI responsive during large file selection
+- **Multi-model visualization** — a catalogue of professional models allows shoppers who prefer not to upload personal photos to still experience accurate fit visualization
+- **Recommendation engine** — inferred results are accompanied by similar products and personalized suggestions, extending time-on-page after a successful try-on
+- **Save and share** — results are downloadable for personal reference or social sharing, creating organic product discovery outside the store
+- **Optimized image compression** — payload size is reduced client-side before submission to the inference API, minimizing round-trip latency without degrading output quality
 
-## Key Design Decisions
+## Implementation Details
 
-### Why Google Gemini Instead of a Custom Model?
+### Why React Router v7
 
-Training a garment-aware virtual try-on model from scratch requires labeled image datasets, GPU infrastructure, and months of iteration. Gemini's multimodal API already understands clothing, body proportion, and image composition. The engineering effort shifts from model training to **prompt engineering and API integration** — a dramatically lower barrier for a plugin targeting SMB e-commerce stores.
+React Router v7 (formerly Remix) was chosen over a plain SPA setup because its loader/action model co-locates data dependencies with the routes that consume them. This keeps the try-on flow's state management explicit and eliminates the prop-drilling common in multi-step modal UIs. Server-side rendering capability is available if the product is later embedded in a server-rendered storefront, without requiring an architecture change.
 
-The result quality is directly tied to:
+### Why Twinverse AI Instead of a Direct Model Integration
 
-1. The garment category passed in the prompt (Top vs. Dress vs. Outerwear)
-2. The clarity and composition of the user's uploaded photo
-3. The quality of the product's garment image
+Integrating a garment try-on model from scratch would require curated training data, GPU inference infrastructure, and a dedicated ML serving layer — none of which are appropriate scope for a client-facing shopping module. The Twinverse AI V1 API exposes a single endpoint that accepts subject and garment images and returns a composited result, shifting the engineering challenge from model operations to API integration and UX design. The inference quality is consistent and the API contract is stable, allowing the frontend to evolve independently.
 
-### Why a Garment Mapper?
+### Webcam Capture and Timer Architecture
 
-Generic image prompts produce generic results. The Gemini prompt changes meaningfully based on garment type — a "top" has different compositional guidance than a "full-length dress" or a "structured jacket." The **Garment Mapper** is an admin UI that lets shop owners bulk-tag product images with garment categories. This metadata is stored in product meta and passed to the API handler at request time, improving output consistency without requiring per-request manual input.
+The smart timer is not a simple delay before snapshot — it allows the user to position themselves correctly before capture fires. Three fixed intervals (5s, 10s, 15s) cover different use cases: quick capture for users already in position, longer intervals for users adjusting clothing or lighting. The `react-webcam` component provides direct access to the video stream and frame capture API, keeping the implementation dependency-light while maintaining precise control over frame selection.
 
-### Why a Custom Session Table?
+### Image Compression Before Inference
 
-WordPress's native option system and post meta are designed for key-value persistence, not relational try-on history scoped per user per garment. The dedicated `wp_tryon_sessions` table supports:
-
-- Indexed queries by user ID and timestamp
-- Storing image paths without BLOB overhead (paths only, files on disk)
-- Clean pagination for the user-facing history view
-- Truncation policies without affecting core WordPress data
-
-### Why Modal-First, Not a New Page?
-
-Redirecting users away from the product page during a purchase decision is a conversion killer. The try-on experience needs to be zero-friction: the shopper should be able to complete the try-on and click **Add to Cart** without navigating anywhere. The modal pattern achieves this — it overlays the product page, returns focus to it when dismissed, and keeps the user in the purchase funnel throughout.
-
----
-
-## Security Model
-
-Any plugin that accepts user-uploaded files and communicates with an external API presents real attack surfaces. The following measures are implemented throughout:
-
-| Threat            | Mitigation                                                                      |
-| ----------------- | ------------------------------------------------------------------------------- |
-| CSRF              | WordPress nonce verification on every AJAX action                               |
-| XSS               | `esc_html()`, `esc_url()`, `wp_kses_post()` on all output                       |
-| SQL injection     | `$wpdb->prepare()` on every database query                                      |
-| Malicious uploads | MIME type validation + extension whitelist before processing                    |
-| API key exposure  | Key stored in `wp_options`, never rendered to the client                        |
-| HTTPS enforcement | All Gemini API calls made over TLS; stored API key excluded from AJAX responses |
-
-HPOS (High-Performance Order Storage) compatibility is declared via `woocommerce_cart_hash_key` feature flag, ensuring the plugin works on stores that have migrated away from the legacy `wp_posts`-based order storage.
-
----
-
-## User Workflow
-
-### Shopper Experience
-
-1. **Product Page** — A **Virtual Try-On** button appears below the Add to Cart button on any product with garment mapping configured.
-2. **Modal Opens** — The modal bootstraps on first click (lazy-loaded). The upload zone is presented.
-3. **Upload** — Shopper drags and drops or clicks to select a photo. FileReader API generates a live preview before any upload occurs.
-4. **Processing** — The photo and garment image are sent to the backend via AJAX. A spinner state displays while Gemini processes.
-5. **Result** — The generated try-on composite fades into the result pane.
-6. **Action** — Shopper downloads the result image or clicks **Add to Cart** directly from the modal.
-
-### Admin Experience
-
-1. **Settings Page** — Enter the Gemini API key. Configure default garment category as fallback.
-2. **Garment Mapper** — Browse all products with images. Assign garment categories (Top, Bottom, Dress, Outerwear, Activewear) per product. Bulk-assign by category filter.
-3. **Session Log** — View try-on history across all users: timestamp, product, session status.
-
----
-
-## Database Schema
-
-```sql
-CREATE TABLE wp_tryon_sessions (
-  id            BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  user_id       BIGINT(20) UNSIGNED NOT NULL,
-  product_id    BIGINT(20) UNSIGNED NOT NULL,
-  user_image    VARCHAR(500)        NOT NULL,
-  result_image  VARCHAR(500)        NOT NULL,
-  garment_type  VARCHAR(50)         NOT NULL,
-  status        ENUM('pending','complete','failed') DEFAULT 'pending',
-  created_at    DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-  KEY idx_user   (user_id),
-  KEY idx_product (product_id)
-);
-```
-
----
-
-## Gemini API Integration
-
-The `TryonModal_Gemini` class wraps all communication with the Google AI Studio endpoint. The request is a multimodal `generateContent` call that passes:
-
-- A structured system prompt describing the try-on task and garment category
-- The user's photo as base64-encoded inline image data
-- The product's garment image as base64-encoded inline image data
-
-```php
-private function buildTryOnPrompt(string $garmentCategory): string {
-    return "You are a virtual fitting room AI. Generate a photorealistic image
-            showing the person in the first photo wearing the {$garmentCategory}
-            shown in the second photo. Preserve the person's face, skin tone,
-            body proportions, and pose. Ensure the garment fits naturally.";
-}
-```
-
-The response image is returned as base64, saved to the uploads directory, its path stored in the session table, and the URL returned to the modal via JSON.
-
----
-
-## Frontend: The Modal
-
-The modal is zero-dependency vanilla JavaScript. It lazy-initializes on the first button click, meaning the product page incurs zero JavaScript or CSS overhead for users who never open it.
-
-Key interaction details:
-
-- **Drag and drop** uses the HTML5 `dragover` / `drop` event model with `FileReader` for client-side preview
-- **Upload progress** uses `XMLHttpRequest` with `upload.onprogress` for a live progress indicator
-- **Transitions** are CSS `opacity` + `transform` animations triggered by class toggling — no JS animation loops
-- **Result fade-in** is a CSS keyframe animation triggered when the response JSON is received
-- **Add to Cart** submits the WooCommerce form via `fetch()` without page reload
-
-All CSS classes are namespaced under `.nano-tryon-` to prevent conflicts with any theme. Every style is overridable without touching plugin files.
-
----
+Sending raw camera frames or full-resolution uploads to the inference API would introduce unnecessary latency. A compression pass runs client-side before the payload is constructed — reducing file size while preserving the resolution needed for accurate garment compositing. This optimization is transparent to the user but measurably reduces time-to-result for users on constrained connections.
 
 ## Tech Stack
 
-| Layer           | Technology                                       |
-| --------------- | ------------------------------------------------ |
-| Language        | PHP 8.1+                                         |
-| Platform        | WordPress + WooCommerce                          |
-| AI              | Google Gemini (multimodal via AI Studio)         |
-| Frontend        | Vanilla JavaScript + CSS                         |
-| Database        | MySQL via `$wpdb`                                |
-| Upload handling | WordPress Media Library + custom MIME validation |
-| Security        | WP nonces, `$wpdb->prepare()`, `esc_*` helpers   |
+| Component | Technology | Rationale |
+| --- | --- | --- |
+| Framework | React Router v7 | File-based routing with loader/action patterns; Remix successor with SSR optionality |
+| UI Library | React 19 | Concurrent rendering, stable API, first-class hooks for capture state management |
+| Build Tool | Vite 5 | Sub-second HMR, native ESM, production tree-shaking and code splitting |
+| Styling | Tailwind CSS v3 | Utility-first approach eliminates style collision risk in embedded contexts |
+| Animations | Motion (Framer Motion) | Declarative animation API with GPU-accelerated transitions; no custom loops |
+| Camera | react-webcam | Direct MediaDevices API access with a stable React abstraction layer |
+| AI Inference | Twinverse AI V1 | Managed inference endpoint; removes GPU infrastructure and model training from scope |
 
----
-
-## What I Learned
-
-**Prompt engineering is a real engineering discipline.** The difference between a passable try-on output and a good one came entirely from how the garment category is described in the prompt. Vague prompts produce vague composites. Precise, contextual prompts — specifying garment type, fit style, and photorealism requirements — produce outputs users actually trust.
-
-**WordPress's security primitives are solid when you actually use them.** Nonces, `$wpdb->prepare()`, and the `esc_*` family of functions cover almost every common attack surface for a plugin. The problem is most developers bypass them for convenience. Writing them correctly from the start is cheaper than patching a CVE later.
-
-**Modal-first is the right pattern for in-purchase-funnel tools.** Any UX flow that takes the user away from the product page during a purchase decision has a dropout risk. Keeping the try-on entirely within a modal overlay means the Add to Cart button is always reachable — which is the entire point.
-
----
-
-Tryon Modal demonstrates that production-quality AI features don't require custom models or SaaS infrastructure. A well-integrated third-party API, a clean modal UX, and good security hygiene are enough to deliver a real feature to real users on real stores.
+TwinTry demonstrates that the hard problem in virtual try-on is not the AI — it is the capture-to-result UX loop. Getting the selfie timer, compression, model selection, and result display to feel instantaneous and trustworthy is where the engineering effort actually lives.
