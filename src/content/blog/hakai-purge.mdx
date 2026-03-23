@@ -1,7 +1,7 @@
 ---
-title: 'Hakai: How I Shaved 14 Seconds Off Deleting Folders and Why That Mattered'
+title: 'Hakai: I Wrote a Rust + Bun Hybrid to Delete node_modules and I Have No Regrets'
 date: '2026-03-01'
-summary: 'Because waiting 15 seconds for npkill to tell me how much space my old Next.js projects are taking is 14 seconds too long.'
+summary: 'npkill was too slow. So I built a parallel directory destroyer in Rust with a Bun TUI because apparently I hate free time.'
 tags:
   - 'Rust'
   - 'Bun'
@@ -9,73 +9,64 @@ tags:
   - 'Performance'
 categories:
   - 'Dev Story'
-  - 'Projects'
 image: '/hakai-logo.png'
 ---
 
-# Hakai: How I Shaved 14 Seconds Off Deleting Folders and Why That Mattered
+# Hakai: I Wrote a Rust + Bun Hybrid to Delete node_modules and I Have No Regrets
 
-> Let me introduce you to the logical conclusion of my war on `node_modules`.
+> "Throughout the filesystem and the disk, I alone am the honored one."
 
-If you read my previous post about `wimo purge`, you might be thinking: "Wow, you really hate `node_modules`, don't you?"
+It started, as all terrible ideas do, with a minor inconvenience.
 
-Yes. But honestly, my hatred wasn't fully optimized yet.
+I ran `npkill` on my projects folder -- five years of side projects, abandoned tutorials, and repos I swore I'd finish. It found 50,000+ directories. Twelve seconds just to _scan_. Sequential size calculation. And when I hit delete on a 5GB `node_modules`? The UI froze while Node.js heroically attempted thousands of blocking I/O calls.
 
-![hakai vs npkill](/blog/hakai-vs-npkill.png)
+Unacceptable.
 
-`npkill` has been the standard for finding and destroying heavy artifact folders. And it works fine! If you scan a small directory. But drop `npkill` into a `~/projects` folder containing 50,000 deep directories spanning 5 years of side projects?
+So naturally, I chose the hardest possible approach.
 
-You wait.
+## The Architecture Nobody Asked For
 
-You watch it sequentially crawl the directories. You watch the size calculations happen sequentially. You select a 5GB folder to delete, and the entire UI locks up while Node.js tries desperately to delete via thousands of blocking I/O calls.
+I call it **hakai (破壊)** -- "destruction" in Japanese -- because naming things is the second hardest problem in computer science, and for once, this one was easy.
 
-This is unacceptable. This is a waste of human potential.
+The core insight: JavaScript is not built for high-performance filesystem work. Rust is. So the engine -- scanning, size calculation, deletion, risk analysis -- is compiled Rust. `rayon` gives me a work-stealing thread pool that distributes directory traversal across every CPU core. It's embarrassingly parallel and I'm not embarrassed at all.
 
-Enter **hakai (破壊)**.
+But here's where the yak-shaving gets beautiful.
 
-## Over-Engineering Directory Deletion
+Building TUIs in Rust is... an experience. So the frontend -- keybinds, diff-based rendering, regex search, multi-select -- runs in **Bun**. Sub-50ms startup, 60fps rendering, and I already knew TypeScript.
 
-"Hakai" means "destruction" in Japanese. I needed something that lived up to the name.
+The two halves talk over a newline-delimited JSON IPC protocol on stdin/stdout pipes. Rust fires scan results, sizes, and deletion progress down stdout. Bun catches it on stdin, parses each line, renders without blocking. One JSON object per line, trivially debuggable with `jq`.
 
-The problem with fast file operations is that JavaScript isn't meant for it. So I reached for the ultimate meme language of our generation: **Rust**.
-
-Rust is fast. Blazingly fast, as they say. I used the `rayon` crate for parallel scanning, effectively utilizing every CPU core I had to blast through directory trees simultaneously.
-
-But I didn't want a static, boring CLI output. I wanted the rich, interactive TUI experience. And building complex TUIs in Rust can get messy quickly.
-
-So I made a choice that will likely infuriate purists.
-
-## The Forbidden Alliance: Rust + Bun
-
-The filesystem engine—the core that does the scanning, size calculation, async deletion (via `tokio`), and risk analysis—is written in compiled Rust.
-
-The interface—the part that looks pretty, handles keybinds, diff-based rendering, and regex search—is written in **Bun**.
-
-Why Bun? Because it starts up in under 50ms, is natively fast, and I already knew how to build TUIs in TS.
-
-To connect them, I built a brutal, efficient newline-delimited JSON Inter-Process Communication (IPC) protocol.
-
-The Rust engine scans 8,000 directories a second and fires a relentless barrage of JSON down `stdout`.
-The Bun frontend catches the stream on `stdin`, parses it effortlessly, and renders the TUI at 60fps.
-
-It is a beautiful, chaotic marriage.
+A chaotic marriage that infuriates purists on both sides. Perfect.
 
 ## The Benchmarks of Spite
 
-Here are the results of this completely unhinged architecture:
+Here's what happens when you massively over-engineer a file deletion tool:
 
-| Operation         | npkill (Node) | hakai (Rust+Bun) | Gain       |
-| ----------------- | ------------- | ---------------- | ---------- |
-| Scan 50k dirs     | ~8–12s        | <1s              | **10–15×** |
-| Size calculation  | Sequential    | Parallel         | **8–12×**  |
-| Delete 5GB folder | ~45s (blocks) | Async (smooth)   | **4–6×**   |
+| Operation | npkill (Node) | hakai (Rust+Bun) | Gain |
+| --- | --- | --- | --- |
+| Scan 50k dirs | ~8-12s | <1s | **10-15x** |
+| Size calculation | Sequential | Parallel (rayon) | **8-12x** |
+| Delete 5GB folder | ~45s (blocks UI) | Async, non-blocking | **4-6x** |
+| Cold startup | ~400ms | <50ms | **8x** |
 
-When you tell `hakai` to delete 100 folders at once via multi-select, it deletes up to 8 of them concurrently via async tokio tasks. It finishes before you can even move your hand back to your mouse.
+When you multi-select 100 folders and hit enter, `hakai` fires up to 8 concurrent deletion tasks via `tokio`. The UI never blocks. The scan never pauses. Folders just vanish. It finishes before your hand reaches the mouse.
 
-## Was it worth it?
+## The Weekend That Kept Growing
 
-I spent an entire weekend configuring Rust cross-compilation targets, fighting token limits across IPC pipes, and ensuring Windows Git Bash TTY issues were resolved, all to save roughly 10 seconds of my day once a month.
+Let me be transparent about the scope creep.
 
-So, yes. Obviously.
+What started as "make npkill but faster" turned into: cross-platform path handling for Windows' 260-character MAX_PATH limit (solved with `\\?\` UNC prefixes). Fixing TTY detection for Windows Git Bash, which is somehow still broken in 2026. Adding risk analysis that flags orphaned `node_modules` missing a `package.json` so you don't nuke a monorepo root. Building a headless mode with `--json` output for CI pipelines because scope creep doesn't stop until the PR is merged.
 
-If you also wish to obliterate gigabytes of data with terrifying speed, grab [hakai on GitHub](https://github.com/Mic-360/hakai). Use with caution.
+"It works on my machine" wasn't good enough. It had to work on _everyone's_ machine.
+
+## Was It Worth It?
+
+I spent a full weekend configuring Rust cross-compilation targets, debugging IPC buffer edge cases, and fighting `tokio` task cancellation semantics -- all to save roughly 10 seconds of my day once a month.
+
+Let's do the math. If I use `hakai` twice a month and save 12 seconds each time, I'll break even on development time in approximately... 47 years.
+
+But that benchmark table looks _really_ good in a README.
+
+So yes. Obviously worth it.
+
+Grab [hakai on GitHub](https://github.com/Mic-360/hakai). Your `node_modules` had it coming.
