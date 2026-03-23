@@ -115,7 +115,9 @@ export interface CommandInterfaceEvents {
   ) => void
   onSoundPush: (consumer: (samples: Float32Array) => void) => void
   onExit: (consumer: () => void) => void
-  onMessage: (consumer: (msgType: MessageType, ...args: Array<any>) => void) => void
+  onMessage: (
+    consumer: (msgType: MessageType, ...args: Array<any>) => void,
+  ) => void
   onNetworkConnected: (
     consumer: (networkType: NetworkType, address: string) => void,
   ) => void

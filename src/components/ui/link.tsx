@@ -1,6 +1,6 @@
 import { Link as TanStackLink } from '@tanstack/react-router'
 import { forwardRef } from 'react'
-import type { LinkProps } from '@tanstack/react-router';
+import type { LinkProps } from '@tanstack/react-router'
 import { useFeedback } from '@/hooks/use-feedback'
 
 export const Link = forwardRef<HTMLAnchorElement, LinkProps>((props, ref) => {

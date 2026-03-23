@@ -1,4 +1,8 @@
-import type { CommandInterfaceEvents, MessageType, NetworkType } from '../emulators'
+import type {
+  CommandInterfaceEvents,
+  MessageType,
+  NetworkType,
+} from '../emulators'
 
 export declare class CommandInterfaceEventsImpl implements CommandInterfaceEvents {
   private onStdoutConsumers
@@ -19,7 +23,9 @@ export declare class CommandInterfaceEventsImpl implements CommandInterfaceEvent
   ) => void
   onSoundPush: (consumer: (samples: Float32Array) => void) => void
   onExit: (consumer: () => void) => void
-  onMessage: (consumer: (msgType: MessageType, ...args: Array<any>) => void) => void
+  onMessage: (
+    consumer: (msgType: MessageType, ...args: Array<any>) => void,
+  ) => void
   onNetworkConnected(
     consumer: (networkType: NetworkType, address: string) => void,
   ): void

@@ -1,10 +1,8 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { motion } from 'motion/react'
 import { useEffect, useState } from 'react'
-import type {
-  BlogMeta,
-  ProjectMeta} from '@/lib/content';
-import type { HealthSample} from '@/lib/health';
+import type { BlogMeta, ProjectMeta } from '@/lib/content'
+import type { HealthSample } from '@/lib/health'
 import { Section, StatCard } from '@/components/functions'
 import { KeyboardHint } from '@/components/CommandMenu'
 import GitHubHeatmap from '@/components/GitHubHeatmap'
@@ -19,10 +17,7 @@ import {
   siteInfo,
   siteMeta,
 } from '@/config/site-data'
-import {
-  getBlogIndex,
-  getProjectIndex,
-} from '@/lib/content'
+import { getBlogIndex, getProjectIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
 import { hashEmail } from '@/lib/gravatar'
 import { getHealthData } from '@/lib/health'

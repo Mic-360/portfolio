@@ -15,8 +15,7 @@ import {
 } from 'motion/react'
 
 import { useRef, useState } from 'react'
-import type {
-  MotionValue} from 'motion/react';
+import type { MotionValue } from 'motion/react'
 import { cn } from '@/lib/utils'
 
 export const FloatingDock = ({
@@ -24,7 +23,12 @@ export const FloatingDock = ({
   desktopClassName,
   mobileClassName,
 }: {
-  items: Array<{ title: string; icon: React.ReactNode; href: string; rel?: string }>
+  items: Array<{
+    title: string
+    icon: React.ReactNode
+    href: string
+    rel?: string
+  }>
   desktopClassName?: string
   mobileClassName?: string
 }) => {
@@ -40,7 +44,12 @@ const FloatingDockMobile = ({
   items,
   className,
 }: {
-  items: Array<{ title: string; icon: React.ReactNode; href: string; rel?: string }>
+  items: Array<{
+    title: string
+    icon: React.ReactNode
+    href: string
+    rel?: string
+  }>
   className?: string
 }) => {
   const [open, setOpen] = useState(false)
@@ -96,7 +105,12 @@ const FloatingDockDesktop = ({
   items,
   className,
 }: {
-  items: Array<{ title: string; icon: React.ReactNode; href: string; rel?: string }>
+  items: Array<{
+    title: string
+    icon: React.ReactNode
+    href: string
+    rel?: string
+  }>
   className?: string
 }) => {
   const mouseX = useMotionValue(Infinity)
@@ -140,8 +154,16 @@ function IconContainer({
   const widthTransform = useTransform(distance, [-150, 0, 150], [40, 80, 40])
   const heightTransform = useTransform(distance, [-150, 0, 150], [40, 80, 40])
 
-  const widthTransformIcon = useTransform(distance, [-150, 0, 150], [20, 40, 20])
-  const heightTransformIcon = useTransform(distance, [-150, 0, 150], [20, 40, 20])
+  const widthTransformIcon = useTransform(
+    distance,
+    [-150, 0, 150],
+    [20, 40, 20],
+  )
+  const heightTransformIcon = useTransform(
+    distance,
+    [-150, 0, 150],
+    [20, 40, 20],
+  )
 
   const width = useSpring(widthTransform, {
     mass: 0.1,

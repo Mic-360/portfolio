@@ -15428,18 +15428,16 @@ function wl(e) {
               children:
                 0 === e.length
                   ? Ui('div', { class: 'kbd-md' })
-                  : e
-                      .split(' ')
-                      .map((e) =>
-                        Ui('kbd', {
-                          class:
-                            'kbd kbd-md cursor-pointer hover:bg-accent-focus',
-                          onPointerDown: () => u(e, !0),
-                          onPointerUp: () => u(e, !1),
-                          onPointerCancel: () => u(e, !1),
-                          children: c[e] ?? r[0][e] ?? d(e),
-                        }),
-                      ),
+                  : e.split(' ').map((e) =>
+                      Ui('kbd', {
+                        class:
+                          'kbd kbd-md cursor-pointer hover:bg-accent-focus',
+                        onPointerDown: () => u(e, !0),
+                        onPointerUp: () => u(e, !1),
+                        onPointerCancel: () => u(e, !1),
+                        children: c[e] ?? r[0][e] ?? d(e),
+                      }),
+                    ),
             }),
           ),
         }),
