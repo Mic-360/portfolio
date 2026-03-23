@@ -111,7 +111,7 @@ function ResumePage() {
       {/* Connect With Me Section */}
       <motion.section
         variants={item}
-        className="flex flex-col gap-10 text-center bg-primary/5 p-10 rounded-4xl border-2 border-primary/10 shadow-inner relative overflow-hidden"
+        className="flex flex-col gap-10 text-center bg-primary/5 p-10 border-2 border-primary/10 shadow-inner relative overflow-hidden"
       >
         <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-50 pointer-events-none" />
         <div className="relative z-10 flex flex-col gap-4">
@@ -136,7 +136,7 @@ function ResumePage() {
               data-cal-namespace="connect"
               data-cal-link={siteInfo.calLink}
               data-cal-config='{"layout":"week_view","useSlotsViewOnSmallScreen":"true"}'
-              className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-black text-sm font-bold uppercase tracking-widest hover:scale-105 transition-transform shadow-lg hover:shadow-primary/20 cursor-pointer"
+              className="group inline-flex items-center gap-2 px-6 py-3 bg-primary/60 text-black text-sm font-bold uppercase tracking-widest hover:scale-105 transition-transform shadow-lg hover:shadow-primary/20 cursor-pointer"
             >
               Get in Touch
               <span className="transform group-hover:translate-x-1 transition-transform">
@@ -144,12 +144,12 @@ function ResumePage() {
               </span>
             </button>
             <a
-              href="https://www.linkedin.com/in/bhaumic"
+              href="/Resume-web.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border text-foreground text-sm font-bold uppercase tracking-widest hover:bg-primary/10 hover:border-primary transition-colors shadow-lg hover:shadow-primary/20"
+              className="group inline-flex items-center gap-2 px-6 py-3 border border-border text-foreground text-sm font-bold uppercase tracking-widest hover:bg-primary/10 hover:border-primary transition-colors shadow-lg hover:shadow-primary/20"
             >
-              LinkedIn
+              Resume
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -170,32 +170,6 @@ function ResumePage() {
           </motion.div>
         </div>
       </motion.section>
-
-      <motion.div variants={item} className="flex items-center justify-center">
-        <a
-          href="/Resume-web.pdf"
-          download
-          className="group flex items-center gap-3 text-lg italic text-primary"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="w-4 h-4"
-          >
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-            <polyline points="7 10 12 15 17 10" />
-            <line x1="12" y1="15" x2="12" y2="3" />
-          </svg>
-          Download PDF
-        </a>
-      </motion.div>
 
       <motion.footer variants={item}>
         <Link
