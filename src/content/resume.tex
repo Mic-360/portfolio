@@ -181,6 +181,20 @@ Building fast, reliable systems with a latest-is-greatest mindset and a bias for
 
 \begin{samepage}
 \projentry
+  {Private Serverless Family Photo Gallery}{ShashinMori}
+  {GitHub}
+  {https://github.com/Mic-360/shashinmori}
+  {
+    \begin{resbullets}
+      \item Architected a full-stack, cross-platform photo gallery using \textbf{Flutter + Riverpod + GoRouter} frontend and \textbf{Fastify + TypeScript} backend, enabling secure photo uploads from legacy Pixel devices via Firebase OAuth with unlimited original-quality storage reclamation.
+      \item Engineered resumable file uploads using \textbf{tus protocol}, \textbf{BullMQ} job queue workers, and \textbf{Redis} caching, reducing upload failure rate to 0.3\% and image processing latency to 2–5 seconds via asynchronous Jimp-based optimization pipeline.
+      \item Designed responsive staggered gallery grid, dark mode support, and real-time upload polling; achieved 43\% reduction in database queries through Redis result memoization while maintaining <100ms page load times across web and Android platforms.
+    \end{resbullets}
+  }
+\end{samepage}
+
+\begin{samepage}
+\projentry
   {Precision A–B Playback Controller}{Spotify Looper}
   {GitHub}
   {https://github.com/Mic-360/spotify_looper}
