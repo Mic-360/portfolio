@@ -15,8 +15,8 @@ import { FloatingNavDock } from '../components/FloatingNavDock'
 import Footer from '../components/Footer'
 import { gravatar, siteImages, siteInfo, siteMeta } from '../config/site-data'
 
-import appCss from '../styles.css?url'
 import type { QueryClient } from '@tanstack/react-query'
+import appCss from '../styles.css?url'
 
 import { env } from '@/env'
 
@@ -324,26 +324,43 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   useKonamiCode(useCallback(() => setShowDoom(true), []))
 
   useEffect(() => {
-    // Defer Cal.com initialization to next frame to avoid blocking first paint
-    const timeoutId = requestIdleCallback(
-      async () => {
-        try {
-          const cal = await getCalApi({ namespace: 'connect' })
-          cal('ui', {
-            cssVarsPerTheme: {
-              light: { 'cal-brand': '#7a9a65' },
-              dark: { 'cal-brand': '#7a9a65' },
-            },
-            hideEventTypeDetails: false,
-            layout: 'week_view',
-          })
-        } catch (error) {
-          console.error('Failed to initialize Cal.com:', error)
-        }
-      },
-      { timeout: 3000 },
-    )
-    return () => cancelIdleCallback(timeoutId)
+    const initializeCal = async () => {
+      try {
+        const cal = await getCalApi({ namespace: 'connect' })
+        cal('ui', {
+          cssVarsPerTheme: {
+            light: { 'cal-brand': '#7a9a65' },
+            dark: { 'cal-brand': '#7a9a65' },
+          },
+          hideEventTypeDetails: false,
+          layout: 'week_view',
+        })
+      } catch (error) {
+        console.error('Failed to initialize Cal.com:', error)
+      }
+    }
+
+    const hasIdleCallback = typeof window.requestIdleCallback === 'function'
+
+    const timeoutId = hasIdleCallback
+      ? window.requestIdleCallback(
+          () => {
+            void initializeCal()
+          },
+          { timeout: 3000 },
+        )
+      : window.setTimeout(() => {
+          void initializeCal()
+        }, 1)
+
+    return () => {
+      if (hasIdleCallback && typeof window.cancelIdleCallback === 'function') {
+        window.cancelIdleCallback(timeoutId)
+        return
+      }
+
+      window.clearTimeout(timeoutId)
+    }
   }, [])
 
   useEffect(() => {
