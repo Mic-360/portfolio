@@ -1,5 +1,5 @@
 ---
-title: 'I Spent a Weekend Teaching My Browser What Hand Gestures Mean'
+title: 'TabiNeko: Teaching Chrome That a Wrist Flick Means "Go Back" Was Harder Than It Sounds'
 date: '2026-02-27'
 summary: 'A completely normal story about building a mouse-gesture Chrome extension because the back button was, apparently, too far away.'
 tags:
@@ -13,116 +13,99 @@ categories:
 image: '/tabineko.png'
 ---
 
-# I Spent a Weekend Teaching My Browser What Hand Gestures Mean
+# TabiNeko: Teaching Chrome That a Wrist Flick Means "Go Back" Was Harder Than It Sounds
 
 > My right hand is 4cm from the back button. I built an entire Chrome extension instead of moving it.
 
-Normal people use the back button. They click it. They go back. They continue their lives. I, apparently, am not normal people.
-
-## It started with a simple thought
+It started with a reasonable thought.
 
 "I wish I could just swipe to go back."
 
-That's it. That's the entire origin story. I didn't have a problem. I manufactured one. Then I built a solution for the problem I manufactured, added five build tools, a gesture detection state machine, and named the whole thing after a Japanese cat reference.
+That's it. No technical problem. No user pain. Just a fleeting preference about mouse navigation that a normal person would think once and immediately forget. I, instead, spent a weekend building a gesture recognition engine, a canvas-based trail renderer, a Manifest V3 service worker, and a full design system for a 400px popup.
 
-Totally fine. Very normal behavior.
+The back button is still 4cm away. I've just stopped using it.
 
-## Manifest V3: A Chrome Story
+## Manifest V3: Google's Gift to Extension Developers Who Thought Life Was Too Easy
 
-Ah yes, Manifest V3 — Google's gift to extension developers who thought their job was too easy. You know what's fun? Having to write a service worker for background tasks that does nothing but switch tabs. You know what's more fun? Discovering that your popup can't run inline scripts because of Content Security Policy, so you now need a **custom build tool that literally extracts your inline scripts into separate files at compile time**.
+You know what Manifest V3 took away? The ability to run persistent background pages. Fine, that's a service worker now. You know what else it took? Inline scripts in the popup HTML, because Content Security Policy says no.
 
-That's not a workaround. That's archaeology.
+That second one meant I needed a build step that extracts inline scripts into separate files at compile time. Not a workaround. That's just the job now. I wrote a custom `extract-inline.ts` script — 74 lines — that exists entirely because Chrome's CSP decided my popup was suspicious.
 
-But sure, it's totally fine, it's just one extra script, it'll take like 10 minutes.
+I'm fine. The script is fine. We're all fine.
 
-```ts
-// extract-inline.ts — the file that exists because CSP said no
-// 74 lines of "why am I like this"
-```
+## "I'll Just Write a Quick Content Script"
 
-I'm fine. Everything is fine.
+Famous last words.
 
-## "I'll just write a quick content script"
+The content script injects into every page on the internet. It listens for right-click drag events. It detects direction. It sends a message to the background service worker. Done.
 
-The content script was supposed to be simple. Listen for right-click drag. Detect direction. Send message. Done.
+What actually ended up in the content script:
 
-What actually happened:
+A canvas element gets injected into every page. High-DPI support, because gesture trails on a retina display need to be crisp. Quadratic curve smoothing so the trail looks fluid instead of jagged. Real-time cardinal direction labels rendered mid-gesture with arrow symbols. A `gesture.ts` module with direction detection via accumulated angle deltas.
 
-- A canvas element gets injected into every single page on the internet
-- High-DPI support because god forbid the gesture trail look blurry on a retina display
-- Quadratic curve smoothing so the trail looks "fluid"
-- Real-time direction labels with arrow symbols rendered mid-gesture
-- A separate `gesture.ts` file with a 300-degree threshold circle detection algorithm using `atan2` cross-products
+For going back. And forward. And switching tabs. And scrolling to the top.
 
-For going back. And forward. Like the buttons that are RIGHT THERE.
+## The Circle Gesture Problem
 
-## The Circle Gesture
+I need to talk about circle detection for a moment.
 
-Okay look. I need to talk about the circle detection.
+The naive approach: did the mouse path close on itself? Easy. Done. Ship it.
 
-So for a circle gesture, I needed to track whether the mouse was moving in a loop. The naive approach: did the path close on itself? Sure. Done. Ship it.
+What I actually implemented: accumulated signed angle changes using `atan2` cross-products across consecutive path points, checked whether the total exceeds 300 degrees of arc, verified path closure within 80 pixels of the starting point.
 
-What I actually did: accumulated signed angle changes via `atan2` cross-products, checked if the total exceeded 300 degrees of rotation, verified path closure within 80px.
+This is for refreshing the page. The keyboard shortcut is F5. It has been F5 for thirty years. My circle detection algorithm is more sophisticated than my first three jobs combined.
 
-This is for the "refresh page" gesture. The button is F5. It has been F5 for 30 years. My circle detection algorithm is more sophisticated than most of the code at my last job.
+I have no regrets.
 
-## Using Astro for a Browser Popup
+## The Gesture Map
 
-The popup is one page. It shows a gesture reference table. It is 400px wide. It will never be server-side rendered. It has no dynamic data. It will never need hydration.
+Seven gestures. Seven actions.
 
-I used Astro.
+| Gesture | Action |
+|---|---|
+| Swipe Left | Go Back |
+| Swipe Right | Go Forward |
+| Swipe Up | Scroll to Top |
+| Swipe Down | Scroll to Bottom |
+| Right then Down | Next Tab |
+| Left then Up | Previous Tab |
+| Circle | Refresh Page |
 
-It has a full design system. Custom CSS variables. A sage-green color palette with names like `sage-300` and `sage-600`. A cubic-bezier easing curve: `(0.22, 1, 0.36, 1)`. I have named shadow tokens. For a popup.
+All triggered by right-click drag. No accidental fires on normal right-click. The direction detection only commits once you've moved enough to make intent clear.
+
+## The Build Pipeline That Grew a Pipeline
+
+It's a Chrome extension. You write JS, load it unpacked, test it. Simple.
+
+My build pipeline:
+1. **Astro** compiles the popup
+2. **Bun** bundles the content and background scripts
+3. Custom CSP extraction script extracts inline scripts
+4. **Sharp** generates four icon sizes from source
+5. Pack script ZIPs everything for distribution
+
+Five tools. For seven features. I wrote more build infrastructure than I wrote browser logic. That's my brand.
+
+## The Popup Design System
+
+The popup is 400px wide. It shows a gesture reference table. It will never need server-side rendering. It has no dynamic data whatsoever.
+
+I gave it a full design system. Custom CSS variables. A sage-green palette with named tokens like `sage-300` and `sage-600`. Named shadow tokens. A cubic-bezier easing curve. In Astro.
 
 ```css
 --shadow-soft: 0 4px 16px rgba(46, 47, 44, 0.04);
---shadow-card: 0 2px 8px rgba(46, 47, 44, 0.06);
 ```
 
-For. A. Popup.
+For a popup.
 
-## The Build Pipeline
+## Does It Actually Work?
 
-It's a Chrome extension. You write some JS, you load it unpacked, you test it. Simple.
+Yes. Surprisingly well.
 
-My build pipeline:
+The gesture trail is smooth. The direction detection is accurate. Switching tabs with a two-direction swipe is genuinely faster than Ctrl+Tab once you've muscle-memorized it. The circle-to-refresh has completely replaced F5 in my daily workflow.
 
-1. Astro compiles the popup
-2. Bun bundles the content and background scripts
-3. Custom CSP extraction script runs
-4. Icon generator (Sharp) creates four sizes from source
-5. Pack script ZIPs everything up for distribution
+I created a problem, solved it more thoroughly than necessary, and now can't imagine browsing without it. Standard engineering outcome.
 
-That's five tools. For an extension that does seven things:
-go back, go forward, next tab, previous tab, scroll top, scroll bottom, refresh.
+**TabiNeko** is open source. You can use the back button instead. Both are valid. I won't judge you. I'm too busy drawing circles on web pages to have opinions about other people's navigation choices.
 
-I wrote more build infrastructure than I wrote actual features. That's my brand now apparently.
-
-## The Name
-
-TabiNeko. "Tabi" (旅) means journey. "Neko" (猫) means cat. It's a traveling cat. It navigates. Get it?
-
-I named my mouse gesture extension after a traveling cat because:
-
-1. The gestures feel like a cat pawing at the screen
-2. I wanted the branding to be "Japanese minimalist"
-3. The color is sage green which is calming
-4. I am extremely normal
-
-The tagline is "Right-click. Swipe. Flow." I spent longer on the tagline than I did on the background service worker.
-
-## Does It Even Work?
-
-Yes. Actually, it works great. Right-click drag to the right then down for next tab. Left-click drag left then up for previous. Draw a circle to refresh. It's smooth, it feels good, and the gesture trail looks genuinely satisfying.
-
-Did I need it? No. Is the back-button 4cm away? Yes. Am I using TabiNeko every single day now?
-
-...yes.
-
-The gestures are faster than I expected once you muscle-memory them. The tab switching is legitimately more fluid than Ctrl+Tab. The circle-to-refresh has ruined me for F5. I created a problem, then I solved it better than the original solution ever could.
-
-That's just engineering, bro.
-
----
-
-TabiNeko is open source if you want to try it. Or you can just use the back button. Both are valid life choices. I won't judge you. I'm too busy drawing circles on my screen to refresh things.
+[Grab it on GitHub](https://github.com/Mic-360/tabineko).

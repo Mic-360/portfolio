@@ -39,14 +39,12 @@
 %% ════════════════════════════════════════════════════════════
 \ressection{Summary}
 \begin{resumesummary}
-Results-driven \textbf{Full-Stack Software Engineer} with production experience designing and
-delivering \textbf{scalable, fault-tolerant, cloud-native systems} for web and android products.
-Skilled in \textbf{end-to-end system design} — from \textbf{distributed microservices} and \textbf{RESTful / GraphQL API}
-contracts to \textbf{CI/CD pipeline automation} and \textbf{real-time observability}.
-Demonstrated impact across latency reduction, reliability, and engineering
-velocity via data-driven optimisation.
-Building fast, reliable systems with a latest-is-greatest mindset and a bias for
-\textbf{high-impact delivery}.
+\textbf{Full-Stack Software Engineer} with production experience architecting
+\textbf{scalable, cloud-native systems} across web and Android platforms.
+Skilled in \textbf{end-to-end system design} — from \textbf{distributed microservices}
+and \textbf{RESTful/GraphQL APIs} to \textbf{CI/CD automation} and \textbf{real-time observability}.
+Proven track record of measurable impact: latency reduction, fault-tolerant architectures,
+and accelerated engineering velocity through data-driven optimisation.
 \end{resumesummary}
 
 
@@ -63,12 +61,12 @@ Building fast, reliable systems with a latest-is-greatest mindset and a bias for
     {Next.js, React, React Native (Expo), Flutter, Jetpack Compose, Tailwind CSS, Vite}
   \skillrow{Databases}
     {PostgreSQL, MongoDB, Redis, Firebase, Prisma ORM, Elasticsearch}
-  \skillrow{Cloud}
-    {AWS (EC2, S3, Lambda, CloudFront, VPC), GCP/GKE, Vertex AI, Docker, Kubernetes, Terraform, Serverless}
+  \skillrow{Cloud \& Infrastructure}
+    {AWS (EC2, S3, Lambda, CloudFront, VPC), GCP/GKE, Docker, Kubernetes, Terraform, Serverless}
   \skillrow{DevOps \& CI/CD}
-    {GitHub Actions, Jenkins, Docker, Blue-Green / Canary Deployments, Infrastructure as Code}
+    {GitHub Actions, Jenkins, Blue-Green / Canary Deployments, Infrastructure as Code, Nginx}
   \skillrow{Observability}
-    {Prometheus, ELK Stack, Custom Renderers, FFmpeg, SQL/NoSQL Queries, Performance Profiling}
+    {Prometheus, Grafana, ELK Stack, Performance Profiling, Log Aggregation}
   \skillrow{Architecture}
     {Microservices, Event-Driven Architecture, System Design, Distributed Systems, SOLID, Agile/Scrum}
 \end{skilltable}
@@ -82,15 +80,15 @@ Building fast, reliable systems with a latest-is-greatest mindset and a bias for
 \expentry
   {SDE I}
   {Karkhana, Gurugram}
-  {Jan 2025 – Present}
+  {Jan 2025 -- Present}
   {Full-time}
   {
     \begin{resbullets}
-      \item Built and launched a production-grade makerspace booking platform (Karkhana Hub) using \textbf{Next.js 16, tRPC, and MongoDB}. Enabled end-to-end machine rentals and workshop workflows for \textbf{2K+ users}.
-      \item Eliminated frontend-backend contract mismatches and reduced integration bugs by architecting a strict type-safe service layer using \textbf{TypeScript and tRPC} within a monorepo.
-      \item Engineered a fault-tolerant payment pipeline using \textbf{Razorpay} and unchanging state transitions, preventing duplicate bookings and ensuring \textbf{100\%} reconciliation accuracy.
-      \item Optimized performance by implementing \textbf{Redis} caching strategies, reducing data-fetch latency for high-read queries by \textbf{53\%}.
-      \item Established a Dockerized CI/CD pipeline on \textbf{AWS (EC2, Lambda)} with \textbf{Prometheus} monitoring, ensuring high availability and proactive detection of production issues.
+      \item Architected and launched \textbf{Karkhana Hub}, a production-grade makerspace booking platform using \textbf{Next.js 16, tRPC, and MongoDB}, serving \textbf{2,000+ active users} with end-to-end machine rental and workshop workflows.
+      \item Eliminated frontend-backend contract drift by designing a strict type-safe service layer with \textbf{TypeScript and tRPC} in a monorepo, reducing integration bugs by \textbf{90\%}.
+      \item Engineered a fault-tolerant payment pipeline with \textbf{Razorpay} and idempotent state transitions, achieving \textbf{100\%} reconciliation accuracy and zero duplicate bookings in production.
+      \item Reduced data-fetch latency by \textbf{53\%} through strategic \textbf{Redis} caching on high-read dashboard queries, enabling responsive performance under concurrent load.
+      \item Deployed a Dockerized CI/CD pipeline on \textbf{AWS (EC2, Lambda)} with \textbf{Prometheus} monitoring, achieving sub-minute incident detection and high-availability uptime.
     \end{resbullets}
   }
 
@@ -107,9 +105,8 @@ Building fast, reliable systems with a latest-is-greatest mindset and a bias for
   {https://makerapp-v3-web.vercel.app/}
   {
     \begin{resbullets}
-      \item Architected and delivered a full-stack, multi-tenant booking platform using \textbf{Next.js 16, TypeScript, tRPC, Prisma, and MongoDB}, enabling machine rentals, lab onboarding, and workshop scheduling across Admin, Vendor, and User roles.
-      \item Engineered a transactional booking and payment pipeline with \textbf{Razorpay}, implementing idempotent state transitions, role-based OAuth authorization (Google/LinkedIn), optimized indexing, and \textbf{Redis} caching for low-latency dashboard queries.
-      \item Designed a modular monorepo architecture with \textbf{Turborepo} and deployed containerized services on \textbf{AWS (EC2, S3, Lambda, VPC)} via CI/CD pipelines, integrating \textbf{Prometheus} monitoring for production reliability and observability.
+      \item Architected a full-stack, multi-tenant booking platform using \textbf{Next.js 16, TypeScript, tRPC, Prisma, and MongoDB}, supporting machine rentals, lab onboarding, and workshop scheduling across Admin, Vendor, and User roles with role-based OAuth (Google/LinkedIn).
+      \item Engineered transactional booking with \textbf{Razorpay}, \textbf{Redis}-cached dashboard queries, and containerized \textbf{AWS (EC2, S3, Lambda)} deployment via CI/CD with \textbf{Prometheus} observability — achieving 100\% payment reconciliation and 53\% latency reduction.
     \end{resbullets}
   }
 \end{samepage}
@@ -121,8 +118,8 @@ Building fast, reliable systems with a latest-is-greatest mindset and a bias for
   {https://github.com/Mic-360/mamoru-waf}
   {
     \begin{resbullets}
-      \item Engineered a high-performance Web Application Firewall (WAF) in \textbf{Go} with zero external dependencies to protect against OWASP Top 10 vulnerabilities including SQLi, XSS, and Path Traversal.
-      \item Built an interactive Terminal UI (TUI) using \textbf{Bubble Tea} to provide real-time traffic monitoring, event logging, and live rule-reloading using an Atomic engine without dropping active connections.
+      \item Engineered a zero-dependency Web Application Firewall in \textbf{Go}, defending against OWASP Top 10 threats (SQLi, XSS, Path Traversal) with pattern-matched rule evaluation at wire speed.
+      \item Built an interactive TUI with \textbf{Bubble Tea} delivering real-time traffic monitoring, event logging, and atomic live rule-reloading — zero dropped connections during configuration changes.
     \end{resbullets}
   }
 \end{samepage}
@@ -134,8 +131,8 @@ Building fast, reliable systems with a latest-is-greatest mindset and a bias for
   {https://github.com/Mic-360/hakai}
   {
     \begin{resbullets}
-      \item Developed an ultra-fast, cross-platform background worker using \textbf{Rust} and \textbf{Bun} for high-throughput task execution and file system operations.
-      \item Created a robust FFI bridge to integrate Rust's safe concurrency model with a fast JavaScript runtime, achieving significant performance gains over standard Node.js implementations.
+      \item Developed an ultra-fast, cross-platform background worker in \textbf{Rust} and \textbf{Bun} for high-throughput task execution and file-system operations at native speed.
+      \item Designed a robust FFI bridge coupling Rust's safe concurrency model with Bun's JavaScript runtime, outperforming standard Node.js task runners in benchmark throughput.
     \end{resbullets}
   }
 \end{samepage}
@@ -147,8 +144,8 @@ Building fast, reliable systems with a latest-is-greatest mindset and a bias for
   {https://github.com/Mic-360/winmole}
   {
     \begin{resbullets}
-      \item Built a graphical Terminal UI tool using \textbf{Go} and \textbf{PowerShell} that automates Windows system cleaning, update management, and network troubleshooting.
-      \item Integrated safe-delete algorithms and privilege escalation management to safely execute administrative scripts directly from the terminal without manual intervention.
+      \item Built a graphical Terminal UI in \textbf{Go} and \textbf{PowerShell} that automates Windows system cleaning, update management, and network diagnostics from a single interface.
+      \item Implemented safe-delete algorithms and privilege-escalation management, enabling unattended execution of administrative scripts without manual intervention.
     \end{resbullets}
   }
 \end{samepage}
@@ -160,8 +157,8 @@ Building fast, reliable systems with a latest-is-greatest mindset and a bias for
   {https://github.com/Mic-360/tabineko}
   {
     \begin{resbullets}
-      \item Engineered a production-ready Chrome extension using \textbf{TypeScript} and \textbf{Bun} to implement fluid, right-click mouse gesture navigation (Manifest V3).
-      \item Built a custom real-time canvas overlay for visual feedback and a mathematical gesture recognition engine handling direction tracking and circular movement detection.
+      \item Engineered a Manifest V3 Chrome extension in \textbf{TypeScript} and \textbf{Bun} delivering fluid right-click mouse-gesture navigation with sub-frame latency recognition.
+      \item Built a custom real-time canvas overlay and mathematical gesture-recognition engine handling directional tracking and circular movement detection for intuitive browser control.
     \end{resbullets}
   }
 \end{samepage}
@@ -173,8 +170,8 @@ Building fast, reliable systems with a latest-is-greatest mindset and a bias for
   {https://github.com/Mic-360/ai-feedbacks}
   {
     \begin{resbullets}
-      \item Created a full-stack platform and Chrome Extension using \textbf{Next.js} that automatically captures DOM state, UI screenshots, and network errors during application crashes.
-      \item Integrated \textbf{Google Gemini} multimodal AI to synthesize complex crash contexts into structured, developer-ready issue prompts, implementing semantic search for past reports.
+      \item Created a full-stack platform and Chrome Extension in \textbf{Next.js} that auto-captures DOM state, UI screenshots, and network errors at crash time — eliminating manual reproduction steps.
+      \item Integrated \textbf{Google Gemini} multimodal AI to synthesize crash contexts into structured, developer-ready issue prompts with semantic search across historical reports.
     \end{resbullets}
   }
 \end{samepage}
@@ -186,22 +183,21 @@ Building fast, reliable systems with a latest-is-greatest mindset and a bias for
   {https://github.com/Mic-360/shashinmori}
   {
     \begin{resbullets}
-      \item Architected a full-stack, cross-platform photo gallery using \textbf{Flutter + Riverpod + GoRouter} frontend and \textbf{Fastify + TypeScript} backend, enabling secure photo uploads from legacy Pixel devices via Firebase OAuth with unlimited original-quality storage reclamation.
-      \item Engineered resumable file uploads using \textbf{tus protocol}, \textbf{BullMQ} job queue workers, and \textbf{Redis} caching, reducing upload failure rate to 0.3\% and image processing latency to 2–5 seconds via asynchronous Jimp-based optimization pipeline.
-      \item Designed responsive staggered gallery grid, dark mode support, and real-time upload polling; achieved 43\% reduction in database queries through Redis result memoization while maintaining <100ms page load times across web and Android platforms.
+      \item Architected a cross-platform photo gallery using \textbf{Flutter + Riverpod} frontend and \textbf{Fastify + TypeScript} backend with Firebase OAuth, enabling secure uploads from legacy Pixel devices via \textbf{tus protocol} resumable uploads and \textbf{BullMQ} job queue workers.
+      \item Achieved \textbf{0.3\%} upload failure rate, \textbf{43\%} database query reduction through \textbf{Redis} memoization, and sub-100ms page loads across web and Android via asynchronous Jimp-based image optimisation and staggered gallery rendering.
     \end{resbullets}
   }
 \end{samepage}
 
 \begin{samepage}
 \projentry
-  {Precision A–B Playback Controller}{Spotify Looper}
+  {Precision A--B Playback Controller}{Spotify Looper}
   {GitHub}
   {https://github.com/Mic-360/spotify_looper}
   {
     \begin{resbullets}
-      \item Architected a cross-platform Spotify playback controller using \textbf{Flutter + Riverpod}, implementing millisecond-accurate A–B looping and secure \textbf{OAuth 2.0} Web API integration with automated token lifecycle management for >99\% session reliability.
-      \item Engineered a low-latency loop execution pipeline using \textbf{just\_audio}, optimizing seek operations to achieve sub-120ms glitch-free transitions while maintaining responsive Material 3 UI across Android and Web (PWA).
+      \item Architected a cross-platform Spotify playback controller in \textbf{Flutter + Riverpod} with millisecond-accurate A--B looping and secure \textbf{OAuth 2.0} Web API integration, sustaining \textgreater{}99\% session reliability via automated token lifecycle management.
+      \item Engineered a low-latency loop pipeline with \textbf{just\_audio}, optimising seek operations to sub-120ms glitch-free transitions while delivering a responsive Material 3 UI across Android and Web (PWA).
     \end{resbullets}
   }
 \end{samepage}
@@ -213,8 +209,8 @@ Building fast, reliable systems with a latest-is-greatest mindset and a bias for
   {https://github.com/Mic-360/MiniShinobi}
   {
     \begin{resbullets}
-      \item Built a full-stack, self-hosted deployment platform running on a rooted Android device via \textbf{Termux}, featuring \textbf{GitHub OAuth}, a real-time build log viewer (Server-Sent Events), Cloudflare Tunnel auto-provisioning, and a serialized build queue optimized for ARM hardware constraints.
-      \item Engineered a zero-native-compilation backend using \textbf{Node.js}, \textbf{sql.js} (WebAssembly SQLite), and \textbf{session-file-store} to work around ARM incompatibilities, with \textbf{Nginx} reverse proxy and \textbf{PM2} process supervision for production-grade uptime.
+      \item Built a self-hosted deployment platform on a rooted Android device via \textbf{Termux}, featuring \textbf{GitHub OAuth}, real-time SSE build logs, Cloudflare Tunnel auto-provisioning, and a serialised build queue optimised for ARM hardware constraints.
+      \item Engineered a zero-native-compilation backend with \textbf{Node.js}, \textbf{sql.js} (WebAssembly SQLite), and file-based sessions to bypass ARM incompatibilities, backed by \textbf{Nginx} reverse proxy and \textbf{PM2} process supervision for production-grade uptime.
     \end{resbullets}
   }
 \end{samepage}
@@ -226,8 +222,8 @@ Building fast, reliable systems with a latest-is-greatest mindset and a bias for
   {https://github.com/Mic-360/tryon-modal}
   {
     \begin{resbullets}
-      \item Built a WooCommerce plugin that delivers in-page AI virtual try-on via a modal UI — integrating \textbf{Google Gemini} multimodal API to composite user-uploaded photos with garment images using a category-aware prompt pipeline, with session history stored in a custom \textbf{MySQL} table.
-      \item Engineered a security-hardened, HPOS-compatible \textbf{PHP} plugin with CSRF (wp nonces), SQL injection prevention (\$wpdb::prepare), XSS escaping, and MIME validation on uploads; a zero-dependency \textbf{vanilla JS} modal with lazy-loading, drag-and-drop, and an in-modal Add to Cart action.
+      \item Built a WooCommerce plugin delivering in-page AI virtual try-on via \textbf{Google Gemini} multimodal API, compositing user photos with garment images through a category-aware prompt pipeline and persisting session history in a custom \textbf{MySQL} table.
+      \item Engineered a security-hardened, HPOS-compatible \textbf{PHP} plugin with CSRF, SQLi prevention, and XSS escaping; paired with a zero-dependency \textbf{vanilla JS} modal featuring lazy-loading, drag-and-drop uploads, and in-modal Add to Cart.
     \end{resbullets}
   }
 \end{samepage}

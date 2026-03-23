@@ -80,6 +80,8 @@ function BlogPost() {
     )
   }
 
+  const readingTime = Math.max(1, Math.ceil(post.html.replace(/<[^>]*>/g, '').split(/\s+/).length / 200))
+
   const canonicalUrl = `${siteMeta.baseUrl}/blog/${post.slug}`
   const imageUrl = post.image
     ? `${siteMeta.baseUrl}${post.image}`
@@ -140,7 +142,7 @@ function BlogPost() {
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: 0.08,
       },
     },
   }
@@ -193,7 +195,7 @@ function BlogPost() {
             variants={item}
             className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary"
           >
-            {formatDate(post.date)}
+            {formatDate(post.date)} · {readingTime} min read
           </motion.p>
         </div>
 
@@ -209,7 +211,7 @@ function BlogPost() {
             {[...post.categories, ...post.tags].map((tag) => (
               <span
                 key={tag}
-                className="text-[9px] uppercase tracking-[0.2em] px-2 py-0.5 rounded-sm bg-muted text-primary/60 border border-border/30"
+                className="text-[9px] uppercase tracking-[0.2em] px-2 py-0.5 rounded-sm bg-muted text-primary/60 border border-border/30 hover:bg-primary/10 hover:text-primary/80 transition-colors duration-200"
               >
                 {tag}
               </span>
@@ -218,7 +220,7 @@ function BlogPost() {
         )}
         <motion.div
           variants={item}
-          className="animus-sync-bar mt-2 opacity-30"
+          className="animus-sync-bar mt-4 opacity-50"
         />
       </header>
 

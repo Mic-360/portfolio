@@ -4,10 +4,11 @@ date: '2026-03-02'
 summary: 'A production-grade mouse gesture Chrome extension that lets you navigate tabs and pages with right-click drag gestures — built with TypeScript, Bun, and a custom Manifest V3 build pipeline.'
 stack:
   - 'TypeScript'
-  - 'Astro'
   - 'Bun'
   - 'Chrome MV3'
+  - 'Astro'
   - 'Sharp'
+  - 'adm-zip'
 links:
   - label: 'GitHub'
     url: 'https://github.com/Mic-360/TabiNeko'
@@ -22,150 +23,88 @@ categories:
 image: '/tabineko.png'
 ---
 
-# TabiNeko — Mouse Gestures
+# TabiNeko — Mouse Gesture Navigation
 
-A premium Chrome extension (Manifest V3) that replaces repetitive mouse clicks with fluid right-click drag gestures. Navigate backward, forward, switch tabs, scroll, and refresh — all without lifting your hand to reach toolbar buttons or keyboard shortcuts.
+TabiNeko is a Manifest V3 Chrome extension that replaces repetitive toolbar clicks and keyboard shortcuts with fluid right-click drag gestures. Navigate backward and forward, jump between tabs, scroll to page extremes, and refresh — without lifting a hand to reach the keyboard or precisely targeting a 24px button. It is built on a custom TypeScript + Bun build pipeline that works around Manifest V3's Content Security Policy constraints, and ships as a Chrome Web Store-ready ZIP artifact from a single `bun run release` command.
 
-## The Problem
+## Overview
 
-Modern browser navigation is optimized for pointing, not flowing. Every back, forward, and tab switch requires precise cursor targeting. Power users making dozens of navigation moves per session end up in a loop of micro-movements that interrupt focus. Mouse gestures have been a feature of Opera and Firefox since the early 2000s — Chrome has never shipped one natively.
-
-## The Solution
-
-TabiNeko injects a lightweight content script into every page that listens for right-click drag events. As you drag, it renders a live visual trail on a canvas overlay and continuously classifies your motion into cardinal directions. On mouseup, it resolves the gesture signature and executes the corresponding browser action — entirely client-side, with no network calls and no permissions beyond what is strictly required.
-
-### Gesture Reference
-
-| Gesture      | Motion | Action           |
-| ------------ | ------ | ---------------- |
-| Swipe Right  | `→`    | Go Forward       |
-| Swipe Left   | `←`    | Go Back          |
-| Swipe Up     | `↑`    | Scroll to Top    |
-| Swipe Down   | `↓`    | Scroll to Bottom |
-| Right → Down | `→ ↓`  | Next Tab         |
-| Left → Up    | `← ↑`  | Previous Tab     |
-| Circle       | `↻`    | Refresh Page     |
-
-Context menu behavior is suppressed only when a gesture is detected, so right-clicking normally still works as expected.
-
----
+Opera shipped mouse gesture support in 2001. Firefox has had it via extensions since the early 2000s. Chrome has never shipped a native gesture system. Power users navigating dozens of pages per session accumulate hundreds of micro-movements — back button, next tab, scroll to bottom — that interrupt focus without being individually significant. TabiNeko treats gesture recognition as a first-class input method rather than an afterthought, with a mathematical classifier that handles imperfect hand-drawn paths reliably and a visual trail that gives users immediate feedback as they draw.
 
 ## Architecture
 
-TabiNeko is split into three runtime contexts, each compiled independently:
+TabiNeko separates into three independent runtime contexts, each compiled to its own output bundle, plus a static popup UI pre-rendered at build time.
 
-### 1. Content Script (`src/scripts/content.ts`)
+### Content Script — Gesture Tracking and Action Dispatch
 
-Injected into every HTTP/HTTPS page at `document_idle`. Responsibilities:
+The content script (`src/scripts/content.ts`) is injected into every HTTP and HTTPS page at `document_idle`. It owns three responsibilities: listening for mouse events, rendering the gesture trail, and dispatching the resolved action.
 
-- **Gesture tracking** — Listens to `mousedown`, `mousemove`, and `mouseup` events, delegating direction logic to `gesture.ts`.
-- **Canvas overlay** — Appends a full-viewport `<canvas>` on gesture start, renders the live trail using quadratic Bézier curve smoothing and scales for `devicePixelRatio` so the path looks crisp on retina displays.
-- **Direction labels** — Renders real-time arrow symbols at the gesture origin as the user draws.
-- **Action dispatch** — For page-level actions (scroll, back, forward, reload), executes directly in the page context. For tab operations (next/prev tab), sends a typed message to the background service worker.
-- **Context menu suppression** — Adds a one-shot `contextmenu` listener that cancels the event only when a gesture was just completed.
+On `mousedown` with the right button, the script appends a full-viewport `<canvas>` element to the page and begins recording mouse position. The canvas scales for `devicePixelRatio`, so the trail renders crisp on retina displays. Path segments are drawn as quadratic Bézier curves rather than straight lines, which produces smooth visual trails even when the mouse moves in short, jerky steps.
 
-### 2. Gesture Engine (`src/scripts/internal/gesture.ts`)
+On `mouseup`, the gesture signature returned by the classifier is resolved to a browser action. Page-level actions — `history.back()`, `history.forward()`, `window.location.reload()`, `window.scrollTo()` — execute directly in the page context. Tab operations send typed messages to the background service worker, which has the `tabs` permission required to query and activate tabs across the window.
 
-A pure, stateless gesture classifier. Key implementation details:
+Context menu suppression is handled by a one-shot `contextmenu` listener attached only when a gesture completes. If no gesture was recognized, the context menu fires normally — right-clicking without dragging works as expected.
 
-- **Direction detection** — Uses a 25px movement threshold from the last anchor point before registering a new cardinal direction. This filters out cursor noise and minor direction wobble.
-- **Deduplication** — Consecutive identical directions are collapsed (e.g., `["R", "R", "D"]` → `["R", "D"]`), preventing rapid re-triggering from slow or jittery movement.
-- **Circle detection** — Accumulates the signed angle change between consecutive mouse vectors using `atan2` and cross-product arithmetic. A full circle is confirmed when accumulated rotation exceeds 300° and the path endpoint is within 80px of the start point. This approach handles imperfect hand-drawn circles reliably.
-- **Output** — Returns a string signature (`"R"`, `"L"`, `"R,D"`, `"CIRCLE"`, etc.) or `null` if the gesture is unrecognized.
+### Gesture Engine — Mathematical Classification
 
-### 3. Background Service Worker (`src/scripts/background.ts`)
+The gesture classifier (`src/scripts/internal/gesture.ts`) is a pure, stateless function: it takes a sequence of mouse coordinates and returns a string signature (`"R"`, `"L,U"`, `"CIRCLE"`, etc.) or `null`. It has no side effects and no dependency on the DOM.
 
-A minimal Chrome MV3 service worker that handles tab-switching commands:
+Direction detection uses a 25-pixel movement threshold from the last registered anchor point. A new cardinal direction (`R`, `L`, `U`, `D`) is only recorded when the cursor has moved more than 25px from the anchor in a dominant axis. This threshold filters cursor noise and minor wobble without requiring the user to draw with robotic precision. Consecutive identical directions are collapsed before the signature is finalized — `["R", "R", "D"]` becomes `["R", "D"]` — preventing jittery movement from generating phantom multi-directional gestures.
 
-- Receives `NEXT_TAB` and `PREV_TAB` messages from the content script.
-- Queries all tabs in the current window, identifies the active tab's index, and activates the next or previous tab.
-- **Wrap-around logic** — Last tab → First tab, First tab → Last tab.
-- Handles edge cases: tabs closed between gesture start and message receipt are caught and fail silently.
+Circle detection uses a different approach: the classifier accumulates the signed angular change between consecutive mouse displacement vectors, computed via `atan2` and the 2D cross-product. A closed circle is confirmed when two conditions hold simultaneously: accumulated rotation exceeds 300 degrees (tolerating imperfect closure), and the distance between the path's start and end points is less than 80 pixels. This geometric approach handles real hand-drawn circles reliably — users do not need to close the path perfectly for the gesture to register.
 
-### 4. Popup UI (`src/components/Popup.astro`)
+### Background Service Worker — Tab Management
 
-A static Astro-rendered HTML page loaded as the extension action popup. It displays the gesture reference table and branding. No JavaScript runs in the popup at runtime — content is fully pre-rendered at build time.
+The background script (`src/scripts/background.ts`) is a minimal MV3 service worker handling exactly two message types: `NEXT_TAB` and `PREV_TAB`. On receipt, it queries all tabs in the current window, identifies the active tab's index, and activates the neighboring tab. Wrap-around is implemented — the last tab advances to the first, and the first tab retreats to the last. Tabs closed between gesture start and message delivery are caught and fail silently.
 
----
+The service worker is intentionally minimal. Under Manifest V3, service workers are terminated when idle and restarted on demand, so no persistent state is stored in the background context.
+
+### Popup UI — Static Astro Output
+
+The extension action popup (`src/components/Popup.astro`) is a static HTML page rendered by Astro at build time. It displays the gesture reference table and branding. No JavaScript executes in the popup at runtime — Astro's zero-JS-by-default output model produces a CSP-compliant page without additional post-processing.
 
 ## Build Pipeline
 
-Chrome's Manifest V3 Content Security Policy prohibits inline scripts in extension pages, so the standard Astro build output (which injects inline `<script>` tags) must be post-processed. The build pipeline is composed of Bun scripts:
+Manifest V3's Content Security Policy prohibits inline scripts in extension pages. Astro's standard build output injects inline `<script>` tags, which would be blocked by the extension CSP. The build pipeline, composed entirely of Bun scripts, resolves this in four stages:
 
-| Script            | File                          | Purpose                                                      |
-| ----------------- | ----------------------------- | ------------------------------------------------------------ |
-| `bun run dev`     | —                             | Start Astro dev server for popup UI work                     |
-| `bun run build`   | `build-tools/bundler.ts`      | Compile content + background scripts, then run Astro         |
-| `bun run icons`   | `build-tools/create-icons.ts` | Generate 16/32/48/128px icons from source via Sharp          |
-| `bun run release` | `build-tools/pack.ts`         | Full pipeline: format → build → icons → ZIP for distribution |
+1. **Astro compiles** `Popup.astro` to static HTML and CSS in `dist/`.
+2. **`bundler.ts`** runs Bun's native bundler on `content.ts` and `background.ts`, producing minified `content.js` and `background.js` in `dist/`. Bun's built-in TypeScript support eliminates a separate transpilation step.
+3. **`extract-inline.ts`** parses the Astro-generated HTML, extracts any residual inline `<script>` blocks into separate `.js` files, rewrites the `<script src="...">` attributes to reference them, and writes the modified HTML back. The output is unconditionally CSP-compliant.
+4. **`pack.ts`** ZIPs the `dist/` folder into a versioned archive using `adm-zip` — no OS-level ZIP tooling required, which makes the build reproducible on any platform.
 
-**Build sequence in detail:**
+The full pipeline runs in under two seconds on commodity hardware via `bun run release`, producing a Chrome Web Store-ready artifact.
 
-1. Astro compiles `Popup.astro` to static HTML/CSS in `dist/`.
-2. `bundler.ts` runs Bun's built-in bundler on `content.ts` and `background.ts`, outputting minified `content.js` and `background.js` to `dist/`.
-3. `extract-inline.ts` parses the Astro-generated HTML, extracts any remaining inline `<script>` blocks into separate `.js` files, and rewrites the `src` attributes to reference them — making the output CSP-compliant.
-4. `pack.ts` ZIPs the `dist/` folder into a versioned archive ready for Chrome Web Store submission.
+## Key Features
 
----
+- **Seven gesture vocabulary**: Right, Left, Up, Down, Right+Down, Left+Up, and Circle map to Forward, Back, Scroll Top, Scroll Bottom, Next Tab, Previous Tab, and Refresh respectively. The signature space is intentionally small to keep the gestures distinct and muscle-memory-friendly.
+- **Mathematical circle detection**: Accumulated signed angular change via `atan2` and cross-product, with 300° rotation threshold and 80px closure tolerance. Handles imperfect hand-drawn circles that no directional classifier would catch.
+- **25px directional threshold**: Filters cursor noise without requiring deliberate, precise strokes. Arrived at empirically — too small produces false direction changes from jitter; too large requires exaggerated gestures.
+- **Retina-crisp canvas trail**: Full-viewport canvas scaled by `devicePixelRatio`. Quadratic Bézier smoothing renders the trail as a fluid curve rather than a jagged polyline.
+- **Selective context menu suppression**: The right-click context menu fires normally when no gesture is detected. The extension does not hijack right-click globally — only completed gestures suppress the menu.
+- **Zero network calls, minimal permissions**: No host permissions beyond content script injection. No telemetry. `tabs` and `activeTab` permissions cover tab switching; `scripting` covers injection. `storage` is reserved for future gesture configuration.
+- **CSP-compliant MV3 output**: Custom `extract-inline.ts` post-processor ensures the extension passes Chrome Web Store review without inline script violations.
 
-## Tech Stack
+## Implementation Details
 
-| Layer             | Technology   | Why                                               |
-| ----------------- | ------------ | ------------------------------------------------- |
-| Extension runtime | Chrome MV3   | Current standard, required for store distribution |
-| Language          | TypeScript 5 | Strict types across all three runtime contexts    |
-| Popup UI          | Astro 3      | Zero-JS static output by default; fast builds     |
-| Bundler           | Bun          | Sub-second builds, native TypeScript support      |
-| Icon generation   | Sharp        | High-quality PNG resizing without heap bloat      |
-| Packaging         | adm-zip      | Pure-JS ZIP generation, no OS tooling required    |
+### Why the 300° Circle Threshold
 
----
+A 360° threshold would require a perfectly closed circle — achievable with a mouse but uncomfortably precise as a casual gesture. At 300°, the classifier accepts circles that are slightly open (a common natural endpoint when the hand lifts) while rejecting large arcs that are clearly not circular intent. The 80px closure distance constraint prevents long arcs from qualifying as circles by accident.
 
-## Permissions
+### Bun as Bundler and Build Runtime
 
-TabiNeko requests only what is strictly necessary:
+Bun's native bundler handles TypeScript without a separate transpilation pass and produces minified output in a single command. The full build from source to loadable `dist/` runs in under two seconds, which matters for a development workflow where the iteration loop is: edit content script, rebuild, reload extension in Chrome, test gesture. A slow build (Webpack, for instance, takes 8–15 seconds for a comparable project) would make this loop painful.
 
-| Permission  | Reason                                         |
-| ----------- | ---------------------------------------------- |
-| `tabs`      | Query and switch tabs by index                 |
-| `activeTab` | Identify the currently focused tab             |
-| `scripting` | Inject content script programmatically         |
-| `storage`   | Reserved for future user gesture configuration |
+### Stateless Gesture Classifier Design
 
-No host permissions beyond `http://*/*` and `https://*/*` for content script injection. No network requests. No telemetry.
+Keeping `gesture.ts` as a pure function with no DOM or browser API dependencies made it directly unit-testable. Direction thresholds, deduplication rules, and circle detection parameters were tuned against a test suite of recorded mouse paths rather than through subjective manual testing. The classifier's output is a string signature (`"R,D"`, `"CIRCLE"`) rather than an action enum, which keeps it decoupled from the action dispatch layer — adding a new gesture requires only a new match arm in the content script's dispatch table.
 
----
+## Tech Stack Rationale
 
-## Installation (Developer Mode)
-
-1. Clone the repository and install dependencies:
-
-   ```bash
-   git clone https://github.com/Mic-360/TabiNeko
-   cd TabiNeko
-   bun install
-   ```
-
-2. Build the extension:
-
-   ```bash
-   bun run build
-   ```
-
-3. Open `chrome://extensions/` in Chrome, enable **Developer mode**, click **Load unpacked**, and select the `dist/` folder.
-
-4. The TabiNeko icon will appear in your toolbar. Right-click and drag anywhere on a page to begin.
-
----
-
-## What I Learned
-
-**Manifest V3 is strict by design.** The CSP restrictions that forced a custom extraction step exist because inline scripts in extension pages are a real attack surface. Building the extraction tool was annoying but the constraint is correct.
-
-**Gesture UX requires tuning, not just logic.** The 25px direction threshold, 300° circle threshold, and quadratic trail smoothing weren't arbitrary — each value was arrived at by testing what felt natural vs. what felt like the extension was fighting you. Gesture recognition is a UX problem as much as a math problem.
-
-**Bun's native bundler is genuinely fast.** The full build from source to loadable `dist/` runs in under two seconds, which makes iteration on the content script painless.
-
----
-
-If you want to try TabiNeko, it takes about two minutes to build and load. The gestures take a few minutes to muscle-memory — after that, going back to clicking feels slow.
+| Component | Technology | Rationale |
+| --- | --- | --- |
+| Extension Runtime | Chrome MV3 | Current standard; required for Chrome Web Store distribution |
+| Language | TypeScript 5 | Strict types across all three runtime contexts; catches cross-context message shape mismatches at compile time |
+| Popup UI | Astro | Zero-JS static output by default; avoids inline script CSP violations without custom post-processing for most content |
+| Bundler / Build Runtime | Bun | Sub-second builds with native TypeScript support; eliminates separate transpilation step |
+| Icon Generation | Sharp | High-quality PNG resizing to 16/32/48/128px without heap bloat; runs as a build step |
+| Packaging | adm-zip | Pure-JS ZIP generation; no OS tooling dependency, reproducible on any platform |

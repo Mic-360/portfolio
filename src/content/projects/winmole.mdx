@@ -1,11 +1,13 @@
 ---
 title: 'Winmole'
 date: '2026-02-28'
-summary: 'A fast, all-in-one system maintenance CLI toolkit for Windows built with PowerShell and Go.'
+summary: 'An all-in-one Windows system maintenance toolkit built with PowerShell and Go — combines deep cleanup, interactive uninstall, disk analysis, and live health dashboards in a persistent split-pane TUI with .NET-accelerated I/O and runspace-pool parallelism.'
 stack:
   - 'PowerShell'
   - 'Go'
-  - 'Bubbletea'
+  - 'Bubble Tea'
+  - 'Lip Gloss'
+  - 'gopsutil'
 links:
   - label: 'GitHub'
     url: 'https://github.com/Mic-360/winmole'
@@ -13,47 +15,88 @@ tags:
   - 'windows'
   - 'cli'
   - 'system-tool'
+  - 'performance'
 categories:
   - 'tooling'
 image: '/winmole-logo.png'
 ---
 
-# Winmole
+# WiMo — Windows System Optimizer
 
-WiMo (Windows System Optimizer — Mole for Windows) is an all-in-one system maintenance CLI toolkit for Windows. It acts as a comprehensive tool combining the features of common optimization applications into a free, open-source, fast, and colorful terminal experience.
+A comprehensive system maintenance CLI toolkit for Windows that consolidates what typically requires four or five separate applications — disk analyzer, app uninstaller, cache cleaner, system health monitor, and build artifact purger — into a single terminal experience with a persistent interactive menu, .NET-accelerated file operations, and real-time Go dashboards.
 
-## The problem
+## Overview
 
-Windows accumulates temporary files, browser caches, and orphaned application data over time. Built-in cleanup tools are often slow and lack extreme detail, while third-party tools are frequently bloated or paid. There was a need for a unified, fast, and safe terminal-based solution for system maintenance and building artifact cleanup.
+Windows accumulates entropy fast. Temporary files, browser caches, Windows Update leftovers, orphaned registry entries, stale thumbnail databases, and project build artifacts compound into gigabytes of dead weight over months of development work. The built-in tools — Disk Cleanup, Add/Remove Programs, `winget` — address these categories in isolation, forcing context-switching across multiple UIs and offering no unified view of what is consuming space or what is safe to remove.
 
-## The solution
-
-WiMo is built with PowerShell for system integration and Go for real-time, interactive TUI dashboards. It features a persistent interactive menu, parallel scanning, and .NET-accelerated file operations.
-
-### Key Features
-
-- **Deep System Cleanup:** Safely removes temp files, browser caches, and Windows Update leftovers with a 4-layer safe delete system (protected paths, user data patterns, recycle bin fallback, and dry-run).
-- **Interactive Uninstaller:** Merges applications from the Windows Registry, `winget`, and local programs into a unified interface for complete removal.
-- **Visual Disk Analyzer & Live Status:** Utilizes Go binaries built with Bubble Tea for rich terminal UIs, offering real-time directory scanning and system health dashboards.
-- **Build Artifact Purge:** Concurrently cleans project build artifacts (like `node_modules`, `target`, and `__pycache__`) across directories using runspace pools for parallel execution.
-
-## Highlights
-
-- **Performance Overhaul:** Uses `System.IO.Directory.EnumerateFiles/EnumerateDirectories` instead of `Get-ChildItem` for significantly faster directory walking.
-- **Parallel Execution:** Employs PowerShell runspace pools for concurrent size calculation and deletion, drastically reducing wait times.
-- **Seamless TUI:** A split-pane persistent menu with vim-style navigation mapping providing a fluid user experience even in constrained terminal widths.
+Third-party alternatives (CCleaner, TreeSize, Revo Uninstaller) fill parts of this gap, but arrive with licensing costs, bloated installers, and telemetry. WiMo is the open-source alternative: free, terminal-native, and engineered for developers who want precise control over what is cleaned, what is analyzed, and what is left alone.
 
 ## Architecture
 
-The project splits responsibilities effectively:
+WiMo splits its responsibilities across two runtimes, each handling what it does best.
 
-- **PowerShell (`wimo.ps1`)**: Handles the core logic, argument parsing, file operations, and the split-pane menu.
-- **Go (`analyze/main.go`, `status/main.go`)**: Powers the high-performance TUIs using goroutines to handle live updates and concurrent directory scanning quickly and with minimal UI blocking.
+### PowerShell Core (`wimo.ps1`)
 
-## What I learned
+The PowerShell script owns the system integration layer: argument parsing, the split-pane interactive menu, file operations, registry queries, and winget orchestration. PowerShell is the right choice here because it has direct, first-class access to Windows APIs — the registry, WMI, service control, and the .NET framework — without requiring native binaries or elevated compilation steps. Every system-level operation stays within a runtime that ships on every modern Windows installation.
 
-Integrating Go with PowerShell to handle specific TUI capabilities highlighted the strengths of compiling separate targeted binaries to solve specific UI performance concerns within a broader scripting environment. Developing the 4-layer safe delete system underscored the complexities of writing robust file operation logic on Windows, where system permissions and user data boundaries are paramount.
+The menu is a persistent split-pane layout: a left navigation panel and a right context panel that updates based on selection. The menu remains visible and returns focus after every command completes, making the tool feel like a proper application rather than a collection of scripts. Navigation uses vim-style `j`/`k` bindings with checkboxes and progress bars rendered in box-drawing characters.
 
----
+### Go Binaries (`analyze-go.exe`, `status-go.exe`)
 
-If you'd like a walkthrough or have feedback, reach out or check the repository.
+Two standalone Go binaries handle the interactive dashboard commands where PowerShell's rendering performance is not sufficient for real-time updates. Compiled ahead of time and invoked by the PowerShell wrapper, these binaries run in alt-screen mode and return control cleanly when the user exits.
+
+- **`analyze-go.exe`** — concurrent directory size scanner built with Bubble Tea. Goroutines traverse the filesystem in parallel, with live-updating size figures displayed as scanning progresses. The alt-screen approach keeps the full terminal for the tree view without corrupting the parent shell's output.
+
+- **`status-go.exe`** — a card-based system health dashboard using Bubble Tea and Lip Gloss. Six cards display CPU, Memory, Disk, Network, Processes, and System data sourced from `gopsutil`. A health score badge aggregates the readings into a single signal. The layout is responsive: below 70 columns, cards collapse to a single-column stack. Auto-refresh fires every 2 seconds via Bubble Tea's `tea.Tick` command, keeping the dashboard live without manual polling.
+
+If the Go binaries have not been built, the PowerShell wrappers display a helpful message with build instructions rather than crashing.
+
+## Key Features
+
+- **`wimo clean`** — deep system cleanup targeting temp files, browser caches (Chrome, Firefox, Edge), Windows Update caches, and system event logs with a 4-layer safety system
+- **`wimo uninstall`** — interactive uninstaller that merges the Windows Registry, `winget`, and locally installed programs into a single unified list, with leftover file and registry cleanup after removal
+- **`wimo optimize`** — system optimization pass: flush DNS cache, clear icon and thumbnail caches, send TRIM command to SSDs, restart degraded services
+- **`wimo analyze`** — visual disk space explorer with real-time concurrent scanning via the Go TUI binary
+- **`wimo status`** — live system health dashboard with 6 metric cards, health score badge, and 2-second auto-refresh
+- **`wimo purge`** — concurrent build artifact removal targeting `node_modules`, `.next`, `target`, `__pycache__`, Flutter build, Java `.class` files, and more across an entire project tree
+
+## Implementation Details
+
+### .NET-Accelerated File I/O
+
+The most impactful performance decision in WiMo is replacing PowerShell's native `Get-ChildItem -Recurse` with direct .NET calls to `System.IO.Directory.EnumerateFiles()` and `EnumerateDirectories()`. `Get-ChildItem` wraps each file system entry in a `FileInfo` object and materializes the full collection before returning — a significant overhead for deep directory trees. The .NET enumeration methods stream entries lazily and avoid the object allocation cost, producing measurably faster scans on directories with thousands of files.
+
+### Runspace Pool Parallelism
+
+`wimo clean` and `wimo purge` both execute size calculations and deletions in parallel using PowerShell runspace pools configured with up to 16 concurrent threads. A runspace pool is a pre-warmed set of PowerShell runspaces that avoids the startup cost of spawning new processes per task. For the purge command, this means multiple build artifact directories are sized and deleted concurrently — a project tree with dozens of `node_modules` directories completes in a fraction of the time of sequential processing.
+
+For locked files, the deletion path falls back from `System.IO.Directory.Delete()` to `Remove-Item` with retry logic, handling the common case of files held open by background processes.
+
+### 4-Layer Safe Delete System
+
+Any tool that deletes files at scale needs a principled safety model. WiMo's delete pipeline enforces four layers before any file is permanently removed:
+
+1. **Protected path check** — system-critical directories (`C:\Windows`, `C:\Program Files`, `C:\Program Files (x86)`) are unconditionally excluded and cannot be targeted by any command
+2. **User data pattern check** — Documents, Desktop, Downloads, Pictures, Videos, and Music directories are always preserved regardless of what scan patterns match
+3. **Recycle Bin fallback** — files are routed through the Recycle Bin where possible, giving the user a recovery window before permanent deletion
+4. **Dry-run preview** — `--dry-run` outputs exactly what would be removed without committing any deletions, allowing full inspection before execution
+
+This layered approach means a misconfigured scan pattern cannot propagate into irreversible data loss — the safety layers are enforced in the deletion path, not the scan path.
+
+### Go + Bubble Tea Dashboard Design
+
+The `status` command's card layout is built with Lip Gloss for styled borders, padding, and color. The Catppuccin-inspired sage green palette was chosen for readability in both light and dark terminal backgrounds without relying on bold colors that clash with system themes. The responsive breakpoint at 70 columns handles narrow terminals and split-screen layouts without overflow or wrapping artifacts. The health score badge aggregates CPU load, memory pressure, and disk usage into a single qualitative signal — a quick visual for whether the system is under stress.
+
+## Tech Stack
+
+| Component | Technology | Rationale |
+| --- | --- | --- |
+| System Integration | PowerShell 5.1+ | First-class Windows API access, ships on all modern Windows, no installation required |
+| .NET File I/O | System.IO.Directory | Streaming enumeration avoids `Get-ChildItem` object allocation overhead |
+| Parallelism | PowerShell Runspace Pools | Pre-warmed thread pool (up to 16 threads) for concurrent size calculation and deletion |
+| Dashboard TUI | Go + Bubble Tea | Elm-architecture event loop with alt-screen mode; goroutines handle concurrent scanning |
+| Terminal Styling | Lip Gloss | Declarative ANSI styling with responsive layout primitives |
+| System Metrics | gopsutil | Cross-platform hardware metrics library; provides CPU, memory, disk, and network data |
+| Package Management | winget integration | Native Windows package manager; no third-party dependency for app inventory |
+
+WiMo demonstrates that PowerShell and Go are genuinely complementary runtimes: PowerShell owns the system integration surface where Windows API breadth matters, and Go owns the real-time rendering surface where concurrency and render performance matter. The two communicate through process invocation with clean handoff, keeping each component in its area of strength.

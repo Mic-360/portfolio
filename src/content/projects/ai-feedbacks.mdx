@@ -1,11 +1,12 @@
 ---
 title: 'AI Feedbacks'
 date: '2026-02-26'
-summary: 'A premium bug-to-prompt engine that closes the loop between issue discovery and resolution using multimodal AI.'
+summary: 'A multimodal bug-to-prompt pipeline that captures screenshot, DOM state, console errors, and network failures at the moment of failure, then synthesizes them into a structured, agent-ready prompt via Google Gemini.'
 stack:
   - 'Next.js 15'
   - 'Tailwind CSS v4'
   - 'Google Gemini'
+  - 'Chrome Extension MV3'
   - 'TanStack Form'
   - 'Framer Motion'
 links:
@@ -22,140 +23,72 @@ image: '/ai-feedbacks.png'
 
 # AI Feedbacks
 
-A multimodal bug-to-prompt engine that captures the full context of a web application issue — screenshot, DOM state, console errors, network failures — and synthesizes it into a structured, agent-ready prompt using Google Gemini.
+A multimodal bug capture and prompt synthesis engine that closes the gap between issue discovery and resolution. The Chrome extension grabs the full failure context — screenshot, DOM state, console errors, network failures — at the moment it exists. The Next.js backend sends it to Google Gemini and returns a structured, fix-ready prompt suitable for Cursor, Windsurf, or any agentic coding tool.
 
-![AI Feedbacks](/ai-feedbacks.png)
+## Overview
 
-## The Problem
+Standard bug reporting is a lossy compression problem. By the time a developer files a ticket, the screenshot has been cropped to the wrong region, the console errors are gone, and the network tab has been refreshed. When that thin description reaches an AI coding agent, the result is hallucinations or a five-message interrogation before the agent understands what actually broke.
 
-Standard bug reporting is fragmented. Developers receive screenshots without logs, or logs without context. When that thin description reaches an AI coding agent, the result is hallucinations or a 5-message back-and-forth before the agent understands what actually broke. Context that exists at the moment of failure is lost within seconds of the user closing the tab.
+AI Feedbacks solves this by treating bug capture as an instrumentation problem, not a documentation problem. Context is captured automatically at the moment of failure, not reconstructed from memory afterward.
 
-## The Solution
+## Architecture
 
-AI Feedbacks unifies bug capture and prompt generation into a single pipeline. The Chrome Extension grabs the screenshot, DOM state, and network errors automatically. The reporter adds a one-line description. The backend calls Gemini and returns a structured fix-ready prompt.
+The system is a two-component pipeline: a Chrome Manifest V3 extension that runs in the browser and a Next.js 15 backend that owns the AI analysis and persistence layer.
 
-## Prerequisites
+### Chrome Extension (Manifest V3)
 
-Before running the project, make sure you have:
+The extension has three components with distinct responsibilities:
 
-- **Node.js** v18.17.0 or higher (`node --version`)
-- **npm** v9+ or **pnpm** v8+
-- A **Google Gemini API key** from [aistudio.google.com](https://aistudio.google.com)
-- **Google Chrome** for the extension
+**`content.js`** runs as an injected content script on every tab. It intercepts `console.error` and `console.warn` calls by wrapping the native console methods, and monkey-patches `XMLHttpRequest` and `fetch` to capture failed network requests (4xx/5xx status codes) from the last 60 seconds. This state is held in-page memory, ready for collection on demand.
 
-## Getting Started
+**`popup.html` + crop tool** provides the user interface when the extension icon is clicked. It renders a crop selector overlay on the active tab, allowing the reporter to highlight the exact region of the failure rather than capturing the full viewport. The cropped area is rendered to a canvas and serialized as a base64 image buffer.
 
-### 1. Clone and Install
+**`background.js`** is the Manifest V3 service worker. It coordinates between the popup and content script via `chrome.runtime.sendMessage`, collects the screenshot buffer and captured console/network logs, and POSTs the assembled payload to the dashboard API.
 
-```bash
-git clone https://github.com/Mic-360/ai-feedbacks.git
-cd ai-feedbacks
-npm install
-```
+### Next.js 15 Backend
 
-### 2. Configure Environment Variables
+The backend is a Next.js 15 application with two API routes:
 
-```bash
-cp .env.example .env.local
-```
+**`/api/analyze`** receives the bug payload — screenshot buffer, console errors, network failures, and a one-line description — and calls Gemini via the AI SDK's `streamText` function. The screenshot is passed as an image part alongside the text context. Gemini processes the visual and textual data together and returns a structured prompt identifying the broken component, the relevant network failures, and a fix instruction. The response streams back to the client incrementally.
 
-Fill in `.env.local`:
+**`/api/feedbacks`** handles CRUD for persisted reports. The dashboard indexes all submitted feedback and exposes a natural language semantic search interface — queries like "login button error from last week" or "the white flash on mobile" resolve without exact keyword matching.
 
-```env
-# Required
-GEMINI_API_KEY=your_gemini_api_key_here
+## Key Features
 
-# Optional — defaults shown
-GEMINI_MODEL=gemini-3-flash-preview
-MAX_IMAGE_SIZE=5242880
-```
+- **Multimodal context capture** — screenshot, DOM state, `console.error`/`console.warn` output, and failed network requests (4xx/5xx) from the last 60 seconds, all captured in a single extension action
+- **Crop selector** — reporters highlight the specific failure region rather than submitting a full-page screenshot, reducing noise in the Gemini prompt
+- **Structured Gemini output** — the analyze route is prompted to return a structured fix instruction, not a freeform description; output is immediately pasteable into an agentic tool
+- **Streaming response** — `streamText` streams the Gemini response token-by-token so the dashboard populates progressively rather than waiting for the full completion
+- **Semantic search** — past reports are searchable by natural language query, not tags or exact keywords
+- **Vercel-native deployment** — the Next.js app deploys with `vercel --prod`; `GEMINI_API_KEY` is the only required environment variable
 
-### 3. Start the Development Server
+## Implementation Details
 
-```bash
-npm run dev
-```
+### Why a Chrome Extension Instead of a Bookmarklet or SDK
 
-Open [http://localhost:3000](http://localhost:3000).
+The Manifest V3 service worker architecture was chosen over a JavaScript bookmarklet or an embeddable SDK for two reasons. First, a content script has persistent access to the console and network interceptors from page load — a bookmarklet injected on demand can only capture errors that occur after injection. Second, the extension's `chrome.scripting` API allows screenshot capture of the active tab, which is not available to page-context JavaScript.
 
-### 4. Install the Chrome Extension
+The trade-off is that the extension requires a one-time install from `chrome://extensions` in developer mode. For a developer tooling use case, this is appropriate — the audience is engineers who already have that workflow.
 
-1. Navigate to `chrome://extensions` in Chrome.
-2. Enable **Developer Mode** (top-right toggle).
-3. Click **Load unpacked** and select the `extension/` directory.
-4. The extension icon appears in your Chrome toolbar — you're ready.
+### Gemini Model Selection
 
-## How It Works
+The backend defaults to `gemini-3-flash-preview`, which was selected over the Pro tier for latency reasons. A bug report submission should feel interactive — a 2-3 second response is acceptable, a 10+ second wait breaks the capture flow. The Flash model processes the multimodal payload (image + text context) fast enough to stream the first tokens within a second of submission on typical payloads.
 
-### Capturing a Bug
+### Network Capture Window
 
-1. Navigate to the broken page in your browser.
-2. Click the extension icon and use the crop selector to highlight the problem area.
-3. The extension automatically captures:
-   - Your cropped screenshot
-   - All `console.error` / `console.warn` output from the session
-   - Failed network requests (4xx/5xx) from the last 60 seconds
-4. Add a one-line description of what went wrong.
-5. Submit — the payload goes to the dashboard API.
+The 60-second rolling window for network error capture is a deliberate boundary. Capturing the entire session's network history produces too much noise for Gemini to reason about precisely. A 60-second window captures the requests immediately preceding the failure — the likely causal chain — without including irrelevant earlier activity.
 
-### AI Prompt Generation
+### Semantic Search Implementation
 
-The `/api/analyze` route receives the payload and calls Gemini with the image and context:
+The dashboard's semantic search is backed by the feedback stored in the Next.js API layer. Queries are processed against stored report content using embedding-based similarity rather than full-text search, enabling natural language retrieval without requiring reporters to apply consistent tags or categories.
 
-```ts
-const result = streamText({
-  model: google('gemini-3-flash-preview'),
-  messages: [
-    {
-      role: 'user',
-      content: [
-        { type: 'text', text: `Analyze this bug: ${description}` },
-        { type: 'image', image: screenshotBuffer },
-      ],
-    },
-  ],
-})
-```
+## Tech Stack Rationale
 
-Gemini returns a structured prompt identifying the broken component, relevant network failures, and a fix instruction ready to paste into Cursor, Windsurf, or any agentic tool.
-
-### Searching Past Reports
-
-The dashboard supports **natural language semantic search**. Query with:
-
-- _"login button error from last week"_
-- _"the white flash on mobile"_
-
-No tag system needed. No exact-keyword matching required.
-
-## Project Architecture
-
-```
-ai-feedbacks/
-├── app/
-│   ├── api/
-│   │   ├── analyze/        # POST: receives bug payload, calls Gemini
-│   │   └── feedbacks/      # GET/POST: feedback CRUD
-│   ├── page.tsx            # Main dashboard
-│   └── layout.tsx
-├── components/             # Tailwind v4 UI components
-├── extension/              # Chrome Manifest V3 extension
-│   ├── manifest.json
-│   ├── content.js          # DOM + network log capture
-│   ├── popup.html          # Crop tool UI
-│   └── background.js       # Service worker
-└── lib/
-    └── gemini.ts           # Gemini client wrapper
-```
-
-## Deploying to Vercel
-
-```bash
-vercel --prod
-```
-
-Add `GEMINI_API_KEY` under **Settings → Environment Variables** in your Vercel project. All other variables are optional.
-
----
-
-Source: [github.com/Mic-360/ai-feedbacks](https://github.com/Mic-360/ai-feedbacks)
+| Component | Technology | Rationale |
+| --- | --- | --- |
+| Dashboard | Next.js 15 | App Router enables co-located API routes and streaming RSC; avoids a separate API server |
+| Styling | Tailwind CSS v4 | CSS-first configuration; no PostCSS config overhead |
+| AI | Google Gemini | Native multimodal support — image and text in the same API call without preprocessing |
+| Extension | Chrome MV3 | Service worker architecture required for tab screenshot access and persistent console interception |
+| Forms | TanStack Form | Type-safe form state with minimal bundle overhead |
+| Animation | Framer Motion | Declarative animation primitives for the crop selector overlay and dashboard transitions |

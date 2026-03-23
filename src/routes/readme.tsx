@@ -126,7 +126,7 @@ function ReadmePage() {
           <motion.div
             key={type}
             whileHover={{ y: -5 }}
-            className="bg-card/20 rounded-xl overflow-hidden border border-border/50 hover:border-primary/30 transition-colors"
+            className="bg-card/20 shadow-2xl overflow-hidden border border-border/50 hover:border-primary/30 transition-colors"
           >
             <ReadmeImage
               src={`https://github-profile-summary-cards.vercel.app/api/cards/${type.includes('?') ? type + '&' : type + '?'}username=mic-360&theme=transparent`}
@@ -142,7 +142,7 @@ function ReadmePage() {
       {/* Metrics Section */}
       <motion.section
         variants={item}
-        className="w-full rounded-2xl overflow-hidden border border-border/50 bg-card/20 p-2"
+        className="w-full shadow-2xl overflow-hidden border border-border/50 bg-card/20 p-2"
       >
         <ReadmeImage
           src="https://raw.githubusercontent.com/Mic-360/Mic-360/main/github-metrics.svg"
@@ -227,7 +227,7 @@ function ReadmePage() {
                 alt={icon.alt}
                 width={44}
                 height={44}
-                className="w-11 h-11 grayscale hover:grayscale-0 transition-all duration-300"
+                className="w-11 h-11 grayscale-0 hover:grayscale transition-all duration-300"
               />
             </motion.div>
           ))}
@@ -237,9 +237,9 @@ function ReadmePage() {
       {/* Workspace Section */}
       <motion.section
         variants={item}
-        className="flex flex-col gap-6 text-center bg-muted/20 p-8 rounded-3xl border border-border/50"
+        className="flex flex-col gap-6 text-center p-8"
       >
-        <h4 className="text-sm font-bold uppercase tracking-[0.3em] text-primary">
+        <h4 className="text-2xl font-black italic uppercase tracking-tighter">
           My Workspace
         </h4>
         <div className="flex flex-wrap justify-center gap-3">
@@ -275,7 +275,7 @@ function ReadmePage() {
                 alt={badge.alt}
                 width={160}
                 height={28}
-                className="h-7 w-auto rounded shadow-sm"
+                className="h-7 w-auto shadow-2xl"
               />
             </motion.div>
           ))}
@@ -285,9 +285,9 @@ function ReadmePage() {
       {/* Connect With Me Section */}
       <motion.section
         variants={item}
-        className="flex flex-col gap-10 text-center bg-primary/5 p-10 rounded-4xl border-2 border-primary/10 shadow-inner relative overflow-hidden"
+        className="flex flex-col gap-10 text-center p-10 shadow-inner relative overflow-hidden"
       >
-        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl" />
+        <div className="absolute top-0 right-0 w-32 h-32 -mr-16 -mt-16 blur-3xl" />
         <div className="flex flex-col gap-3 relative z-10">
           <h2 className="text-3xl font-black italic uppercase tracking-tighter">
             Connect With Me
@@ -298,7 +298,7 @@ function ReadmePage() {
               alt="Profile views"
               width={176}
               height={28}
-              className="h-8 w-auto rounded"
+              className="h-8 w-auto"
             />
           </div>
         </div>
@@ -336,7 +336,7 @@ function ReadmePage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.1, y: -3 }}
-                className="shadow-md hover:shadow-xl transition-shadow rounded overflow-hidden"
+                className="shadow-md hover:shadow-xl transition-shadow overflow-hidden"
               >
                 <ReadmeImage
                   src={social.src}
@@ -353,7 +353,7 @@ function ReadmePage() {
 
       <motion.div
         variants={item}
-        className="flex justify-center rounded-3xl overflow-hidden border border-border/50 shadow-2xl"
+        className="flex justify-center overflow-hidden border border-border/50 shadow-2xl"
       >
         <ReadmeImage
           src="https://raw.githubusercontent.com/Mic-360/Mic-360/main/space-shooter.gif"

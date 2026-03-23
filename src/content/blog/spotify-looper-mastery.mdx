@@ -1,78 +1,76 @@
 ---
-title: 'Spotify Looper: Fixing the Features Spotify Refused to Build'
+title: 'Pulse Loop: I Built a Whole App to Loop the Same 8 Bars for 3 Hours Straight'
 date: '2026-02-23'
-summary: 'Reclaim your music. Learn how Spotify Looper lets you loop your favorite segments, filling the obvious missing feature gap left by the official app.'
+summary: 'Spotify has existed for twenty years and still cannot loop a specific segment of a song. So I built Pulse Loop. Millisecond-accurate A-B looping. For musicians. For obsessives. For me.'
 tags:
+  - 'Flutter'
   - 'Spotify'
-  - 'UX'
   - 'Music Tech'
-  - 'Personalization'
+  - 'Material 3'
 categories:
-  - 'Productivity'
-  - 'Lifestyle'
+  - 'Dev Story'
+  - 'Projects'
 image: '/blog/spotify-looper-hero.png'
 ---
 
-## Spotify Looper: Fixing the Features Spotify Refused to Build
+# Pulse Loop: I Built a Whole App to Loop the Same 8 Bars for 3 Hours Straight
 
-> "Music is personal. But apparently setting a basic A/B loop is asking too much of a $50B company."
+> Spotify: twenty years of existence, billions in revenue, zero A-B loop implementations. I handled it.
 
-Unpopular but entirely correct opinion: Spotify is spectacular at helping you discover music via their algorithms, and genuinely terrible at letting you interact with it in any meaningful way.
+Let me tell you what Spotify gives you.
 
-A/B looping — repeating a specific start-to-end segment — has existed in offline media players since Windows Media Player 2001. It is not a complex feature. It is a `while (position > end) { seek(start); }` loop. A junior dev could write it on a Tuesday. Yet Spotify, a company with hundreds of engineers who inexplicably redesign the UI every 6 months to hide my liked songs, has not shipped this in **twenty years of existence**.
+Play. Pause. Skip. Shuffle (broken in a new way every year). Repeat song — meaning the entire track, including the 90-second spoken intro you hate. A seek bar that is functionally useless at precise scrubbing speeds. That's it. That is the complete feature set for a company worth $50 billion.
 
-So here is: **Spotify Looper**. Because waiting for Spotify's product roadmap to align with what users actually want is not a viable life plan.
+No loop region. No segment markers. No "skip this intro automatically every single time forever" feature.
 
-<div className="image-grid">
-  <img src="/blog/looper-ui-1.jpg" alt="Precision Control Interface" />
-  <img src="/blog/looper-ui-2.jpg" alt="Dynamic Themed UI" />
-  <img src="/blog/looper-ui-3.jpg" alt="Cross-platform Playback" />
-</div>
+It's `while (position >= end) { seek(start); }`. A junior dev could ship this on a Tuesday. They haven't shipped it in twenty years.
 
-## What Spotify Gave You vs. What You Actually Wanted
+So: **Pulse Loop**.
 
-Spotify's native playback controls, honestly assessed:
+## What It Actually Does
 
-1. **Play / Pause** — Shipped in 2006, still functional. Congrats.
-2. **Skip Track** — Absolutely fine.
-3. **Shuffle** — Broken in a creative, new, algorithmic way every single year.
-4. **Repeat Song** — Repeats the entire thing, not just the 15-second part that is actually good.
-5. **Seek Bar** — Completely imprecise at human scrubbing speeds. Oops, you missed the drop again.
+Two modes. Online and offline.
 
-No A/B loop. No segment markers. No persistent "skip this terrible 90-second spoken intro every time" feature. A passive listening experience, fully shipped, case closed.
+**Online mode** connects to your Spotify account via OAuth 2.0. You browse your top tracks, recently played, or search. You set a millisecond-accurate start point and end point. You toggle loop on. The app monitors playback position and seeks back to start the moment it hits your end marker. Sub-120ms seek latency via `spotify_sdk`. The loop is seamless.
 
-## Loop the 30 Seconds That Actually Hit
+Three playback modes:
+- **Normal** — loops the full track
+- **Loop** — repeats your selected start-to-end segment continuously
+- **Skip** — skips your selected segment and keeps playing the rest
 
-Spotify Looper gives you millisecond-accurate start and end markers on any track in your library. Set them, toggle loop on, done. The app monitors playback position and auto-seeks back to your start when it hits the end marker.
+That last one is the feature I didn't know I needed. Set it on every song with a terrible bridge. Gone forever.
 
-Want to hear that exact chorus until it's permanently memorized? Mark it. Want to skip a 90-second spoken intro permanently without scrubbing manually like a peasant? Set a start boundary. That intro is gone forever.
+**Offline mode** doesn't need Spotify at all. Upload local audio files — MP3, WAV, M4A, OGG, FLAC, AAC — and get the same loop controls powered by `just_audio`. Files persist to app cache on Android and IndexedDB on web, so they survive restarts. Automatic metadata extraction from `Artist - Title` filename format. Full offline, full loop, no account required.
 
-## Skip the Tools Spotify Won't Give You
+## The Tech, Because It Matters
 
-Not every single second of every song deserves your ears. Long intros, annoying bridges, guest verses that completely kill the vibe — set a start or end boundary and Spotify Looper auto-respects it every single time that track plays.
+**Flutter + Riverpod** with code generation. Riverpod's `@riverpod` annotations generate the boilerplate you'd otherwise write by hand. It's the state management solution that actually scales beyond three providers without turning into a BuildContext archaeology dig.
 
-## For the Musicians (You Know Exactly What This is For)
+**`spotify_sdk`** for Spotify playback control and `flutter_web_auth_2` for the OAuth 2.0 flow. The auth flow is the part that will make you briefly consider quitting software development. Then it works and you forget.
 
-Practicing a riff from a recording is a completely different workflow than casual listening. You need the exact same 8-bar passage on loop 40 times before your fingers agree with your brain. Standard seek-and-scrub is imprecise and breaks practice focus entirely.
+**`just_audio`** for offline playback. Rock solid, cross-platform, handles every audio format I threw at it. The seek precision on local files is significantly better than Spotify's remote playback latency, which is either satisfying or depressing depending on how you look at it.
 
-Spotify Looper was built for this workflow. Set your loop region, hit play, practice. The loop is automatic. No more manually seeking backwards between repetitions while trying to hold your instrument.
+**Material 3 Expressive** theming with dynamic colors. The UI pulls palette colors from album art. Your loop controller matches your album. It's completely unnecessary and I spent more time on it than I should have.
 
-| Feature  | What Spotify Gives You             | What Looper Gives You                           |
-| -------- | ---------------------------------- | ----------------------------------------------- |
-| Looping  | Full playlist or full song only    | Millisecond-accurate A/B segments per track     |
-| Skipping | Manual scrubbing every single time | Persistent boundaries that auto-apply           |
-| Control  | Basic playback                     | Full ownership over what you actually hear      |
-| Theming  | Static green forever               | Dynamic Material 3 colors pulled from album art |
+## The Part Where I Justify This Whole Thing
 
-## The Honest Conclusion
+I play guitar. Learning from recordings means looping the same passage repeatedly. Standard workflow: play the section, miss the end, seek back manually, miss the start, give up, play the whole song again.
 
-Spotify won't build this. Two decades of "the algorithm knows what you want to hear" and zero years of "here are actual granular controls for the music you're already listening to." That feature gap is the entire reason this project exists.
+With Pulse Loop: set start marker, set end marker, play. The 8-bar passage repeats until your fingers get it right. No seeking. No distraction. The loop is just there, waiting, patient, accurate to the millisecond.
 
-Open source. Free to use. Works right now.
+This is the entire reason the project exists. Everything else — the Skip mode, the offline support, the dynamic theming — is scope creep that turned out to be genuinely useful.
 
-- [Grab the source on GitHub](https://github.com/Mic-360/spotify_looper)
+## Is This Worth It Over Just Scrubbing Manually?
+
+The seek bar on a phone screen, at the precision needed for a 4-second riff inside a 4-minute track, is basically a game of chance. You will miss. Repeatedly.
+
+Pulse Loop sets the markers once. They stay. Every time that track plays, the loop is already there.
+
+Spotify won't build this. They've had twenty years and chose not to. That feature gap is the entire reason this exists, and honestly, I'm fine with that.
+
+Open source. Free. Works right now.
+
+- [Source on GitHub](https://github.com/Mic-360/spotify_looper)
 - [Try it live](https://spotify-looper-cc1ad.web.app/)
 
----
-
-Go loop the good part. Because Spotify certainly won't do it for you.
+Go loop the good part. The 8 bars that actually hit. Because Spotify certainly isn't going to help you find them.

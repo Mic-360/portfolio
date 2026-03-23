@@ -1,7 +1,7 @@
 ---
 title: 'Hakai'
 date: '2026-03-01'
-summary: 'A blazing-fast, Rust-powered directory destroyer to find and obliterate build artifacts.'
+summary: 'A blazing-fast, Rust-powered directory destroyer with a Bun TUI — scans 50,000 directories in under a second and deletes concurrently without blocking the UI.'
 stack:
   - 'Rust'
   - 'Bun'
@@ -14,6 +14,7 @@ tags:
   - 'rust'
   - 'cli'
   - 'performance'
+  - 'systems'
 categories:
   - 'tooling'
 image: '/hakai-logo.png'
@@ -21,41 +22,88 @@ image: '/hakai-logo.png'
 
 # hakai (破壊)
 
-An exceptionally fast directory destroyer designed to find and obliterate heavy build artifact folders like `node_modules`, `target`, and `__pycache__`.
+A high-performance directory destroyer engineered to find and obliterate heavy build artifact folders -- `node_modules`, `target`, `__pycache__`, and more -- across thousands of projects in under a second.
 
-## The problem
+## Overview
 
-Developers often accumulate gigabytes of obsolete build artifacts across numerous projects. Existing tools like `npkill` suffer from performance bottlenecks: slow sequential scans on large directory trees, single-threaded deletion that blocks the UI, and compatibility issues on Windows Git Bash.
-
-## The solution
-
-`hakai` is a high-performance rewrite utilizing a dual-architecture approach: **Rust** for the intense filesystem operations and **Bun** for a rapid, interactive Terminal UI.
-
-### Key Features
-
-- **Parallel Scanning:** Uses a `rayon` thread pool to scan directory trees across all CPU cores, completing searches up to 15x faster than Node-based alternatives.
-- **Concurrent Deletion:** Employs the `tokio` async runtime to safely delete up to 8 directories simultaneously without blocking the scan or the UI.
-- **Interactive TUI:** Built with Bun, the TUI provides a diff-based flicker-free rendering experience with vim keybinds, multi-select, and regex-powered filtering.
-- **Risk Analysis:** Intelligently flags system-level directories, global package manager locations, and orphaned `node_modules` to prevent accidental destructive actions.
-
-## Highlights
-
-- **Unmatched Speed:** Capable of scanning 50k directories in under a second and calculating folder sizes concurrently.
-- **Cross-Platform Resiliency:** Perfectly handles native paths across Windows, macOS, and Linux, specifically fixing TTY issues common to Windows Git Bash.
-- **Automation Ready:** Supports headless mode with JSON or streaming JSON output for seamless integration into CI pipelines or automation scripts.
+Existing tools like `npkill` suffer from fundamental limitations: single-threaded scanning, blocking deletion that freezes the UI, and broken behavior on Windows Git Bash. Hakai eliminates these bottlenecks by splitting the system into a compiled Rust core for filesystem operations and a Bun-powered TUI for the interactive interface, achieving order-of-magnitude performance improvements while maintaining a responsive user experience.
 
 ## Architecture
 
-The system is decoupled to maximize the strengths of each language:
+Hakai employs a dual-process architecture that leverages the strengths of each runtime where they matter most.
 
-- **Rust Core (`hakai-core`):** A compiled binary that manages all I/O and CPU-bound work (parallel traversal, concurrent deletion, size calculations, and risk analysis).
-- **Bun TUI (`hakai-tui`):** A frontend process that handles the interactive UI, rendering, and user input.
-  The two processes communicate via a highly efficient, newline-delimited JSON IPC protocol over stdin/stdout pipes, ensuring the heavy lifting never impacts UI responsiveness.
+### Rust Core (hakai-core)
 
-## What I learned
+The Rust binary owns all CPU-bound and I/O-bound work: parallel directory traversal, concurrent size calculation, async deletion, and risk analysis. Heavy filesystem operations run at native speed with direct OS API access, unconstrained by a JavaScript event loop or garbage collector.
 
-Creating `hakai` provided deep insights into cross-process communication (IPC) between a compiled systems language (Rust) and an optimized Javascript runtime (Bun). Implementing the concurrent scanner via `rayon` and async deletion with `tokio` highlighted the complexities of managing filesystem locks and highly parallel I/O operations without crashing the OS file descriptor limits.
+The scanner uses `ignore::WalkBuilder` with rayon's work-stealing thread pool. When a target directory is found, the walker prunes that subtree immediately, avoiding unnecessary stat calls. Size calculation is dispatched to worker threads upon discovery, overlapping I/O with the ongoing scan.
 
----
+### Bun TUI (hakai-tui)
 
-If you'd like a walkthrough or have feedback, reach out or check the repository.
+The interactive terminal interface is built in Bun, chosen for its sub-50ms startup time and efficient rendering pipeline. The TUI provides diff-based flicker-free rendering, vim-style keybindings, multi-select support, and regex-powered search filtering. By handling only the presentation layer, the TUI remains responsive regardless of how aggressively the core is scanning or deleting.
+
+### IPC Protocol
+
+The two processes communicate via a newline-delimited JSON (NDJSON) protocol over stdin/stdout pipes. The Rust core emits structured JSON messages -- scan results, size calculations, deletion progress, and error reports -- as a continuous stream. The Bun frontend parses this stream line by line and updates the UI in real time.
+
+This ensures the rendering pipeline never blocks on filesystem operations and vice versa. One JSON object per line, no framing overhead, trivially debuggable with `jq`.
+
+## Key Features
+
+### Parallel Scanning
+
+Rayon's work-stealing thread pool distributes directory traversal across all CPU cores. Subtree pruning on match skips the contents of matched directories entirely, eliminating unnecessary I/O. Scanning 50,000 directories completes in under one second -- a 10-15x improvement over sequential Node.js alternatives.
+
+### Concurrent Deletion
+
+Deletion is handled asynchronously via tokio, processing up to 8 tasks concurrently. Each task operates independently -- a slow delete on a large directory does not block smaller ones. An instant rename-to-trash strategy renames the target to a hidden `.hakai_trash_*` path (an atomic O(1) operation), so the directory disappears immediately. Actual file removal proceeds in the background using rayon's parallel recursive walker with `par_iter` for batches of 256+ files.
+
+The UI continues rendering and accepting input throughout, with real-time progress streamed through the IPC protocol.
+
+### Risk Analysis
+
+Hakai flags potentially dangerous targets before deletion:
+
+- **System-level directories** -- global installations that would break toolchains.
+- **Orphaned node_modules** -- missing a corresponding `package.json`, possibly a monorepo root.
+- **Active project artifacts** -- recently modified directories likely under active development.
+
+Risk levels are surfaced in the TUI so developers make informed decisions.
+
+### Headless Mode
+
+For CI integration, hakai supports a headless mode bypassing the TUI. Output formats include complete JSON (`--json`) and streaming NDJSON (`--json-stream`). A `--delete-all` flag with `-y` confirmation skip enables automated cleanup, and `--dry-run` previews deletions without removing anything.
+
+## Implementation Details
+
+### Rayon Thread Pool
+
+The scanner uses rayon's `par_iter` and the `ignore` crate's `WalkBuilder` for parallel directory traversal. The work-stealing scheduler ensures idle threads pick up work from busy ones, maintaining high throughput on heterogeneous directory structures. Size calculation overlaps with scanning -- dispatched to worker threads immediately upon discovery rather than queued for a second pass.
+
+### Tokio Async Runtime
+
+Deletion uses tokio's async runtime rather than blocking OS calls. Each deletion is a spawned task that progresses independently, with the runtime managing scheduling, cancellation, and error propagation. Concurrent deletion is capped at 8 tasks to balance parallelism against OS file descriptor limits.
+
+### Newline-Delimited JSON IPC
+
+The NDJSON protocol keeps the two processes cleanly decoupled. Each message is a self-contained JSON object terminated by a newline -- no framing, no length prefixes, no stateful negotiation. The protocol is trivially extensible and debuggable by piping the core's output to `jq`.
+
+### Cross-Platform Path Handling
+
+Windows' 260-character MAX_PATH limitation is handled via automatic `\\?\` UNC prefix. Read-only files (common in npm caches) have permissions cleared before deletion. TTY detection is handled explicitly for Windows Git Bash, ensuring correct rendering across all terminal emulators.
+
+### Configurable Profiles
+
+Six built-in language profiles -- `node`, `rust`, `python`, `flutter`, `java`, and `all` -- target standard build artifact directories per ecosystem. A `.hakairc` TOML config supports custom profiles and exclusion patterns for team-specific cleanup rules.
+
+## Tech Stack Rationale
+
+| Component | Technology | Rationale |
+| --- | --- | --- |
+| Filesystem Engine | Rust | Zero-cost abstractions, direct OS API access, no garbage collector pauses during I/O-heavy operations |
+| Parallelism | Rayon | Work-stealing thread pool with ergonomic parallel iterators, proven in production Rust codebases |
+| Async Deletion | Tokio | Industry-standard async runtime with robust task scheduling and cancellation support |
+| TUI | Bun | Sub-50ms startup, fast rendering pipeline, and familiar TypeScript ergonomics for UI development |
+| IPC | NDJSON over stdio | Zero-dependency, streaming-friendly, human-readable, and trivially debuggable |
+
+This architecture ensures that each component operates within its optimal domain: Rust handles the performance-critical systems work, Bun handles the interactive presentation, and the IPC protocol keeps them cleanly decoupled.

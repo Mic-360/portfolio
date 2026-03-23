@@ -12,47 +12,49 @@ categories:
 image: '/auto-copilot-review.png'
 ---
 
-# Auto Copilot Review: Outsourcing My Insecurities to an LLM on Every Git Add
+# Auto Copilot Review: Your Code Is Bad and an AI Knows It
 
-> Writing code is fun. Reviewing code is boring. Reviewing your own code is functionally impossible because you already convinced yourself it was correct an hour ago.
+> Writing code is easy. Reviewing your own code is functionally impossible because you already convinced yourself it was fine an hour ago.
 
-You know that exact moment before you finalize a commit? The moment where your cursor hovers over the 'Commit' button in VS Code, and you get that cold, creeping dread that you definitely left a `console.log("here")` somewhere or broke a type definition in a file you vaguely remember touching?
+You know that moment. Cursor hovering over the commit button. The cold creep of dread. Did you leave a `console.log("here")` in? Did you break a type in a file you only vaguely remember touching? Did you rename that variable to something embarrassing?
 
-Normally, you have two choices:
+You have two options:
 
-1. Manually scroll through the diff, lie to yourself that it looks fine, and send it.
-2. Explicitly open GitHub Copilot Chat, copy-paste your diff, and ask it to review it.
+1. Scroll through the diff, lie to yourself, and push to master.
+2. Manually open Copilot Chat, paste the diff, ask it to review, wait, context-switch back, forget what you were doing.
 
-Number 1 leads to embarrassing PR comments. Number 2 breaks your flow entirely and feels like a chore.
+Option 1 leads to PR comments that age poorly. Option 2 is a full flow-killing chore that requires so much ceremony you never actually do it.
 
-What if there was a Number 3?
+What if the AI just... watched?
 
-## Making Staging Aggressively Helpful
+## Making Staging Aggressively Judgemental
 
-I decided the moment I stage a file (`git add`), my editor should immediately, silently judge me.
+I built a VS Code extension that hooks into the Git API. Every time you stage a file — `git add`, the little `+` button, however you do it — **Auto Copilot Review** wakes up, grabs the diff of everything staged, and fires it straight into GitHub Copilot Chat with a review request.
 
-So I built a VS Code extension that hooks directly into the Git API. Every single time you stage a file, **Auto Copilot Review** wakes up, grabs the diff of your staged changes, and shoves them straight into the GitHub Copilot Chat view with a "review this diff" command.
+Zero clicks. Zero context-switching. You stage a file, you glance right, and there's already a breakdown of your logic problems waiting for you like a very patient disappointed parent.
 
-It happens entirely magically in the background.
+It happens entirely in the background. The extension doesn't ask. It doesn't warn you. It just starts judging.
 
-## The "Oh God Slow Down" Problem (Debouncing)
+## The "God, Slow Down" Problem
 
-My first iteration was eager. Too eager.
+My first build was too eager. Embarrassingly eager.
 
-I tend to stage files by rapidly clicking the '+' icon next to 5 different files in a row.
+I stage files by rapidly clicking `+` on five different files in a row, which in V1 meant five simultaneous Copilot API requests firing within one second. The Chat panel had a complete breakdown — five competing reviews flashing at once, each overwriting the last. It looked like a merge conflict with extra steps.
 
-In V1 of the extension, this resulted in 5 identical, overlapping requests hitting the Copilot API in the span of a second, causing the Chat UI to have a panic attack and aggressively flash 5 different competing code reviews at the same time.
+Turns out teaching a machine to review your code also means teaching it patience.
 
-It turns out that teaching a machine to instantaneously review your code requires teaching a machine _patience_.
+I added a configurable debounce timer — default 5 seconds. Now you can stage as frantically as you want. Once you stop moving for 5 seconds, everything gets bundled into a single review request. One clean response. No chaos.
 
-I added a configurable debounce timer (defaulting to 5 seconds). Now, you can rapidly stage as many files as you want. Once you stop moving for 5 seconds, it gathers everything up into one neat, tidy package and fires a single review request.
+It's a small thing. It's the thing that made it actually usable.
 
-## The Results
+## The Part Where It Actually Works
 
-It actually works phenomenally well. I stage files, glance over at the Copilot chat panel, and within seconds there's a neat breakdown of my logic flaws, typos, and forgotten debug statements waiting for me.
+Within seconds of staging: a clean breakdown of your logic flaws, typos, forgotten debug statements, and edge cases you were hoping nobody would notice.
 
-It feels like having a highly pedantic junior developer sitting permanently on your shoulder, eagerly waiting for you to prep a commit so they can point out your mistakes before you push them to master.
+It feels like having an extremely pedantic code reviewer permanently installed on your shoulder, waiting for exactly the moment you're about to commit something embarrassing so they can quietly intervene.
 
-It is completely frictionless. It requires zero clicks the moment it’s installed. It just exists, watching, reviewing, and saving me from PR embarrassment.
+The best part is it requires genuinely nothing from you after install. No commands. No shortcuts. No workflow changes. It just exists, watching, reviewing, and silently saving you from the PR comments that would have aged very badly.
 
-If you have a Copilot subscription and a complete lack of faith in your own late-night coding sessions, [install the extension here](https://github.com/Mic-360/auto-copilot-review). You're welcome.
+Is it humbling? Yes. Does it catch things you'd have shipped? Also yes.
+
+If you have a Copilot subscription and a realistic assessment of your late-night coding judgment, [install the extension](https://github.com/Mic-360/auto-copilot-review). Your future self — the one reading PR comments — will thank you.

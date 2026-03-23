@@ -315,14 +315,14 @@ function App() {
                 key={project.slug}
                 to="/projects/$slug"
                 params={{ slug: project.slug }}
-                className="group animus-corner relative h-56 flex flex-col justify-end p-4 rounded-lg border border-border/20 bg-card/10 hover:border-primary/50 transition-all duration-500 overflow-hidden"
+                className="group animus-corner relative h-56 flex flex-col justify-end p-4 border border-border/20 bg-card/10 hover:border-primary/50 transition-all duration-500 overflow-hidden"
               >
                 {project.image && (
                   <>
                     <img
                       src={project.image}
                       alt={project.title}
-                      className="absolute inset-0 w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-60 transition-all duration-700 group-hover:scale-105"
+                      className="absolute inset-0 w-full h-full object-contain group-hover:grayscale group-hover:opacity-60 transition-all duration-700 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent" />
                   </>
@@ -462,7 +462,7 @@ function App() {
             .
           </p>
         </Section>
-        <p className="mt-4 text-center font-mono text-[10px] tracking-widest text-muted-foreground/40 select-none flex items-center gap-1 justify-between">
+        <p className="mt-4 text-center font-mono text-[10px] tracking-widest text-muted-foreground/40 select-none flex flex-col sm:flex-row items-center gap-1 justify-between">
           <span>Yes, This portfolio can run DOOM</span>
           <span className="text-md">Konami Code: ↑ ↑ ↓ ↓ ← → ← → b a</span>
         </p>

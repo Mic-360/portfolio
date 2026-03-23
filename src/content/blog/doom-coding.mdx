@@ -17,30 +17,32 @@ image: 'https://github.com/user-attachments/assets/f3d05c00-a47a-4ebe-8db3-1795a
 
 > "If you aren't shipping features while your friends are paying $20 for a mid drink at the club, are you even a dev?"
 
-Nobody:  
+Nobody:
 Me at 2 AM in an Uber: _opens Termux_
 
-Welcome to **Doom Coding** — doom scrolling except instead of passively destroying your attention span, you're actively destroying your work-life balance! More productive. Same outcome. While normal people "go outside" and "be present in the moment," we're SSH-ing into production from the back of a ride-share. Is it healthy? Incredible question, we're moving on.
+Welcome to **Doom Coding** — doom scrolling except instead of passively destroying your attention span, you're actively destroying your work-life balance. More productive. Same outcome.
 
-After this 5-minute setup, you'll be able to code anywhere you have cell service. Even in the air. Even on a run. Even at the club.
+While normal people "go outside" and "exist in the physical world," we're SSH-ing into production from the back of a ride-share. Is it healthy? Incredible question, we're moving on.
+
+After this 5-minute setup, you'll be able to code anywhere you have cell service. Even in the air. Even on a run. Even at the club. These are all real options you will have. Whether you should use them is a completely separate conversation.
 
 ![Code in the air](https://github.com/user-attachments/assets/bda532b6-3963-4ace-907b-ebbf9460032c)
 
 ![Code on a run](https://github.com/user-attachments/assets/f5449004-0a76-44ee-9922-a5cce1423f93)
-_Literally higher than your server's uptime. Even when keeping that heart rate in Zone 2._
+_Literally higher than your server's uptime. Zone 2 heart rate. Production logs open. Living the dream._
 
-## The Stack (Because Minimalism is for Quitters)
+## The Stack (Minimalism Is for People Who've Never Had Scope Creep)
 
 The Holy Quadrinity of mobile dev enlightenment:
 
-1. **Termux**: Your new home. It's a terminal emulator that makes your Android phone feel like the power tool it actually is, instead of just a $1,200 TikTok consumption device.
+1. **Termux**: Your new home. A terminal emulator that turns your $1,200 TikTok consumption device into an actual power tool.
 2. **Node.js/Bun**: Because of course we're using JavaScript environments. It's 2026.
-3. **Claude Code**: The paid AI god for people with salaries.
-4. **OpenCode + Antigravity Auth**: The "freebie" AI god for everyone aggressively dodging API metering.
+3. **Claude Code**: The paid AI deity for people with budget lines.
+4. **OpenCode + Antigravity Auth**: The "I have principles" AI deity for everyone aggressively dodging API metering.
 
 ## Step 1: The Sacrifice (Termux Setup)
 
-First, download Termux. **Do not use the Play Store version.** It's practically ancient history and entirely broken. Get it from F-Droid or GitHub like an adult.
+Download Termux. **Not from the Play Store.** That version is archaeological. Get it from F-Droid or GitHub like someone who reads changelogs.
 
 Open it up and run the ritual:
 
@@ -48,7 +50,7 @@ Open it up and run the ritual:
 pkg update && pkg upgrade
 ```
 
-Install Ubuntu (no, I don't care about your favorite obscure distros like Alpine or Arch-mobile, I want my `apt-get` to work):
+Install Ubuntu (no, I don't care about your Alpine evangelism, I want `apt-get` to work):
 
 ```bash
 pkg install proot-distro
@@ -56,49 +58,47 @@ proot-distro install ubuntu
 proot-distro login ubuntu
 ```
 
-Update your brand new chroot system:
+Update your brand new chroot:
 
 ```bash
 apt update && apt upgrade -y
 apt install curl git nodejs npm -y
 ```
 
-Congratulations. Your phone is officially a development machine. You can finally tell people you "work entirely in the terminal" when you're waiting for your cold brew at Starbucks.
+Congratulations. Your phone is now a development machine. You can tell people you "work entirely in the terminal" while waiting for your cold brew. They won't know what that means. It'll feel good anyway.
 
-## Step 2: Choosing Your AI Deity
+## Step 2: Choose Your AI Deity
 
-Two paths. One has a monthly billing cycle, the other has character.
+Two paths. One has a monthly billing cycle. The other has character.
 
 ### Path A: The "I Have a Budget Line for This" Option (Claude Code)
 
-If you're completely fine with paying Anthropic to technically do your job while you sip coffee:
+If you're fine with paying Anthropic to technically do your job while you drink coffee:
 
 ```bash
 curl -fsSL https://claude.ai/install.sh | bash
 claude --remote
 ```
 
-Done. Go back to your $15 avocado toast.
+Done. Go back to your avocado toast.
 
 ### Path B: The "I Have Principles" Option (OpenCode + Antigravity Auth)
 
-For those of us who prefer to keep our money for important things (like RAM or specialized mechanical switches), we use **OpenCode**.
+For those of us who prefer to keep money for important things — RAM, mechanical switches, that one keyboard you've been eyeing for six months.
 
-I found the antigravity plugin while responsibly avoiding doom-scrolling, and it genuinely simplified my life. Finally, no monthly AI subscription just to get an LLM to tell me why my regex is objectively terrible.
+We use **OpenCode**.
 
-#### Setting up OpenCode + Antigravity
+I found the Antigravity plugin while responsibly not doom-scrolling, and it genuinely simplified my life. No monthly AI subscription just to get an LLM to tell me why my regex is objectively wrong.
 
-First, install OpenCode:
-
-Easiest way:
+Install OpenCode:
 
 ```bash
 curl -fsSL https://opencode.ai/install | bash
 ```
 
-Now, we add the **[Antigravity Auth plugin](https://github.com/NoeFabris/opencode-antigravity-auth)**. This lets you tap into Google's Gemini-3 and Claude 4.5 quotas via OAuth like a true hacker.
+Now add the **[Antigravity Auth plugin](https://github.com/NoeFabris/opencode-antigravity-auth)**. This lets you tap Google's Gemini and Claude quotas via OAuth like someone who knows how OAuth works.
 
-Edit your config at `~/.config/opencode/opencode.json` (yes, use `nano` or `vim` on your phone screen, I believe in you):
+Edit your config at `~/.config/opencode/opencode.json` (yes, with `nano` on your phone screen, you can do it, I believe in you):
 
 ```json
 {
@@ -107,21 +107,21 @@ Edit your config at `~/.config/opencode/opencode.json` (yes, use `nano` or `vim`
   "provider": {
     "google": {
       "models": {
-        // Copy pasta the standard Antigravity auth schema here so you have all the free tier models
-        // I'm not pasting all 60 lines again, figure it out.
+        // Paste the Antigravity auth schema here for all the free-tier models.
+        // I'm not pasting all 60 lines. Figure it out.
       }
     }
   }
 }
 ```
 
-Now, login:
+Now login:
 
 ```bash
 opencode auth login
 ```
 
-**CRITICAL NOTE**: Android Termux doesn't support the fancy OpenCode TUI interface natively unless you have tiny fingers and the patience of a saint. You're a terminal purist now. Use the `--web` flag or your screen will just look like it is having a stroke.
+**CRITICAL NOTE**: Android Termux does not support the full OpenCode TUI natively unless you have the patience of someone who has never experienced latency. You're a terminal purist now. Use the `--web` flag or your screen will look like it's having a medical event.
 
 ```bash
 opencode web --hostname [YOUR_TAILSCALE_IP] --port 4096
@@ -129,38 +129,40 @@ opencode web --hostname [YOUR_TAILSCALE_IP] --port 4096
 
 ## Step 3: Tailscale (The Packet Wormhole)
 
-If you're running `opencode web`, you'll need a way for your browser to talk to that proot-distro Ubuntu instance without Android's sandbox throwing a tantrum. Enter **Tailscale**.
+Running `opencode web` means your browser needs to reach that proot-distro Ubuntu instance without Android's sandbox filing a complaint. Enter **Tailscale**.
 
-1. **Install the App**: Download Tailscale.
-2. **Login**: Use the same account you use on everything else.
-3. **Turn it ON**: You're now part of the mesh network.
+1. **Install the app.** It's in the Play Store. This one you can get from there.
+2. **Login.** Use the same account you use everywhere else.
+3. **Turn it on.** You're now part of the mesh.
 
-Find your phone's Tailscale IP (the one that looks like `100.x.y.z`). That is your new identity. Use it in the `opencode web` command so you can access your dev environment from your mobile Chrome, or even from your laptop if you're feeling extra lazy.
+Find your phone's Tailscale IP — the one that looks like `100.x.y.z`. That is your new identity. Use it in the `opencode web` command so you can hit your dev environment from Chrome, or from your laptop if you're feeling spectacularly lazy.
 
 ![Tailscale status](https://github.com/user-attachments/assets/e5da61ab-828d-4f40-920d-840306c284ed)
 
-## Step 4: Ascend To Godhood
+## Step 4: Ascend to Godhood
 
-You are now coding from a device that fits in your pocket. You can push to production at a farmers market. You can fix a bug during a movie. You can ship features between sets at the gym. These are all real actions you can take now, regardless of whether or not you _should_.
+You are now coding from something that fits in your pocket.
+
+You can push to production at a farmers market. Fix a bug during a movie. Ship features between sets at the gym. All of these are real actions you can now take. None of them are actions you should take without thinking carefully about your life choices first.
 
 ![Claude coding](https://github.com/user-attachments/assets/d92df1cd-570b-49b0-96f7-a5ce31644a6f)
 
-## Pro Tips for the Elite
+## Pro Tips for the Committed
 
-- **Track Progress**: Always ask your AI to update `CLAUDE.md` or `SHIPPING.md`. Your future sober(ish) self will thank you for documenting what your 2 AM self did.
-- **The Club**: If you’re coding at the club, make sure the brightness is all the way up so everyone around you knows you are fundamentally more important than the DJ.
+- **Document everything**: Always ask your AI to update `CLAUDE.md` or `SHIPPING.md`. Your future coherent self will be grateful that your 2 AM self left notes.
+- **The Club Protocol**: If you're coding at the club, crank the brightness to max. Everyone should know you are categorically more important than whatever the DJ is doing right now.
 
 ![Code at the club](https://github.com/user-attachments/assets/f3d05c00-a47a-4ebe-8db3-1795a6a0798c)
-_Me when the drop hits but the prod logs show a 500 error._
+_Me when the drop hits but the prod logs are showing 500s._
 
 ## Troubleshooting (Otherwise Known As Skill Issues)
 
 If it doesn't work:
 
-1. **Termux Sleep**: Android loves to ruthlessly murder background processes. Make sure you enable "Keep CPU awake" in the Termux notification tray or your session will die faster than a startup with no VC funding.
-2. **Node Versions**: If `npm` acts up, `pkg reinstall nodejs-lts`.
-3. **OpenCode UI**: I told you already, use `--web`. If you forgot, that's a classic skill issue on your part.
+1. **Termux Sleep**: Android loves murdering background processes. Enable "Keep CPU awake" in the Termux notification tray or your session dies faster than a startup with no runway.
+2. **Node version drama**: If `npm` acts up, `pkg reinstall nodejs-lts`. Do not negotiate with it.
+3. **OpenCode TUI**: I told you. Use `--web`. If you forgot: classic skill issue. Noted for the retrospective.
 
 ---
 
-Happy Doom Coding. Go ship something before the concept of a "healthy work-life balance" accidentally enters your mind.
+Happy Doom Coding. Go ship something before the concept of "healthy work-life balance" accidentally enters your mind and ruins everything.

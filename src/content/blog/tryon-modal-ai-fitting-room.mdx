@@ -1,7 +1,7 @@
 ---
-title: 'I Built an AI Fitting Room With a PHP Plugin and Zero Regrets'
+title: 'I Asked Google Gemini to Dress People. The Results Were Educational.'
 date: '2025-02-11'
-summary: 'Online fashion has a $400B return problem. I fixed it with PHP, Google Gemini, and a WooCommerce modal. No VC funding was harmed in the making of this project.'
+summary: 'Online fashion loses $400B a year to returns. I fixed it with PHP, a WooCommerce plugin, and a carefully worded prompt. No research team required.'
 tags:
   - 'AI'
   - 'PHP'
@@ -14,49 +14,49 @@ categories:
 image: '/tryon-preview.png'
 ---
 
-# I Built an AI Fitting Room With a PHP Plugin and Zero Regrets
+# I Asked Google Gemini to Dress People. The Results Were Educational.
 
 > The fashion industry loses $400 billion a year to returns.
 > Me: I'll fix it. With PHP.
+> Everyone: ...
+> Me: And a modal.
 
-Look, everyone wants to solve hard problems with flashy tech. Kubernetes clusters. Custom ML pipelines. Billion-parameter vision transformers trained on proprietary data.
+Look, I could have built a custom vision transformer. Trained it on proprietary fashion datasets. Deployed it on a GPU cluster. Applied for Series A funding and put "AI/ML Engineer" in my LinkedIn bio.
 
-I used Google Gemini, a WooCommerce plugin, and a CSS modal.
+Instead I wrote a WordPress plugin.
 
-The fitting room still works.
+The fitting room still works. The VC funding was unnecessary.
 
 ![Tryon Modal](/tryon-preview.png)
 
-## The Problem Is Actually Real
+## The Problem Is Embarrassingly Real
 
-Online clothes shopping has one fundamental flaw: you cannot tell if it'll look good on you. So you buy three sizes, keep one, return two. The warehouse re-accepts the return, dry-cleans it, restocks it — and the planet loses its mind.
+You can't try clothes on through a screen. So you buy three sizes, keep one, return two. The warehouse restocks it. The planet suffers. Customer service handles the complaints. Everyone loses except the shipping company.
 
-Conversion rates drop. Return rates climb. Customer service handles complaints. The whole thing is a mess with a very obvious solution that somehow costs a fortune if you want the brand-name version of it.
+This problem has an obvious solution that somehow costs $99/month if you want the branded SaaS version of it.
 
-So I built the budget version. It's called `tryon-modal`.
+So I built the unbranded version. It's called `tryon-modal`. It's open source. It takes longer to read this post than to get it running.
 
-## "It's Just a WordPress Plugin"
+## "It's Just a WordPress Plugin" — Yes. And?
 
-Yes. And the back button is "just pressing F1 instead of F5." The container matters less than what's inside it.
+WooCommerce runs on 30% of all e-commerce sites. If you're targeting fashion stores, you're targeting WordPress. That's not a compromise — that's a distribution strategy.
 
-WooCommerce runs on 30% of all e-commerce sites. The plugin ecosystem means any store owner can install this in under five minutes without touching a line of code. Targeting WordPress wasn't a compromise — it was the distribution strategy.
+Also, PHP 8 has named arguments, enums, fibers, union types, and a JIT compiler. If you're still dunking on PHP in 2025, that tweet isn't landing the way you think it is.
 
-Also, if you write condescending tweets about PHP, please know that PHP 8 exists and has named arguments, enums, fibers, and union types. It's fine. You're fine. We're all fine.
+## The AI Part (Which Is Embarrassingly Simple)
 
-## The Gemini Part (This Is the Fun Part)
+Everyone imagines "AI virtual try-on" means a six-month research sprint and a team of computer vision PhDs.
 
-Here's the thing about AI Virtual Try-On: the custom model route would cost you a research team, six months, and a GPU budget. Google Gemini's multimodal API already understands images, garments, and human figures.
-
-So instead of training anything, you send it:
+What it actually means in 2025: Google Gemini's multimodal API already understands images, garments, and human figures. So instead of training anything, you send it three things:
 
 1. The user's photo
 2. The garment image
-3. A carefully crafted prompt
+3. A prompt that is genuinely just English sentences
 
-And it gives you back a try-on composite. The "AI research" was writing a good prompt and a clean API handler class in PHP.
+And it gives you back a try-on composite. The "AI research" was writing a good prompt and a clean PHP API handler.
 
 ```php
-// The whole "AI" is this. Don't overthink it.
+// This is the entire AI integration. Don't overthink it.
 $response = $this->gemini->generateContent([
   'parts' => [
     ['text' => $this->buildTryOnPrompt($garmentCategory)],
@@ -66,57 +66,55 @@ $response = $this->gemini->generateContent([
 ]);
 ```
 
-That's it. That's the AI integration. The model handles the rest.
+That's it. That's the model call. The rest is plumbing.
 
-## The Garment Mapper: My Favorite Feature Nobody Will Notice
+## The Garment Mapper: My Favorite Feature Nobody Will Tweet About
 
-One of the things that actually matters for result quality is garment categorization. Gemini needs context: is this a top? A dress? Trousers? The prompt changes significantly based on the garment type, and the prompt difference changes the output quality significantly.
+Here's the thing about Gemini: the prompt needs context. "Is this a top or a dress?" changes the output quality significantly. Wildly, visibly significantly.
 
-So I built an admin-side **Garment Mapper** — a bulk configuration UI where shop owners can mark their product images as Tops, Bottoms, Dresses, Outerwear, etc. It sounds boring. It makes the AI results noticeably better. Nobody will tweet about it. I'm extremely proud of it.
+So I built a **Garment Mapper** — an admin UI where store owners bulk-tag their product images as Tops, Bottoms, Dresses, Outerwear, etc. The tagging feeds into `buildTryOnPrompt()`. The prompt changes. The results get noticeably better.
 
-## Security in a Plugin Nobody Asked For
+It's the most impactful feature in the plugin and the least glamorous one to explain. That is the software development experience in a single sentence.
 
-Okay here's where it gets slightly serious for a beat.
+## Security: The Part Nobody Claps For
 
-Any tool that accepts user-uploaded photos and runs them through an external API has some real attack surfaces. User uploads can be malicious. SQL queries can be injected. CSRF attacks are a thing on every web form ever.
+A plugin that accepts user-uploaded photos and routes them to an external API has real attack surfaces. So we do the boring-but-correct stuff:
 
-So the plugin does the boring-but-correct stuff:
+- **Nonces** on every AJAX action (CSRF protection, WordPress-style)
+- **`esc_html()` and `sanitize_*`** everywhere user data touches the DOM
+- **`$wpdb->prepare()`** on every database query — no raw SQL, ever
+- **MIME type validation** on uploaded photos before they go anywhere near Gemini
+- **HTTPS enforcement** on all API calls
 
-- **Nonces** on every AJAX action (CSRF protection)
-- **`esc_html()` / `sanitize_*`** everywhere output touches the DOM (XSS)
-- **`$wpdb->prepare()`** on every database query (SQL injection)
-- **MIME type validation** on uploaded photos before they go anywhere
-- **HTTPS enforcement** on all Gemini API calls
+Nobody writes blog posts about not having CVEs. The alternative is worse.
 
-Nobody claps for security discipline. The alternative is a CVE. I'll take the silence.
+## The Modal: Invisible Until Needed
 
-## The Modal UI: Invisible Until You Need It
+The worst thing a plugin can do is slow down a product page. So the modal loads nothing — zero CSS, zero JS overhead — until the user clicks **Virtual Try-On**. Then it bootstraps the whole UI on demand.
 
-The worst thing a plugin can do is slow down the product page. So the modal loads nothing — no CSS, no JS overhead — until the user clicks the **Virtual Try-On** button. Then the whole UI bootstraps itself.
+Once open, it supports:
 
-The modal supports:
-
-- Drag-and-drop photo upload with a live preview
+- Drag-and-drop photo upload with live preview
 - A results pane that fades in when Gemini responds
-- A download button for the try-on result
-- An **Add to Cart** button right there in the modal — no page leave required
+- A download button for the try-on image
+- An **Add to Cart** button inside the modal — no page navigation required
 
-The whole thing is styled with a CSS class namespace (`nano-tryon-*`) so it can be overridden per-theme without touching plugin files. Because the cardinal sin of WordPress plugin development is !important-ing your styles into the host theme.
+The whole thing is namespaced under `nano-tryon-*` CSS classes so theme overrides work without touching plugin files. Because `!important`-ing your plugin styles into the host theme is a war crime.
 
-## Session History: The Feature That Exists Because It Should
+## Session History: Two SQL Queries, Actually Useful
 
-Try-on sessions get stored in a custom database table (`wp_tryon_sessions`) — image paths, garment used, timestamp, user ID. The history view lets users revisit what they tried. It costs two SQL queries and a simple UI loop.
+Try-on sessions get stored in `wp_tryon_sessions` — image paths, garment used, timestamp, user ID. Users can revisit what looked good before buying.
 
-Could I have skipped it? Sure. Users who come back to check "what looked good last time" before buying are genuinely more likely to convert. It's free retention. I kept it.
+Could I have skipped it? Yes. Did I? No. Users who come back and check what they tried on last week convert better than users who don't. It cost two SQL queries and a loop. The ROI math is straightforward.
 
 ## Does It Work?
 
-Yes. Users upload a photo, pick a product with garment mapping configured, and within a few seconds see themselves wearing it — without leaving the product page, without an account on some third-party app, without paying $99/month for a SaaS that does the same thing.
+Yes. Upload a photo, pick a product, wait a few seconds, see yourself wearing it — without leaving the product page, without an account on a third-party app, without a $99/month subscription.
 
-A WooCommerce store. A Gemini API key. A five-minute plugin install.
+A WooCommerce store. A Gemini API key. A five-minute install.
 
-That's the whole thing. Sometimes the unsexy tool for the unsexy platform solves a real problem better than the venture-backed alternative. Sometimes the fitting room is a PHP modal.
+Sometimes the unsexy tool for the unsexy platform solves the real problem better than the venture-backed alternative. Sometimes the fitting room is a PHP modal.
 
 ---
 
-The code is [open source on GitHub](https://github.com/Mic-360/tryon-modal). If you run a WooCommerce store and have a Gemini API key, it takes longer to read this post than to get it running.
+The code is [open source on GitHub](https://github.com/Mic-360/tryon-modal). Your Gemini API key is free up to a quota that will absolutely cover your first thousand try-ons.

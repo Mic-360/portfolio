@@ -14,94 +14,71 @@ categories:
 image: '/blog/mini-shinobi-dashboard.png'
 ---
 
-# I Built Vercel on a Phone. A Rooted Android Phone.
+# I Turned My Old Phone Into a Vercel Clone. Please Don't Ask Why.
 
-> Normal people: _pays $20/month for hobby project hosting_
-> Me: _roots phone, installs Termux, rewrites deployment infrastructure from scratch_
+> Normal people: pays $20/month for hobby project hosting.
+> Me: roots phone, installs Termux, rewrites deployment infrastructure from scratch at midnight.
 
-Both valid life choices. I am not here to judge. I am here to explain the decisions that led to me configuring Nginx on a Snapdragon 660 at midnight.
+Both are valid approaches to the problem. I'm not here to judge. I'm here to explain the sequence of decisions that led to me configuring Nginx on a Snapdragon 660 while the phone was also playing a lo-fi playlist.
 
 ## The Inciting Incident
 
-I wanted to host some side projects. Free tiers exist. Vercel exists. Railway exists. Render exists.
+I had a rooted Android phone sitting in a drawer. I wanted to host some side projects. Vercel exists. Railway exists. Render exists.
 
-I had a rooted Android phone sitting in a drawer.
+I chose the drawer phone.
 
-You can probably guess where this is going.
+## What Is MiniShinobi
 
-## Introducing MiniShinobi
+It's a self-hosted, Vercel-like deployment platform that runs entirely inside [Termux](https://termux.dev) on a rooted Android device. You connect a GitHub repo, hit **Deploy**, and your project goes live on a real subdomain over HTTPS via Cloudflare Tunnel — all from a device that charges next to your bed at night.
 
-It's a self-hosted, Vercel-like deployment platform. It runs entirely inside [Termux](https://termux.dev) on a rooted Android device. You connect a GitHub repo, click **Deploy**, and your project goes live via Cloudflare Tunnels — all from a device that charges next to your bed at night.
+The stack: Node.js backend, Vite/React dashboard, Nginx reverse proxy, PM2 for process management, `sql.js` for the database, and `cloudflared` for tunnels. All of it supervised by PM2 on a phone.
 
-![MiniShinobi Dashboard](/blog/mini-shinobi-dashboard.png)
+## "We'll Just Use sql.js"
 
-Is this the most resource-efficient way to host a side project? No. Is it the most _interesting_? Absolutely yes.
+The first design constraint: you cannot compile `better-sqlite3` on ARM Termux. Native Node addon compilation on ARM is a special kind of unpleasant that I don't recommend.
 
-## "We'll just use SQLite"
+So the database runs on `sql.js` — SQLite compiled to WebAssembly. Zero native compilation, zero segfaults. Every write flushes the entire database buffer to disk. The database is small. The phone has 4 GB of RAM. This is fine.
 
-The first design decision was the database. On a normal server you'd reach for PostgreSQL. On ARM Termux you can't compile `better-sqlite3` because native Node addon compilation on ARM is genuinely a nightmare. So instead I'm running `sql.js` — SQLite compiled to WebAssembly — which means zero native compilation, zero segfaults, and one very cursed runtime.
+It's cursed in a way that is technically completely fine.
 
-```js
-// sql.js: the cursed WebAssembly SQLite
-// Does it run on a phone? Yes.
-// Should it? Unclear.
-const SQL = await initSqlJs({ wasmBinary })
-const db = new SQL.Database(existingBuffer)
-```
+## "We'll Just Use child_process"
 
-Every write flushes the entire database to disk as a Buffer. This is fine. The database is small. The phone has 4 GB of RAM. Everything is fine.
+Similarly, `node-pty` needs native compilation. You know how that story ends.
 
-## "We'll just use child_process"
+So the entire deployment engine — `git clone`, `npm install`, `npm run build`, framework detection, process spawn — runs through Node's built-in `child_process.spawn`. Every byte of stdout and stderr is line-buffered and streamed live to the browser via Server-Sent Events. You watch your build happen in real-time from the dashboard, which is serving you that stream from a phone in your drawer.
 
-On a real server, you'd reach for `node-pty` to get a proper terminal. On ARM Termux, `node-pty` requires native compilation. You know that story by now.
+Does it feel like it should work? No. Does it work? The phone is serving things to the open internet right now.
 
-So the entire deployment engine — `git clone`, `npm install`, `npm run build`, `serve`, you name it — runs through Node's built-in `child_process.spawn`. Every byte of stdout and stderr is line-buffered and streamed live to the browser via Server-Sent Events.
+## "We'll Just Use PM2"
 
-Is it elegant? No. Does it work? The phone is literally serving projects to the open internet right now. So.
+`pm2 start ecosystem.config.js` and everything wakes up: the Express backend, Nginx, and `cloudflared`. Three supervised processes, one config file. If anything crashes, PM2 restarts it. On a phone.
 
-## "We'll just use PM2"
+This is the part where I discovered PM2 is genuinely great and I should have been using it everywhere.
 
-This is the part where I discovered that PM2 is actually great and I should have been using it everywhere. Four processes. One config file. One command.
+## The Build Queue (The Unsexy Correct Decision)
 
-```bash
-pm2 start ecosystem.config.js
-```
+4 GB of RAM sounds fine until `npm run build` on a React app invites the OOM killer to the party.
 
-Nginx wakes up. Express wakes up. cloudflared wakes up. Everything wakes up. On a phone.
+There's a serialized build queue. One build at a time. If you deploy two projects simultaneously, one waits. It's not exciting. It's the right call for a device with less RAM than most laptops have VRAM.
 
-## The Build Queue
+I also added 1 GB of swap. Don't look at me like that.
 
-Here's a subtle one. 4 GB of RAM sounds fine until you're running `npm run build` for a React app and the OOM killer shows up to the party uninvited.
+## Cloudflare Tunnels Are Legitimately Magic
 
-So there's a build queue. Serialized. One build at a time. If you click Deploy on two projects simultaneously, one waits. It's not exciting. It's the correct engineering decision for a device with less RAM than most laptops have VRAM.
+`cloudflared` is the part that makes all of this actually work. You run one daemon, write a YAML config, and `localhost:3000` is suddenly reachable at `your-project.yourdomain.com` over HTTPS with a valid certificate.
 
-I added 1 GB of swap too.
-
-```bash
-su -c "dd if=/dev/zero of=/data/swapfile bs=1M count=1024"
-su -c "mkswap /data/swapfile && swapon /data/swapfile"
-```
-
-Don't look at me like that.
-
-## Cloudflare Tunnels Are Genuinely Incredible
-
-Okay real talk for a second. `cloudflared` is magic. You run one daemon, configure a YAML file, and your `localhost:PORT` is suddenly reachable at `your-project.yourdomain.com` over HTTPS with a valid certificate.
-
-No port forwarding. No public IP. No router configuration. Just a rooted Android phone, a cloudflared binary, and a domain you paid $12/year for.
-
-Every deployment gets its own named tunnel. Every project gets its own subdomain. The phone sitting in my drawer is serving things over the real internet.
+No port forwarding. No public IP. No router config. No DynDNS prayers. Every deployment gets its own named tunnel. Every project gets its own subdomain. The phone sitting in a drawer is serving real traffic on the real internet.
 
 ## Does It Actually Work?
 
-The build logs stream in real-time. The deployments go live. The GitHub OAuth flow works. Static sites and Node apps both deploy. The subdomains resolve. The SSL certificates are valid.
+Build logs stream live. Deployments go live. GitHub OAuth works. Static sites and Node apps both deploy. The framework detector auto-detects Next.js, Vite, and plain static sites. SSL certificates are valid.
 
-I'm running this on a Snapdragon 660 · 4 GB RAM · PixelExperience Android 13. The phone is also charging. It's also playing a lo-fi playlist in the background.
+Running on a Snapdragon 660, 4 GB RAM, PixelExperience Android 13. The phone is also charging. The lo-fi playlist is still going.
 
-Did I need to build this? No. Do I have a deployment dashboard running on my old rooted phone that cost me exactly $0/month to operate? Yes.
+Did I need to build this? No. Do I have a full deployment dashboard running on a rooted Android phone for exactly $0/month? Yes.
 
-That's just engineering, bro.
+That's just engineering.
 
 ---
 
-MiniShinobi is open source. If you have a rooted Android phone gathering dust and too much free time, you know what to do. The README has every command you need. I've already done the part where you discover why you shouldn't do this, so you get to skip to the part where it works.
+[MiniShinobi is open source.](https://github.com/Mic-360/MiniShinobi) If you have a rooted Android phone gathering dust and a questionable relationship with free time, the README has every command. I already did the part where you discover why you shouldn't do this. You get to skip straight to the part where it works.

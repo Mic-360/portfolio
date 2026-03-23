@@ -1,12 +1,12 @@
 ---
 title: 'Mamoru-WAF'
 date: '2026-02-25'
-summary: 'A lightweight, zero-dependency Go Web Application Firewall with a premium Terminal UI and hot-reloading rule engine.'
+summary: 'A zero-dependency Go Web Application Firewall with a Bubble Tea TUI and atomic hot-reloading rule engine — sub-2ms overhead, under 30MB resident memory, OWASP Top 10 protection as a single binary.'
 stack:
   - 'Go'
   - 'Bubble Tea'
-  - 'Docker'
   - 'YAML'
+  - 'Docker'
 links:
   - label: 'GitHub'
     url: 'https://github.com/Mic-360/mamoru-waf'
@@ -20,208 +20,68 @@ categories:
 image: '/blog/mamoru-mascot.png'
 ---
 
-# Mamoru-WAF: The Lightweight Guardian
+# Mamoru-WAF
 
-A high-performance reverse proxy and Web Application Firewall built in Go with zero external dependencies. Mamoru-WAF sits in front of your backend services and evaluates every incoming request against a hot-reloadable rule engine — blocking SQLi, XSS, path traversal, and bot traffic before it reaches your app.
+A high-performance reverse proxy and Web Application Firewall built in Go with zero external runtime dependencies. Mamoru sits in front of any HTTP backend, evaluates every incoming request against a hot-reloadable rule engine, and blocks SQL injection, XSS, path traversal, and automated scanner traffic before it reaches the application — all from a single binary under 15MB.
 
-![Mamoru-kun Mascot](/project/mamoru.png)
+## Overview
 
-## The Problem
+Enterprise WAFs assume infrastructure that most teams don't have: Redis for rate limiting state, PostgreSQL for logging, a dedicated DevOps team to manage rolling rule updates. For a solo developer, a microservice, or a containerized sidecar deployment, this overhead introduces unnecessary cost and operational burden without proportional security gain.
 
-Every enterprise WAF assumes you have a Redis cluster for rate limiting, a PostgreSQL database for logging, and a DevOps team to manage updates. For a solo developer, a hobby project, or a small microservice, this is overkill that introduces unnecessary cost, latency, and operational burden.
+Mamoru-WAF collapses that complexity. Drop the binary in front of any HTTP service, point it at a YAML config file, and get OWASP Top 10 protection in under 60 seconds. No database. No external state. No infrastructure dependencies.
 
-## The Solution
+## Architecture
 
-Mamoru-WAF is a single binary. No database. No external state. No infrastructure dependencies. Drop it in front of any HTTP service and get OWASP Top 10 protection in under 60 seconds.
+Mamoru's architecture separates concerns cleanly across three layers: the proxy layer, the rule engine, and the operator interface.
 
-## Prerequisites
+### Reverse Proxy Core
 
-- **Go** 1.21 or higher — `go version` to check
-- **Docker** 24+ (optional, for containerized deployment)
-- A running backend HTTP service to protect (any language/framework)
+The proxy layer is a standard Go `httputil.ReverseProxy` wrapped with middleware that intercepts every inbound request before forwarding. The target service is opaque to the outside world — clients connect to Mamoru's listen port and never reach the backend directly. Timeout configuration, connection pooling, and error propagation are all managed at this layer.
 
-## Installation
+### AtomicEngine Rule Evaluation
 
-### Option A: Build from Source
+The rule engine is where Mamoru's core security logic lives. Rules are evaluated sequentially: first match wins, which makes rule ordering deterministic and auditable. Each rule specifies a target (`url`, `body`, `headers`, or `all`), a regex pattern, an action (`block` or `allow`), and a response status code.
 
-```bash
-git clone https://github.com/Mic-360/mamoru-waf.git
-cd mamoru-waf
+The engine is managed by an `AtomicEngine` struct that holds the active ruleset behind an atomic pointer. When `rules.yaml` changes on disk, a file watcher detects the modification and compiles the new ruleset in a background goroutine. Once compilation succeeds, the pointer is swapped atomically — in-flight requests continue evaluating against the old ruleset until they complete, while all new requests pick up the updated rules immediately. **No connections are dropped. No restart is required.** Rule changes propagate within 2 seconds.
 
-go build -o mamoru ./cmd/server
-./mamoru --config rules.yaml
-```
+The `fail_safe` configuration key controls behavior if the engine itself crashes: `open` lets traffic through, `block` rejects everything. This is an explicit operational trade-off the operator declares, not a silent default.
 
-### Option B: Docker
+### Bubble Tea TUI
 
-```bash
-# Build the image locally
-docker build -t mamoru-waf .
+When `tui.enabled: true`, Mamoru launches an interactive terminal dashboard built with the Bubble Tea framework. The TUI renders four live panels: a real-time event log of blocked requests (with rule name, source IP, and timestamp), backend health indicators, requests-per-second and block rate statistics, and an active rule summary with per-rule match counts.
 
-# Run with your config file mounted
-docker run -d \
-  -p 8080:8080 \
-  -v $(pwd)/rules.yaml:/app/rules.yaml \
-  mamoru-waf
-```
+The TUI runs in the same process as the proxy on a separate goroutine, connected via channels. Keyboard shortcut `d` toggles between `block` and `detect` modes live without touching the config file. `r` forces an immediate rule reload. For production or CI deployments, `--headless` disables the TUI entirely and writes structured logs to stdout or a file.
 
-### Option C: Docker Compose Sidecar
+## Key Features
 
-```yaml
-# docker-compose.yml
-version: '3'
-services:
-  mamoru:
-    build: ./mamoru-waf
-    ports:
-      - '8080:8080'
-    volumes:
-      - ./rules.yaml:/app/rules.yaml
-    environment:
-      - MAMORU_TARGET=http://app:3000
-      - MAMORU_MODE=block
-    depends_on:
-      - app
-  app:
-    image: your-backend-image
-    expose:
-      - '3000'
-```
+- **OWASP Top 10 patterns built-in** — regex rules for SQLi (`union`, `select`, `drop`, `sleep`), XSS (`<script`, `javascript:`, `onerror=`), path traversal (`../`, `%2e%2e%2f`), and automated scanner User-Agents (`sqlmap`, `nikto`, `masscan`)
+- **Per-path rate limiting** — global rate limits with endpoint-specific overrides; the `/api/login` example ships at 5 req/s with a burst of 10
+- **Atomic hot-reload** — rule changes applied within 2 seconds, zero dropped connections, compile-then-swap semantics
+- **Headless mode** — `--headless --log-file /var/log/mamoru.log` for production deployments; structured log output compatible with log aggregators
+- **Docker Compose sidecar pattern** — purpose-built for the `depends_on` + `MAMORU_TARGET` environment variable deployment model
+- **Extensible rule interface** — custom rules implement a two-method Go interface (`Name() string`, `Evaluate(*http.Request) (bool, string)`) and register with the engine initializer
 
-## Configuration: `rules.yaml`
+## Implementation Details
 
-Every rule is evaluated in order. First match wins.
+### Zero External Dependencies
 
-```yaml
-proxy:
-  target: 'http://localhost:3000' # The backend service to protect
-  listen: ':8080' # Port Mamoru listens on
-  timeout: 30s
+The dependency constraint was a deliberate design choice, not an arbitrary limitation. External dependencies in a security tool introduce supply chain risk — a compromised package in a WAF's dependency tree is significantly more dangerous than one in an application. By restricting Mamoru to the Go standard library plus a single TUI framework, the entire codebase is auditable. The `net/http/httputil` reverse proxy, `regexp` for pattern matching, `sync/atomic` for engine swaps, and `os` for file watching cover everything needed.
 
-mode: 'block' # "block" → block matching requests | "detect" → log only
+### Regex Compilation Strategy
 
-rate_limit:
-  enabled: true
-  requests_per_second: 100
-  burst: 200
-  per_path:
-    - path: '/api/login'
-      requests_per_second: 5
-      burst: 10
+Patterns are compiled once during ruleset load, not on each request evaluation. A ruleset reload compiles all patterns upfront in the background goroutine — if any pattern is invalid, the entire reload fails cleanly and the existing ruleset remains active. This prevents a misconfigured `rules.yaml` from taking down protection.
 
-rules:
-  - name: 'block-sqli'
-    type: 'regex'
-    target: 'url' # options: "url" | "body" | "headers" | "all"
-    pattern: '(?i)(union|select|insert|drop|sleep|benchmark)'
-    action: 'block'
-    status: 403
+### Rate Limiter Design
 
-  - name: 'block-xss'
-    type: 'regex'
-    target: 'all'
-    pattern: '(?i)(<script|javascript:|onerror=|onload=)'
-    action: 'block'
-    status: 403
+The rate limiter uses Go's `golang.org/x/time/rate` token bucket implementation scoped per source IP. Per-path overrides are matched before the global limit — a request to `/api/login` is checked against the login-specific limiter first. State is in-process memory, which means rate limit counters reset on restart. This is an intentional trade-off: for a single-instance deployment, in-memory state is simpler and faster than an external store.
 
-  - name: 'block-path-traversal'
-    type: 'regex'
-    target: 'url'
-    pattern: "(\\.\\./|%2e%2e%2f)"
-    action: 'block'
-    status: 403
+## Tech Stack Rationale
 
-  - name: 'block-scanners'
-    type: 'regex'
-    target: 'headers'
-    pattern: '(?i)(sqlmap|nikto|masscan|nmap)'
-    action: 'block'
-    status: 403
+| Component | Technology | Rationale |
+| --- | --- | --- |
+| Runtime | Go | Compiled binary, low memory footprint, native concurrency primitives, no GC pauses under normal WAF-scale load |
+| TUI | Bubble Tea | Elm-architecture model makes the dashboard state machine predictable; composable components for multi-panel layouts |
+| Rule config | YAML | Human-readable, diff-friendly, trivial to version-control alongside application code |
+| Packaging | Docker | Single-file Compose sidecar pattern; `depends_on` + environment variable config is idiomatic for microservice deployment |
 
-fail_safe: 'open' # "open" → let traffic through if engine crashes | "block" → block all
-
-tui:
-  enabled: true # Set to false for headless/production deployments
-```
-
-## CLI Flags
-
-| Flag         | Default       | Description                             |
-| ------------ | ------------- | --------------------------------------- |
-| `--config`   | `rules.yaml`  | Path to the config file                 |
-| `--headless` | `false`       | Disable the TUI, log to stdout          |
-| `--log-file` | `""`          | Write logs to file (in addition to TUI) |
-| `--port`     | `8080`        | Override the listen port                |
-| `--mode`     | (from config) | Override mode: `block` or `detect`      |
-
-```bash
-# Example: headless production run with log file
-./mamoru --config /etc/mamoru/rules.yaml --headless --log-file /var/log/mamoru.log
-```
-
-## Hot Reloading Rules
-
-Edit `rules.yaml` at any time while Mamoru is running. The `AtomicEngine` detects the change and applies it within **2 seconds** without dropping any active connections.
-
-```bash
-# Edit rules live
-vim rules.yaml
-# Changes apply automatically — no restart needed
-```
-
-## The TUI Dashboard
-
-When `tui.enabled: true`, Mamoru launches an interactive terminal dashboard:
-
-| Panel              | Description                                                       |
-| ------------------ | ----------------------------------------------------------------- |
-| **Live Event Log** | Real-time feed of blocked requests with reason, IP, and timestamp |
-| **Backend Health** | Status indicators for your proxied upstream services              |
-| **Request Stats**  | Requests/sec, block rate, top blocked rule patterns               |
-| **Rule Summary**   | Active rules and their match counts                               |
-
-**Hotkeys:**
-
-| Key     | Action                                        |
-| ------- | --------------------------------------------- |
-| `r`     | Reload `rules.yaml` manually                  |
-| `d`     | Toggle between `block` and `detect` mode live |
-| `q`     | Quit                                          |
-| `↑ / ↓` | Scroll the event log                          |
-
-![Mamoru Banner](/project/mamoru.png)
-
-## Adding Custom Rules
-
-Implement the `Rule` interface in `internal/rules/`:
-
-```go
-type Rule interface {
-    Name() string
-    Evaluate(r *http.Request) (blocked bool, reason string)
-}
-
-type BlockBadHeaderRule struct{}
-
-func (b BlockBadHeaderRule) Name() string { return "block-bad-header" }
-
-func (b BlockBadHeaderRule) Evaluate(r *http.Request) (bool, string) {
-    if r.Header.Get("X-Suspicious") == "yes" {
-        return true, "suspicious header detected"
-    }
-    return false, ""
-}
-```
-
-Register it in the engine initializer and it evaluates on every request automatically.
-
-## Performance
-
-- **Latency overhead:** < 2ms per request in standard configurations
-- **Binary size:** < 15MB uncompressed
-- **Memory footprint:** < 30MB resident set at steady state
-- **Throughput:** Handles thousands of req/s on a single CPU core
-
----
-
-Source: [github.com/Mic-360/mamoru-waf](https://github.com/Mic-360/mamoru-waf)
+At steady state: under 2ms added latency per request, under 30MB resident memory, binary size under 15MB. Handles thousands of requests per second on a single CPU core — appropriate for protecting services from the hobby tier up to moderate production traffic.

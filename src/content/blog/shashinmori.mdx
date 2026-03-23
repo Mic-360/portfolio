@@ -1,0 +1,87 @@
+---
+title: 'ShashinMori: Google Killed Free Storage, So I Committed Crimes Against Backend Architecture'
+date: '2026-03-23'
+summary: 'A full-stack Flutter + Fastify odyssey to reclaim unlimited original quality storage from dead Pixel phones. Spoiler: OAuth tokens are involved.'
+tags:
+  - 'Flutter'
+  - 'Fastify'
+  - 'Firebase'
+  - 'TypeScript'
+categories:
+  - 'Dev Story'
+  - 'Full-Stack'
+image: '/blog/shashinmori.png'
+---
+
+# ShashinMori: Google Killed Free Storage, So I Committed Crimes Against Backend Architecture
+
+> "Why pay $3/month for Google One when you can spend 3 weeks building a private photo gallery instead?"
+
+It started with Google Photos.
+
+Specifically, it started with Google Photos deciding that my perfectly functional 2016 Pixel — a phone Google **themselves** promised unlimited original-quality storage to forever — no longer deserved unlimited original-quality storage. Forever, apparently, was a marketing term.
+
+Fifteen gigabytes. Shared with Gmail. For a family photo archive.
+
+Fine. I'll build my own.
+
+## The Architecture That Got Out of Hand
+
+Here is the pitch: old Pixel devices already have Google Photos running locally. Google Photos backs up whatever it finds in a watched folder. So the plan was to run the backend **on the Pixel itself**, dump uploads into a sync folder, let Google Photos do the backup, then purge the originals after 12 hours. Previews stay forever. Gallery reads from Firestore metadata and preview files.
+
+Reader, I drew a flowchart. It had six boxes. By the time I shipped, it had 14.
+
+The actual pipeline:
+
+1. Flutter app authenticates via Firebase OAuth
+2. Upload goes to the Fastify API using the **tus protocol** — resumable uploads, because uploads die midway and life is pain
+3. A BullMQ job fires off the upload worker
+4. Worker moves the original to `/sdcard/ShashinMori/<uid>/...` (Google Photos picks it up automatically)
+5. Worker runs Jimp to generate an optimized preview
+6. Worker writes metadata to Firestore
+7. A 12-hour cleanup job purges the original from the sync folder after backup
+8. Gallery endpoints serve from Firestore metadata + the retained preview
+
+This is what "simple photo backup app" looks like at 2 AM.
+
+## The Tech Stack, Annotated
+
+**Flutter + Riverpod + GoRouter** on the frontend. Riverpod is the state management solution that makes you feel vaguely competent until BuildContext eats your soul. GoRouter is fine. Dart is fine. Writing Dart is like TypeScript with training wheels, which is either reassuring or insulting depending on your perspective.
+
+**Fastify + TypeScript** on the backend. Faster than Express, more opinionated than I expected, very happy with it once the plugin system clicked.
+
+**tus protocol** for uploads. The resumable upload standard that nobody talks about until you're dealing with spotty mobile connections and 50MB RAW files. `@tus/server` handles the chunked upload dance. The client-side `tus_client_dart` package does the same on Flutter. When it works, it's magic. Getting there was not magic.
+
+**BullMQ + Upstash Redis** for the job queue. Fire and forget. The worker processes asynchronously so the upload endpoint returns fast and the heavy Jimp processing doesn't block anything.
+
+**Jimp** for image processing. Pure JavaScript, no native binaries, runs on the Pixel without drama. Slower than Sharp. Doesn't require compiling native modules on ARM. Trade-offs.
+
+## The Design Decisions I Will Defend
+
+This is an **append-only archive**. No delete. No download. Intentionally.
+
+The point is preservation, not management. Photos go in. They stay in. Google Photos has a copy. The preview is always there. Nothing accidentally disappears because someone's toddler tapped delete.
+
+Multi-user isolation is enforced at the Firestore level — every record is scoped to a UID, so family members sharing the backend can't see each other's photos.
+
+Is it overkill for a family gallery? Absolutely. Is every architectural decision technically justified? Yes, actually. That's the worst kind of overkill.
+
+## What I Actually Learned
+
+File uploads are a protocol, not a feature. If you're doing anything beyond a single-chunk POST, just use tus from the start.
+
+BullMQ with Redis makes async job queues embarrassingly easy. The worker model — receive upload, enqueue job, return 200, process later — is the correct mental model for anything involving I/O you don't control.
+
+Running a backend on a Pixel device is completely viable and deeply unhinged. Termux + PM2 + Docker-compatible deployment targets. I have regrets about the path I took to learn this.
+
+## The Numbers
+
+- **6** npm packages that actually matter, surrounded by 30 that exist
+- **1** old Pixel phone running a production API server in my living room
+- **0** delete endpoints, on purpose
+- **12 hours** before originals get purged from the sync folder
+- **Indefinite** preview retention, because that's the whole point
+
+ShashinMori is open source. The architecture diagram alone is worth cloning it.
+
+[Grab it on GitHub](https://github.com/Mic-360/shashinmori). Your old Pixel deserves a second life.

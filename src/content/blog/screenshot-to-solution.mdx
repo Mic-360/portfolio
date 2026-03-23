@@ -13,40 +13,41 @@ categories:
 image: '/ai-feedbacks.png'
 ---
 
-# From Screenshot to Solution: Stop Forwarding Me Vague Bug Tickets
+# The AI Sees Your Stack Trace and Judges You
 
-> "The hardest part of fixing a bug isn't the code. It's deciphering what the user meant by 'it made a weird noise on Tuesday.'"
+> "It's broken." — an actual Jira ticket, assigned to you, with no further context, a screenshot of the wrong screen, and the energy of someone who has never once thought about what a developer needs to fix a bug.
 
-Bug reporting in 2026. Still a game of telephone. Still completely, fundamentally broken.
+Bug reporting in 2026. Still a game of telephone. Still completely broken.
 
-"It's not working." — an actual, verbatim Jira ticket description sitting in your queue right now, assigned to you by a PM who didn't ask any follow-up questions.
+We're in a timeline where AI writes production code, but the standard bug report is still a screenshot cropped to a vague red box, pasted into Slack, followed by four words and the silent prayer that you're also a psychic. By the time that reaches an AI coding agent, the context has fully decayed. The agent writes the wrong fix. You spend 20 minutes explaining what was actually broken. Classic.
 
-We live in a timeline where AI can literally write production code for us, yet the standard industry bug report is: a screenshot cropped to a vague red box, pasted into Slack, followed by four words and the fervent prayer that the developer receiving it is also a certified psychic.
+**AI Feedbacks** exists specifically because I got tired of receiving "it doesn't work" as actionable development context.
 
-By the time that ticket reaches an AI coding agent, the context has fully decayed. The agent writes the wrong fix. You spend 20 minutes explaining to the agent what was actually broken because the user didn't tell _you_. Classic workflow. Very efficient.
+## The Problem Has a Name: Context Decay
 
-Enter **AI Feedbacks** — which exists specifically because somebody got tired of receiving "it doesn't work" as actionable development context.
+When a bug fires on the client side, useful information exists for exactly a few seconds: the DOM state at the moment of failure, the console errors, the failed network requests, the exact UI configuration. Then the user closes the tab, writes "the button did something weird," and submits.
 
-![AI Feedbacks Logo](/ai-feedbacks-logo.png)
+By the time that reaches Cursor or Windsurf, the prompt is so thin it's basically a riddle. Agents hallucinate. Developers reconstruct the crash scene manually before they can even ask the agent to start fixing it.
 
-## The Problem: Context Decay (AKA Your Entire Morning Wasted)
+The technical term is "context decay." The honest term is "why does this happen every single sprint."
 
-When a bug fires on the client side, a bunch of incredibly useful information exists for exactly a few seconds: the DOM state, the console errors, the failed network requests, the exact UI configuration at the exact moment of failure.
+## The Fix: Capture Everything at the Moment It Exists
 
-Then the user immediately closes the tab, writes "the button did something weird," attaches a screenshot of the completely wrong screen, and hits submit.
+The Chrome Extension runs silently in the background. When the user crops and submits a bug report, it automatically:
 
-By the time that ticket reaches an AI agent like Cursor or Windsurf, the prompt is so thin it's basically a riddle. Developers end up spending 20 minutes reconstructing the crash scene before they can even ask the agent to start fixing it. Coding agents hallucinate because they have zero context. Everyone loses.
+- Grabs the exact area of the screen they flagged
+- Captures every `console.error` and `console.warn` from the session (yes, including the ones you've been ignoring)
+- Packages all failed network requests (4xx/5xx) from the last 60 seconds
+- Captures the DOM state at the time of failure
+- Sends the whole bundle to the backend — without the user doing anything else
 
-The technical term is "context decay." The honest term is "why does this keep happening every single sprint."
+The developer doesn't receive a blurry screenshot. They receive a structured, agent-ready prompt.
 
-## The Solution: Give Your Agent Enough to Actually Work With
+## Google Gemini Does the Heavy Lifting
 
-AI Feedbacks captures the full crash scene at the absolute moment it happens — screenshot, DOM context, console errors, failed network requests — and synthesizes it into a fully structured, agent-ready prompt. No manual log-copying. No vague Jira descriptions. Just: here is exactly what broke, in the precise format your agent needs to fix it in one pass.
-
-**Google Gemini 3 Flash Preview** does the heavy lifting:
+The backend is built with **Next.js 15** and powered by **Google Gemini 3 Flash Preview** for multimodal analysis. Gemini sees the screenshot, reads the error logs, cross-references the network failures, and synthesizes everything into a prompt that actually gives your coding agent something to work with on the first pass.
 
 ```ts
-// The AI processing pipeline
 const result = streamText({
   model: google('gemini-3-flash-preview'),
   messages: [
@@ -61,41 +62,25 @@ const result = streamText({
 })
 ```
 
-Gemini identifies the broken component, cross-references the network logs, and returns a structured prompt. The kind that actually works on the first pass instead of requiring five clarification messages where the LLM apologizes to you repeatedly. Wild concept, I know.
+Feed it a screenshot and a vague description. Get back a prompt that Cursor can actually use. Wild concept.
 
-### How the Chrome Extension Captures Context
+## The Dashboard: Because You'll Forget About Last Tuesday's Bug
 
-The extension runs silently in the background and on crop+submit it:
-
-- Grabs the exact area of the screen the user flagged.
-- Captures all `console.error` and `console.warn` from the session (all the ones you ignored).
-- Packages failed network requests (4xx/5xx) from the last 60 seconds.
-- Sends the whole thing to the backend without the user doing literally anything else.
-
-The developer receives a ready-to-use prompt. Not a blurry screenshot. A prompt.
-
-## The Dashboard: Because You Also Need Last Tuesday's Bug
-
-The web dashboard is built with **natural language semantic search** because nobody has time to remember the exact spelling of the tags they used in a ticket from two weeks ago.
+The web dashboard has natural language semantic search because nobody remembers the exact tag they used two weeks ago.
 
 Search for:
-
 - _"that auth error"_
 - _"the white flash on mobile"_
-- _"whatever was completely broken with the chart last week"_
+- _"whatever was broken with the chart last week"_
 
-And it just finds it. Not because you tagged it correctly in a 14-step triage process. Because you described it like a normal human being.
+It just finds it. Not because you tagged correctly in a 14-step triage process. Because you described it like a human.
 
-![AI Feedbacks](/ai-feedbacks.png)
+The UI is monochrome, high-contrast, deliberately no-frills. No decorative gradients competing for attention while you're just trying to ship a fix. The `#87ae73` accent color is the most exciting thing in the design system, and that's intentional.
 
-The UI is monochrome, high-contrast, and deliberately boring-looking. The tool is the content. There are no decorative gradients competing for your attention while you're just trying to ship a fix and go to lunch.
+## Who This Is For
 
-## Who This is Pointedly For
+If you use Cursor, Windsurf, GitHub Copilot, or any agentic coding tool — you already know the dirty secret: output quality is 100% constrained by prompt quality. AI Feedbacks automates the hardest part of a good bug prompt: capturing and structuring all the context at the exact moment it exists, before the user closes the tab and forgets everything.
 
-If you or your team uses Cursor, Windsurf, GitHub Copilot, or literally any agentic tool for development — you already know the dirty secret: the quality of the output is entirely, 100% constrained by the quality of the prompt you feed it. AI Feedbacks automates the hardest part of writing a good bug prompt: capturing and structuring the context at the exact moment it exists.
+Better context in. First-pass fixes out. Feed your agents better.
 
-Feed your agents better context. Get first-pass fixes more often. It's not rocket science, it's just better tooling for lazy people (which is what engineers are).
-
----
-
-Source code: [github.com/Mic-360/ai-feedbacks](https://github.com/Mic-360/ai-feedbacks)
+[github.com/Mic-360/ai-feedbacks](https://github.com/Mic-360/ai-feedbacks)
