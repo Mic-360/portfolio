@@ -292,7 +292,7 @@ function App() {
                   <p className="text-[10px] text-secondary-foreground line-clamp-2 italic leading-relaxed">
                     {post.summary}
                   </p>
-                  {post.tags && post.tags.length > 0 && (
+                  {post.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-1">
                       {post.tags.slice(0, 3).map((tag) => (
                         <span

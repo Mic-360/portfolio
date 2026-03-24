@@ -1,10 +1,10 @@
-import { motion } from 'motion/react'
-import { Link } from '@tanstack/react-router'
 import CurrentIcon from '@/components/ui/current-icon'
 import HealthstatIcon from '@/components/ui/healthstat-icon'
 import LayersIcon from '@/components/ui/layers-icon'
 import PenIcon from '@/components/ui/pen-icon'
 import PreviousIcon from '@/components/ui/previous-icon'
+import { Link } from '@tanstack/react-router'
+import { motion } from 'motion/react'
 
 function Section({
   title,
@@ -173,6 +173,7 @@ function StatCard({
   unit,
   type = 'sum',
   format = (v: number) => v.toLocaleString(),
+  showStats = true,
 }: {
   label: string
   samples?: Array<{
@@ -183,6 +184,7 @@ function StatCard({
   unit: string
   type?: 'sum' | 'avg' | 'latest'
   format?: (v: number) => string
+  showStats?: boolean
 }) {
   const processedData = (samples || []).map((s) => {
     let val = Number(s.value)
@@ -191,11 +193,17 @@ function StatCard({
       const end = new Date(s.endDate).getTime()
       val = (end - start) / (1000 * 60 * 60)
     }
-    return { ...s, value: isNaN(val) ? 0 : val }
+    return {
+      ...s,
+      value: isNaN(val) ? 0 : val,
+      timestamp: new Date(s.endDate).getTime(),
+    }
   })
 
-  // Take only last 20 samples for cleaner graph if there are too many
-  // Take useful window for the instrumental look
+  // Sort by timestamp for proper time-series
+  processedData.sort((a, b) => a.timestamp - b.timestamp)
+
+  // Take last 40 samples for graph (time-aware)
   const graphData = processedData.slice(-40)
 
   const values = processedData.map((s) => s.value)
@@ -213,6 +221,11 @@ function StatCard({
             new Date(b.endDate).getTime() - new Date(a.endDate).getTime(),
         )[0].value
       : 0
+
+  // Calculate min/max/avg for display
+  const min = values.length ? Math.min(...values) : 0
+  const max = values.length ? Math.max(...values) : 0
+  const avg = values.length ? mainValue : 0
 
   return (
     <motion.div
@@ -246,6 +259,23 @@ function StatCard({
       </div>
 
       <Sparkline data={graphData} color="var(--primary)" />
+
+      {showStats && graphData.length > 0 && (
+        <div className="grid grid-cols-3 gap-1 text-[9px] opacity-60 group-hover:opacity-100 transition-opacity z-10">
+          <div className="text-center">
+            <span className="block font-mono">avg</span>
+            <span className="text-primary/80">{format(avg)}</span>
+          </div>
+          <div className="text-center">
+            <span className="block font-mono">min</span>
+            <span className="text-primary/60">{format(min)}</span>
+          </div>
+          <div className="text-center">
+            <span className="block font-mono">max</span>
+            <span className="text-primary/80">{format(max)}</span>
+          </div>
+        </div>
+      )}
     </motion.div>
   )
 }

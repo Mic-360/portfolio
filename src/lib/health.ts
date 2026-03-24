@@ -62,9 +62,7 @@ export function aggregateByDay(
     const val = Number(s.value)
     if (isNaN(val)) return
 
-    if (!byDay[day]) {
-      byDay[day] = { total: 0, count: 0 }
-    }
+    byDay[day] ??= { total: 0, count: 0 }
     byDay[day].total += val
     byDay[day].count++
   })
@@ -76,4 +74,92 @@ export function aggregateByDay(
       endDate: date,
       value: type === 'sum' ? total : total / count,
     }))
+}
+
+/**
+ * Aggregates granular health samples by hour for time-series visualization.
+ */
+export function aggregateByHour(
+  samples: Array<HealthSample> = [],
+  type: 'sum' | 'avg' = 'sum',
+): Array<HealthSample & { value: number; hour: string }> {
+  if (!samples.length) return []
+
+  const byHour: Record<string, { total: number; count: number }> = {}
+
+  samples.forEach((s) => {
+    const hour = s.startDate.substring(0, 13) // YYYY-MM-DDTHH
+    const val = Number(s.value)
+    if (isNaN(val)) return
+
+    byHour[hour] ??= { total: 0, count: 0 }
+    byHour[hour].total += val
+    byHour[hour].count++
+  })
+
+  return Object.entries(byHour)
+    .sort(([hourA], [hourB]) => hourA.localeCompare(hourB))
+    .map(([hour, { total, count }]) => ({
+      startDate: hour,
+      endDate: hour,
+      hour,
+      value: type === 'sum' ? total : total / count,
+    }))
+}
+
+/**
+ * Calculates statistics for health samples.
+ */
+export interface HealthStats {
+  total: number
+  average: number
+  min: number
+  max: number
+  count: number
+  latest: number
+  unit?: string
+}
+
+export function calculateStats(
+  samples: Array<HealthSample> = [],
+): HealthStats {
+  if (!samples.length)
+    return {
+      total: 0,
+      average: 0,
+      min: 0,
+      max: 0,
+      count: 0,
+      latest: 0,
+    }
+
+  const values = samples.map((s) => Number(s.value)).filter((v) => !isNaN(v))
+
+  if (!values.length)
+    return {
+      total: 0,
+      average: 0,
+      min: 0,
+      max: 0,
+      count: 0,
+      latest: 0,
+    }
+
+  const total = values.reduce((a, b) => a + b, 0)
+
+  return {
+    total,
+    average: total / values.length,
+    min: Math.min(...values),
+    max: Math.max(...values),
+    count: values.length,
+    latest: values[values.length - 1] || 0,
+  }
+}
+
+/**
+ * Formats metric values with appropriate precision and units.
+ */
+export function formatMetricValue(value: number, decimals = 0): string {
+  return Number(value.toFixed(decimals)).toLocaleString()
 }
