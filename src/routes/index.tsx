@@ -151,32 +151,36 @@ function App() {
                 rel="me"
               />
             </a>
-            <div className="flex flex-col gap-1">
-              <h1 className="text-2xl font-semibold italic">
-                {siteInfo.name} ~{' '}
-                <span className="text-sm mb-1 align-bottom inline-flex leading-4">
-                  {siteInfo.nativeName}
+            <div className='flex flex-col sm:flex-row justify-between items-baseline sm:min-w-xl'>
+              <div className="flex flex-col gap-1">
+                <h1 className="text-2xl font-semibold italic">
+                  {siteInfo.name} ~{' '}
+                  <span className="text-sm mb-1 align-bottom inline-flex leading-4">
+                    {siteInfo.nativeName}
+                  </span>
+                </h1>
+                <h2 className="text-xs tracking-tight border w-fit p-0.5 rounded-xs text-primary font-sans border-border">
+                  {siteInfo.tagline}
+                </h2>
+              </div>
+              <div className="flex flex-col sm:items-end text-[10px] sm:text-xs uppercase tracking-[0.3em] text-primary mt-1.5">
+                <span>{siteInfo.location}</span>
+                <span className="italic tracking-wide text-foreground">
+                  {siteInfo.locationNative}
                 </span>
-              </h1>
-              <h2 className="text-xs tracking-tight border w-fit p-0.5 rounded-xs text-primary font-sans border-border">
-                {siteInfo.tagline}
-              </h2>
+              </div>
             </div>
           </div>
-          <div className="flex flex-col sm:items-end text-[10px] sm:text-xs uppercase tracking-[0.3em] text-primary mt-1.5">
-            <span>{siteInfo.location}</span>
-            <span className="italic tracking-wide text-foreground">
-              {siteInfo.locationNative}
-            </span>
-          </div>
         </div>
-        <motion.p whileHover={{ x: 5 }} className="italic cursor-default">
-          <span className="not-italic font-medium">i build</span>{' '}
-          <span className="underline decoration-primary underline-offset-4 font-black">
-            {siteInfo.buildLine}
-          </span>
-        </motion.p>
-        <KeyboardHint />
+        <div className="flex justify-between items-center">
+          <motion.p whileHover={{ x: 5 }} className="italic cursor-default">
+            <span className="not-italic font-medium">i build</span>{' '}
+            <span className="underline decoration-primary underline-offset-4 font-black">
+              {siteInfo.buildLine}
+            </span>
+          </motion.p>
+          <KeyboardHint />
+        </div>
       </motion.section>
 
       <motion.div variants={item}>
