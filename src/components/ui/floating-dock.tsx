@@ -82,7 +82,7 @@ const FloatingDockMobile = ({
                   href={item.href}
                   rel={item.rel}
                   key={item.title}
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-card border border-border"
+                  className="flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-md border border-border"
                 >
                   <div className="h-4 w-4">{item.icon}</div>
                 </a>
@@ -93,7 +93,7 @@ const FloatingDockMobile = ({
       </AnimatePresence>
       <button
         onClick={() => setOpen(!open)}
-        className="flex h-10 w-10 items-center justify-center rounded-full bg-card border border-border"
+        className="flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-md border border-border"
       >
         <IconLayoutNavbarCollapse className="h-5 w-5 text-muted-foreground" />
       </button>
@@ -119,7 +119,7 @@ const FloatingDockDesktop = ({
       onMouseMove={(e) => mouseX.set(e.pageX)}
       onMouseLeave={() => mouseX.set(Infinity)}
       className={cn(
-        'mx-auto hidden h-16 items-end gap-4 rounded-2xl bg-card/80 backdrop-blur-md border border-border px-4 pb-3 md:flex',
+        'mx-auto hidden h-16 items-end gap-4 px-4 pb-3 md:flex',
         className,
       )}
     >
@@ -190,13 +190,13 @@ function IconContainer({
   const [hovered, setHovered] = useState(false)
 
   return (
-    <a href={href} rel={rel}>
+    <a href={href} rel={rel} className="backdrop-blur-md p-1 rounded-full border border-border">
       <motion.div
         ref={ref}
         style={{ width, height }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        className="relative flex aspect-square items-center justify-center rounded-full bg-secondary"
+        className="relative flex aspect-square items-center justify-center rounded-full"
       >
         <AnimatePresence>
           {hovered && (
