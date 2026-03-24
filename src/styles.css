@@ -156,6 +156,7 @@
   0% {
     transform: translateY(-100%);
   }
+
   100% {
     transform: translateY(1000%);
   }
@@ -197,6 +198,70 @@
 }
 
 /* ═══════════════════════════════════════════════════════
+   Custom Scrollbar — Sage Green Theme, Hidden by Default
+   ═══════════════════════════════════════════════════════ */
+
+/* Webkit Browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--primary) 60%, transparent);
+  border-radius: 4px;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 0 6px color-mix(in oklab, var(--primary) 15%, transparent);
+  opacity: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+  box-shadow: 0 0 10px color-mix(in oklab, var(--primary) 35%, transparent);
+  opacity: 1;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: color-mix(in oklab, var(--primary) 120%, var(--primary));
+  box-shadow: 0 0 12px color-mix(in oklab, var(--primary) 45%, transparent);
+  opacity: 1;
+}
+
+/* Show scrollbar on scroll */
+body::-webkit-scrollbar-thumb {
+  opacity: 0.7;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+/* Firefox: Show on hover */
+*:hover {
+  scrollbar-color: var(--primary) transparent;
+}
+
+/* Dark Mode Adjustments */
+[data-theme='dark'] ::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--primary) 65%, transparent);
+  box-shadow: 0 0 6px color-mix(in oklab, var(--primary) 20%, transparent);
+}
+
+[data-theme='dark'] ::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+  box-shadow: 0 0 10px color-mix(in oklab, var(--primary) 40%, transparent);
+}
+
+
+
+/* ═══════════════════════════════════════════════════════
    Animus Interface — Assassin's Creed Inspired
    ═══════════════════════════════════════════════════════ */
 
@@ -234,9 +299,7 @@
   opacity: 1;
   width: 18px;
   height: 18px;
-  filter: drop-shadow(
-    0 0 4px color-mix(in oklab, var(--primary) 40%, transparent)
-  );
+  filter: drop-shadow(0 0 4px color-mix(in oklab, var(--primary) 40%, transparent));
 }
 
 /* Animus scan line overlay — apply to containers for subtle effect */
@@ -250,13 +313,11 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    color-mix(in oklab, var(--primary) 3%, transparent) 2px,
-    color-mix(in oklab, var(--primary) 3%, transparent) 4px
-  );
+  background: repeating-linear-gradient(0deg,
+      transparent,
+      transparent 2px,
+      color-mix(in oklab, var(--primary) 3%, transparent) 2px,
+      color-mix(in oklab, var(--primary) 3%, transparent) 4px);
   opacity: 0;
   transition: opacity 0.4s ease;
 }
@@ -309,12 +370,10 @@
   content: '';
   flex: 1;
   height: 1px;
-  background: linear-gradient(
-    to right,
-    transparent,
-    var(--primary),
-    transparent
-  );
+  background: linear-gradient(to right,
+      transparent,
+      var(--primary),
+      transparent);
 }
 
 .animus-divider .diamond {
@@ -666,12 +725,10 @@
 .mdx-content hr {
   border: none;
   height: 1px;
-  background: linear-gradient(
-    to right,
-    transparent,
-    var(--border),
-    transparent
-  );
+  background: linear-gradient(to right,
+      transparent,
+      var(--border),
+      transparent);
   margin: 2rem 0;
 }
 
