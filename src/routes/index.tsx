@@ -322,7 +322,7 @@ function App() {
                     <img
                       src={project.image}
                       alt={project.title}
-                      className="absolute inset-0 w-full h-full object-contain group-hover:grayscale group-hover:opacity-60 transition-all duration-700 group-hover:scale-105"
+                      className="absolute inset-0 w-full h-full object-contain opacity-40 group-hover:grayscale group-hover:opacity-60 transition-all duration-700 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent" />
                   </>
@@ -342,7 +342,7 @@ function App() {
                     {project.summary}
                   </p>
 
-                  {project.stack && project.stack.length > 0 && (
+                  {project.stack.length > 0 && (
                     <div className="flex flex-wrap gap-1.5 mt-1">
                       {project.stack.slice(0, 4).map((tech) => (
                         <span
