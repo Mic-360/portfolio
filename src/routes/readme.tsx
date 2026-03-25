@@ -1,4 +1,3 @@
-import { motion } from 'motion/react'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import type { ImgHTMLAttributes } from 'react'
 import { siteImages, siteMeta } from '@/config/site-data'
@@ -41,7 +40,7 @@ type ReadmeImageProps = ImgHTMLAttributes<HTMLImageElement> & {
 function ReadmeImage({
   width,
   height,
-  loading = 'lazy',
+  loading = 'eager',
   decoding = 'async',
   className,
   ...props
@@ -59,73 +58,41 @@ function ReadmeImage({
 }
 
 function ReadmePage() {
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  }
-
-  const item = {
-    hidden: { opacity: 0, y: 10 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
-  }
-
   return (
-    <motion.article
-      variants={container}
-      initial="hidden"
-      animate="show"
-      className="flex flex-col gap-12"
-    >
+    <article className="flex flex-col gap-12">
       {/* Profile Image and GitHub Stats Section */}
-      <motion.section
-        variants={item}
-        className="flex flex-col md:flex-row items-center justify-center gap-10"
-      >
-        <motion.div
-          whileHover={{ scale: 1.05, rotate: 2 }}
-          className="w-40 h-40 shrink-0 relative"
-        >
+      <section className="flex flex-col md:flex-row items-center justify-center gap-10">
+        <div className="w-40 h-40 shrink-0 relative">
           <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl animate-pulse" />
           <ReadmeImage
             src={siteImages.profilePhoto}
             alt="Bhaumic Singh — Profile Photo"
             width={160}
             height={160}
-            loading="eager"
             className="w-full h-full rounded-full border-2 border-primary shadow-2xl relative z-10 object-cover"
           />
-        </motion.div>
+        </div>
         <div className="w-full flex-1">
           <ReadmeImage
             src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=mic-360&theme=transparent"
             alt="Stats"
             width={495}
             height={195}
-            loading="eager"
             className="w-full h-auto filter drop-shadow-md"
           />
         </div>
-      </motion.section>
+      </section>
 
       {/* Summary Cards Section */}
-      <motion.section
-        variants={item}
-        className="grid grid-cols-1 md:grid-cols-2 gap-6"
-      >
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {[
           'repos-per-language',
           'most-commit-language',
           'stats',
           'productive-time?utcOffset=5.30',
         ].map((type) => (
-          <motion.div
+          <div
             key={type}
-            whileHover={{ y: -5 }}
             className="bg-card/20 shadow-2xl overflow-hidden border border-border/50 hover:border-primary/30 transition-colors"
           >
             <ReadmeImage
@@ -135,15 +102,12 @@ function ReadmePage() {
               height={195}
               className="w-full h-auto"
             />
-          </motion.div>
+          </div>
         ))}
-      </motion.section>
+      </section>
 
       {/* Metrics Section */}
-      <motion.section
-        variants={item}
-        className="w-full shadow-2xl overflow-hidden border border-border/50 bg-card/20 p-2"
-      >
+      <section className="w-full shadow-2xl overflow-hidden border border-border/50 bg-card/20 p-2">
         <ReadmeImage
           src="https://raw.githubusercontent.com/Mic-360/Mic-360/main/github-metrics.svg"
           alt="Contributions Metrics"
@@ -151,26 +115,11 @@ function ReadmePage() {
           height={480}
           className="w-full h-auto rounded-lg"
         />
-      </motion.section>
+      </section>
 
       {/* Languages and Tools Section */}
-      <motion.section
-        variants={item}
-        className="flex flex-col gap-8 text-center py-8 relative"
-      >
-        <motion.div
-          className="absolute inset-0 m-auto w-60 h-60 lg:w-80 lg:h-80 bg-primary/40 rounded-full blur-[100px] pointer-events-none z-0"
-          animate={{
-            x: [0, 40, -40, 0],
-            y: [0, -40, 40, 0],
-            scale: [1, 1.1, 0.9, 1],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
+      <section className="flex flex-col gap-8 text-center py-8 relative">
+        <div className="absolute inset-0 m-auto w-60 h-60 lg:w-80 lg:h-80 bg-primary/40 rounded-full blur-[100px] pointer-events-none z-0 animate-[float_10s_ease-in-out_infinite]" />
         <h2 className="text-2xl font-black italic uppercase tracking-tighter relative z-10">
           <span className="text-primary mr-2">/</span>
           Languages and Tools
@@ -217,10 +166,9 @@ function ReadmePage() {
             },
             { src: 'firebase/firebase-original.svg', alt: 'Firebase' },
           ].map((icon) => (
-            <motion.div
+            <div
               key={icon.alt}
-              whileHover={{ scale: 1.2, rotate: 5 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+              className="hover:scale-[1.2] hover:rotate-[5deg] transition-transform"
             >
               <ReadmeImage
                 src={`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${icon.src}`}
@@ -229,16 +177,13 @@ function ReadmePage() {
                 height={44}
                 className="w-11 h-11 grayscale-0 hover:grayscale transition-all duration-300"
               />
-            </motion.div>
+            </div>
           ))}
         </div>
-      </motion.section>
+      </section>
 
       {/* Workspace Section */}
-      <motion.section
-        variants={item}
-        className="flex flex-col gap-6 text-center p-8"
-      >
+      <section className="flex flex-col gap-6 text-center p-8">
         <h4 className="text-2xl font-black italic uppercase tracking-tighter">
           My Workspace
         </h4>
@@ -269,7 +214,10 @@ function ReadmePage() {
               alt: 'RAM',
             },
           ].map((badge) => (
-            <motion.div key={badge.alt} whileHover={{ scale: 1.05, y: -2 }}>
+            <div
+              key={badge.alt}
+              className="hover:scale-105 hover:-translate-y-0.5 transition-transform"
+            >
               <ReadmeImage
                 src={badge.src}
                 alt={badge.alt}
@@ -277,16 +225,13 @@ function ReadmePage() {
                 height={28}
                 className="h-7 w-auto shadow-2xl"
               />
-            </motion.div>
+            </div>
           ))}
         </div>
-      </motion.section>
+      </section>
 
       {/* Connect With Me Section */}
-      <motion.section
-        variants={item}
-        className="flex flex-col gap-10 text-center p-10 shadow-inner relative overflow-hidden"
-      >
+      <section className="flex flex-col gap-10 text-center p-10 shadow-inner relative overflow-hidden">
         <div className="absolute top-0 right-0 w-32 h-32 -mr-16 -mt-16 blur-3xl" />
         <div className="flex flex-col gap-3 relative z-10">
           <h2 className="text-3xl font-black italic uppercase tracking-tighter">
@@ -330,13 +275,12 @@ function ReadmePage() {
                 alt: 'X',
               },
             ].map((social) => (
-              <motion.a
+              <a
                 key={social.alt}
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{ scale: 1.1, y: -3 }}
-                className="shadow-md hover:shadow-xl transition-shadow overflow-hidden"
+                className="shadow-md hover:shadow-xl hover:scale-110 hover:-translate-y-0.5 transition-all overflow-hidden"
               >
                 <ReadmeImage
                   src={social.src}
@@ -345,16 +289,13 @@ function ReadmePage() {
                   width={120}
                   height={30}
                 />
-              </motion.a>
+              </a>
             ))}
           </div>
         </div>
-      </motion.section>
+      </section>
 
-      <motion.div
-        variants={item}
-        className="flex justify-center overflow-hidden border border-border/50 shadow-2xl"
-      >
+      <div className="flex justify-center overflow-hidden border border-border/50 shadow-2xl">
         <ReadmeImage
           src="https://raw.githubusercontent.com/Mic-360/Mic-360/main/space-shooter.gif"
           alt="Space Shooter"
@@ -362,9 +303,9 @@ function ReadmePage() {
           height={360}
           className="w-full max-w-4xl h-auto"
         />
-      </motion.div>
+      </div>
 
-      <motion.footer variants={item}>
+      <footer>
         <Link
           to="/"
           className="group inline-flex items-center gap-2 italic text-muted-foreground hover:text-primary transition-colors text-lg"
@@ -374,7 +315,7 @@ function ReadmePage() {
           </span>
           back
         </Link>
-      </motion.footer>
-    </motion.article>
+      </footer>
+    </article>
   )
 }
