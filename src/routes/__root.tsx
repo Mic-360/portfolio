@@ -13,12 +13,10 @@ import { useKonamiCode } from '../hooks/useKonamiCode'
 import { CommandMenu } from '../components/CommandMenu'
 import { FloatingNavDock } from '../components/FloatingNavDock'
 import Footer from '../components/Footer'
-import { MascotContainer } from '../components/Mascot/MascotContainer'
-import { BackgroundMusic } from '../components/BackgroundMusic'
 import { gravatar, siteImages, siteInfo, siteMeta } from '../config/site-data'
 
-import appCss from '../styles.css?url'
 import type { QueryClient } from '@tanstack/react-query'
+import appCss from '../styles.css?url'
 
 import { env } from '@/env'
 
@@ -488,7 +486,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         />
       </head>
       <body className="bg-background text-foreground antialiased">
-        <BackgroundMusic />
         <FeedbackHandler />
         <CommandMenu />
         <main className="mx-auto w-full max-w-2xl p-4 text-sm lowercase">
@@ -496,7 +493,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         </main>
         <Footer />
         <div className="h-20" />
-        <MascotContainer />
         <FloatingNavDock />
         <Suspense fallback={null}>
           <AnimatePresence>
