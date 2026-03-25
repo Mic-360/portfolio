@@ -137,10 +137,16 @@ function BlogIndex() {
           </Link>
         </div>
 
-        <p className="text-muted-foreground leading-relaxed max-w-xl">
-          short, practical notes on building web and android apps, tools,
-          systems, and experiments.
-        </p>
+        <div className="flex flex-row-reverse gap-4 items-center">
+          <img
+            src="/frieren/frienbook.svg"
+            className="h-16 sm:h-22 inline-block align-bottom"
+          />
+          <p className="text-muted-foreground leading-relaxed">
+            short, practical notes on building web and android apps, tools,
+            systems, and experiments.
+          </p>
+        </div>
       </motion.header>
 
       <div className="flex flex-col gap-6">

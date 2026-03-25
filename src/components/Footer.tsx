@@ -84,7 +84,7 @@ export default function Footer() {
           })}
       </ul>
       <div className="mt-6 flex items-end justify-between gap-4">
-        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+        <p className="text-[10px] sm:text-xs uppercase tracking-[0.2em] text-muted-foreground">
           © {new Date().getFullYear()} mit licensed · built with TanStack Start
           ·{' '}
           <a
@@ -98,10 +98,14 @@ export default function Footer() {
         </p>
         <motion.a
           href={'/about'}
-          className="shrink-0"
+          className="shrink-0 flex items-baseline text-primary transition hover:text-primary/80 gap-1"
           title="Scan to view Gravatar profile"
           whileHover={{ scale: 1.05 }}
         >
+          <img
+            src="/frieren/team.svg"
+            className="h-12 sm:h-16 inline-block align-bottom"
+          />
           <img
             src={gravatar.qrCodeUrl}
             alt="Gravatar QR Code"

@@ -138,10 +138,16 @@ function ProjectsIndex() {
             back
           </Link>
         </div>
-        <p className="text-muted-foreground leading-relaxed max-w-xl">
-          a short list of work across products with full‑stack builds of web and
-          android apps using AI or integrating AI.
-        </p>
+        <div className="flex flex-row-reverse gap-4 items-center">
+          <img
+            src="/frieren/frieren.svg"
+            className="h-16 sm:h-22 inline-block align-bottom"
+          />
+          <p className="text-muted-foreground leading-relaxed max-w-xl">
+            a short list of work across products with full‑stack builds of web
+            and android apps using AI or integrating AI.
+          </p>
+        </div>
       </motion.header>
 
       <div className="flex flex-col gap-10">

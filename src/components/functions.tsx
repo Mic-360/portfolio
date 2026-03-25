@@ -1,10 +1,10 @@
+import { Link } from '@tanstack/react-router'
+import { motion } from 'motion/react'
 import CurrentIcon from '@/components/ui/current-icon'
 import HealthstatIcon from '@/components/ui/healthstat-icon'
 import LayersIcon from '@/components/ui/layers-icon'
 import PenIcon from '@/components/ui/pen-icon'
 import PreviousIcon from '@/components/ui/previous-icon'
-import { Link } from '@tanstack/react-router'
-import { motion } from 'motion/react'
 
 function Section({
   title,
@@ -162,7 +162,7 @@ function Sparkline({
       </svg>
 
       {/* CRT Scanline Effect */}
-      <div className="absolute inset-0 pointer-events-none bg-linear-to-b from-transparent via-primary/5 to-transparent h-[2px] w-full animate-scanline opacity-10" />
+      <div className="absolute inset-0 pointer-events-none bg-linear-to-b from-transparent via-primary/5 to-transparent h-0.5 w-full animate-scanline opacity-10" />
     </div>
   )
 }

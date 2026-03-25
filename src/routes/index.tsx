@@ -151,7 +151,7 @@ function App() {
                 rel="me"
               />
             </a>
-            <div className='flex flex-col sm:flex-row justify-between items-baseline sm:min-w-xl'>
+            <div className="flex flex-col sm:flex-row justify-between items-baseline sm:min-w-xl">
               <div className="flex flex-col gap-1">
                 <h1 className="text-2xl font-semibold italic">
                   {siteInfo.name} ~{' '}
@@ -208,11 +208,15 @@ function App() {
           </motion.p>
           <motion.p whileHover={{ x: 3 }}>{siteInfo.educationLine}</motion.p>
           <motion.p whileHover={{ x: 3 }}>{siteInfo.interests}</motion.p>
-          <motion.p whileHover={{ x: 3 }}>
+          <motion.p whileHover={{ x: 3 }} className="space-x-4">
             i can build{' '}
             <span className="italic font-black underline underline-offset-2 decoration-primary text-primary">
               literally anything.
             </span>
+            <img
+              src="/frieren/party.svg"
+              className="h-6 sm:h-8 inline-block align-bottom"
+            />
           </motion.p>
         </Section>
       </motion.div>
@@ -436,35 +440,41 @@ function App() {
 
       <motion.div variants={item}>
         <Section title="contact">
-          <p>
-            interested to talk? read my{' '}
-            {contactLinks.map((link, i) => (
-              <span key={link.label}>
-                <Link
-                  to={link.url}
-                  className="underline decoration-primary underline-offset-4"
-                  rel="me"
-                >
-                  {link.label}
-                </Link>
-                {i < contactLinks.length - 1 ? ', ' : ' '}
-              </span>
-            ))}
-            or book a call with me on
-            <button
-              data-cal-namespace="connect"
-              data-cal-link={siteInfo.calLink}
-              data-cal-config='{"layout":"week_view","useSlotsViewOnSmallScreen":"true"}'
-              className="underline decoration-primary pl-1 inline-flex items-center gap-1 group cursor-pointer"
-            >
-              cal.com
-              <CalendarIcon
-                size={16}
-                className="inline-block mr-1 mb-0.5 text-primary"
-              />
-            </button>
-            .
-          </p>
+          <div className="flex items-baseline gap-2 relative">
+            <p>
+              interested to talk? read my{' '}
+              {contactLinks.map((link, i) => (
+                <span key={link.label}>
+                  <Link
+                    to={link.url}
+                    className="underline decoration-primary underline-offset-4"
+                    rel="me"
+                  >
+                    {link.label}
+                  </Link>
+                  {i < contactLinks.length - 1 ? ', ' : ' '}
+                </span>
+              ))}
+              or book a call with me on
+              <button
+                data-cal-namespace="connect"
+                data-cal-link={siteInfo.calLink}
+                data-cal-config='{"layout":"week_view","useSlotsViewOnSmallScreen":"true"}'
+                className="underline decoration-primary pl-1 inline-flex items-center gap-1 group cursor-pointer"
+              >
+                cal.com
+                <CalendarIcon
+                  size={16}
+                  className="inline-block mr-1 mb-0.5 text-primary"
+                />
+              </button>
+              .
+            </p>
+            <img
+              src="/frieren/fern.svg"
+              className="h-16 sm:h-22 inline-block absolute -right-4 -top-6 sm:-top-4 transform -translate-y-1/2"
+            />
+          </div>
         </Section>
         <p className="mt-4 text-center font-mono text-[10px] tracking-widest text-muted-foreground/40 select-none flex flex-col sm:flex-row items-center gap-1 justify-between">
           <span>Yes, This portfolio can run DOOM</span>
