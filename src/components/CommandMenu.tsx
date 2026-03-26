@@ -66,7 +66,7 @@ export function CommandMenu() {
   useHotkey('Mod+E', () => navTo('/bento'))
   useHotkey('Mod+G', () => navTo('/readme'))
   useHotkey('Mod+F', () => navTo('/rss'))
-  useHotkey('Mod+L', () => navTo('/llms-full.txt'))
+  useHotkey('Mod+L', () => navTo('/llms-full/txt'))
   useHotkey('Mod+M', () => navTo('/sitemap/xml'))
 
   // Fetch blogs and projects when the dialog opens for the first time
@@ -188,12 +188,12 @@ export function CommandMenu() {
             <span>rss feed</span>
             <CommandShortcut>{formatForDisplay('Mod+F')}</CommandShortcut>
           </CommandItem>
-          <CommandItem onSelect={() => handleNavigate('/llms-full.txt')}>
+          <CommandItem onSelect={() => handleNavigate('/llms-full/txt')}>
             <Bot />
             <span>llms-full.txt</span>
             <CommandShortcut>{formatForDisplay('Mod+L')}</CommandShortcut>
           </CommandItem>
-          <CommandItem onSelect={() => handleNavigate('/sitemap.xml')}>
+          <CommandItem onSelect={() => handleNavigate('/sitemap/xml')}>
             <Map />
             <span>sitemap</span>
             <CommandShortcut>{formatForDisplay('Mod+M')}</CommandShortcut>
