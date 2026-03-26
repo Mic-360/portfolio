@@ -58,6 +58,39 @@ export const Route = createFileRoute('/projects/$slug')({
         })),
       ],
       links: [{ rel: 'canonical', href: canonicalUrl }],
+      scripts: [
+        {
+          type: 'application/ld+json',
+          children: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'CreativeWork',
+            name: project.title,
+            description: project.summary,
+            datePublished: project.date,
+            image: imageUrl,
+            url: canonicalUrl,
+            keywords: [...project.categories, ...project.tags].join(', '),
+            author: {
+              '@type': 'Person',
+              name: siteMeta.siteName,
+              url: siteMeta.baseUrl,
+            },
+            inLanguage: 'en-US',
+          }),
+        },
+        {
+          type: 'application/ld+json',
+          children: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: siteMeta.baseUrl },
+              { '@type': 'ListItem', position: 2, name: 'Projects', item: `${siteMeta.baseUrl}/projects` },
+              { '@type': 'ListItem', position: 3, name: project.title, item: canonicalUrl },
+            ],
+          }),
+        },
+      ],
     }
   },
   component: ProjectDetail,
@@ -78,52 +111,6 @@ function ProjectDetail() {
         </Link>
       </section>
     )
-  }
-
-  const canonicalUrl = `${siteMeta.baseUrl}/projects/${project.slug}`
-  const imageUrl = project.image
-    ? `${siteMeta.baseUrl}${project.image}`
-    : `${siteMeta.baseUrl}/og/projects/${project.slug}`
-  const projectJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'CreativeWork',
-    name: project.title,
-    description: project.summary,
-    datePublished: project.date,
-    image: imageUrl,
-    url: canonicalUrl,
-    keywords: [...project.categories, ...project.tags].join(', '),
-    author: {
-      '@type': 'Person',
-      name: siteMeta.siteName,
-      url: siteMeta.baseUrl,
-    },
-    inLanguage: 'en-US',
-  }
-
-  const breadcrumbJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Home',
-        item: siteMeta.baseUrl,
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: 'Projects',
-        item: `${siteMeta.baseUrl}/projects`,
-      },
-      {
-        '@type': 'ListItem',
-        position: 3,
-        name: project.title,
-        item: canonicalUrl,
-      },
-    ],
   }
 
   const container = {
@@ -148,19 +135,6 @@ function ProjectDetail() {
       animate="show"
       className="flex flex-col gap-8 pb-12"
     >
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(projectJsonLd),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbJsonLd),
-        }}
-      />
-
       <header className="flex flex-col gap-4">
         <motion.div variants={item}>
           <Link

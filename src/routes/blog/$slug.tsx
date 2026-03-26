@@ -58,6 +58,37 @@ export const Route = createFileRoute('/blog/$slug')({
         })),
       ],
       links: [{ rel: 'canonical', href: canonicalUrl }],
+      scripts: [
+        {
+          type: 'application/ld+json',
+          children: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BlogPosting',
+            headline: post.title,
+            description: post.summary,
+            datePublished: post.date,
+            dateModified: post.date,
+            image: imageUrl,
+            mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
+            author: { '@type': 'Person', name: siteMeta.siteName, url: siteMeta.baseUrl },
+            publisher: { '@type': 'Person', name: siteMeta.siteName, url: siteMeta.baseUrl },
+            keywords,
+            inLanguage: 'en-US',
+          }),
+        },
+        {
+          type: 'application/ld+json',
+          children: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: siteMeta.baseUrl },
+              { '@type': 'ListItem', position: 2, name: 'Blog', item: `${siteMeta.baseUrl}/blog` },
+              { '@type': 'ListItem', position: 3, name: post.title, item: canonicalUrl },
+            ],
+          }),
+        },
+      ],
     }
   },
   component: BlogPost,
@@ -82,61 +113,6 @@ function BlogPost() {
 
   const readingTime = Math.max(1, Math.ceil(post.html.replace(/<[^>]*>/g, '').split(/\s+/).length / 200))
 
-  const canonicalUrl = `${siteMeta.baseUrl}/blog/${post.slug}`
-  const imageUrl = post.image
-    ? `${siteMeta.baseUrl}${post.image}`
-    : `${siteMeta.baseUrl}/og/blog/${post.slug}`
-  const blogJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: post.title,
-    description: post.summary,
-    datePublished: post.date,
-    dateModified: post.date,
-    image: imageUrl,
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': canonicalUrl,
-    },
-    author: {
-      '@type': 'Person',
-      name: siteMeta.siteName,
-      url: siteMeta.baseUrl,
-    },
-    publisher: {
-      '@type': 'Person',
-      name: siteMeta.siteName,
-      url: siteMeta.baseUrl,
-    },
-    keywords: [...post.categories, ...post.tags].join(', '),
-    inLanguage: 'en-US',
-  }
-
-  const breadcrumbJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Home',
-        item: siteMeta.baseUrl,
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: 'Blog',
-        item: `${siteMeta.baseUrl}/blog`,
-      },
-      {
-        '@type': 'ListItem',
-        position: 3,
-        name: post.title,
-        item: canonicalUrl,
-      },
-    ],
-  }
-
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -159,18 +135,6 @@ function BlogPost() {
       animate="show"
       className="flex flex-col gap-8 pb-12"
     >
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(blogJsonLd),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbJsonLd),
-        }}
-      />
       <header className="flex flex-col gap-4 text-left">
         <motion.div variants={item}>
           <Link

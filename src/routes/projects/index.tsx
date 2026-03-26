@@ -9,11 +9,12 @@ export const Route = createFileRoute('/projects/')({
   loader: async () => ({
     projects: await getProjectIndex(),
   }),
-  head: () => {
+  head: ({ loaderData }) => {
     const title = `Projects | ${siteMeta.defaultTitle}`
     const description = 'Selected projects across Android, AI, and web.'
     const imageUrl = `${siteMeta.baseUrl}${siteMeta.defaultImage}`
     const canonicalUrl = `${siteMeta.baseUrl}/projects`
+    const projects = loaderData?.projects ?? []
 
     return {
       meta: [
@@ -22,7 +23,7 @@ export const Route = createFileRoute('/projects/')({
         { property: 'og:title', content: title },
         { property: 'og:description', content: description },
         { property: 'og:type', content: 'website' },
-        { property: 'og:url', content: `${siteMeta.baseUrl}/projects` },
+        { property: 'og:url', content: canonicalUrl },
         { property: 'og:image', content: imageUrl },
         { property: 'og:image:width', content: '1200' },
         { property: 'og:image:height', content: '630' },
@@ -34,6 +35,43 @@ export const Route = createFileRoute('/projects/')({
         { name: 'twitter:image:alt', content: title },
       ],
       links: [{ rel: 'canonical', href: canonicalUrl }],
+      scripts: [
+        {
+          type: 'application/ld+json',
+          children: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'CollectionPage',
+            name: 'Projects',
+            description: 'Selected projects across Android, AI, and web.',
+            url: canonicalUrl,
+            mainEntity: {
+              '@type': 'ItemList',
+              itemListElement: projects.map((project, index) => ({
+                '@type': 'ListItem',
+                position: index + 1,
+                url: `${siteMeta.baseUrl}/projects/${project.slug}`,
+                name: project.title,
+                description: project.summary,
+                image: project.image
+                  ? `${siteMeta.baseUrl}${project.image}`
+                  : `${siteMeta.baseUrl}/og/projects/${project.slug}`,
+                datePublished: project.date,
+              })),
+            },
+          }),
+        },
+        {
+          type: 'application/ld+json',
+          children: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: siteMeta.baseUrl },
+              { '@type': 'ListItem', position: 2, name: 'Projects', item: canonicalUrl },
+            ],
+          }),
+        },
+      ],
     }
   },
   component: ProjectsIndex,
@@ -41,46 +79,6 @@ export const Route = createFileRoute('/projects/')({
 
 function ProjectsIndex() {
   const { projects } = Route.useLoaderData()
-  const collectionJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
-    name: 'Projects',
-    description: 'Selected projects across Android, AI, and web.',
-    url: `${siteMeta.baseUrl}/projects`,
-    mainEntity: {
-      '@type': 'ItemList',
-      itemListElement: projects.map((project, index) => ({
-        '@type': 'ListItem',
-        position: index + 1,
-        url: `${siteMeta.baseUrl}/projects/${project.slug}`,
-        name: project.title,
-        description: project.summary,
-        image: project.image
-          ? `${siteMeta.baseUrl}${project.image}`
-          : `${siteMeta.baseUrl}/og/projects/${project.slug}`,
-        datePublished: project.date,
-      })),
-    },
-  }
-
-  const breadcrumbJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Home',
-        item: siteMeta.baseUrl,
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: 'Projects',
-        item: `${siteMeta.baseUrl}/projects`,
-      },
-    ],
-  }
 
   const container = {
     hidden: { opacity: 0 },
@@ -104,18 +102,6 @@ function ProjectsIndex() {
       animate="show"
       className="flex flex-col gap-8"
     >
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(collectionJsonLd),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbJsonLd),
-        }}
-      />
       <motion.header variants={item} className="flex flex-col gap-4 mb-2">
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">

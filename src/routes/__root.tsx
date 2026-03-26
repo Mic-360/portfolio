@@ -212,6 +212,85 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
     return {
       meta,
+      scripts: [
+        {
+          type: 'application/ld+json',
+          children: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            name: siteMeta.siteName,
+            url: siteMeta.baseUrl,
+            description: siteMeta.defaultDescription,
+            inLanguage: 'en-US',
+            publisher: {
+              '@type': 'Person',
+              name: siteInfo.name,
+              url: siteMeta.baseUrl,
+              image: `${siteMeta.baseUrl}${siteImages.profilePhoto}`,
+              sameAs: [
+                'https://github.com/Mic-360',
+                'https://x.com/bhaumicsingh',
+                'https://www.linkedin.com/in/bhaumic/',
+                'https://www.instagram.com/bhaumic.singh/',
+                gravatar.profileUrl,
+                gravatar.verifiedDomain,
+              ],
+            },
+          }),
+        },
+        {
+          type: 'application/ld+json',
+          children: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Person',
+            name: siteInfo.name,
+            alternateName: ['Bhaumic', 'भौमिक सिंह'],
+            url: siteMeta.baseUrl,
+            image: [
+              `${siteMeta.baseUrl}${siteImages.profilePhoto}`,
+              gravatar.avatarUrl,
+            ],
+            jobTitle: siteInfo.currentRole,
+            worksFor: {
+              '@type': 'Organization',
+              name: siteInfo.currentCompany,
+              url: siteInfo.currentCompanyUrl,
+            },
+            address: {
+              '@type': 'PostalAddress',
+              addressLocality: 'Prayagraj',
+              addressRegion: 'Uttar Pradesh',
+              addressCountry: 'IN',
+            },
+            alumniOf: {
+              '@type': 'CollegeOrUniversity',
+              name: 'ITER, SOA University',
+            },
+            knowsAbout: [
+              'React',
+              'Next.js',
+              'Flutter',
+              'Rust',
+              'Full Stack Web Development',
+              'Android Development',
+              'Artificial Intelligence (AI)',
+              'Cloud Computing',
+              'DevOps',
+              'TypeScript',
+              'Go',
+              'Python',
+            ],
+            sameAs: [
+              'https://github.com/Mic-360',
+              'https://x.com/bhaumicsingh',
+              'https://www.linkedin.com/in/bhaumic/',
+              'https://www.instagram.com/bhaumic.singh/',
+              gravatar.profileUrl,
+              gravatar.verifiedDomain,
+            ],
+          }),
+        },
+      ],
       links: [
         {
           rel: 'stylesheet',
@@ -385,95 +464,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
-  const websiteJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: siteMeta.siteName,
-    url: siteMeta.baseUrl,
-    description: siteMeta.defaultDescription,
-    inLanguage: 'en-US',
-    publisher: {
-      '@type': 'Person',
-      name: siteInfo.name,
-      url: siteMeta.baseUrl,
-      image: `${siteMeta.baseUrl}${siteImages.profilePhoto}`,
-      sameAs: [
-        'https://github.com/Mic-360',
-        'https://x.com/bhaumicsingh',
-        'https://www.linkedin.com/in/bhaumic/',
-        'https://www.instagram.com/bhaumic.singh/',
-        gravatar.profileUrl,
-        gravatar.verifiedDomain,
-      ],
-    },
-  }
-
-  const personJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Person',
-    name: siteInfo.name,
-    alternateName: ['Bhaumic', 'भौमिक सिंह'],
-    url: siteMeta.baseUrl,
-    image: [
-      `${siteMeta.baseUrl}${siteImages.profilePhoto}`,
-      gravatar.avatarUrl,
-    ],
-    jobTitle: siteInfo.currentRole,
-    worksFor: {
-      '@type': 'Organization',
-      name: siteInfo.currentCompany,
-      url: siteInfo.currentCompanyUrl,
-    },
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'Prayagraj',
-      addressRegion: 'Uttar Pradesh',
-      addressCountry: 'IN',
-    },
-    alumniOf: {
-      '@type': 'CollegeOrUniversity',
-      name: 'ITER, SOA University',
-    },
-    knowsAbout: [
-      'React',
-      'Next.js',
-      'Flutter',
-      'Rust',
-      'Full Stack Web Development',
-      'Android Development',
-      'Artificial Intelligence (AI)',
-      'Cloud Computing',
-      'DevOps',
-      'TypeScript',
-      'Go',
-      'Python',
-    ],
-    sameAs: [
-      'https://github.com/Mic-360',
-      'https://x.com/bhaumicsingh',
-      'https://www.linkedin.com/in/bhaumic/',
-      'https://www.instagram.com/bhaumic.singh/',
-      gravatar.profileUrl,
-      gravatar.verifiedDomain,
-    ],
-  }
-
   return (
     <html data-theme="dark" suppressHydrationWarning>
       <head>
         <HeadContent />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(websiteJsonLd),
-          }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(personJsonLd),
-          }}
-        />
         {/* Google Analytics - Replace G-XXXXXXXXXX with actual tracking ID */}
         <script
           async

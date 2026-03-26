@@ -9,11 +9,12 @@ export const Route = createFileRoute('/blog/')({
   loader: async () => ({
     posts: await getBlogIndex(),
   }),
-  head: () => {
+  head: ({ loaderData }) => {
     const title = `Blog | ${siteMeta.defaultTitle}`
     const description = 'Writing and notes from recent builds and experiments.'
     const imageUrl = `${siteMeta.baseUrl}${siteMeta.defaultImage}`
     const canonicalUrl = `${siteMeta.baseUrl}/blog`
+    const posts = loaderData?.posts ?? []
 
     return {
       meta: [
@@ -22,7 +23,7 @@ export const Route = createFileRoute('/blog/')({
         { property: 'og:title', content: title },
         { property: 'og:description', content: description },
         { property: 'og:type', content: 'website' },
-        { property: 'og:url', content: `${siteMeta.baseUrl}/blog` },
+        { property: 'og:url', content: canonicalUrl },
         { property: 'og:image', content: imageUrl },
         { property: 'og:image:width', content: '1200' },
         { property: 'og:image:height', content: '630' },
@@ -34,6 +35,44 @@ export const Route = createFileRoute('/blog/')({
         { name: 'twitter:image:alt', content: title },
       ],
       links: [{ rel: 'canonical', href: canonicalUrl }],
+      scripts: [
+        {
+          type: 'application/ld+json',
+          children: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'CollectionPage',
+            name: 'Blog',
+            description:
+              'Short, practical notes on building web and android apps, tools, systems, and experiments.',
+            url: canonicalUrl,
+            mainEntity: {
+              '@type': 'ItemList',
+              itemListElement: posts.map((post, index) => ({
+                '@type': 'ListItem',
+                position: index + 1,
+                url: `${siteMeta.baseUrl}/blog/${post.slug}`,
+                name: post.title,
+                description: post.summary,
+                image: post.image
+                  ? `${siteMeta.baseUrl}${post.image}`
+                  : `${siteMeta.baseUrl}/og/blog/${post.slug}`,
+                datePublished: post.date,
+              })),
+            },
+          }),
+        },
+        {
+          type: 'application/ld+json',
+          children: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: siteMeta.baseUrl },
+              { '@type': 'ListItem', position: 2, name: 'Blog', item: canonicalUrl },
+            ],
+          }),
+        },
+      ],
     }
   },
   component: BlogIndex,
@@ -41,47 +80,6 @@ export const Route = createFileRoute('/blog/')({
 
 function BlogIndex() {
   const { posts } = Route.useLoaderData()
-  const collectionJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
-    name: 'Blog',
-    description:
-      'Short, practical notes on building web and android apps, tools, systems, and experiments.',
-    url: `${siteMeta.baseUrl}/blog`,
-    mainEntity: {
-      '@type': 'ItemList',
-      itemListElement: posts.map((post, index) => ({
-        '@type': 'ListItem',
-        position: index + 1,
-        url: `${siteMeta.baseUrl}/blog/${post.slug}`,
-        name: post.title,
-        description: post.summary,
-        image: post.image
-          ? `${siteMeta.baseUrl}${post.image}`
-          : `${siteMeta.baseUrl}/og/blog/${post.slug}`,
-        datePublished: post.date,
-      })),
-    },
-  }
-
-  const breadcrumbJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Home',
-        item: siteMeta.baseUrl,
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: 'Blog',
-        item: `${siteMeta.baseUrl}/blog`,
-      },
-    ],
-  }
 
   const container = {
     hidden: { opacity: 0 },
@@ -105,18 +103,6 @@ function BlogIndex() {
       animate="show"
       className="flex flex-col gap-8"
     >
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(collectionJsonLd),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbJsonLd),
-        }}
-      />
       <motion.header variants={item} className="flex flex-col gap-4 mb-2">
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">

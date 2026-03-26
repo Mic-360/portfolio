@@ -69,6 +69,26 @@ export const Route = createFileRoute('/')({
         { rel: 'canonical', href: canonicalUrl },
         { rel: 'image_src', href: `${siteMeta.baseUrl}${siteImages.banner}` },
       ],
+      scripts: [
+        {
+          type: 'application/ld+json',
+          children: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'ProfessionalService',
+            name: siteInfo.name,
+            image: imageUrl,
+            url: siteMeta.baseUrl,
+            address: {
+              '@type': 'PostalAddress',
+              addressLocality: 'Prayagraj',
+              addressRegion: 'Uttar Pradesh',
+              addressCountry: 'IN',
+            },
+            priceRange: '$$',
+            description,
+          }),
+        },
+      ],
     }
   },
   component: App,
@@ -107,22 +127,6 @@ function App() {
     show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
   }
 
-  const professionalServiceJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'ProfessionalService',
-    name: siteInfo.name,
-    image: `${siteMeta.baseUrl}${siteMeta.defaultImage}`,
-    url: siteMeta.baseUrl,
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'Prayagraj',
-      addressRegion: 'Uttar Pradesh',
-      addressCountry: 'IN',
-    },
-    priceRange: '$$',
-    description: siteMeta.defaultDescription,
-  }
-
   return (
     <motion.div
       variants={container}
@@ -130,12 +134,6 @@ function App() {
       animate="show"
       className="flex flex-col gap-8"
     >
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(professionalServiceJsonLd),
-        }}
-      />
       <motion.section variants={item} className="flex flex-col gap-3">
         <div className="flex flex-col sm:flex-row item-center justify-between">
           <div className="flex items-center gap-3">
