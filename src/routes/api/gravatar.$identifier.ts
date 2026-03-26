@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { fetchGravatarProfileInternal } from '@/lib/gravatar.server'
+import { getGravatarProfile } from '@/lib/gravatar-profile'
 
 export const Route = createFileRoute('/api/gravatar/$identifier')({
   server: {
@@ -8,7 +8,7 @@ export const Route = createFileRoute('/api/gravatar/$identifier')({
         const { identifier } = params
 
         try {
-          const profile = await fetchGravatarProfileInternal(identifier)
+          const profile = await getGravatarProfile({ data: identifier })
 
           if (!profile) {
             return Response.json(
