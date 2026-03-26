@@ -1,12 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 
+interface DosInstance {
+  stop: () => Promise<void>
+}
+
 declare global {
   var emulators: { pathPrefix: string }
   function Dos(
     el: HTMLDivElement,
     options: Record<string, unknown>,
-  ): Promise<unknown>
+  ): Promise<DosInstance>
 }
 
 function loadScript(src: string): Promise<void> {
@@ -53,6 +57,7 @@ function waitForGlobal(name: string, timeout = 10000): Promise<void> {
 
 export function DoomEasterEgg({ onClose }: { onClose: () => void }) {
   const dosRef = useRef<HTMLDivElement>(null)
+  const dosInstanceRef = useRef<DosInstance | null>(null)
   const [status, setStatus] = useState<'loading' | 'playing' | 'error'>(
     'loading',
   )
@@ -73,6 +78,22 @@ export function DoomEasterEgg({ onClose }: { onClose: () => void }) {
   useEffect(() => {
     let cancelled = false
 
+    // Catch js-dos internal Preact errors that escape its error boundary
+    const errorHandler = (event: ErrorEvent) => {
+      if (
+        event.filename?.includes('js-dos') ||
+        (event.error instanceof TypeError &&
+          event.message?.includes('setState'))
+      ) {
+        event.preventDefault()
+        if (!cancelled) {
+          setStatus('error')
+          setErrorMsg('DOOM engine encountered an internal error')
+        }
+      }
+    }
+    window.addEventListener('error', errorHandler)
+
     async function boot() {
       try {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -87,7 +108,7 @@ export function DoomEasterEgg({ onClose }: { onClose: () => void }) {
 
         if (cancelled || !dosRef.current) return
 
-        await Dos(dosRef.current, {
+        const instance = await Dos(dosRef.current, {
           url: '/doom/doom.zip',
           autoStart: true,
           kiosk: true,
@@ -96,8 +117,15 @@ export function DoomEasterEgg({ onClose }: { onClose: () => void }) {
           noCloud: true,
         })
 
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (!cancelled) setStatus('playing')
+        dosInstanceRef.current = instance
+
+        // If unmounted while Dos() was resolving, stop immediately
+        if (cancelled) {
+          instance.stop().catch(() => {})
+          return
+        }
+
+        setStatus('playing')
       } catch (e) {
         if (!cancelled) {
           setStatus('error')
@@ -109,6 +137,13 @@ export function DoomEasterEgg({ onClose }: { onClose: () => void }) {
     boot()
     return () => {
       cancelled = true
+      window.removeEventListener('error', errorHandler)
+
+      // Properly shut down the js-dos instance
+      if (dosInstanceRef.current) {
+        dosInstanceRef.current.stop().catch(() => {})
+        dosInstanceRef.current = null
+      }
 
       document
         .querySelectorAll('link[href="/doom/js-dos.css"], style[data-jsdos]')

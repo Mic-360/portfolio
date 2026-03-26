@@ -22,6 +22,26 @@ import { env } from '@/env'
 
 const DoomEasterEgg = React.lazy(() => import('../components/DoomEasterEgg'))
 
+class DoomErrorBoundary extends React.Component<
+  { children: React.ReactNode; onError: () => void },
+  { hasError: boolean }
+> {
+  constructor(props: { children: React.ReactNode; onError: () => void }) {
+    super(props)
+    this.state = { hasError: false }
+  }
+  static getDerivedStateFromError() {
+    return { hasError: true }
+  }
+  componentDidCatch() {
+    this.props.onError()
+  }
+  render() {
+    if (this.state.hasError) return null
+    return this.props.children
+  }
+}
+
 interface MyRouterContext {
   queryClient: QueryClient
 }
@@ -493,13 +513,18 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Footer />
         <div className="h-20" />
         <FloatingNavDock />
-        <Suspense fallback={null}>
-          <AnimatePresence>
-            {showDoom && (
-              <DoomEasterEgg key="doom" onClose={() => setShowDoom(false)} />
-            )}
-          </AnimatePresence>
-        </Suspense>
+        <DoomErrorBoundary onError={() => setShowDoom(false)}>
+          <Suspense fallback={null}>
+            <AnimatePresence>
+              {showDoom && (
+                <DoomEasterEgg
+                  key="doom"
+                  onClose={() => setShowDoom(false)}
+                />
+              )}
+            </AnimatePresence>
+          </Suspense>
+        </DoomErrorBoundary>
         <Scripts />
       </body>
     </html>
