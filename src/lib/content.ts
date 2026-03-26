@@ -100,6 +100,13 @@ export const getCertificateBySlug = createServerFn({ method: 'GET' })
     return getCertificateBySlugInternal(data.slug)
   })
 
+export const getBlogPostsWithHtml = createServerFn({ method: 'GET' })
+  .middleware([staticFunctionMiddleware])
+  .handler(async () => {
+    const { getBlogPostsWithHtmlInternal } = await import('./content.server')
+    return getBlogPostsWithHtmlInternal()
+  })
+
 export const getResume = createServerFn({ method: 'GET' })
   .middleware([staticFunctionMiddleware])
   .handler(async () => {
