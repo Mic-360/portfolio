@@ -1,10 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { gravatar, siteImages, siteInfo, siteMeta } from '@/config/site-data'
-import {
-  getBlogIndexInternal,
-  getCertificateIndexInternal,
-  getProjectIndexInternal,
-} from '@/lib/content.server'
+import { getBlogIndex, getCertificateIndex, getProjectIndex } from '@/lib/content'
 
 function toBulletList(
   items: Array<{ title: string; slug: string }>,
@@ -26,9 +22,9 @@ export const Route = createFileRoute('/llms-full/txt')({
     handlers: {
       GET: async () => {
         const [posts, projects, certificates] = await Promise.all([
-          getBlogIndexInternal(),
-          getProjectIndexInternal(),
-          getCertificateIndexInternal(),
+          getBlogIndex(),
+          getProjectIndex(),
+          getCertificateIndex(),
         ])
 
         const body = `# ${siteInfo.name}

@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { getBlogPostBySlugInternal } from '@/lib/content.server'
+import { getBlogPostBySlug } from '@/lib/content'
 import { formatDate } from '@/lib/format'
-import { createOgImageResponse } from '@/lib/og.server'
+import { createOgImageResponse } from '@/lib/og'
 
 function withCrawlerHeaders(response: Response) {
   const headers = new Headers(response.headers)
@@ -18,7 +18,7 @@ export const Route = createFileRoute('/og/blog/$slug')({
   server: {
     handlers: {
       GET: async ({ params }) => {
-        const post = await getBlogPostBySlugInternal(params.slug)
+        const post = await getBlogPostBySlug({ data: { slug: params.slug } })
 
         if (!post) {
           return new Response('Not found', { status: 404 })
