@@ -56,7 +56,7 @@ function createSvgFallbackResponse(svg: string) {
   })
 }
 
-export async function createOgImageResponse(options: OgImageOptions) {
+export function createOgImageResponse(options: OgImageOptions) {
   const svg = buildOgSvg(options)
   return createSvgFallbackResponse(svg)
 }

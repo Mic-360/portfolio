@@ -1,5 +1,5 @@
-import { writeHealthDataInternal } from '@/lib/health.server'
 import { createFileRoute } from '@tanstack/react-router'
+import { writeHealthDataInternal } from '@/lib/health.server'
 
 export const Route = createFileRoute('/api/health')({
   server: {
