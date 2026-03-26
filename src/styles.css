@@ -1031,7 +1031,7 @@ body::-webkit-scrollbar-thumb {
   color: var(--foreground);
   min-width: 7rem;
   flex-shrink: 0;
-  text-align: right;
+  text-align: left;
 }
 
 .cv-skill-set {

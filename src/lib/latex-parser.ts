@@ -583,7 +583,7 @@ function parseEduEntries(content: string): string {
       let extraHtml = ''
       const remaining = content.substring(pos)
       const courseworkMatch = remaining.match(
-        /\\textbf\{Relevant Coursework:\}([\s\S]*?)(?=\\|$)/,
+        /\\textbf\{Relevant Coursework:\}([\s\S]*?)(?=\n\s*\}|\n\s*\\(?:ressection|eduentry|certrow|expentry|projentry)\b|$)/,
       )
       if (courseworkMatch) {
         const courses = processInline(
