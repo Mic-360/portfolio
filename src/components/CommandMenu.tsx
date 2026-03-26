@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import {
+  ArrowLeft,
   BookOpen,
   Award,
   Bot,
@@ -77,6 +78,11 @@ export function CommandMenu() {
     }
   }
 
+  const handleGoBack = () => {
+    setOpen(false)
+    window.history.back()
+  }
+
   return (
     <CommandDialog
       open={open}
@@ -87,6 +93,17 @@ export function CommandMenu() {
       <CommandInput placeholder="type a command or search..." />
       <CommandList className="scrollbar-hide">
         <CommandEmpty>no results found.</CommandEmpty>
+
+        {/* ── Navigation ── */}
+        <CommandGroup heading="Navigation">
+          <CommandItem onSelect={handleGoBack}>
+            <ArrowLeft />
+            <span>Back</span>
+            <CommandShortcut>⌘[</CommandShortcut>
+          </CommandItem>
+        </CommandGroup>
+
+        <CommandSeparator />
 
         {/* ── Pages ── */}
         <CommandGroup heading="Pages">
