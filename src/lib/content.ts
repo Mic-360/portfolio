@@ -3,6 +3,7 @@
 // to avoid the Vite import-protection warning in the client bundle.
 
 import { createServerFn } from '@tanstack/react-start'
+import { staticFunctionMiddleware } from '@tanstack/start-static-server-functions'
 import { z } from 'zod'
 
 // ── Types ────────────────────────────────────────────────────────────
@@ -54,49 +55,54 @@ export type CertificateMeta = {
 // Each function lazily imports from content.server.ts inside the handler,
 // keeping the .server module out of the client bundle entirely.
 
-export const getBlogIndex = createServerFn({ method: 'GET' }).handler(
-  async () => {
+export const getBlogIndex = createServerFn({ method: 'GET' })
+  .middleware([staticFunctionMiddleware])
+  .handler(async () => {
     const { getBlogIndexInternal } = await import('./content.server')
     return getBlogIndexInternal()
-  },
-)
+  })
 
 export const getBlogPostBySlug = createServerFn({ method: 'GET' })
+  .middleware([staticFunctionMiddleware])
   .inputValidator(z.object({ slug: z.string() }))
   .handler(async ({ data }) => {
     const { getBlogPostBySlugInternal } = await import('./content.server')
     return getBlogPostBySlugInternal(data.slug)
   })
 
-export const getProjectIndex = createServerFn({ method: 'GET' }).handler(
-  async () => {
+export const getProjectIndex = createServerFn({ method: 'GET' })
+  .middleware([staticFunctionMiddleware])
+  .handler(async () => {
     const { getProjectIndexInternal } = await import('./content.server')
     return getProjectIndexInternal()
-  },
-)
+  })
 
 export const getProjectBySlug = createServerFn({ method: 'GET' })
+  .middleware([staticFunctionMiddleware])
   .inputValidator(z.object({ slug: z.string() }))
   .handler(async ({ data }) => {
     const { getProjectBySlugInternal } = await import('./content.server')
     return getProjectBySlugInternal(data.slug)
   })
 
-export const getCertificateIndex = createServerFn({ method: 'GET' }).handler(
-  async () => {
+export const getCertificateIndex = createServerFn({ method: 'GET' })
+  .middleware([staticFunctionMiddleware])
+  .handler(async () => {
     const { getCertificateIndexInternal } = await import('./content.server')
     return getCertificateIndexInternal()
-  },
-)
+  })
 
 export const getCertificateBySlug = createServerFn({ method: 'GET' })
+  .middleware([staticFunctionMiddleware])
   .inputValidator(z.object({ slug: z.string() }))
   .handler(async ({ data }) => {
     const { getCertificateBySlugInternal } = await import('./content.server')
     return getCertificateBySlugInternal(data.slug)
   })
 
-export const getResume = createServerFn({ method: 'GET' }).handler(async () => {
-  const { getResumeInternal } = await import('./content.server')
-  return getResumeInternal()
-})
+export const getResume = createServerFn({ method: 'GET' })
+  .middleware([staticFunctionMiddleware])
+  .handler(async () => {
+    const { getResumeInternal } = await import('./content.server')
+    return getResumeInternal()
+  })
