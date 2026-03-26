@@ -435,8 +435,8 @@ const CERTIFICATE_SOURCE: string = (
     eager: true,
     query: '?raw',
     import: 'default',
-  }) as Record<string, string>
-)['../content/certificate.json']
+  })
+)['../content/certificate.json'] as string
 
 function slugify(title: string): string {
   return title
