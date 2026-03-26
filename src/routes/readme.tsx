@@ -27,6 +27,19 @@ export const Route = createFileRoute('/readme')({
         { name: 'twitter:image', content: imageUrl },
       ],
       links: [{ rel: 'canonical', href: canonicalUrl }],
+      scripts: [
+        {
+          type: 'application/ld+json',
+          children: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: siteMeta.baseUrl },
+              { '@type': 'ListItem', position: 2, name: 'README', item: canonicalUrl },
+            ],
+          }),
+        },
+      ],
     }
   },
   component: ReadmePage,

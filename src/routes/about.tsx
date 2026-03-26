@@ -47,6 +47,34 @@ export const Route = createFileRoute('/about')({
         { name: 'twitter:image:alt', content: title },
       ],
       links: [{ rel: 'canonical', href: canonicalUrl }],
+      scripts: [
+        {
+          type: 'application/ld+json',
+          children: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'AboutPage',
+            name: 'About Bhaumic Singh',
+            description,
+            url: canonicalUrl,
+            mainEntity: {
+              '@type': 'Person',
+              name: 'Bhaumic Singh',
+              url: siteMeta.baseUrl,
+            },
+          }),
+        },
+        {
+          type: 'application/ld+json',
+          children: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: siteMeta.baseUrl },
+              { '@type': 'ListItem', position: 2, name: 'About', item: canonicalUrl },
+            ],
+          }),
+        },
+      ],
     }
   },
   component: AboutPage,

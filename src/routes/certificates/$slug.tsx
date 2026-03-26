@@ -33,6 +33,44 @@ export const Route = createFileRoute('/certificates/$slug')({
         { name: 'twitter:description', content: description },
       ],
       links: [{ rel: 'canonical', href: canonicalUrl }],
+      scripts: [
+        {
+          type: 'application/ld+json',
+          children: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'EducationalOccupationalCredential',
+            name: certificate.title,
+            description,
+            credentialCategory: 'certificate',
+            recognizedBy: {
+              '@type': 'Organization',
+              name: certificate.issuer,
+            },
+            dateCreated: certificate.issued,
+            ...(certificate.expires
+              ? { expires: certificate.expires }
+              : {}),
+            ...(certificate.credential_id
+              ? { identifier: certificate.credential_id }
+              : {}),
+            url: certificate.verify_url || canonicalUrl,
+            image: certificate.image_url,
+            competencyRequired: certificate.skills,
+          }),
+        },
+        {
+          type: 'application/ld+json',
+          children: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: siteMeta.baseUrl },
+              { '@type': 'ListItem', position: 2, name: 'Certificates', item: `${siteMeta.baseUrl}/certificates` },
+              { '@type': 'ListItem', position: 3, name: certificate.title, item: canonicalUrl },
+            ],
+          }),
+        },
+      ],
     }
   },
   component: CertificateDetail,

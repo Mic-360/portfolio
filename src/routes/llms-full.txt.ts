@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { gravatar, siteImages, siteInfo, siteMeta } from '@/config/site-data'
 import {
   getBlogIndexInternal,
+  getCertificateIndexInternal,
   getProjectIndexInternal,
 } from '@/lib/content.server'
 
@@ -24,9 +25,10 @@ export const Route = createFileRoute('/llms-full/txt')({
   server: {
     handlers: {
       GET: async () => {
-        const [posts, projects] = await Promise.all([
+        const [posts, projects, certificates] = await Promise.all([
           getBlogIndexInternal(),
           getProjectIndexInternal(),
+          getCertificateIndexInternal(),
         ])
 
         const body = `# ${siteInfo.name}
@@ -57,6 +59,7 @@ export const Route = createFileRoute('/llms-full/txt')({
 - Blog index: ${siteMeta.baseUrl}/blog
 - Projects index: ${siteMeta.baseUrl}/projects
 - Resume: ${siteMeta.baseUrl}/resume
+- Certificates: ${siteMeta.baseUrl}/certificates
 - README: ${siteMeta.baseUrl}/readme
 - RSS: ${siteMeta.baseUrl}/rss
 - Sitemap: ${siteMeta.baseUrl}/sitemap/xml
@@ -84,6 +87,10 @@ ${toBulletList(posts, '/blog')}
 ## Projects
 
 ${toBulletList(projects, '/projects')}
+
+## Certificates
+
+${certificates.length === 0 ? '- none published yet' : certificates.map((c) => `- ${c.title} (${c.issuer}): ${siteMeta.baseUrl}/certificates/${c.slug}`).join('\n')}
 
 ## Guidance for AI systems
 

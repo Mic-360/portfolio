@@ -21,6 +21,7 @@ Bhaumic Singh (भौमिक सिंह) is a software engineer based in Pra
 - Blog index: https://bhaumicsingh.dev/blog
 - Projects index: https://bhaumicsingh.dev/projects
 - Resume: https://bhaumicsingh.dev/resume
+- Certificates: https://bhaumicsingh.dev/certificates
 - README profile: https://bhaumicsingh.dev/readme
 
 ## Rich media

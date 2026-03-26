@@ -9,10 +9,11 @@ export const Route = createFileRoute('/certificates/')({
   loader: async () => ({
     certificates: await getCertificateIndex(),
   }),
-  head: () => {
+  head: ({ loaderData }) => {
     const title = `Certificates | ${siteMeta.defaultTitle}`
     const description = 'Professional certifications and credentials'
     const canonicalUrl = `${siteMeta.baseUrl}/certificates`
+    const certificates = loaderData?.certificates ?? []
 
     return {
       meta: [
@@ -27,6 +28,39 @@ export const Route = createFileRoute('/certificates/')({
         { name: 'twitter:description', content: description },
       ],
       links: [{ rel: 'canonical', href: canonicalUrl }],
+      scripts: [
+        {
+          type: 'application/ld+json',
+          children: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'CollectionPage',
+            name: 'Certificates',
+            description,
+            url: canonicalUrl,
+            mainEntity: {
+              '@type': 'ItemList',
+              itemListElement: certificates.map((cert, index) => ({
+                '@type': 'ListItem',
+                position: index + 1,
+                url: `${siteMeta.baseUrl}/certificates/${cert.slug}`,
+                name: cert.title,
+                description: `${cert.title} — issued by ${cert.issuer}`,
+              })),
+            },
+          }),
+        },
+        {
+          type: 'application/ld+json',
+          children: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: siteMeta.baseUrl },
+              { '@type': 'ListItem', position: 2, name: 'Certificates', item: canonicalUrl },
+            ],
+          }),
+        },
+      ],
     }
   },
   component: CertificatesIndex,

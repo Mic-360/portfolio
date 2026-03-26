@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { siteMeta } from '@/config/site-data'
 import {
   getBlogIndexInternal,
+  getCertificateIndexInternal,
   getProjectIndexInternal,
 } from '@/lib/content.server'
 
@@ -23,9 +24,10 @@ export const Route = createFileRoute('/sitemap/xml')({
   server: {
     handlers: {
       GET: async () => {
-        const [posts, projects] = await Promise.all([
+        const [posts, projects, certificates] = await Promise.all([
           getBlogIndexInternal(),
           getProjectIndexInternal(),
+          getCertificateIndexInternal(),
         ])
 
         const latestBlogDate =
@@ -110,6 +112,22 @@ export const Route = createFileRoute('/sitemap/xml')({
                 caption: project.title,
               },
             ] satisfies Array<SitemapImage>,
+          })),
+          {
+            loc: `${siteMeta.baseUrl}/certificates`,
+            lastmod: new Date().toISOString(),
+            changefreq: 'monthly',
+            priority: '0.6',
+            images: [],
+          },
+          ...certificates.map((cert) => ({
+            loc: `${siteMeta.baseUrl}/certificates/${cert.slug}`,
+            lastmod: cert.issued,
+            changefreq: 'yearly',
+            priority: '0.5',
+            images: cert.image_url
+              ? [{ loc: cert.image_url, caption: cert.title } satisfies SitemapImage]
+              : [],
           })),
         ]
 
