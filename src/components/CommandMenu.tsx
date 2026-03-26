@@ -146,61 +146,6 @@ export function CommandMenu() {
 
         <CommandSeparator />
 
-        {/* ── Blogs ── */}
-        {blogs.length > 0 && (
-          <CommandGroup heading="Blogs">
-            {blogs.map((post, i) => (
-              <CommandItem
-                key={post.slug}
-                onSelect={() => handleNavigate(`/blog/${post.slug}`)}
-              >
-                <Pen className="shrink-0" />
-                <span className="truncate">{post.title}</span>
-                {i < 9 && <CommandShortcut>⌘{i + 1}</CommandShortcut>}
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        )}
-
-        <CommandSeparator />
-
-        {/* ── Projects ── */}
-        {projects.length > 0 && (
-          <CommandGroup heading="Projects">
-            {projects.map((project) => (
-              <CommandItem
-                key={project.slug}
-                onSelect={() => handleNavigate(`/projects/${project.slug}`)}
-              >
-                <FolderOpen className="shrink-0" />
-                <span className="truncate">{project.title}</span>
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        )}
-
-        <CommandSeparator />
-
-        {/* ── Certificates ── */}
-        {certificates.length > 0 && (
-          <CommandGroup heading="Certificates">
-            {certificates.map((cert) => (
-              <CommandItem
-                key={cert.id}
-                onSelect={() => handleNavigate(`/certificates/${cert.slug}`)}
-              >
-                <Award className="shrink-0" />
-                <span className="truncate">{cert.title}</span>
-                <span className="ml-auto text-[9px] text-muted-foreground shrink-0">
-                  {cert.issuer}
-                </span>
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        )}
-
-        <CommandSeparator />
-
         {/* ── Social ── */}
         <CommandGroup heading="Social">
           {socialLinks
@@ -255,6 +200,61 @@ export function CommandMenu() {
             <CommandShortcut>↗</CommandShortcut>
           </CommandItem>
         </CommandGroup>
+
+        <CommandSeparator />
+
+        {/* ── Blogs ── */}
+        {blogs.length > 0 && (
+          <CommandGroup heading="Blogs">
+            {blogs.map((post, i) => (
+              <CommandItem
+                key={post.slug}
+                onSelect={() => handleNavigate(`/blog/${post.slug}`)}
+              >
+                <Pen className="shrink-0" />
+                <span className="truncate">{post.title}</span>
+                {i < 9 && <CommandShortcut>⌘{i + 1}</CommandShortcut>}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        )}
+
+        <CommandSeparator />
+
+        {/* ── Projects ── */}
+        {projects.length > 0 && (
+          <CommandGroup heading="Projects">
+            {projects.map((project) => (
+              <CommandItem
+                key={project.slug}
+                onSelect={() => handleNavigate(`/projects/${project.slug}`)}
+              >
+                <FolderOpen className="shrink-0" />
+                <span className="truncate">{project.title}</span>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        )}
+
+        <CommandSeparator />
+
+        {/* ── Certificates ── */}
+        {certificates.length > 0 && (
+          <CommandGroup heading="Certificates">
+            {certificates.map((cert) => (
+              <CommandItem
+                key={cert.id}
+                onSelect={() => handleNavigate(`/certificates/${cert.slug}`)}
+              >
+                <Award className="shrink-0" />
+                <span className="truncate">{cert.title}</span>
+                <span className="ml-auto text-[9px] text-muted-foreground shrink-0">
+                  {cert.issuer}
+                </span>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        )}
       </CommandList>
     </CommandDialog>
   )
