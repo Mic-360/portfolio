@@ -306,14 +306,19 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
 function NotFound() {
   return (
-    <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 text-center">
+    <div className="flex min-h-screen flex-col items-center justify-center gap-4 text-center">
+      <img
+        src='/frieren/404-frieren.svg'
+        alt='404'
+        className='h-64 w-64'
+      />
       <h1 className="text-6xl font-bold">404</h1>
       <p className="text-xl text-muted-foreground">page not found</p>
       <Link
         to="/"
-        className="mt-4 rounded-lg bg-primary px-6 py-2 text-primary-foreground transition-colors hover:bg-primary/90"
+        className="mt-4 hover:bg-primary px-6 py-2 text-primary-foreground transition-colors bg-primary/20"
       >
-        go home
+        home
       </Link>
     </div>
   )
