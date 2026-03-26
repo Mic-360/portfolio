@@ -1,10 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { siteMeta } from '@/config/site-data'
-import {
-  getBlogIndexInternal,
-  getCertificateIndexInternal,
-  getProjectIndexInternal,
-} from '@/lib/content.server'
+import { getBlogIndex, getCertificateIndex, getProjectIndex } from '@/lib/content'
 
 type SitemapImage = {
   loc: string
@@ -25,9 +21,9 @@ export const Route = createFileRoute('/sitemap/xml')({
     handlers: {
       GET: async () => {
         const [posts, projects, certificates] = await Promise.all([
-          getBlogIndexInternal(),
-          getProjectIndexInternal(),
-          getCertificateIndexInternal(),
+          getBlogIndex(),
+          getProjectIndex(),
+          getCertificateIndex(),
         ])
 
         const latestBlogDate =
