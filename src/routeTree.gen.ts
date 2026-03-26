@@ -26,6 +26,7 @@ import { Route as CertificatesSlugRouteImport } from './routes/certificates/$slu
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as OgProjectsSlugRouteImport } from './routes/og/projects/$slug'
+import { Route as OgCertificatesSlugRouteImport } from './routes/og/certificates/$slug'
 import { Route as OgBlogSlugRouteImport } from './routes/og/blog/$slug'
 import { Route as ApiGravatarIdentifierRouteImport } from './routes/api/gravatar.$identifier'
 
@@ -114,6 +115,11 @@ const OgProjectsSlugRoute = OgProjectsSlugRouteImport.update({
   path: '/og/projects/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OgCertificatesSlugRoute = OgCertificatesSlugRouteImport.update({
+  id: '/og/certificates/$slug',
+  path: '/og/certificates/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OgBlogSlugRoute = OgBlogSlugRouteImport.update({
   id: '/og/blog/$slug',
   path: '/og/blog/$slug',
@@ -144,6 +150,7 @@ export interface FileRoutesByFullPath {
   '/projects/': typeof ProjectsIndexRoute
   '/api/gravatar/$identifier': typeof ApiGravatarIdentifierRoute
   '/og/blog/$slug': typeof OgBlogSlugRoute
+  '/og/certificates/$slug': typeof OgCertificatesSlugRoute
   '/og/projects/$slug': typeof OgProjectsSlugRoute
 }
 export interface FileRoutesByTo {
@@ -165,6 +172,7 @@ export interface FileRoutesByTo {
   '/projects': typeof ProjectsIndexRoute
   '/api/gravatar/$identifier': typeof ApiGravatarIdentifierRoute
   '/og/blog/$slug': typeof OgBlogSlugRoute
+  '/og/certificates/$slug': typeof OgCertificatesSlugRoute
   '/og/projects/$slug': typeof OgProjectsSlugRoute
 }
 export interface FileRoutesById {
@@ -187,6 +195,7 @@ export interface FileRoutesById {
   '/projects/': typeof ProjectsIndexRoute
   '/api/gravatar/$identifier': typeof ApiGravatarIdentifierRoute
   '/og/blog/$slug': typeof OgBlogSlugRoute
+  '/og/certificates/$slug': typeof OgCertificatesSlugRoute
   '/og/projects/$slug': typeof OgProjectsSlugRoute
 }
 export interface FileRouteTypes {
@@ -210,6 +219,7 @@ export interface FileRouteTypes {
     | '/projects/'
     | '/api/gravatar/$identifier'
     | '/og/blog/$slug'
+    | '/og/certificates/$slug'
     | '/og/projects/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -231,6 +241,7 @@ export interface FileRouteTypes {
     | '/projects'
     | '/api/gravatar/$identifier'
     | '/og/blog/$slug'
+    | '/og/certificates/$slug'
     | '/og/projects/$slug'
   id:
     | '__root__'
@@ -252,6 +263,7 @@ export interface FileRouteTypes {
     | '/projects/'
     | '/api/gravatar/$identifier'
     | '/og/blog/$slug'
+    | '/og/certificates/$slug'
     | '/og/projects/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -274,6 +286,7 @@ export interface RootRouteChildren {
   ProjectsIndexRoute: typeof ProjectsIndexRoute
   ApiGravatarIdentifierRoute: typeof ApiGravatarIdentifierRoute
   OgBlogSlugRoute: typeof OgBlogSlugRoute
+  OgCertificatesSlugRoute: typeof OgCertificatesSlugRoute
   OgProjectsSlugRoute: typeof OgProjectsSlugRoute
 }
 
@@ -398,6 +411,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OgProjectsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/og/certificates/$slug': {
+      id: '/og/certificates/$slug'
+      path: '/og/certificates/$slug'
+      fullPath: '/og/certificates/$slug'
+      preLoaderRoute: typeof OgCertificatesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/og/blog/$slug': {
       id: '/og/blog/$slug'
       path: '/og/blog/$slug'
@@ -434,6 +454,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProjectsIndexRoute: ProjectsIndexRoute,
   ApiGravatarIdentifierRoute: ApiGravatarIdentifierRoute,
   OgBlogSlugRoute: OgBlogSlugRoute,
+  OgCertificatesSlugRoute: OgCertificatesSlugRoute,
   OgProjectsSlugRoute: OgProjectsSlugRoute,
 }
 export const routeTree = rootRouteImport

@@ -5,6 +5,7 @@ type OgImageOptions = {
   description?: string
   label?: string
   date?: string
+  image?: string
 }
 
 function escapeXml(input: string) {
@@ -16,11 +17,14 @@ function escapeXml(input: string) {
     .replace(/'/g, '&apos;')
 }
 
-function buildOgSvg({ title, description, label, date }: OgImageOptions) {
+function buildOgSvg({ title, description, label, date, image }: OgImageOptions) {
   const safeTitle = escapeXml(title)
   const safeDescription = description ? escapeXml(description) : ''
   const safeLabel = label ? escapeXml(label) : ''
   const safeDate = date ? escapeXml(date) : ''
+  
+  // Clean potentially problematic URLs
+  const safeImage = image ? `<image href="${escapeXml(image)}" x="0" y="0" width="1200" height="630" preserveAspectRatio="xMidYMid slice" opacity="0.3" />` : ''
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
@@ -29,8 +33,15 @@ function buildOgSvg({ title, description, label, date }: OgImageOptions) {
       <stop offset="0%" stop-color="#0b0f14" />
       <stop offset="100%" stop-color="#0f172a" />
     </linearGradient>
+    <linearGradient id="overlay" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0b0f14" stop-opacity="1" />
+      <stop offset="100%" stop-color="#0b0f14" stop-opacity="0" />
+    </linearGradient>
   </defs>
   <rect width="1200" height="630" fill="url(#bg)" />
+  ${safeImage}
+  ${image ? '<rect width="1200" height="630" fill="url(#overlay)" />' : ''}
+  
   <rect x="60" y="60" width="1080" height="510" rx="28" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" />
   <foreignObject x="110" y="110" width="980" height="410">
     <div xmlns="http://www.w3.org/1999/xhtml" style="display:flex;flex-direction:column;gap:20px;height:100%;color:#e2e8f0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;">

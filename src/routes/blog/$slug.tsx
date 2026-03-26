@@ -40,7 +40,7 @@ export const Route = createFileRoute('/blog/$slug')({
         { property: 'og:image', content: imageUrl },
         { property: 'og:image:width', content: '1200' },
         { property: 'og:image:height', content: '630' },
-        { property: 'og:image:type', content: 'image/png' },
+        { property: 'og:image:type', content: 'image/svg+xml' },
         { property: 'og:image:alt', content: post.title },
         { property: 'article:published_time', content: post.date },
         { name: 'twitter:card', content: 'summary_large_image' },
@@ -70,8 +70,16 @@ export const Route = createFileRoute('/blog/$slug')({
             dateModified: post.date,
             image: imageUrl,
             mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
-            author: { '@type': 'Person', name: siteMeta.siteName, url: siteMeta.baseUrl },
-            publisher: { '@type': 'Person', name: siteMeta.siteName, url: siteMeta.baseUrl },
+            author: {
+              '@type': 'Person',
+              name: siteMeta.siteName,
+              url: siteMeta.baseUrl,
+            },
+            publisher: {
+              '@type': 'Person',
+              name: siteMeta.siteName,
+              url: siteMeta.baseUrl,
+            },
             keywords,
             inLanguage: 'en-US',
           }),
@@ -82,9 +90,24 @@ export const Route = createFileRoute('/blog/$slug')({
             '@context': 'https://schema.org',
             '@type': 'BreadcrumbList',
             itemListElement: [
-              { '@type': 'ListItem', position: 1, name: 'Home', item: siteMeta.baseUrl },
-              { '@type': 'ListItem', position: 2, name: 'Blog', item: `${siteMeta.baseUrl}/blog` },
-              { '@type': 'ListItem', position: 3, name: post.title, item: canonicalUrl },
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: siteMeta.baseUrl,
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Blog',
+                item: `${siteMeta.baseUrl}/blog`,
+              },
+              {
+                '@type': 'ListItem',
+                position: 3,
+                name: post.title,
+                item: canonicalUrl,
+              },
             ],
           }),
         },
@@ -111,7 +134,10 @@ function BlogPost() {
     )
   }
 
-  const readingTime = Math.max(1, Math.ceil(post.html.replace(/<[^>]*>/g, '').split(/\s+/).length / 200))
+  const readingTime = Math.max(
+    1,
+    Math.ceil(post.html.replace(/<[^>]*>/g, '').split(/\s+/).length / 200),
+  )
 
   const container = {
     hidden: { opacity: 0 },

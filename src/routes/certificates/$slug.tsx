@@ -18,6 +18,7 @@ export const Route = createFileRoute('/certificates/$slug')({
     const title = `${certificate.title} | ${siteMeta.defaultTitle}`
     const description = `${certificate.title} — issued by ${certificate.issuer}, ${certificate.issued}`
     const canonicalUrl = `${siteMeta.baseUrl}/certificates/${certificate.slug}`
+    const imageUrl = `${siteMeta.baseUrl}/og/certificates/${certificate.slug}`
 
     return {
       meta: [
@@ -28,9 +29,16 @@ export const Route = createFileRoute('/certificates/$slug')({
         { property: 'og:description', content: description },
         { property: 'og:type', content: 'article' },
         { property: 'og:url', content: canonicalUrl },
-        { name: 'twitter:card', content: 'summary' },
+        { property: 'og:image', content: imageUrl },
+        { property: 'og:image:width', content: '1200' },
+        { property: 'og:image:height', content: '630' },
+        { property: 'og:image:type', content: 'image/svg+xml' },
+        { property: 'og:image:alt', content: certificate.title },
+        { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: title },
         { name: 'twitter:description', content: description },
+        { name: 'twitter:image', content: imageUrl },
+        { name: 'twitter:image:alt', content: certificate.title },
       ],
       links: [{ rel: 'canonical', href: canonicalUrl }],
       scripts: [

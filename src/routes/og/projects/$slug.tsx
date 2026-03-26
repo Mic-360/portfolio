@@ -24,12 +24,17 @@ export const Route = createFileRoute('/og/projects/$slug')({
           return new Response('Not found', { status: 404 })
         }
 
+        const imageUrl = project.image 
+          ? (project.image.startsWith('http') ? project.image : `${process.env.PUBLIC_SITE_URL || 'http://localhost:3000'}${project.image}`)
+          : undefined;
+
         return withCrawlerHeaders(
           await createOgImageResponse({
             title: project.title,
             description: project.summary,
             label: 'Project',
             date: formatDate(project.date),
+            image: imageUrl,
           }),
         )
       },

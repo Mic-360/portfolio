@@ -1,6 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { getBlogPostBySlug } from '@/lib/content'
-import { formatDate } from '@/lib/format'
+import { getCertificateBySlug } from '@/lib/content'
 import { createOgImageResponse } from '@/lib/og'
 
 function withCrawlerHeaders(response: Response) {
@@ -14,26 +13,26 @@ function withCrawlerHeaders(response: Response) {
   })
 }
 
-export const Route = createFileRoute('/og/blog/$slug')({
+export const Route = createFileRoute('/og/certificates/$slug')({
   server: {
     handlers: {
       GET: async ({ params }) => {
-        const post = await getBlogPostBySlug({ data: { slug: params.slug } })
+        const certificate = await getCertificateBySlug({ data: { slug: params.slug } })
 
-        if (!post) {
+        if (!certificate) {
           return new Response('Not found', { status: 404 })
         }
 
-        const imageUrl = post.image 
-          ? (post.image.startsWith('http') ? post.image : `${process.env.PUBLIC_SITE_URL || 'http://localhost:3000'}${post.image}`)
+        const imageUrl = certificate.image_url 
+          ? (certificate.image_url.startsWith('http') ? certificate.image_url : `${process.env.PUBLIC_SITE_URL || 'http://localhost:3000'}${certificate.image_url}`)
           : undefined;
 
         return withCrawlerHeaders(
           await createOgImageResponse({
-            title: post.title,
-            description: post.summary,
-            label: 'Blog',
-            date: formatDate(post.date),
+            title: certificate.title,
+            description: `Issued by ${certificate.issuer}`,
+            label: 'Certificate',
+            date: certificate.issued,
             image: imageUrl,
           }),
         )
