@@ -1,7 +1,7 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { motion } from 'motion/react'
 import { useEffect, useState } from 'react'
-import type { BlogMeta, ProjectMeta } from '@/lib/content'
+import type { BlogMeta, CertificateMeta, ProjectMeta } from '@/lib/content'
 import type { HealthSample } from '@/lib/health'
 import { Section, StatCard } from '@/components/functions'
 import { KeyboardHint } from '@/components/CommandMenu'
@@ -17,16 +17,17 @@ import {
   siteInfo,
   siteMeta,
 } from '@/config/site-data'
-import { getBlogIndex, getProjectIndex } from '@/lib/content'
+import { getBlogIndex, getCertificateIndex, getProjectIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
 import { hashEmail } from '@/lib/gravatar'
 import { getHealthData } from '@/lib/health'
 
 export const Route = createFileRoute('/')({
   loader: async () => {
-    const [posts, projects, health, avatarHash] = await Promise.all([
+    const [posts, projects, certificates, health, avatarHash] = await Promise.all([
       getBlogIndex(),
       getProjectIndex(),
+      getCertificateIndex(),
       getHealthData(),
       hashEmail(gravatarConfig.email),
     ])
@@ -34,6 +35,7 @@ export const Route = createFileRoute('/')({
     return {
       posts,
       projects,
+      certificates,
       health,
       avatarHash,
     }
@@ -83,7 +85,7 @@ function sanitizeSamples<T extends { value: number | string }>(
 }
 
 function App() {
-  const { posts, projects, health, avatarHash } = Route.useLoaderData()
+  const { posts, projects, certificates, health, avatarHash } = Route.useLoaderData()
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
@@ -358,6 +360,55 @@ function App() {
                           className="text-[8px] px-1.5 py-0.5 rounded-xs bg-white/10 text-white/80 border border-white/20 font-mono tracking-tighter backdrop-blur-xs"
                         >
                           {tech}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </Section>
+      </motion.div>
+
+      <motion.div variants={item}>
+        <Section title="certificates">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {certificates.slice(0, 6).map((cert: CertificateMeta) => (
+              <Link
+                key={cert.id}
+                to="/certificates/$slug"
+                params={{ slug: cert.slug }}
+                className="group animus-corner relative flex flex-col gap-2 p-4 border border-border/20 bg-card/10 hover:border-primary/50 transition-all duration-500 overflow-hidden"
+              >
+                {cert.image_url && (
+                  <>
+                    <img
+                      src={cert.image_url}
+                      alt={cert.title}
+                      className="absolute inset-0 w-full h-full object-cover opacity-10 group-hover:opacity-60 transition-opacity duration-700 scale-110"
+                    />
+                    <div className="absolute inset-0 bg-linear-to-t from-background via-background/80 to-background/40" />
+                  </>
+                )}
+                <div className="relative z-10 flex flex-col gap-1.5">
+                  <span className="text-[9px] text-primary/80 font-mono uppercase tracking-[0.2em]">
+                    {cert.issuer}
+                  </span>
+                  <h3 className="text-sm font-bold tracking-tight text-foreground group-hover:text-primary transition-colors line-clamp-2">
+                    {cert.title}
+                  </h3>
+                  <span className="text-[9px] text-muted-foreground font-mono">
+                    {cert.issued}
+                  </span>
+                  {cert.skills.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {cert.skills.slice(0, 2).map((skill) => (
+                        <span
+                          key={skill}
+                          className="text-[8px] px-1.5 py-0.5 rounded-xs bg-primary/5 text-primary/70 border border-primary/20 font-mono tracking-tighter"
+                        >
+                          {skill}
                         </span>
                       ))}
                     </div>

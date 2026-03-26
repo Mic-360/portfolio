@@ -2,6 +2,7 @@ import * as React from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import {
   BookOpen,
+  Award,
   Bot,
   Briefcase,
   Calendar,
@@ -19,7 +20,7 @@ import {
   User,
 } from 'lucide-react'
 
-import type { BlogMeta, ProjectMeta } from '@/lib/content'
+import type { BlogMeta, CertificateMeta, ProjectMeta } from '@/lib/content'
 import {
   CommandDialog,
   CommandEmpty,
@@ -31,13 +32,14 @@ import {
   CommandShortcut,
 } from '@/components/ui/command'
 import { siteInfo, socialLinks } from '@/config/site-data'
-import { getBlogIndex, getProjectIndex } from '@/lib/content'
+import { getBlogIndex, getCertificateIndex, getProjectIndex } from '@/lib/content'
 
 export function CommandMenu() {
   const [open, setOpen] = React.useState(false)
   const navigate = useNavigate()
   const [blogs, setBlogs] = React.useState<Array<BlogMeta>>([])
   const [projects, setProjects] = React.useState<Array<ProjectMeta>>([])
+  const [certificates, setCertificates] = React.useState<Array<CertificateMeta>>([])
   const [loaded, setLoaded] = React.useState(false)
 
   React.useEffect(() => {
@@ -55,10 +57,11 @@ export function CommandMenu() {
   // Fetch blogs and projects when the dialog opens for the first time
   React.useEffect(() => {
     if (open && !loaded) {
-      Promise.all([getBlogIndex(), getProjectIndex()])
-        .then(([blogData, projectData]) => {
+      Promise.all([getBlogIndex(), getProjectIndex(), getCertificateIndex()])
+        .then(([blogData, projectData, certData]) => {
           setBlogs(blogData)
           setProjects(projectData)
+          setCertificates(certData)
           setLoaded(true)
         })
         .catch(console.error)
@@ -154,6 +157,26 @@ export function CommandMenu() {
               >
                 <FolderOpen className="shrink-0" />
                 <span className="truncate">{project.title}</span>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        )}
+
+        <CommandSeparator />
+
+        {/* ── Certificates ── */}
+        {certificates.length > 0 && (
+          <CommandGroup heading="Certificates">
+            {certificates.map((cert) => (
+              <CommandItem
+                key={cert.id}
+                onSelect={() => handleNavigate(`/certificates/${cert.slug}`)}
+              >
+                <Award className="shrink-0" />
+                <span className="truncate">{cert.title}</span>
+                <span className="ml-auto text-[9px] text-muted-foreground shrink-0">
+                  {cert.issuer}
+                </span>
               </CommandItem>
             ))}
           </CommandGroup>

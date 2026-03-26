@@ -37,6 +37,19 @@ export type ProjectPost = ProjectMeta & {
   html: string
 }
 
+export type CertificateMeta = {
+  id: number
+  slug: string
+  title: string
+  issuer: string
+  issued: string
+  expires?: string
+  credential_id: string | null
+  skills: Array<string>
+  verify_url: string
+  image_url: string
+}
+
 // ── Server functions (RPC bridge) ────────────────────────────────────
 // Each function lazily imports from content.server.ts inside the handler,
 // keeping the .server module out of the client bundle entirely.
@@ -67,6 +80,20 @@ export const getProjectBySlug = createServerFn({ method: 'GET' })
   .handler(async ({ data }) => {
     const { getProjectBySlugInternal } = await import('./content.server')
     return getProjectBySlugInternal(data.slug)
+  })
+
+export const getCertificateIndex = createServerFn({ method: 'GET' }).handler(
+  async () => {
+    const { getCertificateIndexInternal } = await import('./content.server')
+    return getCertificateIndexInternal()
+  },
+)
+
+export const getCertificateBySlug = createServerFn({ method: 'GET' })
+  .inputValidator(z.object({ slug: z.string() }))
+  .handler(async ({ data }) => {
+    const { getCertificateBySlugInternal } = await import('./content.server')
+    return getCertificateBySlugInternal(data.slug)
   })
 
 export const getResume = createServerFn({ method: 'GET' }).handler(async () => {

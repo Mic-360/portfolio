@@ -16,11 +16,13 @@ import { Route as BentoRouteImport } from './routes/bento'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
+import { Route as CertificatesIndexRouteImport } from './routes/certificates/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as SitemapXmlRouteImport } from './routes/sitemap.xml'
 import { Route as ProjectsSlugRouteImport } from './routes/projects/$slug'
 import { Route as OgSiteRouteImport } from './routes/og/site'
 import { Route as LlmsFullTxtRouteImport } from './routes/llms-full.txt'
+import { Route as CertificatesSlugRouteImport } from './routes/certificates/$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as OgProjectsSlugRouteImport } from './routes/og/projects/$slug'
@@ -62,6 +64,11 @@ const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
   path: '/projects/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CertificatesIndexRoute = CertificatesIndexRouteImport.update({
+  id: '/certificates/',
+  path: '/certificates/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/blog/',
   path: '/blog/',
@@ -85,6 +92,11 @@ const OgSiteRoute = OgSiteRouteImport.update({
 const LlmsFullTxtRoute = LlmsFullTxtRouteImport.update({
   id: '/llms-full/txt',
   path: '/llms-full/txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CertificatesSlugRoute = CertificatesSlugRouteImport.update({
+  id: '/certificates/$slug',
+  path: '/certificates/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
@@ -122,11 +134,13 @@ export interface FileRoutesByFullPath {
   '/rss': typeof RssRoute
   '/api/health': typeof ApiHealthRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/certificates/$slug': typeof CertificatesSlugRoute
   '/llms-full/txt': typeof LlmsFullTxtRoute
   '/og/site': typeof OgSiteRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/sitemap/xml': typeof SitemapXmlRoute
   '/blog/': typeof BlogIndexRoute
+  '/certificates/': typeof CertificatesIndexRoute
   '/projects/': typeof ProjectsIndexRoute
   '/api/gravatar/$identifier': typeof ApiGravatarIdentifierRoute
   '/og/blog/$slug': typeof OgBlogSlugRoute
@@ -141,11 +155,13 @@ export interface FileRoutesByTo {
   '/rss': typeof RssRoute
   '/api/health': typeof ApiHealthRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/certificates/$slug': typeof CertificatesSlugRoute
   '/llms-full/txt': typeof LlmsFullTxtRoute
   '/og/site': typeof OgSiteRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/sitemap/xml': typeof SitemapXmlRoute
   '/blog': typeof BlogIndexRoute
+  '/certificates': typeof CertificatesIndexRoute
   '/projects': typeof ProjectsIndexRoute
   '/api/gravatar/$identifier': typeof ApiGravatarIdentifierRoute
   '/og/blog/$slug': typeof OgBlogSlugRoute
@@ -161,11 +177,13 @@ export interface FileRoutesById {
   '/rss': typeof RssRoute
   '/api/health': typeof ApiHealthRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/certificates/$slug': typeof CertificatesSlugRoute
   '/llms-full/txt': typeof LlmsFullTxtRoute
   '/og/site': typeof OgSiteRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/sitemap/xml': typeof SitemapXmlRoute
   '/blog/': typeof BlogIndexRoute
+  '/certificates/': typeof CertificatesIndexRoute
   '/projects/': typeof ProjectsIndexRoute
   '/api/gravatar/$identifier': typeof ApiGravatarIdentifierRoute
   '/og/blog/$slug': typeof OgBlogSlugRoute
@@ -182,11 +200,13 @@ export interface FileRouteTypes {
     | '/rss'
     | '/api/health'
     | '/blog/$slug'
+    | '/certificates/$slug'
     | '/llms-full/txt'
     | '/og/site'
     | '/projects/$slug'
     | '/sitemap/xml'
     | '/blog/'
+    | '/certificates/'
     | '/projects/'
     | '/api/gravatar/$identifier'
     | '/og/blog/$slug'
@@ -201,11 +221,13 @@ export interface FileRouteTypes {
     | '/rss'
     | '/api/health'
     | '/blog/$slug'
+    | '/certificates/$slug'
     | '/llms-full/txt'
     | '/og/site'
     | '/projects/$slug'
     | '/sitemap/xml'
     | '/blog'
+    | '/certificates'
     | '/projects'
     | '/api/gravatar/$identifier'
     | '/og/blog/$slug'
@@ -220,11 +242,13 @@ export interface FileRouteTypes {
     | '/rss'
     | '/api/health'
     | '/blog/$slug'
+    | '/certificates/$slug'
     | '/llms-full/txt'
     | '/og/site'
     | '/projects/$slug'
     | '/sitemap/xml'
     | '/blog/'
+    | '/certificates/'
     | '/projects/'
     | '/api/gravatar/$identifier'
     | '/og/blog/$slug'
@@ -240,11 +264,13 @@ export interface RootRouteChildren {
   RssRoute: typeof RssRoute
   ApiHealthRoute: typeof ApiHealthRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  CertificatesSlugRoute: typeof CertificatesSlugRoute
   LlmsFullTxtRoute: typeof LlmsFullTxtRoute
   OgSiteRoute: typeof OgSiteRoute
   ProjectsSlugRoute: typeof ProjectsSlugRoute
   SitemapXmlRoute: typeof SitemapXmlRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  CertificatesIndexRoute: typeof CertificatesIndexRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
   ApiGravatarIdentifierRoute: typeof ApiGravatarIdentifierRoute
   OgBlogSlugRoute: typeof OgBlogSlugRoute
@@ -302,6 +328,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/certificates/': {
+      id: '/certificates/'
+      path: '/certificates'
+      fullPath: '/certificates/'
+      preLoaderRoute: typeof CertificatesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/': {
       id: '/blog/'
       path: '/blog'
@@ -335,6 +368,13 @@ declare module '@tanstack/react-router' {
       path: '/llms-full/txt'
       fullPath: '/llms-full/txt'
       preLoaderRoute: typeof LlmsFullTxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/certificates/$slug': {
+      id: '/certificates/$slug'
+      path: '/certificates/$slug'
+      fullPath: '/certificates/$slug'
+      preLoaderRoute: typeof CertificatesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/$slug': {
@@ -384,11 +424,13 @@ const rootRouteChildren: RootRouteChildren = {
   RssRoute: RssRoute,
   ApiHealthRoute: ApiHealthRoute,
   BlogSlugRoute: BlogSlugRoute,
+  CertificatesSlugRoute: CertificatesSlugRoute,
   LlmsFullTxtRoute: LlmsFullTxtRoute,
   OgSiteRoute: OgSiteRoute,
   ProjectsSlugRoute: ProjectsSlugRoute,
   SitemapXmlRoute: SitemapXmlRoute,
   BlogIndexRoute: BlogIndexRoute,
+  CertificatesIndexRoute: CertificatesIndexRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
   ApiGravatarIdentifierRoute: ApiGravatarIdentifierRoute,
   OgBlogSlugRoute: OgBlogSlugRoute,

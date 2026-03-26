@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { motion } from 'motion/react'
+import { Award } from 'lucide-react'
 import CurrentIcon from '@/components/ui/current-icon'
 import HealthstatIcon from '@/components/ui/healthstat-icon'
 import LayersIcon from '@/components/ui/layers-icon'
@@ -39,6 +40,16 @@ function Section({
               {title}
             </span>
             <Link to="/projects" className="text-xs pr-2">
+              view all
+            </Link>
+          </p>
+        ) : title === 'certificates' ? (
+          <p className="flex items-baseline justify-between w-full gap-2">
+            <span>
+              <Award size={20} className="inline-block mr-2" />
+              {title}
+            </span>
+            <Link to="/certificates" className="text-xs pr-2">
               view all
             </Link>
           </p>

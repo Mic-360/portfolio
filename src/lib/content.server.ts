@@ -417,11 +417,65 @@ async function readProjectPost(slug: string): Promise<ProjectPost | null> {
   }
 }
 
+export type CertificateMeta = {
+  id: number
+  slug: string
+  title: string
+  issuer: string
+  issued: string
+  expires?: string
+  credential_id: string | null
+  skills: Array<string>
+  verify_url: string
+  image_url: string
+}
+
+const CERTIFICATE_SOURCE: string = (
+  import.meta.glob('../content/certificate.json', {
+    eager: true,
+    query: '?raw',
+    import: 'default',
+  }) as Record<string, string>
+)['../content/certificate.json']
+
+function slugify(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+}
+
+function readCertificateIndex(): Array<CertificateMeta> {
+  const raw = JSON.parse(CERTIFICATE_SOURCE) as Array<{
+    id: number
+    title: string
+    issuer: string
+    issued: string
+    expires?: string
+    credential_id: string | null
+    skills: Array<string>
+    verify_url: string
+    image_url: string
+  }>
+
+  return raw.map((cert) => ({
+    ...cert,
+    slug: slugify(cert.title),
+  }))
+}
+
+function readCertificateBySlug(slug: string): CertificateMeta | null {
+  const certs = readCertificateIndex()
+  return certs.find((c) => c.slug === slug) ?? null
+}
+
 export const getBlogIndexInternal = readBlogIndex
 export const getBlogPostsWithHtmlInternal = readBlogPostsWithHtml
 export const getProjectIndexInternal = readProjectIndex
 export const getBlogPostBySlugInternal = readBlogPost
 export const getProjectBySlugInternal = readProjectPost
+export const getCertificateIndexInternal = readCertificateIndex
+export const getCertificateBySlugInternal = readCertificateBySlug
 
 export async function getResumeInternal() {
   const latexSource = getResumeSource()
