@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { siteInfo, siteMeta } from '@/config/site-data'
-import { createOgImageResponse } from '@/lib/og.server'
+import { createOgImageResponse } from '@/lib/og'
 
 function withCrawlerHeaders(response: Response) {
   const headers = new Headers(response.headers)
