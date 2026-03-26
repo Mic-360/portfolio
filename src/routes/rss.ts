@@ -1,13 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { getBlogPostsWithHtmlInternal } from '@/lib/content.server'
 import { siteMeta } from '@/config/site-data'
+import { getBlogPostsWithHtml } from '@/lib/content'
 
 export const Route = createFileRoute('/rss')({
   server: {
     handlers: {
       GET: async () => {
         const baseUrl = siteMeta.baseUrl
-        const posts = await getBlogPostsWithHtmlInternal()
+        const posts = await getBlogPostsWithHtml()
         const items = posts
           .map(
             (post) =>
