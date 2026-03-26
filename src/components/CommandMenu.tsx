@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { useNavigate } from '@tanstack/react-router'
+import { formatForDisplay, useHotkey } from '@tanstack/react-hotkeys'
 import {
   ArrowLeft,
-  BookOpen,
   Award,
+  BookOpen,
   Bot,
   Briefcase,
   Calendar,
-  Command,
   FileText,
   FolderOpen,
   Github,
@@ -43,48 +43,31 @@ export function CommandMenu() {
   const [certificates, setCertificates] = React.useState<Array<CertificateMeta>>([])
   const [loaded, setLoaded] = React.useState(false)
 
-  React.useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      const mod = e.metaKey || e.ctrlKey
-      if (!mod) return
+  // Toggle command menu
+  useHotkey('Mod+K', () => setOpen((o) => !o))
 
-      if (e.key === 'k') {
-        e.preventDefault()
-        setOpen((o) => !o)
-        return
-      }
+  // Go back
+  useHotkey('Mod+Backspace', () => window.history.back())
 
-      // Ctrl+Backspace → go back
-      if (e.key === 'Backspace') {
-        e.preventDefault()
-        window.history.back()
-        return
-      }
+  // Page navigation shortcuts
+  const navTo = React.useCallback(
+    (to: string) => {
+      setOpen(false)
+      navigate({ to })
+    },
+    [navigate],
+  )
 
-      const shortcuts: Record<string, string> = {
-        h: '/',
-        a: '/about',
-        b: '/blog',
-        p: '/projects',
-        r: '/resume',
-        e: '/bento',
-        g: '/readme',
-        f: '/rss',
-        l: '/llms-full.txt',
-        m: '/sitemap/xml',
-      }
-
-      const key = e.key.toLowerCase()
-      if (shortcuts[key]) {
-        e.preventDefault()
-        setOpen(false)
-        navigate({ to: shortcuts[key] })
-      }
-    }
-
-    document.addEventListener('keydown', down)
-    return () => document.removeEventListener('keydown', down)
-  }, [navigate])
+  useHotkey('Mod+H', () => navTo('/'))
+  useHotkey('Mod+A', () => navTo('/about'))
+  useHotkey('Mod+B', () => navTo('/blog'))
+  useHotkey('Mod+P', () => navTo('/projects'))
+  useHotkey('Mod+R', () => navTo('/resume'))
+  useHotkey('Mod+E', () => navTo('/bento'))
+  useHotkey('Mod+G', () => navTo('/readme'))
+  useHotkey('Mod+F', () => navTo('/rss'))
+  useHotkey('Mod+L', () => navTo('/llms-full.txt'))
+  useHotkey('Mod+M', () => navTo('/sitemap/xml'))
 
   // Fetch blogs and projects when the dialog opens for the first time
   React.useEffect(() => {
@@ -130,7 +113,7 @@ export function CommandMenu() {
           <CommandItem onSelect={handleGoBack}>
             <ArrowLeft />
             <span>Back</span>
-            <CommandShortcut>⌘⌫</CommandShortcut>
+            <CommandShortcut>{formatForDisplay('Mod+Backspace')}</CommandShortcut>
           </CommandItem>
         </CommandGroup>
 
@@ -141,37 +124,37 @@ export function CommandMenu() {
           <CommandItem onSelect={() => handleNavigate('/')}>
             <Home />
             <span>home</span>
-            <CommandShortcut>⌘H</CommandShortcut>
+            <CommandShortcut>{formatForDisplay('Mod+H')}</CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/about')}>
             <User />
             <span>about</span>
-            <CommandShortcut>⌘A</CommandShortcut>
+            <CommandShortcut>{formatForDisplay('Mod+A')}</CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/blog')}>
             <BookOpen />
             <span>blog</span>
-            <CommandShortcut>⌘B</CommandShortcut>
+            <CommandShortcut>{formatForDisplay('Mod+B')}</CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/projects')}>
             <FolderOpen />
             <span>projects</span>
-            <CommandShortcut>⌘P</CommandShortcut>
+            <CommandShortcut>{formatForDisplay('Mod+P')}</CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/resume')}>
             <FileText />
             <span>resume</span>
-            <CommandShortcut>⌘R</CommandShortcut>
+            <CommandShortcut>{formatForDisplay('Mod+R')}</CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/bento')}>
             <Briefcase />
             <span>bento</span>
-            <CommandShortcut>⌘E</CommandShortcut>
+            <CommandShortcut>{formatForDisplay('Mod+E')}</CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/readme')}>
             <Github />
             <span>readme</span>
-            <CommandShortcut>⌘G</CommandShortcut>
+            <CommandShortcut>{formatForDisplay('Mod+G')}</CommandShortcut>
           </CommandItem>
         </CommandGroup>
 
@@ -203,17 +186,17 @@ export function CommandMenu() {
           <CommandItem onSelect={() => handleNavigate('/rss')}>
             <Rss />
             <span>rss feed</span>
-            <CommandShortcut>⌘F</CommandShortcut>
+            <CommandShortcut>{formatForDisplay('Mod+F')}</CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/llms-full.txt')}>
             <Bot />
             <span>llms-full.txt</span>
-            <CommandShortcut>⌘L</CommandShortcut>
+            <CommandShortcut>{formatForDisplay('Mod+L')}</CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/sitemap.xml')}>
             <Map />
             <span>sitemap</span>
-            <CommandShortcut>⌘M</CommandShortcut>
+            <CommandShortcut>{formatForDisplay('Mod+M')}</CommandShortcut>
           </CommandItem>
         </CommandGroup>
 
@@ -293,22 +276,11 @@ export function CommandMenu() {
 
 /** Small inline hint for keyboard navigation — place in footer or hero */
 export function KeyboardHint() {
-  const [isMac, setIsMac] = React.useState(false)
-
-  React.useEffect(() => {
-    setIsMac(navigator.userAgent.includes('Mac'))
-  }, [])
-
   return (
     <p className="hidden sm:inline-flex items-center gap-1.5 text-[8px] uppercase tracking-[0.15em] text-muted-foreground select-none">
       press{' '}
       <kbd className="inline-flex items-center gap-0.5 rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] font-medium text-muted-foreground">
-        {isMac ? (
-          <Command className="inline size-2.5" />
-        ) : (
-          <span className="text-[9px]">ctrl</span>
-        )}
-        <span>K</span>
+        {formatForDisplay('Mod+K')}
       </kbd>{' '}
       to navigate this site via keyboard
     </p>
