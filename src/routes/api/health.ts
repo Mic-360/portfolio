@@ -1,19 +1,18 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { writeHealthDataInternal } from '@/lib/health.server'
+import {
+  aggregateByDay,
+  calculateStats,
+  getHealthData,
+  updateHealthData,
+} from '@/lib/health'
 
 export const Route = createFileRoute('/api/health')({
   server: {
     handlers: {
       GET: async () => {
         try {
-          const { getHealthDataInternal } = await import('@/lib/health.server')
-          const { aggregateByDay, calculateStats } = await import(
-            '@/lib/health'
-          )
+          const rawData = await getHealthData()
 
-          const rawData = getHealthDataInternal()
-
-          // Calculate stats and aggregations for each metric
           const parsedData = {
             steps: {
               stats: calculateStats(rawData.steps),
@@ -81,7 +80,7 @@ export const Route = createFileRoute('/api/health')({
             heartRate: payload.heartRate || [],
           }
 
-          writeHealthDataInternal(healthData)
+          await updateHealthData({ data: healthData })
 
           return Response.json({
             status: 'success',
