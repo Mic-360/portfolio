@@ -139,7 +139,7 @@ function BlogIndex() {
 
         <div className="flex flex-row-reverse gap-4 items-center">
           <img
-            src="/frieren/frienbook.svg"
+            src="/frieren/frieren-teach.svg"
             className="h-16 sm:h-22 inline-block align-bottom"
           />
           <p className="text-muted-foreground leading-relaxed">
