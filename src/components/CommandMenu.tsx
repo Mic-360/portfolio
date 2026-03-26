@@ -45,15 +45,46 @@ export function CommandMenu() {
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+      const mod = e.metaKey || e.ctrlKey
+      if (!mod) return
+
+      if (e.key === 'k') {
         e.preventDefault()
-        setOpen((open) => !open)
+        setOpen((o) => !o)
+        return
+      }
+
+      // Ctrl+Backspace → go back
+      if (e.key === 'Backspace') {
+        e.preventDefault()
+        window.history.back()
+        return
+      }
+
+      const shortcuts: Record<string, string> = {
+        h: '/',
+        a: '/about',
+        b: '/blog',
+        p: '/projects',
+        r: '/resume',
+        e: '/bento',
+        g: '/readme',
+        f: '/rss',
+        l: '/llms-full.txt',
+        m: '/sitemap/xml',
+      }
+
+      const key = e.key.toLowerCase()
+      if (shortcuts[key]) {
+        e.preventDefault()
+        setOpen(false)
+        navigate({ to: shortcuts[key] })
       }
     }
 
     document.addEventListener('keydown', down)
     return () => document.removeEventListener('keydown', down)
-  }, [])
+  }, [navigate])
 
   // Fetch blogs and projects when the dialog opens for the first time
   React.useEffect(() => {
@@ -99,7 +130,7 @@ export function CommandMenu() {
           <CommandItem onSelect={handleGoBack}>
             <ArrowLeft />
             <span>Back</span>
-            <CommandShortcut>⌘[</CommandShortcut>
+            <CommandShortcut>⌘⌫</CommandShortcut>
           </CommandItem>
         </CommandGroup>
 
