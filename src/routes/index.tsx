@@ -1,15 +1,15 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { motion } from 'motion/react'
-import { useEffect, useState } from 'react'
-import type { BlogMeta, CertificateMeta, ProjectMeta } from '@/lib/content'
-import type { HealthSample } from '@/lib/health'
-import type { PinterestCreatedPin } from '@/lib/pinterest';
+import { useEffect, useMemo, useState } from 'react'
+
 import { KeyboardHint } from '@/components/CommandMenu'
 import { Section, StatCard } from '@/components/functions'
 import GitHubHeatmap from '@/components/GitHubHeatmap'
 import GravatarAvatar from '@/components/gravatar/GravatarAvatar'
 import GravatarProfileCard from '@/components/gravatar/GravatarProfileCard'
 import CalendarIcon from '@/components/ui/calendar-icon'
+import type { CardStackItem } from '@/components/ui/card-stack'
+import { CardStack } from '@/components/ui/card-stack'
 import { gravatarConfig } from '@/config/gravatar'
 import {
   contactLinks,
@@ -20,6 +20,7 @@ import {
   siteInfo,
   siteMeta,
 } from '@/config/site-data'
+import type { BlogMeta, CertificateMeta, ProjectMeta } from '@/lib/content'
 import {
   getBlogIndex,
   getCertificateIndex,
@@ -28,8 +29,16 @@ import {
 import { formatDate } from '@/lib/format'
 import { hashEmail } from '@/lib/gravatar'
 import { getGravatarProfile } from '@/lib/gravatar-profile'
+import type { HealthSample } from '@/lib/health'
 import { getHealthData } from '@/lib/health'
+import type { PinterestCreatedPin } from '@/lib/pinterest'
 import { getPinterestCreatedPins } from '@/lib/pinterest'
+
+declare global {
+  interface Window {
+    LIRenderAll?: () => void
+  }
+}
 
 export const Route = createFileRoute('/')({
   loader: async () => {
@@ -110,7 +119,7 @@ export const Route = createFileRoute('/')({
             priceRange: '$$',
             description,
           }),
-        },
+        }
       ],
     }
   },
@@ -143,6 +152,28 @@ function App() {
     setIsMounted(true)
   }, [])
 
+  useEffect(() => {
+    let attempts = 0
+    const maxAttempts = 10
+    const intervalId = window.setInterval(() => {
+      attempts += 1
+
+      if (window.LIRenderAll) {
+        window.LIRenderAll()
+        window.clearInterval(intervalId)
+        return
+      }
+
+      if (attempts >= maxAttempts) {
+        window.clearInterval(intervalId)
+      }
+    }, 500)
+
+    return () => {
+      window.clearInterval(intervalId)
+    }
+  }, [])
+
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -157,6 +188,95 @@ function App() {
     hidden: { opacity: 0, y: 10 },
     show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
   }
+
+  const socialCards = useMemo<Array<CardStackItem>>(
+    () => [
+      {
+        id: 1,
+        name: 'x / twitter',
+        designation: 'social card preview',
+        content: (
+          <a
+            href="https://x.com/bhaumicsingh"
+            target="_blank"
+            rel="noopener noreferrer me"
+            className="group block h-full overflow-hidden border border-border/40 bg-black normal-case"
+          >
+            <div className="h-30 w-full overflow-hidden border-b border-white/10">
+              <img
+                src={siteImages.banner}
+                alt="Twitter banner preview"
+                className="h-full w-full object-cover opacity-80 transition-transform duration-500 group-hover:scale-[1.03]"
+              />
+            </div>
+            <div className="relative px-4 pb-4 pt-2">
+              <img
+                src={siteImages.profilePhoto}
+                alt={`${siteInfo.name} profile photo`}
+                className="-mt-12 h-20 w-20 rounded-full border-4 border-black object-cover shadow-lg"
+              />
+              <div className="mt-2 flex items-start justify-between gap-3">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <p className="text-lg font-bold text-white transition-colors group-hover:text-primary">
+                      {siteInfo.name}
+                    </p>
+                  </div>
+                  <p className="text-xs text-white/70">@bhaumicsingh</p>
+                </div>
+                <span className="rounded-full border border-primary/40 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">
+                  follow
+                </span>
+              </div>
+              <p className="mt-2 text-xs italic text-white/80">
+                A developer who loves to build.
+              </p>
+
+              <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-white/65">
+                <span>{siteInfo.location}</span>
+                <span aria-hidden="true">•</span>
+                <span>
+                  {siteMeta.alternateUrls.gravatarDomain.replace(
+                    'https://',
+                    '',
+                  )}
+                </span>
+                <span aria-hidden="true">•</span>
+                <span>Joined December 2016</span>
+              </div>
+
+              <div className="mt-2 flex items-center gap-4 text-xs text-white/75">
+                <p>
+                  <span className="font-bold text-white">71</span> Following
+                </p>
+                <p>
+                  <span className="font-bold text-white">16</span> Followers
+                </p>
+              </div>
+            </div>
+          </a>
+        ),
+      },
+      {
+        id: 2,
+        name: 'gravatar',
+        designation: 'verified identity card',
+        content: profile ? (
+          <GravatarProfileCard
+            profile={profile}
+            className="h-full border-0 bg-card/50 shadow-none"
+          />
+        ) : (
+          <div className="flex h-full items-center justify-center rounded-xl border border-border/40 bg-card/60 px-4 text-center">
+            <p className="text-sm text-muted-foreground italic">
+              unable to load gravatar profile.
+            </p>
+          </div>
+        ),
+      },
+    ],
+    [profile],
+  )
 
   return (
     <motion.div
@@ -519,18 +639,6 @@ function App() {
       </motion.div>
 
       <motion.div variants={item}>
-        <Section title="">
-          {profile ? (
-            <GravatarProfileCard profile={profile} />
-          ) : (
-            <p className="text-sm text-muted-foreground italic">
-              unable to load gravatar profile.
-            </p>
-          )}
-        </Section>
-      </motion.div>
-
-      <motion.div variants={item}>
         <Section title="pinterest">
           {pinterestData.pins.length > 0 ? (
             <div className="flex flex-col gap-3">
@@ -588,6 +696,19 @@ function App() {
           )}
         </Section>
       </motion.div>
+
+      <motion.div variants={item}>
+        <Section title="">
+          <CardStack
+            items={socialCards}
+            className="mx-auto"
+            cardClassName="animus-corner"
+            offset={9}
+            scaleFactor={0.04}
+          />
+        </Section>
+      </motion.div>
+
 
       <motion.div variants={item}>
         <Section title="contact">
