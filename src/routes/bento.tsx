@@ -1,16 +1,7 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
-import GravatarProfileCard from '@/components/gravatar/GravatarProfileCard'
-import { gravatarConfig } from '@/config/gravatar'
 import { siteMeta } from '@/config/site-data'
-import { getGravatarProfile } from '@/lib/gravatar-profile'
 
 export const Route = createFileRoute('/bento')({
-  loader: async () => {
-    const profile = await getGravatarProfile({
-      data: gravatarConfig.slug,
-    })
-    return { profile }
-  },
   head: () => {
     const title = `Bento | ${siteMeta.defaultTitle}`
     const description = 'My social profile and links in a bento grid layout.'
@@ -60,13 +51,8 @@ export const Route = createFileRoute('/bento')({
 })
 
 function BentoPage() {
-  const { profile } = Route.useLoaderData()
-
   return (
     <article className="flex flex-col gap-6 min-h-screen">
-      <Link to="/" className="mr-2 inline-flex items-center gap-1 italic">
-        ← back
-      </Link>
       <div className="relative w-full overflow-hidden rounded-xl border border-border bg-card shadow-2xl min-h-screen">
         <iframe
           src="https://avely.me/bhaumic"
@@ -76,17 +62,6 @@ function BentoPage() {
           allowFullScreen
         />
       </div>
-
-      {/* Gravatar Profile Card — Dynamic */}
-      <section className="flex flex-col gap-4">
-        {profile ? (
-          <GravatarProfileCard profile={profile} />
-        ) : (
-          <p className="text-sm text-muted-foreground italic">
-            unable to load gravatar profile.
-          </p>
-        )}
-      </section>
 
       <Link to="/" className="mr-2 inline-flex items-center gap-1 italic">
         ← back

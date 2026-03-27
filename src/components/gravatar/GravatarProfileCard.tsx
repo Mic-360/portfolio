@@ -22,7 +22,7 @@ export default function GravatarProfileCard({
   return (
     <div
       className={cn(
-        'w-full overflow-hidden rounded-xl border border-border shadow-xl',
+        'w-full overflow-hidden border border-border shadow-xl',
         className,
       )}
     >
@@ -49,22 +49,21 @@ export default function GravatarProfileCard({
       {/* Card body */}
       <div className="relative bg-card px-5 pb-5 pt-0">
         {/* Avatar overlapping banner */}
-        <a
-          href={profileLink}
-          target="_blank"
-          rel="noopener noreferrer me"
-          className="-mt-12 mb-3 block w-fit"
-        >
-          <GravatarAvatar
-            hash={profile.hash}
-            size={96}
-            alt={profile.display_name}
-            className="h-24 w-24 border-4 border-card shadow-lg"
-          />
-        </a>
+        <div className='flex items-center justify-between mb-16 gap-4'>
+          <a
+            href={profileLink}
+            target="_blank"
+            rel="noopener noreferrer me"
+            className="-mt-12 mb-3 block w-fit"
+          >
+            <GravatarAvatar
+              hash={profile.hash}
+              size={96}
+              alt={profile.display_name}
+              className="h-24 w-24 border-4 border-card shadow-lg"
+            />
+          </a>
 
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-          {/* Info */}
           <div className="flex flex-col gap-1">
             <a
               href={profileLink}
@@ -87,12 +86,15 @@ export default function GravatarProfileCard({
                 </p>
               )}
             </a>
-            {profile.description && (
-              <p className="mt-2 text-sm italic text-foreground/80">
-                {profile.description}
-              </p>
-            )}
           </div>
+        </div>
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+          {/* Info */}
+          {profile.description && (
+            <p className="mt-2 text-sm italic text-foreground/80">
+              {profile.description}
+            </p>
+          )}
 
           {/* Social icons */}
           {profile.verified_accounts &&

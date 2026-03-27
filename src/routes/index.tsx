@@ -17,20 +17,30 @@ import {
   siteInfo,
   siteMeta,
 } from '@/config/site-data'
-import { getBlogIndex, getCertificateIndex, getProjectIndex } from '@/lib/content'
+import {
+  getBlogIndex,
+  getCertificateIndex,
+  getProjectIndex,
+} from '@/lib/content'
 import { formatDate } from '@/lib/format'
 import { hashEmail } from '@/lib/gravatar'
 import { getHealthData } from '@/lib/health'
+import GravatarProfileCard from '@/components/gravatar/GravatarProfileCard'
+import { getGravatarProfile } from '@/lib/gravatar-profile'
 
 export const Route = createFileRoute('/')({
   loader: async () => {
-    const [posts, projects, certificates, health, avatarHash] = await Promise.all([
-      getBlogIndex(),
-      getProjectIndex(),
-      getCertificateIndex(),
-      getHealthData(),
-      hashEmail(gravatarConfig.email),
-    ])
+    const [posts, projects, certificates, health, avatarHash, profile] =
+      await Promise.all([
+        getBlogIndex(),
+        getProjectIndex(),
+        getCertificateIndex(),
+        getHealthData(),
+        hashEmail(gravatarConfig.email),
+        getGravatarProfile({
+          data: gravatarConfig.slug,
+        }),
+      ])
 
     return {
       posts,
@@ -38,6 +48,7 @@ export const Route = createFileRoute('/')({
       certificates,
       health,
       avatarHash,
+      profile,
     }
   },
   head: () => {
@@ -105,7 +116,8 @@ function sanitizeSamples<T extends { value: number | string }>(
 }
 
 function App() {
-  const { posts, projects, certificates, health, avatarHash } = Route.useLoaderData()
+  const { posts, projects, certificates, health, avatarHash, profile } =
+    Route.useLoaderData()
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
@@ -482,6 +494,18 @@ function App() {
           {health.updatedAt && isMounted && (
             <p className="text-[10px] italic text-muted-foreground mt-4">
               last updated: {new Date(health.updatedAt).toLocaleString()}
+            </p>
+          )}
+        </Section>
+      </motion.div>
+
+      <motion.div variants={item}>
+        <Section title="">
+          {profile ? (
+            <GravatarProfileCard profile={profile} />
+          ) : (
+            <p className="text-sm text-muted-foreground italic">
+              unable to load gravatar profile.
             </p>
           )}
         </Section>
