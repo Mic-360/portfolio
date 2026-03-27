@@ -3,15 +3,18 @@ import { motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import type { BlogMeta, CertificateMeta, ProjectMeta } from '@/lib/content'
 import type { HealthSample } from '@/lib/health'
-import { Section, StatCard } from '@/components/functions'
+import type { PinterestCreatedPin } from '@/lib/pinterest';
 import { KeyboardHint } from '@/components/CommandMenu'
+import { Section, StatCard } from '@/components/functions'
 import GitHubHeatmap from '@/components/GitHubHeatmap'
 import GravatarAvatar from '@/components/gravatar/GravatarAvatar'
+import GravatarProfileCard from '@/components/gravatar/GravatarProfileCard'
 import CalendarIcon from '@/components/ui/calendar-icon'
 import { gravatarConfig } from '@/config/gravatar'
 import {
   contactLinks,
   gravatar,
+  pinterest,
   previousRoles,
   siteImages,
   siteInfo,
@@ -24,23 +27,31 @@ import {
 } from '@/lib/content'
 import { formatDate } from '@/lib/format'
 import { hashEmail } from '@/lib/gravatar'
-import { getHealthData } from '@/lib/health'
-import GravatarProfileCard from '@/components/gravatar/GravatarProfileCard'
 import { getGravatarProfile } from '@/lib/gravatar-profile'
+import { getHealthData } from '@/lib/health'
+import { getPinterestCreatedPins } from '@/lib/pinterest'
 
 export const Route = createFileRoute('/')({
   loader: async () => {
-    const [posts, projects, certificates, health, avatarHash, profile] =
-      await Promise.all([
-        getBlogIndex(),
-        getProjectIndex(),
-        getCertificateIndex(),
-        getHealthData(),
-        hashEmail(gravatarConfig.email),
-        getGravatarProfile({
-          data: gravatarConfig.slug,
-        }),
-      ])
+    const [
+      posts,
+      projects,
+      certificates,
+      health,
+      avatarHash,
+      profile,
+      pinterestData,
+    ] = await Promise.all([
+      getBlogIndex(),
+      getProjectIndex(),
+      getCertificateIndex(),
+      getHealthData(),
+      hashEmail(gravatarConfig.email),
+      getGravatarProfile({
+        data: gravatarConfig.slug,
+      }),
+      getPinterestCreatedPins(),
+    ])
 
     return {
       posts,
@@ -49,6 +60,7 @@ export const Route = createFileRoute('/')({
       health,
       avatarHash,
       profile,
+      pinterestData,
     }
   },
   head: () => {
@@ -116,8 +128,15 @@ function sanitizeSamples<T extends { value: number | string }>(
 }
 
 function App() {
-  const { posts, projects, certificates, health, avatarHash, profile } =
-    Route.useLoaderData()
+  const {
+    posts,
+    projects,
+    certificates,
+    health,
+    avatarHash,
+    profile,
+    pinterestData,
+  } = Route.useLoaderData()
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
@@ -506,6 +525,65 @@ function App() {
           ) : (
             <p className="text-sm text-muted-foreground italic">
               unable to load gravatar profile.
+            </p>
+          )}
+        </Section>
+      </motion.div>
+
+      <motion.div variants={item}>
+        <Section title="pinterest">
+          {pinterestData.pins.length > 0 ? (
+            <div className="flex flex-col gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {pinterestData.pins
+                  .slice(0, 6)
+                  .map((pin: PinterestCreatedPin) => (
+                    <a
+                      key={pin.id}
+                      href={pin.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group animus-corner border border-border/30 bg-card/10 overflow-hidden hover:border-primary/50 transition-all duration-300"
+                    >
+                      <img
+                        src={pin.imageUrl}
+                        alt={pin.title}
+                        loading="lazy"
+                        width={pin.imageWidth}
+                        height={pin.imageHeight}
+                        className="w-full h-36 sm:h-40 object-cover transition-transform duration-500 group-hover:scale-[1.03] grayscale group-hover:grayscale-0 opacity-80 group-hover:opacity-100"
+                      />
+                      <div className="p-2.5">
+                        <p className="text-[10px] italic line-clamp-2 group-hover:text-primary transition-colors">
+                          {pin.title}
+                        </p>
+                      </div>
+                    </a>
+                  ))}
+              </div>
+              <p className="text-xs italic text-muted-foreground">
+                fresh pins from my created board —{' '}
+                <Link
+                  to="/pinterest/gallery"
+                  className="underline decoration-primary underline-offset-4 hover:text-primary"
+                >
+                  see full gallery
+                </Link>
+                .
+              </p>
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground italic">
+              couldn&apos;t load pins right now. check my{' '}
+              <a
+                href={pinterest.createdUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline decoration-primary underline-offset-4 hover:text-primary"
+              >
+                pinterest created feed
+              </a>
+              .
             </p>
           )}
         </Section>

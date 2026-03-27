@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { motion } from 'motion/react'
-import { Award } from 'lucide-react'
+import { Award, ImagesIcon } from 'lucide-react'
 import CurrentIcon from '@/components/ui/current-icon'
 import HealthstatIcon from '@/components/ui/healthstat-icon'
 import LayersIcon from '@/components/ui/layers-icon'
@@ -66,6 +66,11 @@ function Section({
         ) : title === 'healthstat' ? (
           <>
             <HealthstatIcon size={24} className="inline-block mr-2" />
+            {title}
+          </>
+        ) : title === 'pinterest' ? (
+          <>
+            <ImagesIcon size={24} className="inline-block mr-2" />
             {title}
           </>
         ) : (
