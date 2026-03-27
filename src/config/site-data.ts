@@ -98,3 +98,9 @@ export const contactLinks = [
   { label: 'resume', url: '/resume' },
   { label: 'bento', url: '/bento' },
 ]
+
+export const pinterest = {
+  profileUrl: 'https://in.pinterest.com/bhaumics/',
+  createdUrl: 'https://in.pinterest.com/bhaumics/_created/',
+  createdBoardUrl: 'https://in.pinterest.com/bhaumics/_quick_creates/',
+}

@@ -1,6 +1,6 @@
-import { createFileRoute } from '@tanstack/react-router'
 import { siteMeta } from '@/config/site-data'
 import { getBlogIndex, getCertificateIndex, getProjectIndex } from '@/lib/content'
+import { createFileRoute } from '@tanstack/react-router'
 
 type SitemapImage = {
   loc: string
@@ -79,6 +79,13 @@ export const Route = createFileRoute('/sitemap/xml')({
             lastmod: new Date().toISOString(),
             changefreq: 'monthly',
             priority: '0.5',
+            images: [],
+          },
+          {
+            loc: `${siteMeta.baseUrl}/pinterest/gallery`,
+            lastmod: new Date().toISOString(),
+            changefreq: 'daily',
+            priority: '0.6',
             images: [],
           },
           ...posts.map((post) => ({

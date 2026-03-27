@@ -1,6 +1,5 @@
-import * as React from 'react'
-import { useNavigate } from '@tanstack/react-router'
 import { formatForDisplay, useHotkey } from '@tanstack/react-hotkeys'
+import { useNavigate } from '@tanstack/react-router'
 import {
   ArrowLeft,
   Award,
@@ -12,6 +11,7 @@ import {
   FolderOpen,
   Github,
   Home,
+  Image,
   Instagram,
   Linkedin,
   Map,
@@ -20,8 +20,8 @@ import {
   Twitter,
   User,
 } from 'lucide-react'
+import * as React from 'react'
 
-import type { BlogMeta, CertificateMeta, ProjectMeta } from '@/lib/content'
 import {
   CommandDialog,
   CommandEmpty,
@@ -33,14 +33,21 @@ import {
   CommandShortcut,
 } from '@/components/ui/command'
 import { siteInfo, socialLinks } from '@/config/site-data'
-import { getBlogIndex, getCertificateIndex, getProjectIndex } from '@/lib/content'
+import type { BlogMeta, CertificateMeta, ProjectMeta } from '@/lib/content'
+import {
+  getBlogIndex,
+  getCertificateIndex,
+  getProjectIndex,
+} from '@/lib/content'
 
 export function CommandMenu() {
   const [open, setOpen] = React.useState(false)
   const navigate = useNavigate()
   const [blogs, setBlogs] = React.useState<Array<BlogMeta>>([])
   const [projects, setProjects] = React.useState<Array<ProjectMeta>>([])
-  const [certificates, setCertificates] = React.useState<Array<CertificateMeta>>([])
+  const [certificates, setCertificates] = React.useState<
+    Array<CertificateMeta>
+  >([])
   const [loaded, setLoaded] = React.useState(false)
 
   // Toggle command menu
@@ -68,6 +75,7 @@ export function CommandMenu() {
   useHotkey('Mod+F', () => navTo('/rss'))
   useHotkey('Mod+L', () => navTo('/llms-full/txt'))
   useHotkey('Mod+M', () => navTo('/sitemap/xml'))
+  useHotkey('Mod+I', () => navTo('/pinterest/gallery'))
 
   // Fetch blogs and projects when the dialog opens for the first time
   React.useEffect(() => {
@@ -113,7 +121,9 @@ export function CommandMenu() {
           <CommandItem onSelect={handleGoBack}>
             <ArrowLeft />
             <span>Back</span>
-            <CommandShortcut>{formatForDisplay('Mod+Backspace')}</CommandShortcut>
+            <CommandShortcut>
+              {formatForDisplay('Mod+Backspace')}
+            </CommandShortcut>
           </CommandItem>
         </CommandGroup>
 
@@ -140,6 +150,11 @@ export function CommandMenu() {
             <FolderOpen />
             <span>projects</span>
             <CommandShortcut>{formatForDisplay('Mod+P')}</CommandShortcut>
+          </CommandItem>
+          <CommandItem onSelect={() => handleNavigate('/pinterest/gallery')}>
+            <Image />
+            <span>pinterest gallery</span>
+            <CommandShortcut>{formatForDisplay('Mod+I')}</CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/resume')}>
             <FileText />

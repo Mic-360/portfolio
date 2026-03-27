@@ -20,6 +20,7 @@ import { Route as CertificatesIndexRouteImport } from './routes/certificates/ind
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as SitemapXmlRouteImport } from './routes/sitemap.xml'
 import { Route as ProjectsSlugRouteImport } from './routes/projects/$slug'
+import { Route as PinterestGalleryRouteImport } from './routes/pinterest/gallery'
 import { Route as OgSiteRouteImport } from './routes/og/site'
 import { Route as LlmsFullTxtRouteImport } from './routes/llms-full.txt'
 import { Route as CertificatesSlugRouteImport } from './routes/certificates/$slug'
@@ -85,6 +86,11 @@ const ProjectsSlugRoute = ProjectsSlugRouteImport.update({
   path: '/projects/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PinterestGalleryRoute = PinterestGalleryRouteImport.update({
+  id: '/pinterest/gallery',
+  path: '/pinterest/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OgSiteRoute = OgSiteRouteImport.update({
   id: '/og/site',
   path: '/og/site',
@@ -143,6 +149,7 @@ export interface FileRoutesByFullPath {
   '/certificates/$slug': typeof CertificatesSlugRoute
   '/llms-full/txt': typeof LlmsFullTxtRoute
   '/og/site': typeof OgSiteRoute
+  '/pinterest/gallery': typeof PinterestGalleryRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/sitemap/xml': typeof SitemapXmlRoute
   '/blog/': typeof BlogIndexRoute
@@ -165,6 +172,7 @@ export interface FileRoutesByTo {
   '/certificates/$slug': typeof CertificatesSlugRoute
   '/llms-full/txt': typeof LlmsFullTxtRoute
   '/og/site': typeof OgSiteRoute
+  '/pinterest/gallery': typeof PinterestGalleryRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/sitemap/xml': typeof SitemapXmlRoute
   '/blog': typeof BlogIndexRoute
@@ -188,6 +196,7 @@ export interface FileRoutesById {
   '/certificates/$slug': typeof CertificatesSlugRoute
   '/llms-full/txt': typeof LlmsFullTxtRoute
   '/og/site': typeof OgSiteRoute
+  '/pinterest/gallery': typeof PinterestGalleryRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/sitemap/xml': typeof SitemapXmlRoute
   '/blog/': typeof BlogIndexRoute
@@ -212,6 +221,7 @@ export interface FileRouteTypes {
     | '/certificates/$slug'
     | '/llms-full/txt'
     | '/og/site'
+    | '/pinterest/gallery'
     | '/projects/$slug'
     | '/sitemap/xml'
     | '/blog/'
@@ -234,6 +244,7 @@ export interface FileRouteTypes {
     | '/certificates/$slug'
     | '/llms-full/txt'
     | '/og/site'
+    | '/pinterest/gallery'
     | '/projects/$slug'
     | '/sitemap/xml'
     | '/blog'
@@ -256,6 +267,7 @@ export interface FileRouteTypes {
     | '/certificates/$slug'
     | '/llms-full/txt'
     | '/og/site'
+    | '/pinterest/gallery'
     | '/projects/$slug'
     | '/sitemap/xml'
     | '/blog/'
@@ -279,6 +291,7 @@ export interface RootRouteChildren {
   CertificatesSlugRoute: typeof CertificatesSlugRoute
   LlmsFullTxtRoute: typeof LlmsFullTxtRoute
   OgSiteRoute: typeof OgSiteRoute
+  PinterestGalleryRoute: typeof PinterestGalleryRoute
   ProjectsSlugRoute: typeof ProjectsSlugRoute
   SitemapXmlRoute: typeof SitemapXmlRoute
   BlogIndexRoute: typeof BlogIndexRoute
@@ -369,6 +382,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pinterest/gallery': {
+      id: '/pinterest/gallery'
+      path: '/pinterest/gallery'
+      fullPath: '/pinterest/gallery'
+      preLoaderRoute: typeof PinterestGalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/og/site': {
       id: '/og/site'
       path: '/og/site'
@@ -447,6 +467,7 @@ const rootRouteChildren: RootRouteChildren = {
   CertificatesSlugRoute: CertificatesSlugRoute,
   LlmsFullTxtRoute: LlmsFullTxtRoute,
   OgSiteRoute: OgSiteRoute,
+  PinterestGalleryRoute: PinterestGalleryRoute,
   ProjectsSlugRoute: ProjectsSlugRoute,
   SitemapXmlRoute: SitemapXmlRoute,
   BlogIndexRoute: BlogIndexRoute,
