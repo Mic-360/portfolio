@@ -111,7 +111,7 @@ export default function GitHubHeatmap({ username }: GitHubHeatmapProps) {
         },
         date: {
           start: dayjs()
-            .subtract(responsive.range - 1, 'month')
+            .subtract(responsive.range - 2, 'month')
             .startOf('month')
             .toDate(),
         },
