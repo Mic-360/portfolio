@@ -72,7 +72,7 @@ function ReadmeImage({
 
 function ReadmePage() {
   return (
-    <article className="flex flex-col gap-12">
+    <article className="flex flex-col gap-12 max-w-5xl mx-auto w-full">
       {/* Profile Image and GitHub Stats Section */}
       <section className="flex flex-col md:flex-row items-center justify-center gap-10">
         <div className="w-40 h-40 shrink-0 relative">

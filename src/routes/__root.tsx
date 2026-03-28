@@ -511,7 +511,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           <VideoBackground />
           <FeedbackHandler />
           <CommandMenu />
-          <main className="mx-auto w-full max-w-2xl p-4 text-sm lowercase">
+          <main className="mx-auto w-full max-w-640 px-4 sm:px-6 lg:px-16 xl:px-24 2xl:px-32 py-4 text-sm lowercase">
             {children}
           </main>
           <Footer />

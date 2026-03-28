@@ -123,7 +123,7 @@ function CertificatesIndex() {
 
       <motion.div
         variants={item}
-        className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
       >
         {certificates.map((cert: CertificateMeta) => (
           <Link
@@ -137,9 +137,9 @@ function CertificatesIndex() {
                 <img
                   src={cert.image_url}
                   alt={cert.title}
-                  className="absolute inset-0 w-full h-full object-center opacity-80 group-hover:opacity-80 transition-opacity duration-700 scale-110"
+                  className="absolute inset-0 w-full h-full object-center opacity-80 group-hover:opacity-90 transition-opacity duration-700 scale-110"
                 />
-                <div className="absolute inset-0 bg-linear-to-t from-background via-background/80 to-background/40" />
+                <div className="absolute inset-0 bg-linear-to-t from-background/90 via-background/50 to-transparent" />
               </>
             )}
             <div className="z-10 flex flex-col gap-1.5 absolute bottom-1">

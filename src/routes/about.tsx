@@ -130,7 +130,7 @@ function AboutPage() {
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className="flex flex-col gap-6 max-w-2xl mx-auto"
+      className="flex flex-col gap-6 max-w-4xl mx-auto"
     >
       {/* Main Profile Card - Gravatar Style */}
       <motion.section

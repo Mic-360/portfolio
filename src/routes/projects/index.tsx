@@ -124,7 +124,7 @@ function ProjectsIndex() {
             back
           </Link>
         </div>
-        <div className="flex flex-row-reverse gap-4 items-center">
+        <div className="flex flex-row-reverse gap-4 items-center justify-between">
           <img
             src="/frieren/frieren.svg"
             className="h-16 sm:h-22 inline-block align-bottom"
@@ -136,7 +136,7 @@ function ProjectsIndex() {
         </div>
       </motion.header>
 
-      <div className="flex flex-col gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
         {projects.map((project) => (
           <motion.div
             key={project.slug}

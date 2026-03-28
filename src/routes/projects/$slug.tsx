@@ -148,7 +148,7 @@ function ProjectDetail() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="flex flex-col gap-8 pb-12"
+      className="flex flex-col gap-8 pb-12 max-w-4xl mx-auto w-full"
     >
       <header className="flex flex-col gap-4">
         <motion.div variants={item}>

@@ -88,7 +88,7 @@ function ResumePage() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="flex flex-col gap-10"
+      className="flex flex-col gap-10 max-w-4xl mx-auto w-full"
     >
       <motion.div
         variants={item}

@@ -21,7 +21,7 @@ export function VideoBackground() {
             loop
             muted
             playsInline
-            className="h-full w-full object-cover"
+            className="h-full w-full object-fill"
           >
             <source src="/leaves.mp4" type="video/mp4" />
           </video>

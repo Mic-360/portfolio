@@ -287,7 +287,7 @@ function App() {
     >
       <motion.section variants={item} className="flex flex-col gap-3">
         <div className="flex flex-col sm:flex-row item-center justify-between">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 w-full">
             <a
               href={gravatar.profileUrl}
               target="_blank"
@@ -302,7 +302,7 @@ function App() {
                 rel="me"
               />
             </a>
-            <div className="flex flex-col sm:flex-row justify-between items-baseline sm:min-w-xl">
+            <div className="flex flex-col sm:flex-row justify-between items-baseline w-full">
               <div className="flex flex-col gap-1">
                 <h1 className="text-2xl font-semibold italic">
                   {siteInfo.name} ~{' '}
@@ -334,7 +334,7 @@ function App() {
         </div>
       </motion.section>
 
-      <motion.div variants={item}>
+      <motion.div variants={item} className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <Section title="current">
           <motion.p whileHover={{ x: 3 }}>
             {siteInfo.currentRole} at{' '}
@@ -370,25 +370,7 @@ function App() {
             />
           </motion.p>
         </Section>
-      </motion.div>
 
-      <motion.div variants={item}>
-        <Section title="">
-          <div className="flex flex-col gap-4">
-            <Link
-              to="/readme"
-              className="block overflow-hidden transition-all hover:border-primary/50"
-            >
-              <GitHubHeatmap username="Mic-360" />
-            </Link>
-            <p className="text-xs italic text-muted-foreground">
-              click the graph to view my full github readme.
-            </p>
-          </div>
-        </Section>
-      </motion.div>
-
-      <motion.div variants={item}>
         <Section title="previous">
           <div className="flex flex-col gap-2">
             {previousRoles.map((role) => (
@@ -428,8 +410,19 @@ function App() {
       </motion.div>
 
       <motion.div variants={item}>
+        <Section title="">
+            <Link
+              to="/readme"
+              className="block overflow-hidden transition-all hover:border-primary/50"
+            >
+              <GitHubHeatmap username="Mic-360" />
+            </Link>
+        </Section>
+      </motion.div>
+
+      <motion.div variants={item}>
         <Section title="blogs">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {posts.slice(0, 6).map((post: BlogMeta) => (
               <Link
                 key={post.slug}
@@ -468,7 +461,7 @@ function App() {
 
       <motion.div variants={item}>
         <Section title="projects">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {projects.slice(0, 4).map((project: ProjectMeta) => (
               <Link
                 key={project.slug}
@@ -522,22 +515,22 @@ function App() {
 
       <motion.div variants={item}>
         <Section title="certificates">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-4">
             {certificates.slice(0, 6).map((cert: CertificateMeta) => (
               <Link
                 key={cert.id}
                 to="/certificates/$slug"
                 params={{ slug: cert.slug }}
-                className="group animus-corner relative flex flex-col gap-2 p-4 border border-border/20 bg-card/10 hover:border-primary/50 transition-all duration-500 overflow-hidden"
+                className="group animus-corner relative flex flex-col gap-2 p-4 border border-border/20 bg-card/10 hover:border-primary/50 transition-all duration-500 overflow-hidden min-h-44"
               >
                 {cert.image_url && (
                   <>
                     <img
                       src={cert.image_url}
                       alt={cert.title}
-                      className="absolute inset-0 w-full h-full object-cover opacity-10 group-hover:opacity-60 transition-opacity duration-700 scale-110"
+                      className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-70 transition-opacity duration-700 scale-110"
                     />
-                    <div className="absolute inset-0 bg-linear-to-t from-background via-background/80 to-background/40" />
+                    <div className="absolute inset-0 bg-linear-to-t from-background via-background/70 to-background/30" />
                   </>
                 )}
                 <div className="relative z-10 flex flex-col gap-1.5">
@@ -571,7 +564,7 @@ function App() {
 
       <motion.div variants={item}>
         <Section title="healthstat">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
             <StatCard
               label="steps"
               samples={sanitizeSamples(health.steps)}
@@ -642,7 +635,7 @@ function App() {
         <Section title="pinterest">
           {pinterestData.pins.length > 0 ? (
             <div className="flex flex-col gap-3">
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
                 {pinterestData.pins
                   .slice(0, 6)
                   .map((pin: PinterestCreatedPin) => (
@@ -697,20 +690,36 @@ function App() {
         </Section>
       </motion.div>
 
-      <motion.div variants={item}>
+      <motion.div variants={item} className="max-w-4xl mx-auto w-full">
         <Section title="">
-          <CardStack
-            items={socialCards}
-            className="mx-auto"
-            cardClassName="animus-corner"
-            offset={9}
-            scaleFactor={0.04}
-          />
+          {/* Card stack on smaller screens */}
+          <div className="xl:hidden">
+            <CardStack
+              items={socialCards}
+              className="mx-auto"
+              cardClassName="animus-corner"
+              offset={9}
+              scaleFactor={0.04}
+            />
+          </div>
+          {/* Side by side on large screens */}
+          <div className="hidden xl:grid grid-cols-2 gap-6">
+            {socialCards.map((card) => (
+              <div
+                key={card.id}
+                className="animus-corner h-88 overflow-hidden shadow-xl backdrop-blur-xs"
+              >
+                <div className="h-full text-sm text-foreground/90">
+                  {card.content}
+                </div>
+              </div>
+            ))}
+          </div>
         </Section>
       </motion.div>
 
 
-      <motion.div variants={item}>
+      <motion.div variants={item} className="max-w-3xl mx-auto w-full">
         <Section title="contact">
           <div className="flex items-baseline gap-2 relative">
             <p>

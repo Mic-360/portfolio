@@ -123,7 +123,7 @@ function BlogIndex() {
           </Link>
         </div>
 
-        <div className="flex flex-row-reverse gap-4 items-center">
+        <div className="flex flex-row-reverse gap-4 items-center justify-between">
           <img
             src="/frieren/frieren-teach.svg"
             className="h-16 sm:h-22 inline-block align-bottom"
@@ -135,13 +135,13 @@ function BlogIndex() {
         </div>
       </motion.header>
 
-      <div className="flex flex-col gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
         {posts.map((post) => (
           <motion.div key={post.slug} variants={item}>
             <Link
               to="/blog/$slug"
               params={{ slug: post.slug }}
-              className="ac-game-card animus-scanlines group flex flex-col gap-2 p-4 -mx-4 rounded-lg transition-all"
+              className="ac-game-card animus-scanlines group flex flex-col gap-2 p-4 rounded-lg transition-all"
             >
               <div className="flex items-center gap-3">
                 <div className="ac-game-era bg-primary" />

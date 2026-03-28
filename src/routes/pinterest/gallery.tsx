@@ -130,7 +130,7 @@ function PinterestGalleryPage() {
       {pins.length > 0 ? (
         <motion.div
           variants={item}
-          className="columns-2 lg:columns-3 gap-4"
+          className="columns-2 lg:columns-3 xl:columns-4 2xl:columns-5 gap-4"
         >
           {pins.map((pin: PinterestCreatedPin) => (
             <a

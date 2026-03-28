@@ -20,6 +20,7 @@ interface GitHubHeatmapProps {
 export default function GitHubHeatmap({ username }: GitHubHeatmapProps) {
   const calRef = useRef<any>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+  const wrapperRef = useRef<HTMLDivElement>(null)
   const [loading, setLoading] = useState(true)
   const [total, setTotal] = useState<number | null>(null)
   const [contributions, setContributions] = useState<Array<any>>([])
@@ -29,19 +30,31 @@ export default function GitHubHeatmap({ username }: GitHubHeatmapProps) {
   })
 
   useEffect(() => {
-    const updateResponsive = () => {
-      const width = window.innerWidth
+    const wrapper = wrapperRef.current
+    if (!wrapper) return
+
+    const updateResponsive = (width: number) => {
       let newSettings
-      if (width < 414) {
-        newSettings = { range: 3, cellSize: 20 }
+      if (width < 300) {
+        newSettings = { range: 3, cellSize: 18 }
+      } else if (width < 380) {
+        newSettings = { range: 4, cellSize: 16 }
       } else if (width < 480) {
-        newSettings = { range: 4, cellSize: 18 }
-      } else if (width < 640) {
-        newSettings = { range: 6, cellSize: 14 }
-      } else if (width < 850) {
-        newSettings = { range: 10, cellSize: 10.8 }
+        newSettings = { range: 5, cellSize: 14 }
+      } else if (width < 600) {
+        newSettings = { range: 8, cellSize: 12 }
+      } else if (width < 750) {
+        newSettings = { range: 11, cellSize: 11 }
+      } else if (width < 900) {
+        newSettings = { range: 12, cellSize: 12 }
+      } else if (width < 1024) {
+        newSettings = { range: 16, cellSize: 14 }
+      } else if (width < 1400) {
+        newSettings = { range: 14, cellSize: 16 }
+      } else if (width < 1800) {
+        newSettings = { range: 16, cellSize: 18 }
       } else {
-        newSettings = { range: 12, cellSize: 8.8 }
+        newSettings = { range: 20, cellSize: 20 }
       }
 
       setResponsive((prev) =>
@@ -52,9 +65,16 @@ export default function GitHubHeatmap({ username }: GitHubHeatmapProps) {
       )
     }
 
-    window.addEventListener('resize', updateResponsive)
-    updateResponsive()
-    return () => window.removeEventListener('resize', updateResponsive)
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0]
+      if (entry) {
+        updateResponsive(entry.contentRect.width)
+      }
+    })
+
+    observer.observe(wrapper)
+    updateResponsive(wrapper.clientWidth)
+    return () => observer.disconnect()
   }, [])
 
   useEffect(() => {
@@ -195,7 +215,10 @@ export default function GitHubHeatmap({ username }: GitHubHeatmapProps) {
   }
 
   return (
-    <div className="flex flex-col gap-4 w-full p-1 shadow-inner group transition-all">
+    <div
+      ref={wrapperRef}
+      className="flex flex-col gap-4 w-full max-w-370 mx-auto p-1 shadow-inner group transition-all"
+    >
       <div className="flex justify-between items-end mb-1">
         <div className="flex flex-col gap-1">
           <h3 className="text-xs font-black uppercase tracking-[0.3em] text-primary italic">
@@ -248,6 +271,9 @@ export default function GitHubHeatmap({ username }: GitHubHeatmapProps) {
           <span className="opacity-60">More</span>
         </div>
       </div>
+      <p className="text-xs italic text-muted-foreground">
+        click the graph to view my full github readme.
+      </p>
     </div>
   )
 }

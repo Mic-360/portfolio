@@ -123,7 +123,7 @@ function CertificateDetail() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="flex flex-col gap-8"
+      className="flex flex-col gap-8 max-w-4xl mx-auto w-full"
     >
       {/* Faded banner image */}
       {certificate.image_url && (

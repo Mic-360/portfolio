@@ -34,7 +34,7 @@ function RssIcon() {
 
 export default function Footer() {
   return (
-    <footer className="relative mx-auto w-full max-w-2xl p-4 text-sm text-primary">
+    <footer className="relative mx-auto w-full max-w-640 px-4 sm:px-6 lg:px-16 xl:px-24 2xl:px-32 py-4 text-sm text-primary">
       {/* Animus-style Separator */}
       <div className="animus-divider mb-6">
         <span className="diamond" />
