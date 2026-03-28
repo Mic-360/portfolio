@@ -15,8 +15,11 @@ import {
   Instagram,
   Linkedin,
   Map,
+  Moon,
+  MoonStar,
   Pen,
   Rss,
+  Sun,
   Twitter,
   User,
 } from 'lucide-react'
@@ -33,6 +36,7 @@ import {
   CommandShortcut,
 } from '@/components/ui/command'
 import { siteInfo, socialLinks } from '@/config/site-data'
+import { useTheme } from '@/components/ThemeProvider'
 import type { BlogMeta, CertificateMeta, ProjectMeta } from '@/lib/content'
 import {
   getBlogIndex,
@@ -43,6 +47,7 @@ import {
 export function CommandMenu() {
   const [open, setOpen] = React.useState(false)
   const navigate = useNavigate()
+  const { setMode } = useTheme()
   const [blogs, setBlogs] = React.useState<Array<BlogMeta>>([])
   const [projects, setProjects] = React.useState<Array<ProjectMeta>>([])
   const [certificates, setCertificates] = React.useState<
@@ -227,6 +232,24 @@ export function CommandMenu() {
             <Calendar />
             <span>book a call</span>
             <CommandShortcut>↗</CommandShortcut>
+          </CommandItem>
+        </CommandGroup>
+
+        <CommandSeparator />
+
+        {/* ── Theme ── */}
+        <CommandGroup heading="Theme">
+          <CommandItem onSelect={() => { setMode('normal'); setOpen(false) }}>
+            <Moon />
+            <span>default</span>
+          </CommandItem>
+          <CommandItem onSelect={() => { setMode('sunny'); setOpen(false) }}>
+            <Sun />
+            <span>sunny</span>
+          </CommandItem>
+          <CommandItem onSelect={() => { setMode('midnight'); setOpen(false) }}>
+            <MoonStar />
+            <span>midnight</span>
           </CommandItem>
         </CommandGroup>
 
