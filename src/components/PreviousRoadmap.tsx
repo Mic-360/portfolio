@@ -281,13 +281,13 @@ export function PreviousRoadmap() {
           <div
             className="w-full h-full"
             style={{
-              transform: 'rotateX(52deg) rotateY(-6deg)',
+              transform: 'rotateX(62deg) rotateY(-2deg)',
               transformStyle: 'preserve-3d',
-              transformOrigin: '50% 85%',
+              transformOrigin: '60% 95%',
             }}
           >
             {/* Start flag */}
-            <div className="absolute bottom-[14%] left-[1%] z-10 flex items-center gap-1.5">
+            <div className="absolute bottom-[14%] left-[6%] z-10 flex items-center gap-1.5">
               <div className="w-2.5 h-2.5 rounded-full bg-primary/50 animate-pulse" />
               <span className="text-[7px] font-mono font-black uppercase tracking-[0.4em] text-primary">
                 start
@@ -309,7 +309,7 @@ export function PreviousRoadmap() {
             </div>
 
             <TrackSVG
-              viewBox="0 0 1000 260"
+              viewBox="0 0 1000 280"
               path={DESKTOP_PATH}
               checkpoints={DESKTOP_CPS}
               activeCheckpoint={activeCheckpoint}
