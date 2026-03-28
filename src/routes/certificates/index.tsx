@@ -137,6 +137,8 @@ function CertificatesIndex() {
                 <img
                   src={cert.image_url}
                   alt={cert.title}
+                  referrerPolicy="no-referrer"
+                  crossOrigin="anonymous"
                   className="absolute inset-0 w-full h-full object-center opacity-80 group-hover:opacity-90 transition-opacity duration-700 scale-110"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-background/90 via-background/50 to-transparent" />

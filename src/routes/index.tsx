@@ -334,7 +334,10 @@ function App() {
         </div>
       </motion.section>
 
-      <motion.div variants={item} className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <motion.div
+        variants={item}
+        className="grid grid-cols-1 lg:grid-cols-2 gap-8"
+      >
         <Section title="current">
           <motion.p whileHover={{ x: 3 }}>
             {siteInfo.currentRole} at{' '}
@@ -411,12 +414,12 @@ function App() {
 
       <motion.div variants={item}>
         <Section title="">
-            <Link
-              to="/readme"
-              className="block overflow-hidden transition-all hover:border-primary/50"
-            >
-              <GitHubHeatmap username="Mic-360" />
-            </Link>
+          <Link
+            to="/readme"
+            className="block overflow-hidden transition-all hover:border-primary/50"
+          >
+            <GitHubHeatmap username="Mic-360" />
+          </Link>
         </Section>
       </motion.div>
 
@@ -456,6 +459,16 @@ function App() {
               </Link>
             ))}
           </div>
+          <p className="text-xs italic text-muted-foreground">
+            curated list of sarcasm —{' '}
+            <Link
+              to="/blog"
+              className="underline decoration-primary underline-offset-4 hover:text-primary"
+            >
+              see all blogs
+            </Link>
+            .
+          </p>
         </Section>
       </motion.div>
 
@@ -510,6 +523,16 @@ function App() {
               </Link>
             ))}
           </div>
+          <p className="text-xs italic text-muted-foreground">
+            more detailed blogs and less sarcasm —{' '}
+            <Link
+              to="/projects"
+              className="underline decoration-primary underline-offset-4 hover:text-primary"
+            >
+              see all projects
+            </Link>
+            .
+          </p>
         </Section>
       </motion.div>
 
@@ -528,6 +551,8 @@ function App() {
                     <img
                       src={cert.image_url}
                       alt={cert.title}
+                      referrerPolicy="no-referrer"
+                      crossOrigin="anonymous"
                       className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-70 transition-opacity duration-700 scale-110"
                     />
                     <div className="absolute inset-0 bg-linear-to-t from-background via-background/70 to-background/30" />
@@ -559,6 +584,16 @@ function App() {
               </Link>
             ))}
           </div>
+          <p className="text-xs italic text-muted-foreground">
+            an opinionated set of —{' '}
+            <Link
+              to="/certificates"
+              className="underline decoration-primary underline-offset-4 hover:text-primary"
+            >
+              see all certificates
+            </Link>
+            .
+          </p>
         </Section>
       </motion.div>
 
@@ -717,7 +752,6 @@ function App() {
           </div>
         </Section>
       </motion.div>
-
 
       <motion.div variants={item} className="max-w-3xl mx-auto w-full">
         <Section title="contact">

@@ -134,6 +134,8 @@ function CertificateDetail() {
           <img
             src={certificate.image_url}
             alt={certificate.title}
+            referrerPolicy="no-referrer"
+            crossOrigin="anonymous"
             className="absolute inset-0 w-full h-full object-center opacity-80 scale-105"
           />
           <div className="absolute inset-0 bg-linear-to-b from-transparent via-background/60 to-background" />

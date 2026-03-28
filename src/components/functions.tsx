@@ -1,4 +1,3 @@
-import { Link } from '@tanstack/react-router'
 import { motion } from 'motion/react'
 import { Award, ImagesIcon } from 'lucide-react'
 import CurrentIcon from '@/components/ui/current-icon'
@@ -24,35 +23,20 @@ function Section({
     >
       <h2 className="font-semibold italic text-2xl underline underline-offset-2 decoration-primary flex items-center">
         {title === 'blogs' ? (
-          <p className="flex items-baseline justify-between w-full gap-2">
-            <span>
-              <PenIcon size={20} className="inline-block mr-2" />
-              {title}
-            </span>
-            <Link to="/blog" className="text-xs pr-2">
-              view all
-            </Link>
-          </p>
+          <span>
+            <PenIcon size={20} className="inline-block mr-2" />
+            {title}
+          </span>
         ) : title === 'projects' ? (
-          <p className="flex items-baseline justify-between w-full gap-2">
-            <span>
-              <LayersIcon size={24} className="inline-block mr-2" />
-              {title}
-            </span>
-            <Link to="/projects" className="text-xs pr-2">
-              view all
-            </Link>
-          </p>
+          <span>
+            <LayersIcon size={24} className="inline-block mr-2" />
+            {title}
+          </span>
         ) : title === 'certificates' ? (
-          <p className="flex items-baseline justify-between w-full gap-2">
-            <span>
-              <Award size={20} className="inline-block mr-2" />
-              {title}
-            </span>
-            <Link to="/certificates" className="text-xs pr-2">
-              view all
-            </Link>
-          </p>
+          <span>
+            <Award size={20} className="inline-block mr-2" />
+            {title}
+          </span>
         ) : title === 'current' ? (
           <>
             <CurrentIcon size={24} className="inline-block mr-2" />
