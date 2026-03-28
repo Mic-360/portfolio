@@ -53,7 +53,7 @@ export function FloatingNavDock() {
       rel: 'me',
     },
     {
-      title: mode,
+      title: mode.charAt(0).toUpperCase() + mode.slice(1),
       icon: themeIcons[mode],
       onClick: cycleTheme,
     },
