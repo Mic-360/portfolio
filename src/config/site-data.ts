@@ -45,7 +45,7 @@ export const siteImages = {
   profilePhoto: '/profile.png',
   banner: '/space-shooter.png',
   bannerAnimated: '/space-shooter.gif',
-  icon: '/icon.png',
+  icon: '/icon.svg',
   appleTouchIcon: '/apple-touch-icon.png',
   favicon: '/favicon.ico',
 }
