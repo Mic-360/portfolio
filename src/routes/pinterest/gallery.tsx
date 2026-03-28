@@ -121,7 +121,7 @@ function PinterestGalleryPage() {
             </p>
           </div>
           <img
-            src="/frieren/frieren-chill.svg"
+            src="/frieren/frieren-tea.svg"
             className="h-14 sm:h-20 inline-block align-bottom"
           />
         </div>
