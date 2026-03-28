@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { KeyboardHint } from '@/components/CommandMenu'
 import { Section, StatCard } from '@/components/functions'
 import GitHubHeatmap from '@/components/GitHubHeatmap'
+import { PreviousRoadmap } from '@/components/PreviousRoadmap'
 import GravatarAvatar from '@/components/gravatar/GravatarAvatar'
 import GravatarProfileCard from '@/components/gravatar/GravatarProfileCard'
 import CalendarIcon from '@/components/ui/calendar-icon'
@@ -15,7 +16,6 @@ import {
   contactLinks,
   gravatar,
   pinterest,
-  previousRoles,
   siteImages,
   siteInfo,
   siteMeta,
@@ -375,40 +375,7 @@ function App() {
         </Section>
 
         <Section title="previous">
-          <div className="flex flex-col gap-2">
-            {previousRoles.map((role) => (
-              <motion.div
-                key={role.company}
-                whileHover={{ x: 5 }}
-                className="group/role flex flex-wrap justify-between gap-2"
-              >
-                <div className="flex flex-wrap gap-2 items-center">
-                  <a
-                    href={role.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline decoration-primary underline-offset-4"
-                  >
-                    {role.icon && (
-                      <img
-                        src={role.icon}
-                        alt={role.company}
-                        width={24}
-                        height={24}
-                        loading="lazy"
-                        className="inline-block w-6 h-6 mr-1 mb-0.5 rounded-md object-cover transition-all duration-500 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] group-hover/role:scale-[1.5] group-hover/role:-translate-y-1 group-hover/role:rotate-[-12deg] group-hover/role:drop-shadow-[0_0_6px_var(--primary)]"
-                      />
-                    )}
-                    {role.company}
-                  </a>
-                  <span className="text-primary">~</span>
-                  <span>{role.role}</span>
-                  <span className="text-primary">[{role.location}]</span>
-                </div>
-                <span>[{role.duration}]</span>
-              </motion.div>
-            ))}
-          </div>
+          <PreviousRoadmap />
         </Section>
       </motion.div>
 
