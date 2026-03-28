@@ -96,6 +96,74 @@
   --shadow-2xl: 0 1px 3px 0px rgb(0 0 0 / 0.25);
 }
 
+[data-theme='sunny'] {
+  --background: #faf5eb;
+  --foreground: #2d2417;
+  --card: #f5edd6;
+  --card-foreground: #3d3024;
+  --popover: #f5edd6;
+  --popover-foreground: #3d3024;
+  --primary: #6b8f3c;
+  --primary-foreground: #fdfcf7;
+  --secondary: #e8dcc0;
+  --secondary-foreground: #6b5637;
+  --muted: #e2d4b0;
+  --muted-foreground: #7a6340;
+  --accent: #dccfa3;
+  --accent-foreground: #2c2420;
+  --destructive: #c0392b;
+  --border: #d4c4a0;
+  --input: #d4c4a0;
+  --ring: #6b8f3c;
+  --chart-1: #c0392b;
+  --chart-2: #6b8f3c;
+  --chart-3: #2c6e6f;
+  --chart-4: #c9a84c;
+  --chart-5: #8b6f47;
+  --sidebar: #f0e6cf;
+  --sidebar-foreground: #2d2417;
+  --sidebar-primary: #2c2420;
+  --sidebar-primary-foreground: #fdfcf7;
+  --sidebar-accent: #e2d4b0;
+  --sidebar-accent-foreground: #2c2420;
+  --sidebar-border: #d4c4a0;
+  --sidebar-ring: #6b8f3c;
+}
+
+[data-theme='midnight'] {
+  --background: #0a0a0f;
+  --foreground: #ccc8be;
+  --card: #111116;
+  --card-foreground: #ccc8be;
+  --popover: #111116;
+  --popover-foreground: #ccc8be;
+  --primary: #8fb374;
+  --primary-foreground: #f0efe8;
+  --secondary: #1a1a22;
+  --secondary-foreground: #a8a49a;
+  --muted: #151518;
+  --muted-foreground: #75726a;
+  --accent: #1a1a22;
+  --accent-foreground: #bbb8ae;
+  --destructive: #c0392b;
+  --border: #222228;
+  --input: #222228;
+  --ring: #8fb374;
+  --chart-1: #c0392b;
+  --chart-2: #8fb374;
+  --chart-3: #2c6e6f;
+  --chart-4: #c9a84c;
+  --chart-5: #8b6f47;
+  --sidebar: #0c0c12;
+  --sidebar-foreground: #ccc8be;
+  --sidebar-primary: #8fb374;
+  --sidebar-primary-foreground: #f0efe8;
+  --sidebar-accent: #1a1a22;
+  --sidebar-accent-foreground: #bbb8ae;
+  --sidebar-border: #222228;
+  --sidebar-ring: #8fb374;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -409,6 +477,32 @@ body::-webkit-scrollbar-thumb {
   height: 100%;
   background: linear-gradient(90deg, transparent, var(--primary), transparent);
   animation: animus-sync 3s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════════════
+   Social Icons — Theme-aware invert
+   ═══════════════════════════════════════════════════════ */
+
+[data-theme='dark'] .social-icon,
+[data-theme='midnight'] .social-icon {
+  filter: invert(1);
+}
+
+[data-theme='sunny'] .social-icon {
+  filter: invert(0);
+}
+
+/* // noise grains */
+body::after {
+  content: '';
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.2;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 @layer base {

@@ -1,18 +1,31 @@
 import {
   IconArticle,
-  IconBox,
   IconBrandGithub,
   IconFileText,
   IconFolder,
   IconHome,
   IconMessage,
+  IconMoon,
+  IconMoonStars,
+  IconSunHigh,
   IconUser,
 } from '@tabler/icons-react'
+import type { DockItem } from '@/components/ui/floating-dock'
+import type { ThemeMode } from '@/components/ThemeProvider'
 import { FloatingDock } from '@/components/ui/floating-dock'
 import { siteInfo } from '@/config/site-data'
+import { useTheme } from '@/components/ThemeProvider'
+
+const themeIcons: Record<ThemeMode, React.ReactNode> = {
+  normal: <IconMoon className="h-full w-full text-foreground" />,
+  sunny: <IconSunHigh className="h-full w-full text-foreground" />,
+  midnight: <IconMoonStars className="h-full w-full text-foreground" />,
+}
 
 export function FloatingNavDock() {
-  const items = [
+  const { mode, cycleTheme } = useTheme()
+
+  const items: Array<DockItem> = [
     {
       title: 'Home',
       icon: <IconHome className="h-full w-full text-primary" />,
@@ -40,10 +53,9 @@ export function FloatingNavDock() {
       rel: 'me',
     },
     {
-      title: 'Bento',
-      icon: <IconBox className="h-full w-full text-foreground" />,
-      href: '/bento',
-      rel: 'me',
+      title: mode,
+      icon: themeIcons[mode],
+      onClick: cycleTheme,
     },
     {
       title: 'About',

@@ -37,7 +37,7 @@ export default function GravatarSocialLinks({
             width={iconSize}
             height={iconSize}
             loading="lazy"
-            className="opacity-70 hover:opacity-100 transition-opacity invert dark:invert-0"
+            className="opacity-70 hover:opacity-100 transition-opacity social-icon"
           />
         </a>
       ))}

@@ -13,6 +13,9 @@ import { useKonamiCode } from '../hooks/useKonamiCode'
 import { CommandMenu } from '../components/CommandMenu'
 import { FloatingNavDock } from '../components/FloatingNavDock'
 import Footer from '../components/Footer'
+import { ThemeProvider } from '../components/ThemeProvider'
+import { VideoBackground } from '../components/VideoBackground'
+import { ThemeSwitcher } from '../components/ThemeSwitcher'
 import { gravatar, siteImages, siteInfo, siteMeta } from '../config/site-data'
 
 import appCss from '../styles.css?url'
@@ -505,26 +508,30 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         />
       </head>
       <body className="bg-background text-foreground antialiased">
-        <FeedbackHandler />
-        <CommandMenu />
-        <main className="mx-auto w-full max-w-2xl p-4 text-sm lowercase">
-          {children}
-        </main>
-        <Footer />
-        <div className="h-20" />
-        <FloatingNavDock />
-        <DoomErrorBoundary onError={() => setShowDoom(false)}>
-          <Suspense fallback={null}>
-            <AnimatePresence>
-              {showDoom && (
-                <DoomEasterEgg
-                  key="doom"
-                  onClose={() => setShowDoom(false)}
-                />
-              )}
-            </AnimatePresence>
-          </Suspense>
-        </DoomErrorBoundary>
+        <ThemeProvider>
+          <VideoBackground />
+          <FeedbackHandler />
+          <CommandMenu />
+          <main className="mx-auto w-full max-w-2xl p-4 text-sm lowercase">
+            {children}
+          </main>
+          <Footer />
+          <div className="h-20" />
+          <FloatingNavDock />
+          <ThemeSwitcher />
+          <DoomErrorBoundary onError={() => setShowDoom(false)}>
+            <Suspense fallback={null}>
+              <AnimatePresence>
+                {showDoom && (
+                  <DoomEasterEgg
+                    key="doom"
+                    onClose={() => setShowDoom(false)}
+                  />
+                )}
+              </AnimatePresence>
+            </Suspense>
+          </DoomErrorBoundary>
+        </ThemeProvider>
         <Scripts />
       </body>
     </html>

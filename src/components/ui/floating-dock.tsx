@@ -18,17 +18,20 @@ import { useRef, useState } from 'react'
 import type { MotionValue } from 'motion/react'
 import { cn } from '@/lib/utils'
 
+export type DockItem = {
+  title: string
+  icon: React.ReactNode
+  href?: string
+  rel?: string
+  onClick?: () => void
+}
+
 export const FloatingDock = ({
   items,
   desktopClassName,
   mobileClassName,
 }: {
-  items: Array<{
-    title: string
-    icon: React.ReactNode
-    href: string
-    rel?: string
-  }>
+  items: Array<DockItem>
   desktopClassName?: string
   mobileClassName?: string
 }) => {
@@ -44,12 +47,7 @@ const FloatingDockMobile = ({
   items,
   className,
 }: {
-  items: Array<{
-    title: string
-    icon: React.ReactNode
-    href: string
-    rel?: string
-  }>
+  items: Array<DockItem>
   className?: string
 }) => {
   const [open, setOpen] = useState(false)
@@ -78,14 +76,22 @@ const FloatingDockMobile = ({
                 }}
                 transition={{ delay: (items.length - 1 - idx) * 0.05 }}
               >
-                <a
-                  href={item.href}
-                  rel={item.rel}
-                  key={item.title}
-                  className="flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-md border border-border"
-                >
-                  <div className="h-4 w-4">{item.icon}</div>
-                </a>
+                {item.onClick ? (
+                  <button
+                    onClick={item.onClick}
+                    className="flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-md border border-border"
+                  >
+                    <div className="h-4 w-4">{item.icon}</div>
+                  </button>
+                ) : (
+                  <a
+                    href={item.href}
+                    rel={item.rel}
+                    className="flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-md border border-border"
+                  >
+                    <div className="h-4 w-4">{item.icon}</div>
+                  </a>
+                )}
               </motion.div>
             ))}
           </motion.div>
@@ -105,12 +111,7 @@ const FloatingDockDesktop = ({
   items,
   className,
 }: {
-  items: Array<{
-    title: string
-    icon: React.ReactNode
-    href: string
-    rel?: string
-  }>
+  items: Array<DockItem>
   className?: string
 }) => {
   const mouseX = useMotionValue(Infinity)
@@ -136,12 +137,14 @@ function IconContainer({
   icon,
   href,
   rel,
+  onClick,
 }: {
   mouseX: MotionValue
   title: string
   icon: React.ReactNode
-  href: string
+  href?: string
   rel?: string
+  onClick?: () => void
 }) {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -189,34 +192,46 @@ function IconContainer({
 
   const [hovered, setHovered] = useState(false)
 
+  const content = (
+    <motion.div
+      ref={ref}
+      style={{ width, height }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="relative flex aspect-square items-center justify-center rounded-full"
+    >
+      <AnimatePresence>
+        {hovered && (
+          <motion.div
+            initial={{ opacity: 0, y: 10, x: '-50%' }}
+            animate={{ opacity: 1, y: 0, x: '-50%' }}
+            exit={{ opacity: 0, y: 2, x: '-50%' }}
+            className="absolute -top-8 left-1/2 w-fit rounded-md border border-border bg-popover px-2 py-0.5 text-xs whitespace-pre text-popover-foreground"
+          >
+            {title}
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <motion.div
+        style={{ width: widthIcon, height: heightIcon }}
+        className="flex items-center justify-center"
+      >
+        {icon}
+      </motion.div>
+    </motion.div>
+  )
+
+  if (onClick) {
+    return (
+      <button onClick={onClick} className="backdrop-blur-md p-1 rounded-full border border-border cursor-pointer">
+        {content}
+      </button>
+    )
+  }
+
   return (
     <a href={href} rel={rel} className="backdrop-blur-md p-1 rounded-full border border-border">
-      <motion.div
-        ref={ref}
-        style={{ width, height }}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        className="relative flex aspect-square items-center justify-center rounded-full"
-      >
-        <AnimatePresence>
-          {hovered && (
-            <motion.div
-              initial={{ opacity: 0, y: 10, x: '-50%' }}
-              animate={{ opacity: 1, y: 0, x: '-50%' }}
-              exit={{ opacity: 0, y: 2, x: '-50%' }}
-              className="absolute -top-8 left-1/2 w-fit rounded-md border border-border bg-popover px-2 py-0.5 text-xs whitespace-pre text-popover-foreground"
-            >
-              {title}
-            </motion.div>
-          )}
-        </AnimatePresence>
-        <motion.div
-          style={{ width: widthIcon, height: heightIcon }}
-          className="flex items-center justify-center"
-        >
-          {icon}
-        </motion.div>
-      </motion.div>
+      {content}
     </a>
   )
 }

@@ -200,9 +200,9 @@ function App() {
             href="https://x.com/bhaumicsingh"
             target="_blank"
             rel="noopener noreferrer me"
-            className="group block h-full overflow-hidden border border-border/40 bg-black normal-case"
+            className="group block h-full overflow-hidden border border-border/40 bg-card normal-case"
           >
-            <div className="h-30 w-full overflow-hidden border-b border-white/10">
+            <div className="h-30 w-full overflow-hidden border-b border-border/20">
               <img
                 src={siteImages.banner}
                 alt="Twitter banner preview"
@@ -213,26 +213,26 @@ function App() {
               <img
                 src={siteImages.profilePhoto}
                 alt={`${siteInfo.name} profile photo`}
-                className="-mt-12 h-20 w-20 rounded-full border-4 border-black object-cover shadow-lg"
+                className="-mt-12 h-20 w-20 rounded-full border-4 border-card object-cover shadow-lg"
               />
               <div className="mt-2 flex items-start justify-between gap-3">
                 <div>
                   <div className="flex items-center gap-2">
-                    <p className="text-lg font-bold text-white transition-colors group-hover:text-primary">
+                    <p className="text-lg font-bold text-foreground transition-colors group-hover:text-primary">
                       {siteInfo.name}
                     </p>
                   </div>
-                  <p className="text-xs text-white/70">@bhaumicsingh</p>
+                  <p className="text-xs text-muted-foreground">@bhaumicsingh</p>
                 </div>
                 <span className="rounded-full border border-primary/40 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">
                   follow
                 </span>
               </div>
-              <p className="mt-2 text-xs italic text-white/80">
+              <p className="mt-2 text-xs italic text-foreground/80">
                 A developer who loves to build.
               </p>
 
-              <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-white/65">
+              <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
                 <span>{siteInfo.location}</span>
                 <span aria-hidden="true">•</span>
                 <span>
@@ -245,12 +245,12 @@ function App() {
                 <span>Joined December 2016</span>
               </div>
 
-              <div className="mt-2 flex items-center gap-4 text-xs text-white/75">
+              <div className="mt-2 flex items-center gap-4 text-xs text-foreground/75">
                 <p>
-                  <span className="font-bold text-white">71</span> Following
+                  <span className="font-bold text-foreground">71</span> Following
                 </p>
                 <p>
-                  <span className="font-bold text-white">16</span> Followers
+                  <span className="font-bold text-foreground">16</span> Followers
                 </p>
               </div>
             </div>

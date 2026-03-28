@@ -128,7 +128,7 @@ function Sparkline({
     .join(' ')
 
   return (
-    <div className="relative overflow-hidden bg-black/40 border border-primary/20 rounded-xs group-hover:border-primary/40 transition-colors">
+    <div className="relative overflow-hidden bg-foreground/10 border border-primary/20 rounded-xs group-hover:border-primary/40 transition-colors">
       {/* Grid Pattern */}
       <div
         className="absolute inset-0 z-0 opacity-10 pointer-events-none"
@@ -260,7 +260,7 @@ function StatCard({
             {label}
           </span>
           <div className="flex items-baseline gap-1.5">
-            <span className="text-2xl font-black italic tracking-tighter tabular-nums drop-shadow-[0_0_5px_rgba(122,154,101,0.2)]">
+            <span className="text-2xl font-black italic tracking-tighter tabular-nums drop-shadow-[0_0_5px_var(--primary)]">
               {format(mainValue)}
             </span>
             <span className="text-[10px] uppercase font-mono tracking-tight text-muted-foreground">
