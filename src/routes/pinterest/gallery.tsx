@@ -94,7 +94,7 @@ function PinterestGalleryPage() {
           <div className="flex flex-col gap-1">
             <h1 className="text-3xl font-bold tracking-tight bg-linear-to-r from-foreground to-foreground/70 bg-clip-text text-transparent italic">
               <ImageIcon size={22} className="inline-block mr-3 text-primary" />
-              pinterest gallery
+              pinterest
             </h1>
             <div className="h-0.5 w-16 bg-primary rounded-full" />
           </div>
@@ -130,7 +130,7 @@ function PinterestGalleryPage() {
       {pins.length > 0 ? (
         <motion.div
           variants={item}
-          className="columns-1 sm:columns-2 lg:columns-3 gap-4"
+          className="columns-2 lg:columns-3 gap-4"
         >
           {pins.map((pin: PinterestCreatedPin) => (
             <a
