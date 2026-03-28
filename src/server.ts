@@ -10,6 +10,11 @@ export default {
       req = new Request(url.toString(), req)
     }
 
+    if (pathname === '/sitemap.xml') {
+      url.pathname = '/sitemap/xml'
+      req = new Request(url.toString(), req)
+    }
+
     // 1. Domain Redirects
     if (url.hostname === 'www.bhaumicsingh.dev') {
       url.hostname = 'bhaumicsingh.dev'
