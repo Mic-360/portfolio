@@ -339,7 +339,7 @@ function App() {
         className="grid grid-cols-1 lg:grid-cols-2 gap-8"
       >
         <Section title="current">
-          <motion.p whileHover={{ x: 3 }}>
+          <motion.p whileHover={{ x: 3 }} className="group/current">
             {siteInfo.currentRole} at{' '}
             <motion.a
               whileHover={{ scale: 1.05, y: -2 }}
@@ -354,7 +354,7 @@ function App() {
                 width={24}
                 height={24}
                 loading="lazy"
-                className="inline-block w-6 h-6 mr-2 rounded-sm object-cover"
+                className="inline-block w-6 h-6 mr-2 rounded-sm object-cover transition-all duration-500 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] group-hover/current:scale-[1.4] group-hover/current:rotate-[360deg] group-hover/current:drop-shadow-[0_0_8px_var(--primary)]"
               />
               {siteInfo.currentCompany}
             </motion.a>
@@ -380,7 +380,7 @@ function App() {
               <motion.div
                 key={role.company}
                 whileHover={{ x: 5 }}
-                className="flex flex-wrap justify-between gap-2"
+                className="group/role flex flex-wrap justify-between gap-2"
               >
                 <div className="flex flex-wrap gap-2 items-center">
                   <a
@@ -396,7 +396,7 @@ function App() {
                         width={24}
                         height={24}
                         loading="lazy"
-                        className="inline-block w-6 h-6 mr-1 mb-0.5 rounded-md object-cover"
+                        className="inline-block w-6 h-6 mr-1 mb-0.5 rounded-md object-cover transition-all duration-500 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] group-hover/role:scale-[1.5] group-hover/role:-translate-y-1 group-hover/role:rotate-[-12deg] group-hover/role:drop-shadow-[0_0_6px_var(--primary)]"
                       />
                     )}
                     {role.company}
@@ -687,7 +687,7 @@ function App() {
                         loading="lazy"
                         width={pin.imageWidth}
                         height={pin.imageHeight}
-                        className="w-full h-36 sm:h-40 object-cover transition-transform duration-500 group-hover:scale-[1.03] grayscale group-hover:grayscale-0 opacity-80 group-hover:opacity-100"
+                        className="w-full h-36 sm:h-40 object-center transition-transform duration-500 group-hover:scale-[1.03] grayscale group-hover:grayscale-0 opacity-80 group-hover:opacity-100"
                       />
                       <div className="p-2.5">
                         <p className="text-[10px] italic line-clamp-2 group-hover:text-primary transition-colors">
@@ -725,7 +725,7 @@ function App() {
         </Section>
       </motion.div>
 
-      <motion.div variants={item} className="max-w-4xl mx-auto w-full">
+      <motion.div variants={item} className="max-w-370 mx-auto w-full">
         <Section title="">
           {/* Card stack on smaller screens */}
           <div className="xl:hidden">
@@ -742,7 +742,7 @@ function App() {
             {socialCards.map((card) => (
               <div
                 key={card.id}
-                className="animus-corner h-88 overflow-hidden shadow-xl backdrop-blur-xs"
+                className="animus-corner h-full overflow-hidden shadow-xl backdrop-blur-xs"
               >
                 <div className="h-full text-sm text-foreground/90">
                   {card.content}

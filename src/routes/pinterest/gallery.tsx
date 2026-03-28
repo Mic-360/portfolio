@@ -140,7 +140,7 @@ function PinterestGalleryPage() {
               rel="noopener noreferrer"
               className="group block mb-4 break-inside-avoid"
             >
-              <article className="animus-corner animus-scanlines rounded-lg border border-border/40 bg-card/20 hover:border-primary/50 transition-all duration-400 overflow-hidden">
+              <article className="animus-corner animus-scanlines border border-border/40 bg-card/20 hover:border-primary/50 transition-all duration-400 overflow-hidden">
                 <img
                   src={pin.imageUrl}
                   alt={pin.title}
