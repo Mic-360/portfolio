@@ -67,9 +67,7 @@ export default function GitHubHeatmap({ username }: GitHubHeatmapProps) {
 
     const observer = new ResizeObserver((entries) => {
       const entry = entries[0]
-      if (entry) {
-        updateResponsive(entry.contentRect.width)
-      }
+      updateResponsive(entry.contentRect.width)
     })
 
     observer.observe(wrapper)
@@ -79,15 +77,33 @@ export default function GitHubHeatmap({ username }: GitHubHeatmapProps) {
 
   useEffect(() => {
     setLoading(true)
-    fetch(`https://github-contributions-api.deno.dev/${username}.json`)
-      .then((res) => res.json())
-      .then((data) => {
-        setTotal(data.totalContributions)
-        const flattenedData = data.contributions.flat().map((d: any) => ({
-          date: d.date,
-          value: d.contributionCount,
-        }))
-        setContributions(flattenedData)
+    const currentYear = new Date().getFullYear()
+    const lastYear = currentYear - 1
+
+    const flatten = (data: any) =>
+      (data?.contributions || []).flat().map((d: any) => ({
+        date: d.date,
+        value: d.contributionCount,
+      }))
+
+    Promise.all([
+      fetch(
+        `https://github-contributions-api.deno.dev/${username}.json?y=${lastYear}`,
+      ).then((r) => r.json()),
+      fetch(
+        `https://github-contributions-api.deno.dev/${username}.json`,
+      ).then((r) => r.json()),
+    ])
+      .then(([lastYearData, recentData]) => {
+        setTotal(
+          (lastYearData?.totalContributions || 0) +
+            (recentData?.totalContributions || 0),
+        )
+        // Merge and deduplicate by date (recent data wins on overlap)
+        const map = new Map<string, { date: string; value: number }>()
+        for (const entry of flatten(lastYearData)) map.set(entry.date, entry)
+        for (const entry of flatten(recentData)) map.set(entry.date, entry)
+        setContributions(Array.from(map.values()))
         setLoading(false)
       })
       .catch((err) => {
@@ -106,10 +122,6 @@ export default function GitHubHeatmap({ username }: GitHubHeatmapProps) {
       } catch (e) {
         console.warn('Error destroying CalHeatmap:', e)
       }
-    }
-
-    if (containerRef.current) {
-      containerRef.current.innerHTML = ''
     }
 
     const cal = new CalHeatmap()
