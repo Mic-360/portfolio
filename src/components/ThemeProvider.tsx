@@ -9,20 +9,18 @@ import type { ReactNode } from 'react'
 
 export type ThemeMode = 'normal' | 'sunny' | 'midnight'
 
-const CYCLE_ORDER: ThemeMode[] = ['normal', 'sunny', 'midnight']
+const CYCLE_ORDER: Array<ThemeMode> = ['normal', 'sunny', 'midnight']
 
 interface ThemeContextType {
   mode: ThemeMode
   setMode: (mode: ThemeMode) => void
   cycleTheme: () => void
-  isTransitioning: boolean
 }
 
 const ThemeContext = createContext<ThemeContextType>({
   mode: 'normal',
   setMode: () => {},
   cycleTheme: () => {},
-  isTransitioning: false,
 })
 
 export const useTheme = () => useContext(ThemeContext)
@@ -46,7 +44,6 @@ function applyThemeAttributes(newMode: ThemeMode) {
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [mode, setModeState] = useState<ThemeMode>('normal')
-  const [isTransitioning, setIsTransitioning] = useState(false)
 
   useEffect(() => {
     const stored = localStorage.getItem('theme-mode') as ThemeMode | null
@@ -58,16 +55,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   const setMode = useCallback(
     (newMode: ThemeMode) => {
-      if (newMode === mode || isTransitioning) return
-      setIsTransitioning(true)
+      if (newMode === mode) return
       setModeState(newMode)
       localStorage.setItem('theme-mode', newMode)
-
-      // Apply theme after overlay covers screen
-      setTimeout(() => applyThemeAttributes(newMode), 450)
-      setTimeout(() => setIsTransitioning(false), 900)
+      applyThemeAttributes(newMode)
     },
-    [mode, isTransitioning],
+    [mode],
   )
 
   const cycleTheme = useCallback(() => {
@@ -77,9 +70,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, [mode, setMode])
 
   return (
-    <ThemeContext.Provider
-      value={{ mode, setMode, cycleTheme, isTransitioning }}
-    >
+    <ThemeContext.Provider value={{ mode, setMode, cycleTheme }}>
       {children}
     </ThemeContext.Provider>
   )

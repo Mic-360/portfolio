@@ -15,7 +15,6 @@ import { FloatingNavDock } from '../components/FloatingNavDock'
 import Footer from '../components/Footer'
 import { ThemeProvider } from '../components/ThemeProvider'
 import { VideoBackground } from '../components/VideoBackground'
-import { ThemeSwitcher } from '../components/ThemeSwitcher'
 import { gravatar, siteImages, siteInfo, siteMeta } from '../config/site-data'
 
 import appCss from '../styles.css?url'
@@ -518,7 +517,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           <Footer />
           <div className="h-20" />
           <FloatingNavDock />
-          <ThemeSwitcher />
           <DoomErrorBoundary onError={() => setShowDoom(false)}>
             <Suspense fallback={null}>
               <AnimatePresence>
