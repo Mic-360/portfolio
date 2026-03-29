@@ -1,5 +1,5 @@
-import { motion } from 'motion/react'
 import { Link, createFileRoute } from '@tanstack/react-router'
+import { motion } from 'motion/react'
 import PenIcon from '@/components/ui/pen-icon'
 import { siteMeta } from '@/config/site-data'
 import { getBlogIndex } from '@/lib/content'
@@ -67,8 +67,18 @@ export const Route = createFileRoute('/blog/')({
             '@context': 'https://schema.org',
             '@type': 'BreadcrumbList',
             itemListElement: [
-              { '@type': 'ListItem', position: 1, name: 'Home', item: siteMeta.baseUrl },
-              { '@type': 'ListItem', position: 2, name: 'Blog', item: canonicalUrl },
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: siteMeta.baseUrl,
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Blog',
+                item: canonicalUrl,
+              },
             ],
           }),
         },
@@ -80,6 +90,10 @@ export const Route = createFileRoute('/blog/')({
 
 function BlogIndex() {
   const { posts } = Route.useLoaderData()
+  const leadPost = posts.at(0)
+  const archiveTags = Array.from(
+    new Set(posts.flatMap((post) => [...post.categories, ...post.tags])),
+  ).slice(0, 4)
 
   const container = {
     hidden: { opacity: 0 },
@@ -92,8 +106,8 @@ function BlogIndex() {
   }
 
   const item = {
-    hidden: { opacity: 0, y: 10 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+    hidden: { opacity: 0, y: 14 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.45 } },
   }
 
   return (
@@ -101,88 +115,234 @@ function BlogIndex() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="flex flex-col gap-8"
+      className="flex flex-col gap-14"
     >
-      <motion.header variants={item} className="flex flex-col gap-4 mb-2">
-        <div className="flex items-center justify-between">
-          <div className="flex flex-col gap-1">
-            <h1 className="text-3xl font-bold tracking-tight bg-linear-to-r from-foreground to-foreground/70 bg-clip-text text-transparent italic">
-              <PenIcon size={24} className="inline-block mr-3 text-primary" />
-              blog
-            </h1>
-            <div className="h-0.5 w-12 bg-primary rounded-full" />
+      <motion.header
+        variants={item}
+        className="relative overflow-hidden border-b border-border/20 pb-12"
+      >
+        <div className="pointer-events-none absolute inset-x-[18%] top-[8%] h-28 rounded-full bg-primary/14 blur-3xl" />
+        <div className="pointer-events-none absolute right-[6%] top-[10%] h-72 w-72 rounded-full bg-primary/8 blur-[120px]" />
+
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <span className="text-primary">
+              <PenIcon size={22} />
+            </span>
+            <span className="text-lg uppercase tracking-[0.28em] text-primary/75">
+              writing index
+            </span>
           </div>
           <Link
             to="/"
-            className="animus-corner group px-4 py-1 inline-flex items-center gap-2 italic text-muted-foreground hover:text-primary transition-all duration-500"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
           >
-            <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
-              ←
-            </span>
-            back
+            <span>←</span>
+            home
           </Link>
         </div>
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:items-end">
+          <div className="flex flex-col gap-7 pt-6 lg:pt-10">
+            <div className="grid gap-4">
+              <h1 className="max-w-3xl font-serif text-5xl leading-none text-foreground sm:text-6xl xl:text-7xl">
+                Build notes that read like the same world as the work.
+              </h1>
+              <p className="max-w-xl text-base leading-8 text-foreground/76 sm:text-lg">
+                Essays, postmortems, and sharp notes from web, Android, AI, and
+                systems builds. Which stays clean, readable, and a little
+                more cinematic than a plain list of posts.
+              </p>
+            </div>
 
-        <div className="flex flex-row-reverse gap-4 items-center justify-between">
+            <div className="grid gap-5 border-t border-border/25 pt-5 sm:grid-cols-2">
+              <div className="space-y-1">
+                <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                  essays logged
+                </p>
+                <p className="text-2xl font-serif text-foreground">
+                  {posts.length.toString().padStart(2, '0')}
+                </p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                  main threads
+                </p>
+                <p className="text-sm leading-7 text-foreground/76">
+                  {archiveTags.length > 0
+                    ? archiveTags.join(' · ')
+                    : 'engineering · design · notes · systems'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="relative min-h-[320px] lg:min-h-[500px]">
+            <img
+              src={leadPost?.image || `/og/blog/${leadPost?.slug || 'index'}`}
+              alt={leadPost?.title || 'Writing archive'}
+              className="hero-blend-media media-hover-image media-hover-fade absolute inset-y-[7%] right-0 h-[86%] w-[94%] object-contain"
+            />
+            <div className="hero-grid-overlay absolute inset-y-[10%] right-[4%] w-[82%]" />
+            <div className="pointer-events-none absolute inset-y-[14%] right-[12%] w-[38%] border-l border-primary/18" />
+
+            <div className="absolute inset-x-0 top-0 flex items-center justify-between gap-4 text-[10px] uppercase tracking-[0.28em] text-foreground/48">
+              <span>latest essay</span>
+              <span>{leadPost ? formatDate(leadPost.date) : 'archive'}</span>
+            </div>
+
+            {leadPost ? (
+              <div className="absolute inset-x-0 bottom-[4%] flex max-w-[86%] flex-col gap-2">
+                <p className="text-[10px] uppercase tracking-[0.28em] text-primary/75">
+                  lead note
+                </p>
+                <h2 className="font-serif text-3xl leading-tight text-foreground sm:text-4xl">
+                  {leadPost.title}
+                </h2>
+                <p className="max-w-xl text-sm leading-7 text-foreground/72">
+                  {leadPost.summary}
+                </p>
+              </div>
+            ) : null}
+          </div>
+        </div>
+      </motion.header>
+
+      <div className="divide-y divide-border/20">
+        {posts.map((post, index) => {
+          const postVisual = post.image || `/og/blog/${post.slug}`
+          const reverse = index % 2 === 1
+          const lane = [...post.categories, ...post.tags].slice(0, 4)
+
+          return (
+            <motion.div
+              key={post.slug}
+              variants={item}
+              className="py-10 first:pt-0 md:py-14"
+            >
+              <Link
+                to="/blog/$slug"
+                params={{ slug: post.slug }}
+                className="group block"
+              >
+                <article className="relative min-h-[320px]">
+                  <div
+                    className={`media-hover-parent absolute inset-y-0 ${
+                      reverse
+                        ? 'left-0 right-[12%] md:right-[34%]'
+                        : 'left-[12%] right-0 md:left-[34%]'
+                    }`}
+                  >
+                    <img
+                      src={postVisual}
+                      alt={post.title}
+                      className="project-ambient-media media-hover-image media-hover-fade media-hover-desaturate absolute inset-0 h-full w-full object-contain"
+                    />
+                    <div
+                      className={`absolute inset-0 ${
+                        reverse
+                          ? 'project-ambient-overlay bg-linear-to-r from-transparent via-background/38 to-background'
+                          : 'project-ambient-overlay bg-linear-to-l from-transparent via-background/38 to-background'
+                      }`}
+                    />
+                    <div className="absolute inset-0 bg-linear-to-t from-background via-background/10 to-transparent" />
+                  </div>
+
+                  <div className="relative z-10 grid gap-8 lg:min-h-[320px] lg:grid-cols-12 lg:items-center">
+                    <div
+                      className={`flex flex-col gap-5 ${
+                        reverse
+                          ? 'lg:col-start-7 lg:col-span-6 lg:text-right'
+                          : 'lg:col-span-6'
+                      }`}
+                    >
+                      <div className="flex items-end gap-4">
+                        {!reverse ? (
+                          <span className="font-serif text-[3.5rem] leading-none text-foreground/9 sm:text-[5rem]">
+                            {(index + 1).toString().padStart(2, '0')}
+                          </span>
+                        ) : null}
+                        <div
+                          className={`space-y-3 ${reverse ? 'ml-auto' : ''}`}
+                        >
+                          <p className="text-[10px] uppercase tracking-[0.26em] text-primary/75">
+                            essay
+                          </p>
+                          <div className="space-y-2">
+                            <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                              {formatDate(post.date)}
+                            </p>
+                            <h2 className="font-serif text-3xl leading-tight text-foreground transition-colors group-hover:text-primary sm:text-4xl">
+                              {post.title}
+                            </h2>
+                          </div>
+                        </div>
+                        {reverse ? (
+                          <span className="font-serif text-[3.5rem] leading-none text-foreground/9 sm:text-[5rem]">
+                            {(index + 1).toString().padStart(2, '0')}
+                          </span>
+                        ) : null}
+                      </div>
+
+                      <p className="max-w-2xl text-base leading-8 text-foreground/76">
+                        {post.summary}
+                      </p>
+
+                      <div
+                        className={`grid gap-4 border-t border-border/20 pt-4 text-sm leading-7 text-foreground/72 sm:grid-cols-2 ${
+                          reverse ? 'lg:text-right' : ''
+                        }`}
+                      >
+                        <div className="space-y-1">
+                          <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+                            archive lane
+                          </p>
+                          <p>
+                            {post.categories.length > 0
+                              ? post.categories.join(' · ')
+                              : 'notes'}
+                          </p>
+                        </div>
+                        <div className="space-y-1">
+                          <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+                            topics
+                          </p>
+                          <p>
+                            {lane.length > 0 ? lane.join(' · ') : 'build log'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              </Link>
+            </motion.div>
+          )
+        })}
+      </div>
+
+      <motion.footer
+        variants={item}
+        className="flex flex-col gap-4 border-t border-border/20 pt-6 sm:flex-row sm:items-end sm:justify-between"
+      >
+        <div className="flex gap-6 items-end">
           <img
             src="/frieren/frieren-teach.svg"
             className="h-16 sm:h-22 inline-block align-bottom"
           />
-          <p className="text-muted-foreground leading-relaxed">
-            short, practical notes on building web and android apps, tools,
-            systems, and experiments.
+          <p className="max-w-2xl text-sm leading-7 text-muted-foreground">
+            Every entry opens into a fuller reading view with the same
+            atmosphere, quieter metadata, and cleaner long-form rhythm as the
+            rest of the site.
           </p>
-        </div>
-      </motion.header>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-        {posts.map((post) => (
-          <motion.div key={post.slug} variants={item}>
-            <Link
-              to="/blog/$slug"
-              params={{ slug: post.slug }}
-              className="ac-game-card animus-scanlines group flex flex-col gap-2 p-4 rounded-lg transition-all"
-            >
-              <div className="flex items-center gap-3">
-                <div className="ac-game-era bg-primary" />
-                <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
-                  {formatDate(post.date)}
-                </span>
-              </div>
-
-              <h2 className="text-xl font-bold uppercase tracking-wider text-primary group-hover:text-foreground transition-colors duration-300">
-                {post.title}
-              </h2>
-
-              <p className="text-sm text-muted-foreground/80 group-hover:text-foreground/90 transition-colors leading-relaxed">
-                {post.summary}
-              </p>
-
-              {(post.categories.length > 0 || post.tags.length > 0) && (
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {[...post.categories, ...post.tags].map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-[9px] uppercase tracking-[0.2em] px-2 py-0.5 rounded-sm border border-primary/20 bg-primary/5 text-primary/70 group-hover:border-primary/40 group-hover:bg-primary/10 transition-all"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </Link>
-          </motion.div>
-        ))}
-      </div>
-      <Link
-        to="/"
-        className="group inline-flex items-center gap-1 italic text-muted-foreground hover:text-primary transition-colors duration-300 mb-2"
-      >
-        <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
-          ←
-        </span>
-        back
-      </Link>
+        </div>{' '}
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
+        >
+          <span>←</span>
+          back home
+        </Link>
+      </motion.footer>
     </motion.section>
   )
 }
