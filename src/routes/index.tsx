@@ -317,20 +317,20 @@ function App() {
                   className="h-18 w-18 border border-white/10 shadow-2xl"
                 />
               </a>
-              <div className="min-w-0">
-                <p className="text-[10px] uppercase tracking-[0.28em] text-foreground/55">
+              <div className="min-w-0 text-foreground">
+                <p className="text-[10px] uppercase tracking-[0.28em]">
                   currently building
                 </p>
                 <a
                   href={siteInfo.currentCompanyUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-2 block text-xl font-semibold leading-tight text-foreground transition-colors hover:text-primary sm:text-2xl"
+                  className="mt-2 block text-xl font-semibold leading-tight transition-colors hover:text-primary sm:text-2xl"
                 >
                   {siteInfo.currentRole}
-                  <span className="block text-base font-normal text-foreground/70 sm:inline sm:pl-2">
+                  <div className="block text-base font-normal sm:inline sm:pl-2">
                     at {siteInfo.currentCompany}
-                  </span>
+                  </div>
                 </a>
               </div>
             </div>
