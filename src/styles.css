@@ -462,16 +462,17 @@ body::-webkit-scrollbar-thumb {
    ═══════════════════════════════════════════════════════ */
 
 .social-icon {
+  --image-effect-filter: invert(0);
   transition: filter 0.5s ease;
 }
 
 [data-theme='dark'] .social-icon,
 [data-theme='midnight'] .social-icon {
-  filter: invert(1);
+  --image-effect-filter: invert(1);
 }
 
 [data-theme='sunny'] .social-icon {
-  filter: invert(0);
+  --image-effect-filter: invert(0);
 }
 
 /*  Noise grains */
@@ -495,6 +496,11 @@ body::after {
   will-change: transform, filter, opacity;
 }
 
+:where(img:not([data-backlight='off'])) {
+  --image-effect-filter: brightness(1);
+  filter: var(--image-effect-filter) url(#global-image-backlight);
+}
+
 .hero-blend-media {
   mask-image: radial-gradient(circle at 62% 48%, rgb(0 0 0 / 1) 0%, rgb(0 0 0 / 0.96) 42%, rgb(0 0 0 / 0.48) 72%, transparent 100%);
   -webkit-mask-image: radial-gradient(circle at 62% 48%, rgb(0 0 0 / 1) 0%, rgb(0 0 0 / 0.96) 42%, rgb(0 0 0 / 0.48) 72%, transparent 100%);
@@ -511,6 +517,7 @@ body::after {
 }
 
 @media (hover: hover) and (pointer: fine) {
+
   .animus-corner:hover::before,
   .animus-corner:hover::after {
     opacity: 1;
@@ -539,20 +546,20 @@ body::after {
   }
 
   .media-hover-desaturate {
-    filter: grayscale(1);
+    --image-effect-filter: grayscale(1);
   }
 
-.media-hover-fade {
-  opacity: 0.82;
-}
+  .media-hover-fade {
+    opacity: 0.82;
+  }
 
-.project-ambient-media {
-  transform-origin: center center;
-}
+  .project-ambient-media {
+    transform-origin: center center;
+  }
 
   .media-hover-parent:hover .media-hover-desaturate,
   .media-hover-parent:focus-visible .media-hover-desaturate {
-    filter: grayscale(0);
+    --image-effect-filter: grayscale(0);
   }
 
   .media-hover-parent:hover .media-hover-fade,
@@ -561,13 +568,14 @@ body::after {
   }
 }
 
-@media (hover: none), (pointer: coarse) {
+@media (hover: none),
+(pointer: coarse) {
   .media-hover-image {
     transform: none !important;
   }
 
   .media-hover-desaturate {
-    filter: none !important;
+    --image-effect-filter: grayscale(0) !important;
   }
 
   .media-hover-fade {
@@ -575,7 +583,7 @@ body::after {
   }
 
   .project-ambient-media {
-    filter: saturate(0.75) brightness(0.48) contrast(0.96) !important;
+    --image-effect-filter: saturate(0.75) brightness(0.48) contrast(0.96) !important;
     opacity: 0.48 !important;
   }
 
@@ -589,6 +597,7 @@ body::after {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -607,13 +616,13 @@ body::after {
   /* Smooth theme transitions */
   :root {
     transition: --background 0.5s ease,
-                --foreground 0.5s ease,
-                --card 0.5s ease,
-                --primary 0.5s ease,
-                --border 0.5s ease,
-                --muted 0.5s ease,
-                --accent 0.5s ease,
-                --secondary 0.5s ease;
+      --foreground 0.5s ease,
+      --card 0.5s ease,
+      --primary 0.5s ease,
+      --border 0.5s ease,
+      --muted 0.5s ease,
+      --accent 0.5s ease,
+      --secondary 0.5s ease;
   }
 
   body,

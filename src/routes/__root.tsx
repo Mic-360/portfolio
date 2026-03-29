@@ -14,6 +14,7 @@ import { CommandMenu } from '../components/CommandMenu'
 import { FloatingNavDock } from '../components/FloatingNavDock'
 import Footer from '../components/Footer'
 import { ThemeProvider } from '../components/ThemeProvider'
+import { BacklightFilterDefs } from '../components/ui/backlight'
 import { VideoBackground } from '../components/VideoBackground'
 import { gravatar, siteImages, siteInfo, siteMeta } from '../config/site-data'
 
@@ -408,11 +409,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 function NotFound() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-4 text-center">
-      <img
-        src='/frieren/404-frieren.svg'
-        alt='404'
-        className='h-64 w-64'
-      />
+      <img src="/frieren/404-frieren.svg" alt="404" className="h-64 w-64" />
       <h1 className="text-6xl font-bold">404</h1>
       <p className="text-xl text-muted-foreground">page not found</p>
       <Link
@@ -507,6 +504,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         />
       </head>
       <body className="bg-background text-foreground antialiased">
+        <BacklightFilterDefs />
         <ThemeProvider>
           <VideoBackground />
           <FeedbackHandler />

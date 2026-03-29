@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
-import { motion } from 'motion/react'
 import { previousRoles } from '@/config/site-data'
+import { motion } from 'motion/react'
+import { useEffect, useState } from 'react'
 
 const MOBILE_PATH =
   'M150,580 C150,520 40,490 40,430 C40,370 260,330 260,270 C260,210 40,170 40,110 C40,60 150,30 150,20'
@@ -50,10 +50,11 @@ function RoleLabel({
           width={40}
           height={40}
           loading="lazy"
+          data-backlight='off'
           className={`w-9 h-9 lg:w-10 lg:h-10 shrink-0 rounded-full border-2 object-cover transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
             active
               ? 'border-primary scale-110 drop-shadow-[0_0_12px_var(--primary)]'
-              : 'border-primary/40 group-hover/role:scale-[1.3] group-hover/role:rotate-[360deg] group-hover/role:border-primary group-hover/role:drop-shadow-[0_0_10px_var(--primary)]'
+              : 'border-primary/40 group-hover/role:scale-[1.3] group-hover/role:rotate-360 group-hover/role:border-primary group-hover/role:drop-shadow-[0_0_10px_var(--primary)]'
           }`}
         />
       )}
@@ -274,10 +275,7 @@ export function PreviousRoadmap() {
         ))}
 
         {/* 3D perspective container */}
-        <div
-          className="absolute inset-0"
-          style={{ perspective: '900px' }}
-        >
+        <div className="absolute inset-0" style={{ perspective: '900px' }}>
           <div
             className="w-full h-full"
             style={{

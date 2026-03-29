@@ -2,8 +2,6 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 
-import type { HealthSample } from '@/lib/health'
-import type { PinterestCreatedPin } from '@/lib/pinterest'
 import type { BlogMeta, CertificateMeta, ProjectMeta } from '@/lib/content'
 import {
   getBlogIndex,
@@ -13,7 +11,9 @@ import {
 import { formatDate } from '@/lib/format'
 import { hashEmail } from '@/lib/gravatar'
 import { getGravatarProfile } from '@/lib/gravatar-profile'
+import type { HealthSample } from '@/lib/health'
 import { getHealthData } from '@/lib/health'
+import type { PinterestCreatedPin } from '@/lib/pinterest'
 import { getPinterestCreatedPins } from '@/lib/pinterest'
 
 import { KeyboardHint } from '@/components/CommandMenu'
@@ -362,6 +362,7 @@ function App() {
                 width={24}
                 height={24}
                 loading="lazy"
+                data-backlight="off"
                 className="inline-block w-6 h-6 mr-2 rounded-sm object-cover transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover/current:scale-[1.4] group-hover/current:rotate-360 group-hover/current:drop-shadow-[0_0_8px_var(--primary)]"
               />
               {siteInfo.currentCompany}
@@ -749,7 +750,7 @@ function App() {
                   </p>
                 </div>
 
-                <div className="grid gap-4 border-t border-border/25 pt-5 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center">
+                <div className="grid gap-4 border-t border-border/25 pt-5 pl-6 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center">
                   <a
                     href={gravatar.profileUrl}
                     target="_blank"
