@@ -1,9 +1,10 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { ImageIcon } from 'lucide-react'
 import { motion } from 'motion/react'
+
 import type { PinterestCreatedPin } from '@/lib/pinterest'
-import { getPinterestCreatedPins } from '@/lib/pinterest'
 import { pinterest, siteMeta } from '@/config/site-data'
+import { getPinterestCreatedPins } from '@/lib/pinterest'
 
 export const Route = createFileRoute('/pinterest/gallery')({
   loader: async () => {
@@ -78,8 +79,24 @@ function PinterestGalleryPage() {
   }
 
   const item = {
-    hidden: { opacity: 0, y: 10 },
+    hidden: { opacity: 0, y: 12 },
     show: { opacity: 1, y: 0, transition: { duration: 0.35 } },
+  }
+
+  function buildDownloadUrl(pin: PinterestCreatedPin) {
+    const safeBaseName = pin.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 80) || `pinterest-pin-${pin.id}`
+
+    const params = new URLSearchParams({
+      image: pin.originalImageUrl,
+      fallback: pin.imageUrl,
+      name: safeBaseName,
+    })
+
+    return `/api/pinterest/download?${params.toString()}`
   }
 
   return (
@@ -87,97 +104,101 @@ function PinterestGalleryPage() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="flex flex-col gap-8"
+      className="flex flex-col gap-14"
     >
-      <motion.header variants={item} className="flex flex-col gap-4 mb-2">
-        <div className="flex items-center justify-between">
-          <div className="flex flex-col gap-1">
-            <h1 className="text-3xl font-bold tracking-tight bg-linear-to-r from-foreground to-foreground/70 bg-clip-text text-transparent italic">
-              <ImageIcon size={22} className="inline-block mr-3 text-primary" />
-              pinterest
-            </h1>
-            <div className="h-0.5 w-16 bg-primary rounded-full" />
-          </div>
-          <Link
-            to="/"
-            className="animus-corner group px-4 py-1 inline-flex items-center gap-2 italic text-muted-foreground hover:text-primary transition-all duration-500"
-          >
-            <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
-              ←
-            </span>
-            back
-          </Link>
-        </div>
+      <motion.header
+        variants={item}
+        className="relative overflow-hidden border-b border-border/20"
+      >
 
-        <div className="flex gap-4 items-center justify-between">
-          <div className="flex flex-col gap-2">
-            <p className="text-muted-foreground leading-relaxed">
-              auto-fetched from my pinterest{' '}
-              <span className="text-primary">created</span> section (not saved
-              boards).
-            </p>
-            <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/80">
-              showing {pins.length} created pin{pins.length === 1 ? '' : 's'}
-            </p>
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <span className="text-primary">
+              <ImageIcon size={22} />
+            </span>
+            <span className="text-lg uppercase tracking-[0.28em] text-primary/75">
+              pinterest gallery
+            </span>
           </div>
-          <img
-            src="/frieren/frieren-tea.svg"
-            className="h-14 sm:h-20 inline-block align-bottom"
-          />
+          <div className="flex items-center gap-4">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
+            >
+              <span>←</span>
+              home
+            </Link>
+          </div>
         </div>
       </motion.header>
 
       {pins.length > 0 ? (
         <motion.div
           variants={item}
-          className="columns-2 lg:columns-3 xl:columns-4 2xl:columns-5 gap-4"
+          className="columns-2 gap-4 lg:columns-3 xl:columns-4 2xl:columns-5"
         >
-          {pins.map((pin: PinterestCreatedPin) => (
-            <a
+          {pins.map((pin: PinterestCreatedPin, index) => (
+            <div
               key={pin.id}
-              href={pin.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group block mb-4 break-inside-avoid"
+              className={`group mb-4 block break-inside-avoid ${
+                index % 5 === 1
+                  ? 'translate-y-2'
+                  : index % 5 === 3
+                    ? '-translate-y-2'
+                    : ''
+              }`}
             >
-              <article className="animus-corner animus-scanlines border border-border/40 bg-card/20 hover:border-primary/50 transition-all duration-400 overflow-hidden">
-                <img
-                  src={pin.imageUrl}
-                  alt={pin.title}
-                  loading="lazy"
-                  width={pin.imageWidth}
-                  height={pin.imageHeight}
-                  className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                />
-                <div className="p-3 flex flex-col gap-1">
-                  <h2 className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">
-                    {pin.title}
-                  </h2>
-                  {pin.description ? (
-                    <p className="text-[10px] text-muted-foreground/80 line-clamp-2">
-                      {pin.description}
-                    </p>
-                  ) : null}
+              <article className="overflow-hidden rounded border border-border/25 bg-card/20 transition-all duration-300 hover:border-primary/35">
+                <a
+                  href={pin.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block"
+                >
+                  <img
+                    src={pin.imageUrl}
+                    alt={pin.title}
+                    loading="lazy"
+                    width={pin.imageWidth}
+                    height={pin.imageHeight}
+                    className="h-auto w-full object-cover transition-transform duration-500 group-hover:scale-[1.025]"
+                  />
+                </a>
+                <div className="flex items-center justify-between gap-3 border-t border-border/20 px-3 py-2">
+                  <a
+                    href={pin.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground transition-colors hover:text-primary"
+                  >
+                    open pin
+                  </a>
+                  <a
+                    href={buildDownloadUrl(pin)}
+                    className="text-[10px] uppercase tracking-[0.2em] text-primary transition-colors hover:text-primary/80"
+                  >
+                    download
+                  </a>
                 </div>
               </article>
-            </a>
+            </div>
           ))}
         </motion.div>
       ) : (
         <motion.div
           variants={item}
-          className="rounded-lg border border-border/40 p-6 bg-card/10"
+          className="rounded-[1.6rem] border border-border/25 bg-card/16 p-6"
         >
           <p className="text-muted-foreground">
-            couldn&apos;t load created pins right now. you can still check them
+            Couldn&apos;t load created pins right now. You can still check them
             on{' '}
             <a
               href={pinterest.createdUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="underline decoration-primary underline-offset-4 hover:text-primary transition-colors"
+              className="text-primary underline underline-offset-4 transition-colors hover:text-primary/80"
             >
-              pinterest
+              Pinterest
             </a>
             .
           </p>
@@ -186,31 +207,18 @@ function PinterestGalleryPage() {
 
       <motion.footer
         variants={item}
-        className="flex flex-row-reverse items-center justify-between gap-1 text-[10px] text-muted-foreground"
+        className="flex flex-col gap-3 border-t border-border/20 pt-6 text-[10px] uppercase tracking-[0.24em] text-muted-foreground sm:flex-row sm:items-center sm:justify-between"
       >
-        <span>
-          source profile:{' '}
-          <a
-            href={profileUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline decoration-primary underline-offset-4 hover:text-primary transition-colors"
-          >
-            {profileUrl}
-          </a>
-        </span>
         <span>last sync: {lastSyncLabel}</span>
+        <a
+          href={profileUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="transition-colors hover:text-primary"
+        >
+          {profileUrl.replace('https://', '')}
+        </a>
       </motion.footer>
-
-      <Link
-        to="/"
-        className="group inline-flex items-center gap-1 italic text-muted-foreground hover:text-primary transition-colors duration-300 mb-2"
-      >
-        <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
-          ←
-        </span>
-        back
-      </Link>
     </motion.section>
   )
 }
