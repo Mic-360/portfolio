@@ -90,7 +90,6 @@ export const Route = createFileRoute('/blog/')({
 
 function BlogIndex() {
   const { posts } = Route.useLoaderData()
-  const leadPost = posts.at(0)
   const archiveTags = Array.from(
     new Set(posts.flatMap((post) => [...post.categories, ...post.tags])),
   ).slice(0, 4)
@@ -141,68 +140,37 @@ function BlogIndex() {
             home
           </Link>
         </div>
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:items-end">
-          <div className="flex flex-col gap-7 pt-6 lg:pt-10">
-            <div className="grid gap-4">
-              <h1 className="max-w-3xl font-serif text-5xl leading-none text-foreground sm:text-6xl xl:text-7xl">
-                Build notes that read like the same world as the work.
-              </h1>
-              <p className="max-w-xl text-base leading-8 text-foreground/76 sm:text-lg">
-                Essays, postmortems, and sharp notes from web, Android, AI, and
-                systems builds. Which stays clean, readable, and a little
-                more cinematic than a plain list of posts.
-              </p>
-            </div>
-
-            <div className="grid gap-5 border-t border-border/25 pt-5 sm:grid-cols-2">
-              <div className="space-y-1">
-                <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
-                  essays logged
-                </p>
-                <p className="text-2xl font-serif text-foreground">
-                  {posts.length.toString().padStart(2, '0')}
-                </p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
-                  main threads
-                </p>
-                <p className="text-sm leading-7 text-foreground/76">
-                  {archiveTags.length > 0
-                    ? archiveTags.join(' · ')
-                    : 'engineering · design · notes · systems'}
-                </p>
-              </div>
-            </div>
+        <div className="flex flex-col gap-7 pt-6 lg:pt-10">
+          <div className="grid gap-4">
+            <h1 className="font-serif text-5xl leading-none text-foreground sm:text-6xl xl:text-7xl">
+              Build notes that read like the same world as the work.
+            </h1>
+            <p className="max-w-4xl text-base leading-8 text-foreground/76 sm:text-lg">
+              Essays, postmortems, and sharp notes from web, Android, AI, and
+              systems builds. A quieter archive that stays clean, readable, and
+              a little more cinematic than a plain list of posts.
+            </p>
           </div>
 
-          <div className="relative min-h-[320px] lg:min-h-[500px]">
-            <img
-              src={leadPost?.image || `/og/blog/${leadPost?.slug || 'index'}`}
-              alt={leadPost?.title || 'Writing archive'}
-              className="hero-blend-media media-hover-image media-hover-fade absolute inset-y-[7%] right-0 h-[86%] w-[94%] object-contain"
-            />
-            <div className="hero-grid-overlay absolute inset-y-[10%] right-[4%] w-[82%]" />
-            <div className="pointer-events-none absolute inset-y-[14%] right-[12%] w-[38%] border-l border-primary/18" />
-
-            <div className="absolute inset-x-0 top-0 flex items-center justify-between gap-4 text-[10px] uppercase tracking-[0.28em] text-foreground/48">
-              <span>latest essay</span>
-              <span>{leadPost ? formatDate(leadPost.date) : 'archive'}</span>
+          <div className="grid gap-5 border-t border-border/25 pt-5 sm:grid-cols-2">
+            <div className="space-y-1">
+              <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                essays logged
+              </p>
+              <p className="text-2xl font-serif text-foreground">
+                {posts.length.toString().padStart(2, '0')}
+              </p>
             </div>
-
-            {leadPost ? (
-              <div className="absolute inset-x-0 bottom-[4%] flex max-w-[86%] flex-col gap-2">
-                <p className="text-[10px] uppercase tracking-[0.28em] text-primary/75">
-                  lead note
-                </p>
-                <h2 className="font-serif text-3xl leading-tight text-foreground sm:text-4xl">
-                  {leadPost.title}
-                </h2>
-                <p className="max-w-xl text-sm leading-7 text-foreground/72">
-                  {leadPost.summary}
-                </p>
-              </div>
-            ) : null}
+            <div className="space-y-1">
+              <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                main threads
+              </p>
+              <p className="text-sm leading-7 text-foreground/76">
+                {archiveTags.length > 0
+                  ? archiveTags.join(' · ')
+                  : 'engineering · design · notes · systems'}
+              </p>
+            </div>
           </div>
         </div>
       </motion.header>

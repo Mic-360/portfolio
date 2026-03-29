@@ -2,8 +2,8 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { Award } from 'lucide-react'
 import { motion } from 'motion/react'
 
-import { siteMeta } from '@/config/site-data'
 import type { CertificateMeta } from '@/lib/content'
+import { siteMeta } from '@/config/site-data'
 import { getCertificateIndex } from '@/lib/content'
 
 export const Route = createFileRoute('/certificates/')({
@@ -79,7 +79,6 @@ export const Route = createFileRoute('/certificates/')({
 
 function CertificatesIndex() {
   const { certificates } = Route.useLoaderData()
-  const leadCertificate = certificates.at(0)
   const issuers = Array.from(
     new Set(certificates.map((certificate) => certificate.issuer)),
   ).slice(0, 4)
@@ -130,75 +129,38 @@ function CertificatesIndex() {
             home
           </Link>
         </div>
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:items-end">
-          <div className="flex flex-col gap-7 pt-6 lg:pt-10">
-            <div className="grid gap-4">
-              <h1 className="max-w-3xl font-serif text-5xl leading-none text-foreground sm:text-6xl xl:text-7xl">
-                Credentials &amp; badge wall.
-              </h1>
-              <p className="max-w-xl text-base leading-8 text-foreground/76 sm:text-lg">
-                A quieter archive of certifications across platform,
-                engineering, cloud, and product work. Each credential shows
-                issuer, timing, proof, and core skills.
-              </p>
-            </div>
-
-            <div className="grid gap-5 border-t border-border/25 pt-5 sm:grid-cols-2">
-              <div className="space-y-1">
-                <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
-                  credentials logged
-                </p>
-                <p className="text-2xl font-serif text-foreground">
-                  {certificates.length.toString().padStart(2, '0')}
-                </p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
-                  issuers
-                </p>
-                <p className="text-sm leading-7 text-foreground/76">
-                  {issuers.length > 0
-                    ? issuers.join(' · ')
-                    : 'google · coursera · meta · cloud'}
-                </p>
-              </div>
-            </div>
+        <div className="flex flex-col gap-7 pt-6 lg:pt-10">
+          <div className="grid gap-4">
+            <h1 className="font-serif text-5xl leading-none text-foreground sm:text-6xl xl:text-7xl">
+              Credentials &amp; badge wall.
+            </h1>
+            <p className="max-w-4xl text-base leading-8 text-foreground/76 sm:text-lg">
+              A quieter archive of certifications across platform,
+              engineering, cloud, and product work. Each credential shows
+              issuer, timing, proof, and core skills without a featured
+              certificate taking over the header.
+            </p>
           </div>
 
-          <div className="relative min-h-[320px] lg:min-h-[500px]">
-            {leadCertificate?.image_url ? (
-              <img
-                src={leadCertificate.image_url}
-                alt={leadCertificate.title}
-                referrerPolicy="no-referrer"
-                crossOrigin="anonymous"
-                className="hero-blend-media media-hover-image media-hover-fade absolute inset-y-[7%] right-0 h-[86%] w-[94%] object-contain blur-sm"
-              />
-            ) : (
-              <div className="absolute inset-y-[10%] right-[4%] w-[88%] bg-linear-to-br from-primary/16 via-muted/6 to-transparent" />
-            )}
-            <div className="hero-grid-overlay absolute inset-y-[10%] right-[4%] w-[82%]" />
-            <div className="pointer-events-none absolute inset-y-[14%] right-[12%] w-[38%] border-l border-primary/18" />
-
-            <div className="absolute inset-x-0 top-0 flex items-center justify-between gap-4 text-[10px] uppercase tracking-[0.28em] text-foreground/60">
-              <span>lead credential</span>
-              <span>{leadCertificate?.issued || 'archive'}</span>
+          <div className="grid gap-5 border-t border-border/25 pt-5 sm:grid-cols-2">
+            <div className="space-y-1">
+              <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                credentials logged
+              </p>
+              <p className="text-2xl font-serif text-foreground">
+                {certificates.length.toString().padStart(2, '0')}
+              </p>
             </div>
-
-            {leadCertificate ? (
-              <div className="absolute inset-x-0 bottom-[4%] flex max-w-[86%] flex-col gap-2">
-                <p className="text-[10px] uppercase tracking-[0.28em] text-primary">
-                  featured record
-                </p>
-                <h2 className="font-serif text-3xl leading-tight text-primary font-bold sm:text-4xl">
-                  {leadCertificate.title}
-                </h2>
-                <p className="max-w-xl text-sm leading-7 text-foreground/85">
-                  Issued by {leadCertificate.issuer} with verification and
-                  skills attached in the full credential view.
-                </p>
-              </div>
-            ) : null}
+            <div className="space-y-1">
+              <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                issuers
+              </p>
+              <p className="text-sm leading-7 text-foreground/76">
+                {issuers.length > 0
+                  ? issuers.join(' · ')
+                  : 'google · coursera · meta · cloud'}
+              </p>
+            </div>
           </div>
         </div>
       </motion.header>

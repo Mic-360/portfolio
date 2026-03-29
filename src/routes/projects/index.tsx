@@ -89,7 +89,6 @@ export const Route = createFileRoute('/projects/')({
 
 function ProjectsIndex() {
   const { projects } = Route.useLoaderData()
-  const leadProject = projects.at(0)
   const featuredCategories = Array.from(
     new Set(projects.flatMap((project) => project.categories)),
   ).slice(0, 4)
@@ -140,74 +139,37 @@ function ProjectsIndex() {
             home
           </Link>
         </div>
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:items-end">
-          <div className="flex flex-col gap-7 pt-6 lg:pt-10">
-            <div className="grid gap-4">
-              <h1 className="max-w-3xl font-serif text-5xl leading-none text-foreground sm:text-6xl xl:text-7xl">
-                Software work shown as scenes, not guides.
-              </h1>
-              <p className="max-w-xl text-base leading-8 text-foreground/76 sm:text-lg">
-                An archive of Android, web, AI, and systems projects.
-                Each build has a cleaner UI with its own atmosphere,
-                technical footprint, and path into the full write-up.
-              </p>
-            </div>
-
-            <div className="grid gap-5 border-t border-border/25 pt-5 sm:grid-cols-2">
-              <div className="space-y-1">
-                <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
-                  selected builds
-                </p>
-                <p className="text-2xl font-serif text-foreground">
-                  {projects.length.toString().padStart(2, '0')}
-                </p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
-                  lanes
-                </p>
-                <p className="text-sm leading-7 text-foreground/76">
-                  {featuredCategories.length > 0
-                    ? featuredCategories.join(' · ')
-                    : 'android · ai · web · systems'}
-                </p>
-              </div>
-            </div>
+        <div className="flex flex-col gap-7 pt-6 lg:pt-10">
+          <div className="grid gap-4">
+            <h1 className="font-serif text-5xl leading-none text-foreground sm:text-6xl xl:text-7xl">
+              Software work shown as scenes, not guides.
+            </h1>
+            <p className="max-w-4xl text-base leading-8 text-foreground/76 sm:text-lg">
+              An archive of Android, web, AI, and systems projects. Each build
+              has its own atmosphere, technical footprint, and path into the
+              full write-up without the archive hero needing a featured frame.
+            </p>
           </div>
 
-          <div className="relative min-h-[320px] lg:min-h-[500px]">
-            {leadProject?.image ? (
-              <img
-                src={leadProject.image}
-                alt={leadProject.title}
-                className="hero-blend-media media-hover-image media-hover-fade absolute inset-y-[7%] right-0 h-[86%] w-[94%] object-contain"
-              />
-            ) : (
-              <div className="absolute inset-y-[10%] right-[4%] w-[88%] bg-linear-to-br from-primary/16 via-muted/6 to-transparent" />
-            )}
-            <div className="hero-grid-overlay absolute inset-y-[10%] right-[4%] w-[82%]" />
-            <div className="pointer-events-none absolute inset-y-[14%] right-[12%] w-[38%] border-l border-primary/18" />
-
-            <div className="absolute inset-x-0 top-0 flex items-center justify-between gap-4 text-[10px] uppercase tracking-[0.28em] text-foreground/48">
-              <span>featured frame</span>
-              <span>
-                {leadProject ? formatDate(leadProject.date) : 'archive'}
-              </span>
+          <div className="grid gap-5 border-t border-border/25 pt-5 sm:grid-cols-2">
+            <div className="space-y-1">
+              <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                selected builds
+              </p>
+              <p className="text-2xl font-serif text-foreground">
+                {projects.length.toString().padStart(2, '0')}
+              </p>
             </div>
-
-            {leadProject ? (
-              <div className="absolute inset-x-0 bottom-[4%] flex max-w-[86%] flex-col gap-2">
-                <p className="text-[10px] uppercase tracking-[0.28em] text-primary/75">
-                  lead project
-                </p>
-                <h2 className="font-serif text-3xl leading-tight text-foreground sm:text-4xl">
-                  {leadProject.title}
-                </h2>
-                <p className="max-w-xl text-sm leading-7 text-foreground/72">
-                  {leadProject.summary}
-                </p>
-              </div>
-            ) : null}
+            <div className="space-y-1">
+              <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                lanes
+              </p>
+              <p className="text-sm leading-7 text-foreground/76">
+                {featuredCategories.length > 0
+                  ? featuredCategories.join(' · ')
+                  : 'android · ai · web · systems'}
+              </p>
+            </div>
           </div>
         </div>
       </motion.header>
