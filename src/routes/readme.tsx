@@ -165,7 +165,7 @@ function ReadmePage() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="mx-auto flex w-full max-w-6xl flex-col gap-14"
+      className="mx-auto flex w-full max-w-[1500px] flex-col gap-14"
     >
       <motion.section
         variants={item}
@@ -295,7 +295,8 @@ function ReadmePage() {
                     {card.label}
                   </p>
                   <h2 className="font-serif text-3xl leading-tight text-foreground">
-                    {card.label === 'stats' && 'A quick read on activity and footprint.'}
+                    {card.label === 'stats' &&
+                      'A quick read on activity and footprint.'}
                     {card.label === 'repos per language' &&
                       'Language mix across active repositories.'}
                     {card.label === 'most commit language' &&
@@ -392,11 +393,11 @@ function ReadmePage() {
             public links
           </p>
           <h2 className="max-w-lg font-serif text-4xl leading-tight text-foreground">
-            The public-facing version of the work stays readable here too.
+            The social version of the work stays here.
           </h2>
           <p className="max-w-lg text-base leading-8 text-foreground/76">
             Follow the repositories, connect directly, or browse the rest of the
-            portfolio without leaving the same visual system.
+            portfolio.
           </p>
 
           <div className="divide-y divide-border/25">
@@ -427,10 +428,7 @@ function ReadmePage() {
         </div>
       </motion.section>
 
-      <motion.footer
-        variants={item}
-        className="border-t border-border/25 pt-6"
-      >
+      <motion.footer variants={item} className="border-t border-border/25 pt-6">
         <Link
           to="/"
           className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
