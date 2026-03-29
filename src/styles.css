@@ -38,7 +38,7 @@
   --sidebar-ring: #7a9a65;
 
   --font-sans: 'Inter', sans-serif;
-  --font-serif: 'Geist Serif', serif;
+  --font-serif: 'Playfair Display', serif;
   --font-mono: 'Fira Code', monospace;
 
   --radius: 0.625rem;
@@ -360,14 +360,6 @@ body::-webkit-scrollbar-thumb {
   border-top: none;
 }
 
-.animus-corner:hover::before,
-.animus-corner:hover::after {
-  opacity: 1;
-  width: 18px;
-  height: 18px;
-  filter: drop-shadow(0 0 4px color-mix(in oklab, var(--primary) 40%, transparent));
-}
-
 /* Animus scan line overlay — apply to containers for subtle effect */
 .animus-scanlines {
   position: relative;
@@ -388,10 +380,6 @@ body::-webkit-scrollbar-thumb {
   transition: opacity 0.4s ease;
 }
 
-.animus-scanlines:hover::after {
-  opacity: 1;
-}
-
 /* AC Game card styling */
 .ac-game-card {
   position: relative;
@@ -404,11 +392,6 @@ body::-webkit-scrollbar-thumb {
   border-radius: 0 0.25rem 0.25rem 0;
 }
 
-.ac-game-card:hover {
-  border-left-color: var(--primary);
-  background: color-mix(in oklab, var(--primary) 5%, transparent);
-}
-
 .ac-game-card .ac-game-era {
   width: 6px;
   height: 6px;
@@ -416,11 +399,6 @@ body::-webkit-scrollbar-thumb {
   flex-shrink: 0;
   opacity: 0.7;
   transition: opacity 0.3s ease;
-}
-
-.ac-game-card:hover .ac-game-era {
-  opacity: 1;
-  box-shadow: 0 0 6px currentColor;
 }
 
 /* Animus-style divider */
@@ -509,6 +487,118 @@ body::after {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+.media-hover-image {
+  transition:
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.45s ease,
+    opacity 0.45s ease;
+  will-change: transform, filter, opacity;
+}
+
+.hero-blend-media {
+  mask-image: radial-gradient(circle at 62% 48%, rgb(0 0 0 / 1) 0%, rgb(0 0 0 / 0.96) 42%, rgb(0 0 0 / 0.48) 72%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle at 62% 48%, rgb(0 0 0 / 1) 0%, rgb(0 0 0 / 0.96) 42%, rgb(0 0 0 / 0.48) 72%, transparent 100%);
+}
+
+.hero-grid-overlay {
+  opacity: 0.16;
+  background-image:
+    linear-gradient(color-mix(in oklab, var(--primary) 75%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--primary) 75%, transparent) 1px, transparent 1px);
+  background-size: 26px 26px;
+  mask-image: radial-gradient(circle at 58% 50%, rgb(0 0 0 / 1) 24%, rgb(0 0 0 / 0.8) 54%, transparent 92%);
+  -webkit-mask-image: radial-gradient(circle at 58% 50%, rgb(0 0 0 / 1) 24%, rgb(0 0 0 / 0.8) 54%, transparent 92%);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .animus-corner:hover::before,
+  .animus-corner:hover::after {
+    opacity: 1;
+    width: 18px;
+    height: 18px;
+    filter: drop-shadow(0 0 4px color-mix(in oklab, var(--primary) 40%, transparent));
+  }
+
+  .animus-scanlines:hover::after {
+    opacity: 1;
+  }
+
+  .ac-game-card:hover {
+    border-left-color: var(--primary);
+    background: color-mix(in oklab, var(--primary) 5%, transparent);
+  }
+
+  .ac-game-card:hover .ac-game-era {
+    opacity: 1;
+    box-shadow: 0 0 6px currentColor;
+  }
+
+  .media-hover-parent:hover .media-hover-image,
+  .media-hover-parent:focus-visible .media-hover-image {
+    transform: scale(1.035);
+  }
+
+  .media-hover-desaturate {
+    filter: grayscale(1);
+  }
+
+.media-hover-fade {
+  opacity: 0.82;
+}
+
+.project-ambient-media {
+  transform-origin: center center;
+}
+
+  .media-hover-parent:hover .media-hover-desaturate,
+  .media-hover-parent:focus-visible .media-hover-desaturate {
+    filter: grayscale(0);
+  }
+
+  .media-hover-parent:hover .media-hover-fade,
+  .media-hover-parent:focus-visible .media-hover-fade {
+    opacity: 1;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .media-hover-image {
+    transform: none !important;
+  }
+
+  .media-hover-desaturate {
+    filter: none !important;
+  }
+
+  .media-hover-fade {
+    opacity: 1 !important;
+  }
+
+  .project-ambient-media {
+    filter: saturate(0.75) brightness(0.48) contrast(0.96) !important;
+    opacity: 0.48 !important;
+  }
+
+  .project-ambient-overlay {
+    opacity: 1 !important;
+  }
+
+  .hero-grid-overlay {
+    opacity: 0.12;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -585,6 +675,36 @@ body::after {
   line-height: 1.8;
 }
 
+.mdx-content,
+.mdx-content > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.mdx-content iframe,
+.mdx-content video,
+.mdx-content canvas,
+.mdx-content svg,
+.mdx-content embed,
+.mdx-content object {
+  max-width: 100%;
+}
+
+.mdx-content iframe,
+.mdx-content video {
+  width: 100%;
+  height: auto;
+}
+
+.mdx-content p,
+.mdx-content li,
+.mdx-content blockquote,
+.mdx-content dd,
+.mdx-content td,
+.mdx-content th {
+  overflow-wrap: anywhere;
+}
+
 .mdx-content ul,
 .mdx-content ol {
   margin-bottom: 1.25rem;
@@ -645,6 +765,13 @@ body::after {
   border: 1px solid var(--border);
   position: relative;
   background: var(--card);
+}
+
+.mdx-content .shiki-code-block,
+.mdx-content pre,
+.mdx-content .table-wrapper,
+.mdx-content table {
+  max-width: 100%;
 }
 
 /* Code block header with language and copy button */
