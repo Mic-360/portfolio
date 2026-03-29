@@ -583,6 +583,108 @@ function App() {
         </Section>
       </motion.div>
 
+      <motion.div
+        variants={item}
+        className="grid gap-10 xl:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)]"
+      >
+        <Section title="pinterest">
+          {featuredPins.length > 0 ? (
+            <div className="flex flex-col gap-6">
+              <div className="columns-2 gap-4 sm:columns-3">
+                {featuredPins.map((pin: PinterestCreatedPin) => (
+                  <a
+                    key={pin.id}
+                    href={pin.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="media-hover-parent group mb-4 block break-inside-avoid"
+                  >
+                    <figure className="relative overflow-hidden rounded-3xl bg-muted/20">
+                      <img
+                        src={pin.imageUrl}
+                        alt={pin.title}
+                        loading="lazy"
+                        width={pin.imageWidth}
+                        height={pin.imageHeight}
+                        className="media-hover-image media-hover-desaturate media-hover-fade h-auto w-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-linear-to-t from-black/78 via-transparent to-transparent" />
+                      <figcaption className="absolute inset-x-0 bottom-0 p-3 text-[11px] leading-6 text-white/90">
+                        {pin.title}
+                      </figcaption>
+                    </figure>
+                  </a>
+                ))}
+              </div>
+              <p className="text-sm text-muted-foreground">
+                The mobile version now keeps these pins in full color by
+                default. Browse more in the{' '}
+                <Link
+                  to="/pinterest"
+                  className="text-primary underline underline-offset-4"
+                >
+                  full Pinterest gallery
+                </Link>
+                .
+              </p>
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              Couldn&apos;t load pins right now. You can still open the{' '}
+              <a
+                href={pinterest.createdUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary underline underline-offset-4"
+              >
+                Pinterest created feed
+              </a>
+              .
+            </p>
+          )}
+        </Section>
+
+        <Section title="certificates">
+          <div className="divide-y divide-border/25">
+            {featuredCertificates.map((cert: CertificateMeta) => (
+              <Link
+                key={cert.id}
+                to="/certificates/$slug"
+                params={{ slug: cert.slug }}
+                className="grid gap-3 py-4 text-sm transition-colors hover:text-primary sm:grid-cols-[minmax(0,1fr)_120px]"
+              >
+                <div className="space-y-1">
+                  <p className="text-[10px] uppercase tracking-[0.24em] text-primary/75">
+                    {cert.issuer}
+                  </p>
+                  <h3 className="text-base font-semibold leading-7 text-foreground">
+                    {cert.title}
+                  </h3>
+                  {cert.skills.length > 0 ? (
+                    <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+                      {cert.skills.slice(0, 3).join(' · ')}
+                    </p>
+                  ) : null}
+                </div>
+                <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground sm:text-right">
+                  {cert.issued}
+                </div>
+              </Link>
+            ))}
+          </div>
+          <p className="text-sm text-muted-foreground -mt-3.5">
+            A longer credential ledger lives in{' '}
+            <Link
+              to="/certificates"
+              className="text-primary underline underline-offset-4"
+            >
+              the certificates page
+            </Link>
+            .
+          </p>
+        </Section>
+      </motion.div>
+
       <motion.div variants={item}>
         <Section title="contact">
           <div className="relative overflow-hidden border-b border-border/20 pb-8">
@@ -713,108 +815,6 @@ function App() {
               </div>
             </div>
           </div>
-        </Section>
-      </motion.div>
-
-      <motion.div
-        variants={item}
-        className="grid gap-10 xl:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)]"
-      >
-        <Section title="pinterest">
-          {featuredPins.length > 0 ? (
-            <div className="flex flex-col gap-6">
-              <div className="columns-2 gap-4 sm:columns-3">
-                {featuredPins.map((pin: PinterestCreatedPin) => (
-                  <a
-                    key={pin.id}
-                    href={pin.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="media-hover-parent group mb-4 block break-inside-avoid"
-                  >
-                    <figure className="relative overflow-hidden rounded-3xl bg-muted/20">
-                      <img
-                        src={pin.imageUrl}
-                        alt={pin.title}
-                        loading="lazy"
-                        width={pin.imageWidth}
-                        height={pin.imageHeight}
-                        className="media-hover-image media-hover-desaturate media-hover-fade h-auto w-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-linear-to-t from-black/78 via-transparent to-transparent" />
-                      <figcaption className="absolute inset-x-0 bottom-0 p-3 text-[11px] leading-6 text-white/90">
-                        {pin.title}
-                      </figcaption>
-                    </figure>
-                  </a>
-                ))}
-              </div>
-              <p className="text-sm text-muted-foreground">
-                The mobile version now keeps these pins in full color by
-                default. Browse more in the{' '}
-                <Link
-                  to="/pinterest"
-                  className="text-primary underline underline-offset-4"
-                >
-                  full Pinterest gallery
-                </Link>
-                .
-              </p>
-            </div>
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              Couldn&apos;t load pins right now. You can still open the{' '}
-              <a
-                href={pinterest.createdUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary underline underline-offset-4"
-              >
-                Pinterest created feed
-              </a>
-              .
-            </p>
-          )}
-        </Section>
-
-        <Section title="certificates">
-          <div className="divide-y divide-border/25">
-            {featuredCertificates.map((cert: CertificateMeta) => (
-              <Link
-                key={cert.id}
-                to="/certificates/$slug"
-                params={{ slug: cert.slug }}
-                className="grid gap-3 py-4 text-sm transition-colors hover:text-primary sm:grid-cols-[minmax(0,1fr)_120px]"
-              >
-                <div className="space-y-1">
-                  <p className="text-[10px] uppercase tracking-[0.24em] text-primary/75">
-                    {cert.issuer}
-                  </p>
-                  <h3 className="text-base font-semibold leading-7 text-foreground">
-                    {cert.title}
-                  </h3>
-                  {cert.skills.length > 0 ? (
-                    <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-                      {cert.skills.slice(0, 3).join(' · ')}
-                    </p>
-                  ) : null}
-                </div>
-                <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground sm:text-right">
-                  {cert.issued}
-                </div>
-              </Link>
-            ))}
-          </div>
-          <p className="text-sm text-muted-foreground -mt-3.5">
-            A longer credential ledger lives in{' '}
-            <Link
-              to="/certificates"
-              className="text-primary underline underline-offset-4"
-            >
-              the certificates page
-            </Link>
-            .
-          </p>
         </Section>
       </motion.div>
 
