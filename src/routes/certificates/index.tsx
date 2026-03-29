@@ -1,9 +1,10 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
+import { Award } from 'lucide-react'
 import { motion } from 'motion/react'
+
 import type { CertificateMeta } from '@/lib/content'
 import { siteMeta } from '@/config/site-data'
 import { getCertificateIndex } from '@/lib/content'
-import { Award } from 'lucide-react'
 
 export const Route = createFileRoute('/certificates/')({
   loader: async () => ({
@@ -55,8 +56,18 @@ export const Route = createFileRoute('/certificates/')({
             '@context': 'https://schema.org',
             '@type': 'BreadcrumbList',
             itemListElement: [
-              { '@type': 'ListItem', position: 1, name: 'Home', item: siteMeta.baseUrl },
-              { '@type': 'ListItem', position: 2, name: 'Certificates', item: canonicalUrl },
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: siteMeta.baseUrl,
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Certificates',
+                item: canonicalUrl,
+              },
             ],
           }),
         },
@@ -68,108 +79,232 @@ export const Route = createFileRoute('/certificates/')({
 
 function CertificatesIndex() {
   const { certificates } = Route.useLoaderData()
+  const issuers = Array.from(
+    new Set(certificates.map((certificate) => certificate.issuer)),
+  ).slice(0, 4)
 
   const container = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.05,
+        staggerChildren: 0.08,
       },
     },
   }
 
   const item = {
-    hidden: { opacity: 0, y: 10 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+    hidden: { opacity: 0, y: 14 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.45 } },
   }
 
   return (
-    <motion.div
+    <motion.section
       variants={container}
       initial="hidden"
       animate="show"
-      className="flex flex-col gap-8"
+      className="flex flex-col gap-14"
     >
-      <header className="flex flex-col gap-4">
-        <div className="flex items-center justify-between">
-          <div className="flex flex-col gap-1">
-            <h1 className="text-3xl font-bold tracking-tight bg-linear-to-r from-foreground to-foreground/70 bg-clip-text text-transparent italic">
-              <Award size={24} className="inline-block mr-2 text-primary" />
-              certificates
-            </h1>
-            <div className="h-0.5 w-12 bg-primary rounded-full" />
+      <motion.header
+        variants={item}
+        className="relative overflow-hidden border-b border-border/20 pb-12"
+      >
+        <div className="pointer-events-none absolute inset-x-[18%] top-[8%] h-28 rounded-full bg-primary/14 blur-3xl" />
+        <div className="pointer-events-none absolute right-[6%] top-[10%] h-72 w-72 rounded-full bg-primary/8 blur-[120px]" />
+
+        <div className="flex items-center justify-between gap-4 pb-8">
+          <div className="flex items-center gap-3">
+            <span className="text-primary">
+              <Award size={22} />
+            </span>
+            <span className="text-lg uppercase tracking-[0.28em] text-primary/75">
+              credential archive
+            </span>
           </div>
           <Link
             to="/"
-            className="animus-corner group px-4 py-1 inline-flex items-center gap-2 italic text-muted-foreground hover:text-primary transition-all duration-500"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
           >
-            <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
-              ←
-            </span>
-            back
+            <span>←</span>
+            home
           </Link>
         </div>
-        <div className="flex flex-row-reverse gap-4 items-center justify-between">
+        <div className="flex flex-col gap-7 pt-6 lg:pt-10">
+          <div className="grid gap-4">
+            <h1 className="font-serif text-5xl leading-none text-foreground sm:text-6xl xl:text-7xl">
+              Credentials &amp; badge wall.
+            </h1>
+            <p className="max-w-4xl text-base leading-8 text-foreground/76 sm:text-lg">
+              A quieter archive of certifications across platform,
+              engineering, cloud, and product work. Each credential shows
+              issuer, timing, proof, and core skills without a featured
+              certificate taking over the header.
+            </p>
+          </div>
+
+          <div className="grid gap-5 border-t border-border/25 pt-5 sm:grid-cols-2">
+            <div className="space-y-1">
+              <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                credentials logged
+              </p>
+              <p className="text-2xl font-serif text-foreground">
+                {certificates.length.toString().padStart(2, '0')}
+              </p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                issuers
+              </p>
+              <p className="text-sm leading-7 text-foreground/76">
+                {issuers.length > 0
+                  ? issuers.join(' · ')
+                  : 'google · coursera · meta · cloud'}
+              </p>
+            </div>
+          </div>
+        </div>
+      </motion.header>
+
+      <div className="divide-y divide-border/20">
+        {certificates.map((certificate: CertificateMeta, index) => {
+          const reverse = index % 2 === 1
+
+          return (
+            <motion.div
+              key={certificate.id}
+              variants={item}
+              className="py-10 first:pt-0 md:py-14"
+            >
+              <Link
+                to="/certificates/$slug"
+                params={{ slug: certificate.slug }}
+                className="group block"
+              >
+                <article className="relative min-h-[320px]">
+                  <div
+                    className={`media-hover-parent absolute inset-y-0 ${
+                      reverse
+                        ? 'left-0 right-[12%] md:right-[34%]'
+                        : 'left-[12%] right-0 md:left-[34%]'
+                    }`}
+                  >
+                    {certificate.image_url ? (
+                      <img
+                        src={certificate.image_url}
+                        alt={certificate.title}
+                        referrerPolicy="no-referrer"
+                        crossOrigin="anonymous"
+                        className="project-ambient-media absolute inset-0 h-full w-full object-contain"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-linear-to-br from-primary/18 via-muted/12 to-transparent" />
+                    )}
+                    <div
+                      className={`absolute inset-0 ${
+                        reverse
+                          ? 'project-ambient-overlay bg-linear-to-r from-transparent via-background/38 to-background'
+                          : 'project-ambient-overlay bg-linear-to-l from-transparent via-background/38 to-background'
+                      }`}
+                    />
+                    <div className="absolute inset-0 bg-linear-to-t from-background via-background/10 to-transparent" />
+                  </div>
+
+                  <div className="relative z-10 grid gap-8 lg:min-h-[320px] lg:grid-cols-12 lg:items-center">
+                    <div
+                      className={`flex flex-col gap-5 ${
+                        reverse
+                          ? 'lg:col-start-7 lg:col-span-6 lg:text-right'
+                          : 'lg:col-span-6'
+                      }`}
+                    >
+                      <div className="flex items-end gap-4">
+                        {!reverse ? (
+                          <span className="font-serif text-[3.5rem] leading-none text-foreground/9 sm:text-[5rem]">
+                            {(index + 1).toString().padStart(2, '0')}
+                          </span>
+                        ) : null}
+                        <div
+                          className={`space-y-3 ${reverse ? 'ml-auto' : ''}`}
+                        >
+                          <p className="text-[10px] uppercase tracking-[0.26em] text-primary/75">
+                            credential
+                          </p>
+                          <div className="space-y-2">
+                            <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                              {certificate.issued}
+                            </p>
+                            <h2 className="font-serif text-3xl leading-tight text-foreground transition-colors group-hover:text-primary sm:text-4xl">
+                              {certificate.title}
+                            </h2>
+                          </div>
+                        </div>
+                        {reverse ? (
+                          <span className="font-serif text-[3.5rem] leading-none text-foreground/9 sm:text-[5rem]">
+                            {(index + 1).toString().padStart(2, '0')}
+                          </span>
+                        ) : null}
+                      </div>
+
+                      <p className="max-w-2xl text-base leading-8 text-foreground/76">
+                        Issued by {certificate.issuer}
+                        {certificate.expires
+                          ? ` with validity through ${certificate.expires}.`
+                          : ' with no listed expiry.'}
+                      </p>
+
+                      <div
+                        className={`grid gap-4 border-t border-border/20 pt-4 text-sm leading-7 text-foreground/72 sm:grid-cols-2 ${
+                          reverse ? 'lg:text-right' : ''
+                        }`}
+                      >
+                        <div className="space-y-1">
+                          <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+                            issuer
+                          </p>
+                          <p>{certificate.issuer}</p>
+                        </div>
+                        <div className="space-y-1">
+                          <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+                            skills
+                          </p>
+                          <p>
+                            {certificate.skills.length > 0
+                              ? certificate.skills.slice(0, 4).join(' · ')
+                              : 'credential details'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              </Link>
+            </motion.div>
+          )
+        })}
+      </div>
+
+      <motion.footer
+        variants={item}
+        className="flex flex-col gap-4 border-t border-border/20 pt-6 sm:flex-row sm:items-end sm:justify-between"
+      >
+        <div className="flex gap-6 items-end">
           <img
             src="/frieren/frienbook.svg"
             className="h-16 sm:h-22 inline-block align-bottom"
           />
-          <p className="text-muted-foreground leading-relaxed">
-            {certificates.length} professional certifications and credentials across platform like google, meta, coursera, etc.
+          <p className="max-w-2xl text-sm leading-7 text-muted-foreground">
+            Each credential opens into a clearer detail view with verification,
+            data, and the underlying skill list.
           </p>
         </div>
-      </header>
-
-      <motion.div
-        variants={item}
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
-      >
-        {certificates.map((cert: CertificateMeta) => (
-          <Link
-            key={cert.id}
-            to="/certificates/$slug"
-            params={{ slug: cert.slug }}
-            className="group animus-corner relative flex flex-col gap-2 p-4 border border-border/20 bg-card/10 hover:border-primary/50 transition-all duration-500 overflow-hidden h-64"
-          >
-            {cert.image_url && (
-              <>
-                <img
-                  src={cert.image_url}
-                  alt={cert.title}
-                  referrerPolicy="no-referrer"
-                  crossOrigin="anonymous"
-                  className="absolute inset-0 w-full h-full object-center opacity-80 group-hover:opacity-90 transition-opacity duration-700 scale-110"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-background/90 via-background/50 to-transparent" />
-              </>
-            )}
-            <div className="z-10 flex flex-col gap-1.5 absolute bottom-1">
-              <span className="text-[9px] text-primary/80 font-mono uppercase tracking-[0.2em]">
-                {cert.issuer}
-              </span>
-              <h3 className="text-sm font-bold tracking-tight text-foreground group-hover:text-primary transition-colors line-clamp-2">
-                {cert.title}
-              </h3>
-              <span className="text-[9px] text-muted-foreground font-mono">
-                {cert.issued}
-              </span>
-              {cert.skills.length > 0 && (
-                <div className="flex flex-wrap gap-1 mt-1">
-                  {cert.skills.slice(0, 3).map((skill) => (
-                    <span
-                      key={skill}
-                      className="text-[8px] px-1.5 py-0.5 rounded-xs bg-primary/5 text-primary/70 border border-primary/20 font-mono tracking-tighter"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-          </Link>
-        ))}
-      </motion.div>
-    </motion.div>
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
+        >
+          <span>←</span>
+          back home
+        </Link>
+      </motion.footer>
+    </motion.section>
   )
 }

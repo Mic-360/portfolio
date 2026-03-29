@@ -9,6 +9,7 @@ export type PinterestCreatedPin = {
 	title: string
 	description?: string
 	imageUrl: string
+	originalImageUrl: string
 	imageWidth?: number
 	imageHeight?: number
 }
@@ -51,6 +52,23 @@ function decodeHtml(value?: string): string {
 
 function normalizeUrl(url: string): string {
 	return url.replace(/\\/g, '').replace(/[?#].*$/, '').replace(/\/$/, '')
+}
+
+function deriveOriginalPinterestImageUrl(url: string): string {
+	try {
+		const parsed = new URL(url)
+		if (parsed.hostname !== 'i.pinimg.com') return url
+
+		const segments = parsed.pathname.split('/').filter(Boolean)
+		if (segments.length === 0) return url
+		if (segments[0] === 'originals') return parsed.toString()
+
+		segments[0] = 'originals'
+		parsed.pathname = `/${segments.join('/')}`
+		return parsed.toString()
+	} catch {
+		return url
+	}
 }
 
 function uniqueOrdered<T>(values: Array<T>): Array<T> {
@@ -281,6 +299,7 @@ async function fetchPin(pinUrl: string): Promise<PinterestCreatedPin | null> {
 			title,
 			description,
 			imageUrl,
+			originalImageUrl: deriveOriginalPinterestImageUrl(imageUrl),
 			imageWidth: Number.isFinite(width) ? width : undefined,
 			imageHeight: Number.isFinite(height) ? height : undefined,
 		}

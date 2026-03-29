@@ -13,7 +13,7 @@ export default function GravatarGallery({
   images,
   className,
 }: GravatarGalleryProps) {
-  if (!images || images.length === 0) return null
+  if (images.length === 0) return null
 
   return (
     <div className={cn('grid grid-cols-2 sm:grid-cols-3 gap-3', className)}>
@@ -23,14 +23,14 @@ export default function GravatarGallery({
           href={img.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="group overflow-hidden rounded-lg border border-border/50 hover:border-primary/50 transition-colors"
+          className="group media-hover-parent overflow-hidden rounded-[1.25rem] bg-muted/15"
         >
           <img
             src={img.url}
             alt={img.alt || `Gallery image ${i + 1}`}
             loading="lazy"
             decoding="async"
-            className="w-full h-auto aspect-square object-cover group-hover:scale-105 transition-transform duration-300"
+            className="media-hover-image media-hover-fade h-auto aspect-square w-full object-cover"
           />
         </a>
       ))}

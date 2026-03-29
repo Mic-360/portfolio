@@ -90,7 +90,7 @@ export const socialLinks: Array<SocialLink> = [
   { label: 'rss', url: '/rss' },
   { label: 'x', url: 'https://x.com/bhaumicsingh' },
   { label: 'instagram', url: 'https://www.instagram.com/bhaumic.singh/' },
-  { label: 'github', url: 'https://github.com/Mic-360' },
+  { label: 'github', url: 'https://github.com/Mic-360/portfolio' },
   { label: 'linkedin', url: 'https://www.linkedin.com/in/bhaumic/' },
 ]
 

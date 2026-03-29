@@ -1,5 +1,6 @@
 import { motion } from 'motion/react'
 import { Link, createFileRoute } from '@tanstack/react-router'
+
 import type { GravatarInterest, GravatarLink } from '@/types/gravatar'
 import GravatarAvatar from '@/components/gravatar/GravatarAvatar'
 import GravatarGallery from '@/components/gravatar/GravatarGallery'
@@ -69,8 +70,18 @@ export const Route = createFileRoute('/about')({
             '@context': 'https://schema.org',
             '@type': 'BreadcrumbList',
             itemListElement: [
-              { '@type': 'ListItem', position: 1, name: 'Home', item: siteMeta.baseUrl },
-              { '@type': 'ListItem', position: 2, name: 'About', item: canonicalUrl },
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: siteMeta.baseUrl,
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'About',
+                item: canonicalUrl,
+              },
             ],
           }),
         },
@@ -85,16 +96,16 @@ function AboutPage() {
 
   if (!profile) {
     return (
-      <article className="flex flex-col gap-6 min-h-[60vh] items-center justify-center">
+      <article className="flex min-h-[60vh] flex-col items-center justify-center gap-6">
         <header className="flex flex-col gap-4 text-center">
-          <h1 className="text-2xl font-semibold italic">about</h1>
+          <h1 className="font-serif text-3xl text-foreground">about</h1>
           <p className="text-muted-foreground">
             unable to load profile data. please try again later.
           </p>
         </header>
         <Link
           to="/"
-          className="inline-flex items-center gap-1 italic hover:text-primary transition-colors"
+          className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-primary"
         >
           ← back
         </Link>
@@ -107,20 +118,19 @@ function AboutPage() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: 0.08,
       },
     },
   }
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 15 },
+    hidden: { opacity: 0, y: 14 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        type: 'spring' as const,
-        stiffness: 100,
-        damping: 15,
+        duration: 0.45,
+        ease: 'easeOut' as const,
       },
     },
   }
@@ -130,210 +140,188 @@ function AboutPage() {
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className="flex flex-col gap-6 max-w-4xl mx-auto"
+      className="mx-auto flex w-full max-w-6xl flex-col gap-12"
     >
-      {/* Main Profile Card - Gravatar Style */}
       <motion.section
         variants={itemVariants}
-        className="relative overflow-hidden rounded-xl border border-border/50 bg-card shadow-xl"
+        className="relative min-h-[560px] overflow-hidden"
       >
-        {/* Cover / Header Area */}
         <div
-          className="h-32 sm:h-40 w-full relative"
+          className="absolute inset-0"
           style={{
-            background: profile.header_image
-              ? profile.header_image
-              : 'var(--primary)',
+            background: profile.header_image || 'var(--primary)',
             backgroundColor: profile.background_color || 'var(--primary)',
-            opacity: 0.8,
+            opacity: 0.92,
           }}
-        >
-          <div className="absolute inset-0 bg-linear-to-b from-black/20 to-transparent" />
-          <div className="absolute top-4 right-4 text-[10px] font-mono uppercase tracking-[0.4em] text-white/60 select-none">
-            Subject_{profile.hash.substring(0, 6)}
+        />
+        <div className="absolute inset-0 bg-linear-to-br from-background/88 via-background/42 to-black/72" />
+        <div className="pointer-events-none absolute inset-x-[18%] top-[10%] h-28 rounded-full bg-primary/12 blur-3xl" />
+        <div className="pointer-events-none absolute left-[8%] top-[20%] h-[1px] w-[34%] bg-white/14" />
+        <div className="pointer-events-none absolute right-[10%] top-[22%] h-[1px] w-[22%] bg-white/10" />
+
+        <div className="relative z-10 flex min-h-[560px] flex-col justify-between gap-10 p-6 sm:p-8 lg:p-10">
+          <div className="flex items-start justify-between gap-6 text-[10px] uppercase tracking-[0.28em] text-white/68">
+            <span>about</span>
+            <span>subject_{profile.hash.substring(0, 6)}</span>
           </div>
-        </div>
 
-        {/* Card Content */}
-        <div className="px-6 sm:px-10 pb-10 pt-0 relative">
-          {/* Overlapping Circular Avatar */}
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            className="relative -mt-12 sm:-mt-16 mb-4 block w-fit group"
-          >
-            <a
-              href={profile.profile_url}
-              target="_blank"
-              rel="noopener noreferrer me"
-              className="relative block rounded-full border-4 border-card bg-card shadow-2xl overflow-hidden"
-            >
-              <GravatarAvatar
-                hash={profile.hash}
-                size={128}
-                alt={profile.display_name}
-                className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-full grayscale group-hover:grayscale-0 transition-all duration-700"
-              />
-            </a>
-            <div className="absolute top-0 right-0 w-6 h-6 flex items-center justify-center rounded-full bg-primary text-background font-bold text-[8px] shadow-lg border-2 border-card">
-              99
-            </div>
-          </motion.div>
-
-          <div className="flex flex-col gap-6">
-            <div className="space-y-1">
-              <h1 className="text-3xl sm:text-4xl font-black tracking-tighter text-foreground uppercase">
-                {profile.display_name}
-              </h1>
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-                {profile.job_title && (
-                  <p className="text-md font-semibold text-primary italic">
-                    {profile.job_title}
-                    {profile.company ? (
-                      <span className="text-muted-foreground/60 not-italic">
-                        {' '}
-                        @ {profile.company}
-                      </span>
-                    ) : (
-                      ''
-                    )}
-                  </p>
-                )}
-                {profile.location && (
-                  <span className="text-xs uppercase tracking-widest text-muted-foreground font-bold flex items-center gap-1 before:content-[''] before:w-1 before:h-1 before:bg-primary/40 before:rounded-full">
-                    {profile.location}
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {/* Social Icons - Clean Row under Identity */}
-            {profile.verified_accounts &&
-              profile.verified_accounts.length > 0 && (
-                <div className="flex flex-wrap gap-4 pt-2">
-                  <GravatarSocialLinks
-                    accounts={profile.verified_accounts}
-                    iconSize={20}
-                    className="gap-4 invert-0"
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(260px,0.9fr)] lg:items-end">
+            <div className="flex flex-col gap-6">
+              <div className="flex items-center gap-4">
+                <a
+                  href={profile.profile_url}
+                  target="_blank"
+                  rel="noopener noreferrer me"
+                  className="shrink-0"
+                >
+                  <GravatarAvatar
+                    hash={profile.hash}
+                    size={112}
+                    alt={profile.display_name}
+                    className="h-24 w-24 border border-white/20 shadow-2xl sm:h-28 sm:w-28"
                   />
+                </a>
+                <div className="min-w-0">
+                  <p className="text-[10px] uppercase tracking-[0.28em] text-white/60">
+                    identity
+                  </p>
+                  <h1 className="mt-3 font-serif text-4xl leading-none text-white sm:text-5xl lg:text-6xl">
+                    {profile.display_name}
+                  </h1>
                 </div>
-              )}
-
-            <div className="animus-sync-bar mt-2 opacity-30" />
-
-            {profile.description && (
-              <div className="italic text-lg leading-relaxed text-foreground/90 font-medium max-w-xl">
-                {profile.description}
               </div>
-            )}
+
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-white/70">
+                {profile.job_title ? (
+                  <span>
+                    {profile.job_title}
+                    {profile.company ? ` at ${profile.company}` : ''}
+                  </span>
+                ) : null}
+                {profile.location ? (
+                  <span className="text-white/54">{profile.location}</span>
+                ) : null}
+              </div>
+
+              {profile.description ? (
+                <p className="max-w-2xl text-base leading-8 text-white/82 sm:text-lg">
+                  {profile.description}
+                </p>
+              ) : null}
+
+              {profile.verified_accounts?.length ? (
+                <GravatarSocialLinks
+                  accounts={profile.verified_accounts}
+                  iconSize={22}
+                  className="gap-4 invert-0"
+                />
+              ) : null}
+            </div>
+
+            <div className="grid gap-4 border-t border-white/12 pt-5 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+              <div className="space-y-1">
+                <p className="text-[10px] uppercase tracking-[0.24em] text-white/54">
+                  profile
+                </p>
+                <a
+                  href={profile.profile_url}
+                  target="_blank"
+                  rel="noopener noreferrer me"
+                  className="text-sm text-white/80 transition-colors hover:text-white"
+                >
+                  view source profile
+                </a>
+              </div>
+              {profile.registration_date ? (
+                <div className="space-y-1">
+                  <p className="text-[10px] uppercase tracking-[0.24em] text-white/54">
+                    enlisted
+                  </p>
+                  <p className="text-sm text-white/80">
+                    {new Date(profile.registration_date).getFullYear()}
+                  </p>
+                </div>
+              ) : null}
+              {profile.location ? (
+                <div className="space-y-1">
+                  <p className="text-[10px] uppercase tracking-[0.24em] text-white/54">
+                    base
+                  </p>
+                  <p className="text-sm text-white/80">{profile.location}</p>
+                </div>
+              ) : null}
+            </div>
           </div>
         </div>
       </motion.section>
 
-      {/* Sub-cards for extra info */}
-      <div className="grid grid-cols-1 gap-6">
-        {/* Interests / Affinity */}
-        {profile.interests && profile.interests.length > 0 && (
-          <motion.div
-            variants={itemVariants}
-            className="rounded-xl border border-border/50 bg-card p-6 shadow-md"
-          >
-            <h3 className="text-[10px] uppercase tracking-[0.3em] text-primary font-black mb-4 flex items-center gap-2">
-              Affinity Modules
-            </h3>
-            <div className="flex flex-wrap gap-2">
+      <motion.section
+        variants={itemVariants}
+        className="grid gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]"
+      >
+        {profile.interests && profile.interests.length > 0 ? (
+          <div className="grid gap-4">
+            <p className="text-[10px] uppercase tracking-[0.26em] text-primary/75">
+              interests
+            </p>
+            <div className="flex flex-wrap gap-x-4 gap-y-3 text-sm leading-7 text-foreground/78">
               {profile.interests.map((interest: GravatarInterest) => (
-                <span
-                  key={interest.id}
-                  className="px-3 py-1 text-xs font-mono rounded-md border border-border bg-muted/30 text-foreground/80"
-                >
-                  #{interest.name.replace(/\s+/g, '_').toLowerCase()}
-                </span>
+                <span key={interest.id}>#{interest.name.replace(/\s+/g, '_').toLowerCase()}</span>
               ))}
             </div>
-          </motion.div>
-        )}
+          </div>
+        ) : null}
 
-        {/* External Uplinks */}
-        {profile.links && profile.links.length > 0 && (
-          <motion.div
-            variants={itemVariants}
-            className="rounded-xl border border-border/50 bg-card overflow-hidden shadow-md"
-          >
-            <div className="p-6 pb-0">
-              <h3 className="text-[10px] uppercase tracking-[0.3em] text-primary font-black flex items-center gap-2">
-                External Uplinks
-              </h3>
-            </div>
-            <div className="grid grid-cols-1 divide-y divide-border/50 mt-4">
+        {profile.links && profile.links.length > 0 ? (
+          <div className="grid gap-3">
+            <p className="text-[10px] uppercase tracking-[0.26em] text-primary/75">
+              external links
+            </p>
+            <div className="divide-y divide-border/25">
               {profile.links.map((link: GravatarLink) => (
                 <a
                   key={link.url}
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center justify-between p-4 hover:bg-primary transition-all duration-300"
+                  className="flex items-center justify-between gap-4 py-3 text-sm transition-colors hover:text-primary"
                 >
-                  <span className="font-bold uppercase tracking-widest text-xs group-hover:text-background">
-                    {link.label}
-                  </span>
-                  <span className="text-primary group-hover:text-background transform translate-x-0 group-hover:translate-x-1 transition-transform">
-                    ↗
-                  </span>
+                  <span>{link.label}</span>
+                  <span className="text-muted-foreground">↗</span>
                 </a>
               ))}
             </div>
-          </motion.div>
-        )}
+          </div>
+        ) : null}
+      </motion.section>
 
-        {/* Memory Gallery */}
-        {profile.gallery && profile.gallery.length > 0 && (
-          <motion.div
-            variants={itemVariants}
-            className="rounded-xl border border-border/50 bg-card p-6 shadow-md"
-          >
-            <h3 className="text-[10px] uppercase tracking-[0.3em] text-primary font-black mb-6">
-              Memory Fragments
-            </h3>
-            <GravatarGallery
-              images={profile.gallery}
-              className="grid-cols-2 sm:grid-cols-3 gap-2"
-            />
-          </motion.div>
-        )}
-      </div>
+      {profile.gallery && profile.gallery.length > 0 ? (
+        <motion.section variants={itemVariants} className="grid gap-6">
+          <div className="flex items-center gap-4">
+            <p className="shrink-0 text-[10px] uppercase tracking-[0.26em] text-primary/75">
+              gallery
+            </p>
+            <div className="h-px flex-1 bg-linear-to-r from-primary/30 to-transparent" />
+          </div>
+          <GravatarGallery
+            images={profile.gallery}
+            className="grid-cols-2 gap-3 md:grid-cols-4"
+          />
+        </motion.section>
+      ) : null}
 
-      {/* Simple Footer */}
       <motion.footer
         variants={itemVariants}
-        className="flex flex-col items-center gap-4 text-[10px] text-muted-foreground uppercase tracking-[0.3em] pt-10"
+        className="flex flex-wrap items-center justify-between gap-4 border-t border-border/25 pt-6 text-sm text-muted-foreground"
       >
-        <div className="flex gap-4">
-          {profile.registration_date && (
-            <span>
-              Enlisted_{new Date(profile.registration_date).getFullYear()}
-            </span>
-          )}
-          <span className="text-primary">|</span>
-          <a
-            href={profile.profile_url}
-            target="_blank"
-            rel="noopener noreferrer me"
-            className="hover:text-primary transition-colors flex items-center gap-1"
-          >
-            Source_Gravatar
-          </a>
-        </div>
+        <span>identity powered by gravatar</span>
+        <Link
+          to="/"
+          className="inline-flex items-center gap-1 transition-colors hover:text-primary"
+        >
+          ← back
+        </Link>
       </motion.footer>
-
-      <Link
-        to="/"
-        className="group inline-flex items-center gap-1 italic text-muted-foreground hover:text-primary transition-colors duration-300"
-      >
-        <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
-          ←
-        </span>
-        back
-      </Link>
     </motion.article>
   )
 }

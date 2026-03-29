@@ -16,6 +16,7 @@ import { Route as BentoRouteImport } from './routes/bento'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
+import { Route as PinterestIndexRouteImport } from './routes/pinterest/index'
 import { Route as CertificatesIndexRouteImport } from './routes/certificates/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as SitemapXmlRouteImport } from './routes/sitemap.xml'
@@ -29,6 +30,7 @@ import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as OgProjectsSlugRouteImport } from './routes/og/projects/$slug'
 import { Route as OgCertificatesSlugRouteImport } from './routes/og/certificates/$slug'
 import { Route as OgBlogSlugRouteImport } from './routes/og/blog/$slug'
+import { Route as ApiPinterestDownloadRouteImport } from './routes/api/pinterest.download'
 import { Route as ApiGravatarIdentifierRouteImport } from './routes/api/gravatar.$identifier'
 
 const RssRoute = RssRouteImport.update({
@@ -64,6 +66,11 @@ const IndexRoute = IndexRouteImport.update({
 const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
   id: '/projects/',
   path: '/projects/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PinterestIndexRoute = PinterestIndexRouteImport.update({
+  id: '/pinterest/',
+  path: '/pinterest/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CertificatesIndexRoute = CertificatesIndexRouteImport.update({
@@ -131,6 +138,11 @@ const OgBlogSlugRoute = OgBlogSlugRouteImport.update({
   path: '/og/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPinterestDownloadRoute = ApiPinterestDownloadRouteImport.update({
+  id: '/api/pinterest/download',
+  path: '/api/pinterest/download',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiGravatarIdentifierRoute = ApiGravatarIdentifierRouteImport.update({
   id: '/api/gravatar/$identifier',
   path: '/api/gravatar/$identifier',
@@ -154,8 +166,10 @@ export interface FileRoutesByFullPath {
   '/sitemap/xml': typeof SitemapXmlRoute
   '/blog/': typeof BlogIndexRoute
   '/certificates/': typeof CertificatesIndexRoute
+  '/pinterest/': typeof PinterestIndexRoute
   '/projects/': typeof ProjectsIndexRoute
   '/api/gravatar/$identifier': typeof ApiGravatarIdentifierRoute
+  '/api/pinterest/download': typeof ApiPinterestDownloadRoute
   '/og/blog/$slug': typeof OgBlogSlugRoute
   '/og/certificates/$slug': typeof OgCertificatesSlugRoute
   '/og/projects/$slug': typeof OgProjectsSlugRoute
@@ -177,8 +191,10 @@ export interface FileRoutesByTo {
   '/sitemap/xml': typeof SitemapXmlRoute
   '/blog': typeof BlogIndexRoute
   '/certificates': typeof CertificatesIndexRoute
+  '/pinterest': typeof PinterestIndexRoute
   '/projects': typeof ProjectsIndexRoute
   '/api/gravatar/$identifier': typeof ApiGravatarIdentifierRoute
+  '/api/pinterest/download': typeof ApiPinterestDownloadRoute
   '/og/blog/$slug': typeof OgBlogSlugRoute
   '/og/certificates/$slug': typeof OgCertificatesSlugRoute
   '/og/projects/$slug': typeof OgProjectsSlugRoute
@@ -201,8 +217,10 @@ export interface FileRoutesById {
   '/sitemap/xml': typeof SitemapXmlRoute
   '/blog/': typeof BlogIndexRoute
   '/certificates/': typeof CertificatesIndexRoute
+  '/pinterest/': typeof PinterestIndexRoute
   '/projects/': typeof ProjectsIndexRoute
   '/api/gravatar/$identifier': typeof ApiGravatarIdentifierRoute
+  '/api/pinterest/download': typeof ApiPinterestDownloadRoute
   '/og/blog/$slug': typeof OgBlogSlugRoute
   '/og/certificates/$slug': typeof OgCertificatesSlugRoute
   '/og/projects/$slug': typeof OgProjectsSlugRoute
@@ -226,8 +244,10 @@ export interface FileRouteTypes {
     | '/sitemap/xml'
     | '/blog/'
     | '/certificates/'
+    | '/pinterest/'
     | '/projects/'
     | '/api/gravatar/$identifier'
+    | '/api/pinterest/download'
     | '/og/blog/$slug'
     | '/og/certificates/$slug'
     | '/og/projects/$slug'
@@ -249,8 +269,10 @@ export interface FileRouteTypes {
     | '/sitemap/xml'
     | '/blog'
     | '/certificates'
+    | '/pinterest'
     | '/projects'
     | '/api/gravatar/$identifier'
+    | '/api/pinterest/download'
     | '/og/blog/$slug'
     | '/og/certificates/$slug'
     | '/og/projects/$slug'
@@ -272,8 +294,10 @@ export interface FileRouteTypes {
     | '/sitemap/xml'
     | '/blog/'
     | '/certificates/'
+    | '/pinterest/'
     | '/projects/'
     | '/api/gravatar/$identifier'
+    | '/api/pinterest/download'
     | '/og/blog/$slug'
     | '/og/certificates/$slug'
     | '/og/projects/$slug'
@@ -296,8 +320,10 @@ export interface RootRouteChildren {
   SitemapXmlRoute: typeof SitemapXmlRoute
   BlogIndexRoute: typeof BlogIndexRoute
   CertificatesIndexRoute: typeof CertificatesIndexRoute
+  PinterestIndexRoute: typeof PinterestIndexRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
   ApiGravatarIdentifierRoute: typeof ApiGravatarIdentifierRoute
+  ApiPinterestDownloadRoute: typeof ApiPinterestDownloadRoute
   OgBlogSlugRoute: typeof OgBlogSlugRoute
   OgCertificatesSlugRoute: typeof OgCertificatesSlugRoute
   OgProjectsSlugRoute: typeof OgProjectsSlugRoute
@@ -352,6 +378,13 @@ declare module '@tanstack/react-router' {
       path: '/projects'
       fullPath: '/projects/'
       preLoaderRoute: typeof ProjectsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pinterest/': {
+      id: '/pinterest/'
+      path: '/pinterest'
+      fullPath: '/pinterest/'
+      preLoaderRoute: typeof PinterestIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/certificates/': {
@@ -445,6 +478,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OgBlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/pinterest/download': {
+      id: '/api/pinterest/download'
+      path: '/api/pinterest/download'
+      fullPath: '/api/pinterest/download'
+      preLoaderRoute: typeof ApiPinterestDownloadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/gravatar/$identifier': {
       id: '/api/gravatar/$identifier'
       path: '/api/gravatar/$identifier'
@@ -472,8 +512,10 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapXmlRoute: SitemapXmlRoute,
   BlogIndexRoute: BlogIndexRoute,
   CertificatesIndexRoute: CertificatesIndexRoute,
+  PinterestIndexRoute: PinterestIndexRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
   ApiGravatarIdentifierRoute: ApiGravatarIdentifierRoute,
+  ApiPinterestDownloadRoute: ApiPinterestDownloadRoute,
   OgBlogSlugRoute: OgBlogSlugRoute,
   OgCertificatesSlugRoute: OgCertificatesSlugRoute,
   OgProjectsSlugRoute: OgProjectsSlugRoute,

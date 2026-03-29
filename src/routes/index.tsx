@@ -1,25 +1,9 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { motion } from 'motion/react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { KeyboardHint } from '@/components/CommandMenu'
-import { Section, StatCard } from '@/components/functions'
-import GitHubHeatmap from '@/components/GitHubHeatmap'
-import { PreviousRoadmap } from '@/components/PreviousRoadmap'
-import GravatarAvatar from '@/components/gravatar/GravatarAvatar'
-import GravatarProfileCard from '@/components/gravatar/GravatarProfileCard'
-import CalendarIcon from '@/components/ui/calendar-icon'
-import type { CardStackItem } from '@/components/ui/card-stack'
-import { CardStack } from '@/components/ui/card-stack'
-import { gravatarConfig } from '@/config/gravatar'
-import {
-  contactLinks,
-  gravatar,
-  pinterest,
-  siteImages,
-  siteInfo,
-  siteMeta,
-} from '@/config/site-data'
+import type { HealthSample } from '@/lib/health'
+import type { PinterestCreatedPin } from '@/lib/pinterest'
 import type { BlogMeta, CertificateMeta, ProjectMeta } from '@/lib/content'
 import {
   getBlogIndex,
@@ -29,10 +13,25 @@ import {
 import { formatDate } from '@/lib/format'
 import { hashEmail } from '@/lib/gravatar'
 import { getGravatarProfile } from '@/lib/gravatar-profile'
-import type { HealthSample } from '@/lib/health'
 import { getHealthData } from '@/lib/health'
-import type { PinterestCreatedPin } from '@/lib/pinterest'
 import { getPinterestCreatedPins } from '@/lib/pinterest'
+
+import { KeyboardHint } from '@/components/CommandMenu'
+import { Section, StatCard } from '@/components/functions'
+import GitHubHeatmap from '@/components/GitHubHeatmap'
+import GravatarAvatar from '@/components/gravatar/GravatarAvatar'
+import GravatarSocialLinks from '@/components/gravatar/GravatarSocialLinks'
+import { PreviousRoadmap } from '@/components/PreviousRoadmap'
+import CalendarIcon from '@/components/ui/calendar-icon'
+import { gravatarConfig } from '@/config/gravatar'
+import {
+  contactLinks,
+  gravatar,
+  pinterest,
+  siteImages,
+  siteInfo,
+  siteMeta,
+} from '@/config/site-data'
 
 declare global {
   interface Window {
@@ -119,7 +118,7 @@ export const Route = createFileRoute('/')({
             priceRange: '$$',
             description,
           }),
-        }
+        },
       ],
     }
   },
@@ -179,158 +178,167 @@ function App() {
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: 0.08,
       },
     },
   }
 
   const item = {
-    hidden: { opacity: 0, y: 10 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+    hidden: { opacity: 0, y: 16 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.45 } },
   }
 
-  const socialCards = useMemo<Array<CardStackItem>>(
-    () => [
-      {
-        id: 1,
-        name: 'x / twitter',
-        designation: 'social card preview',
-        content: (
-          <a
-            href="https://x.com/bhaumicsingh"
-            target="_blank"
-            rel="noopener noreferrer me"
-            className="group block h-full overflow-hidden border border-border/40 bg-card normal-case"
-          >
-            <div className="h-30 w-full overflow-hidden border-b border-border/20">
-              <img
-                src={siteImages.banner}
-                alt="Twitter banner preview"
-                className="h-full w-full object-cover opacity-80 transition-transform duration-500 group-hover:scale-[1.03]"
-              />
-            </div>
-            <div className="relative px-4 pb-4 pt-2">
-              <img
-                src={siteImages.profilePhoto}
-                alt={`${siteInfo.name} profile photo`}
-                className="-mt-12 h-20 w-20 rounded-full border-4 border-card object-cover shadow-lg"
-              />
-              <div className="mt-2 flex items-start justify-between gap-3">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <p className="text-lg font-bold text-foreground transition-colors group-hover:text-primary">
-                      {siteInfo.name}
-                    </p>
-                  </div>
-                  <p className="text-xs text-muted-foreground">@bhaumicsingh</p>
-                </div>
-                <span className="rounded-full border border-primary/40 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">
-                  follow
-                </span>
-              </div>
-              <p className="mt-2 text-xs italic text-foreground/80">
-                A developer who loves to build.
-              </p>
-
-              <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
-                <span>{siteInfo.location}</span>
-                <span aria-hidden="true">•</span>
-                <span>
-                  {siteMeta.alternateUrls.gravatarDomain.replace(
-                    'https://',
-                    '',
-                  )}
-                </span>
-                <span aria-hidden="true">•</span>
-                <span>Joined December 2016</span>
-              </div>
-
-              <div className="mt-2 flex items-center gap-4 text-xs text-foreground/75">
-                <p>
-                  <span className="font-bold text-foreground">71</span> Following
-                </p>
-                <p>
-                  <span className="font-bold text-foreground">16</span> Followers
-                </p>
-              </div>
-            </div>
-          </a>
-        ),
-      },
-      {
-        id: 2,
-        name: 'gravatar',
-        designation: 'verified identity card',
-        content: profile ? (
-          <GravatarProfileCard
-            profile={profile}
-            className="h-full border-0 bg-card/50 shadow-none"
-          />
-        ) : (
-          <div className="flex h-full items-center justify-center rounded-xl border border-border/40 bg-card/60 px-4 text-center">
-            <p className="text-sm text-muted-foreground italic">
-              unable to load gravatar profile.
-            </p>
-          </div>
-        ),
-      },
-    ],
-    [profile],
-  )
+  const featuredProjects = projects.slice(0, 4)
+  const featuredPosts = posts.slice(0, 4)
+  const featuredCertificates = certificates.slice(0, 6)
+  const featuredPins = pinterestData.pins.slice(0, 6)
 
   return (
     <motion.div
       variants={container}
       initial="hidden"
       animate="show"
-      className="flex flex-col gap-8"
+      className="flex flex-col gap-10 md:gap-14"
     >
-      <motion.section variants={item} className="flex flex-col gap-3">
-        <div className="flex flex-col sm:flex-row item-center justify-between">
-          <div className="flex items-center gap-3 w-full">
-            <a
-              href={gravatar.profileUrl}
-              target="_blank"
-              rel="noopener noreferrer me"
-              className="shrink-0"
+      <motion.div
+        variants={item}
+        className="flex items-center gap-6 w-full -mb-8"
+      >
+        <a
+          href={gravatar.profileUrl}
+          target="_blank"
+          rel="noopener noreferrer me"
+          className="shrink-0"
+        >
+          <GravatarAvatar
+            hash={avatarHash}
+            size={80}
+            alt={`${siteInfo.name} profile photo`}
+            className="h-20 w-20"
+            rel="me"
+          />
+        </a>
+        <div className="flex min-w-0 flex-col">
+          <span className="text-xl font-medium uppercase tracking-[0.32em] text-primary/80">
+            {siteInfo.name}
+          </span>
+          <span className="text-base text-muted-foreground">
+            {siteInfo.nativeName}
+          </span>
+        </div>
+        <div className="ml-auto hidden lg:block">
+          <KeyboardHint />
+        </div>
+      </motion.div>
+      <motion.section
+        variants={item}
+        className="grid gap-8 lg:grid-cols-[minmax(0,1.08fr)_minmax(320px,0.92fr)] lg:items-end"
+      >
+        <div className="flex flex-col gap-7">
+          <div className="flex flex-col gap-4">
+            <p className="text-[11px] uppercase tracking-[0.28em] text-primary/75">
+              android, ai, cloud, web, design, devops
+            </p>
+            <h1 className="max-w-4xl font-serif text-5xl leading-none text-foreground sm:text-6xl xl:text-7xl">
+              Designing and shipping software that feels a step ahead.
+            </h1>
+            <p className="max-w-2xl text-base leading-8 text-foreground/78 sm:text-lg">
+              {siteInfo.currentRole} based in {siteInfo.location}, building web
+              and android products with AI, cloud systems, and a
+              latest-is-greatest mindset. The goal here is simple: fewer
+              widgets, more atmosphere, and work that reads clearly on every
+              screen.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-6">
+            <Link
+              to="/projects"
+              className="inline-flex items-center gap-2 text-md italic font-medium text-foreground underline decoration-border/70 underline-offset-4 transition-colors hover:text-primary hover:decoration-primary sm:text-xl"
             >
-              <GravatarAvatar
-                hash={avatarHash}
-                size={48}
-                alt={`${siteInfo.name} — Profile Photo`}
-                className="w-12 h-12"
-                rel="me"
-              />
+              selected work
+            </Link>
+            <Link
+              to="/blog"
+              className="inline-flex items-center gap-2 text-md italic font-medium text-foreground underline decoration-border/70 underline-offset-4 transition-colors hover:text-primary hover:decoration-primary sm:text-xl"
+            >
+              latest writing
+            </Link>
+            <a
+              data-cal-namespace="connect"
+              data-cal-link={siteInfo.calLink}
+              data-cal-config='{"layout":"week_view","useSlotsViewOnSmallScreen":"true"}'
+              href={siteInfo.calLink}
+              className="inline-flex items-center gap-2 text-md italic font-medium text-foreground underline decoration-border/70 underline-offset-4 transition-colors hover:text-primary hover:decoration-primary sm:text-xl"
+            >
+              <CalendarIcon size={16} className="text-primary" />
+              book a call
             </a>
-            <div className="flex flex-col sm:flex-row justify-between items-baseline w-full">
-              <div className="flex flex-col gap-1">
-                <h1 className="text-2xl font-semibold italic">
-                  {siteInfo.name} ~{' '}
-                  <span className="text-sm mb-1 align-bottom inline-flex leading-4">
-                    {siteInfo.nativeName}
-                  </span>
-                </h1>
-                <h2 className="text-xs tracking-tight border w-fit p-0.5 rounded-xs text-primary font-sans border-border">
-                  {siteInfo.tagline}
-                </h2>
-              </div>
-              <div className="flex flex-col sm:items-end text-[10px] sm:text-xs uppercase tracking-[0.3em] text-primary mt-1.5">
-                <span>{siteInfo.location}</span>
-                <span className="italic tracking-wide text-foreground">
-                  {siteInfo.locationNative}
-                </span>
-              </div>
-            </div>
+          </div>
+          <div className="lg:hidden">
+            <KeyboardHint />
           </div>
         </div>
-        <div className="flex justify-between items-center">
-          <motion.p whileHover={{ x: 5 }} className="italic cursor-default">
-            <span className="not-italic font-medium">i build</span>{' '}
-            <span className="underline decoration-primary underline-offset-4 font-black">
-              {siteInfo.buildLine}
+
+        <div className="relative min-h-105 lg:min-h-125">
+          <div className="pointer-events-none absolute inset-x-[12%] top-[10%] h-28 rounded-full bg-primary/14 blur-3xl" />
+          <div className="pointer-events-none absolute inset-x-[24%] bottom-[18%] h-36 rounded-full bg-primary/10 blur-3xl" />
+          <div className="pointer-events-none absolute right-[8%] top-[14%] h-48 w-48 rounded-full bg-primary/8 blur-[120px]" />
+
+          <div className="absolute inset-x-0 top-0 flex items-center justify-between gap-4 text-[10px] uppercase tracking-[0.28em] text-foreground/48">
+            <span>{siteInfo.location}</span>
+            <span>
+              {siteMeta.alternateUrls.gravatarDomain.replace('https://', '')}
             </span>
-          </motion.p>
-          <KeyboardHint />
+          </div>
+
+          <div className="absolute inset-0">
+            <img
+              src={siteImages.banner}
+              alt="Featured work backdrop"
+              className="hero-blend-media media-hover-image media-hover-fade absolute inset-y-[7%] right-0 h-[86%] w-[90%] object-cover"
+            />
+            <div className="hero-grid-overlay absolute inset-y-[8%] right-[3%] w-[82%]" />
+            <div className="pointer-events-none absolute inset-y-[14%] right-[12%] w-[42%] border-l border-primary/18" />
+          </div>
+
+          <div className="absolute inset-x-0 bottom-[6%] flex flex-col gap-4 sm:max-w-[82%]">
+            <div className="flex items-center gap-4">
+              <a
+                href={gravatar.profileUrl}
+                target="_blank"
+                rel="noopener noreferrer me"
+                className="shrink-0"
+              >
+                <GravatarAvatar
+                  hash={avatarHash}
+                  size={72}
+                  alt={`${siteInfo.name} avatar`}
+                  className="h-18 w-18 border border-white/10 shadow-2xl"
+                />
+              </a>
+              <div className="min-w-0">
+                <p className="text-[10px] uppercase tracking-[0.28em] text-foreground/55">
+                  currently building
+                </p>
+                <a
+                  href={siteInfo.currentCompanyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 block text-xl font-semibold leading-tight text-foreground transition-colors hover:text-primary sm:text-2xl"
+                >
+                  {siteInfo.currentRole}
+                  <span className="block text-base font-normal text-foreground/70 sm:inline sm:pl-2">
+                    at {siteInfo.currentCompany}
+                  </span>
+                </a>
+              </div>
+            </div>
+
+            <p className="max-w-xl text-sm leading-7 text-foreground/74 sm:text-base">
+              {profile?.description || siteInfo.currentSummary}
+            </p>
+          </div>
         </div>
       </motion.section>
 
@@ -346,7 +354,7 @@ function App() {
               href={siteInfo.currentCompanyUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center px-2 py-0.5 rounded-sm font-black italic underline decoration-primary underline-offset-1 bg-foreground text-background"
+              className="inline-flex items-center px-2 rounded-sm font-black italic underline decoration-primary underline-offset-1 bg-foreground text-background"
             >
               <img
                 src="/khub.jpg"
@@ -354,7 +362,7 @@ function App() {
                 width={24}
                 height={24}
                 loading="lazy"
-                className="inline-block w-6 h-6 mr-2 rounded-sm object-cover transition-all duration-500 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] group-hover/current:scale-[1.4] group-hover/current:rotate-[360deg] group-hover/current:drop-shadow-[0_0_8px_var(--primary)]"
+                className="inline-block w-6 h-6 mr-2 rounded-sm object-cover transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover/current:scale-[1.4] group-hover/current:rotate-360 group-hover/current:drop-shadow-[0_0_8px_var(--primary)]"
               />
               {siteInfo.currentCompany}
             </motion.a>
@@ -369,7 +377,7 @@ function App() {
             </span>
             <img
               src="/frieren/party.svg"
-              className="h-6 sm:h-8 inline-block align-bottom"
+              className="h-8 sm:h-10 inline-block align-bottom"
             />
           </motion.p>
         </Section>
@@ -380,389 +388,443 @@ function App() {
       </motion.div>
 
       <motion.div variants={item}>
-        <Section title="">
-          <Link
-            to="/readme"
-            className="block overflow-hidden transition-all hover:border-primary/50"
-          >
-            <GitHubHeatmap username="Mic-360" />
-          </Link>
-        </Section>
-      </motion.div>
-
-      <motion.div variants={item}>
-        <Section title="blogs">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {posts.slice(0, 6).map((post: BlogMeta) => (
-              <Link
-                key={post.slug}
-                to="/blog/$slug"
-                params={{ slug: post.slug }}
-                className="group ac-game-card animus-corner bg-card/15 border border-border/30 hover:border-primary/50 transition-all duration-300"
-              >
-                <div className="flex flex-col gap-1.5">
-                  <span className="text-[9px] text-primary/80 font-mono uppercase tracking-[0.2em]">
-                    {formatDate(post.date)}
-                  </span>
-                  <h3 className="text-base font-bold tracking-tight text-foreground group-hover:text-primary transition-colors">
-                    {post.title}
-                  </h3>
-                  <p className="text-[10px] text-secondary-foreground line-clamp-2 italic leading-relaxed">
-                    {post.summary}
-                  </p>
-                  {post.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mt-1">
-                      {post.tags.slice(0, 3).map((tag) => (
-                        <span
-                          key={tag}
-                          className="text-[9px] text-muted-foreground font-mono tracking-tighter uppercase"
-                        >
-                          #{tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </Link>
-            ))}
-          </div>
-          <p className="text-xs italic text-muted-foreground">
-            curated list of sarcasm —{' '}
-            <Link
-              to="/blog"
-              className="underline decoration-primary underline-offset-4 hover:text-primary"
-            >
-              see all blogs
-            </Link>
-            .
-          </p>
-        </Section>
-      </motion.div>
-
-      <motion.div variants={item}>
         <Section title="projects">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {projects.slice(0, 4).map((project: ProjectMeta) => (
+          <div className="divide-y divide-border/25">
+            {featuredProjects.map((project: ProjectMeta, index) => (
               <Link
                 key={project.slug}
                 to="/projects/$slug"
                 params={{ slug: project.slug }}
-                className="group animus-corner relative h-56 flex flex-col justify-end p-4 border border-border/20 bg-card/10 hover:border-primary/50 transition-all duration-500 overflow-hidden"
+                className="group block py-8 first:pt-0 last:pb-0"
               >
-                {project.image && (
-                  <>
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="absolute inset-0 w-full h-full object-contain opacity-40 group-hover:grayscale group-hover:opacity-60 transition-all duration-700 group-hover:scale-105"
+                <article className="relative min-h-65 py-2 md:min-h-80">
+                  <div
+                    className={`media-hover-parent absolute inset-y-0 ${index % 2 === 0 ? 'left-[34%] right-0' : 'left-0 right-[34%]'}`}
+                  >
+                    {project.image ? (
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="project-ambient-media absolute inset-0 h-full w-full object-contain"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-linear-to-br from-primary/18 via-muted/12 to-transparent" />
+                    )}
+                    <div
+                      className={`absolute inset-0 ${
+                        index % 2 === 0
+                          ? 'project-ambient-overlay bg-linear-to-r from-background via-background/55 to-transparent'
+                          : 'project-ambient-overlay bg-linear-to-l from-background via-background/55 to-transparent'
+                      }`}
                     />
-                    <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent" />
-                  </>
-                )}
-
-                <div className="relative z-10 flex flex-col gap-2">
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-lg font-bold tracking-tight text-white group-hover:text-primary transition-colors">
-                      {project.title}
-                    </h3>
-                    <span className="text-[9px] text-primary font-mono uppercase tracking-[0.2em]">
-                      {formatDate(project.date)}
-                    </span>
+                    <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent opacity-90" />
                   </div>
 
-                  <p className="text-xs text-white/70 line-clamp-2 leading-relaxed italic">
-                    {project.summary}
-                  </p>
-
-                  {project.stack.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mt-1">
-                      {project.stack.slice(0, 4).map((tech) => (
-                        <span
-                          key={tech}
-                          className="text-[8px] px-1.5 py-0.5 rounded-xs bg-white/10 text-white/80 border border-white/20 font-mono tracking-tighter backdrop-blur-xs"
-                        >
-                          {tech}
-                        </span>
-                      ))}
+                  <div className="relative z-10 grid h-full items-center md:grid-cols-2">
+                    <div
+                      className={`flex max-w-xl flex-col gap-4 ${
+                        index % 2 === 0
+                          ? 'md:col-start-1'
+                          : 'md:col-start-2 md:justify-self-end md:text-right'
+                      }`}
+                    >
+                      <p className="text-[10px] uppercase tracking-[0.26em] text-primary/75">
+                        Featured build
+                      </p>
+                      <div className="space-y-3">
+                        <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                          {formatDate(project.date)}
+                        </p>
+                        <h3 className="font-serif text-3xl leading-tight text-foreground">
+                          {project.title}
+                        </h3>
+                      </div>
+                      <p className="text-base leading-8 text-foreground/78">
+                        {project.summary}
+                      </p>
+                      {project.stack.length > 0 ? (
+                        <p className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
+                          {project.stack.slice(0, 5).join(' · ')}
+                        </p>
+                      ) : null}
                     </div>
-                  )}
-                </div>
+                  </div>
+                </article>
               </Link>
             ))}
           </div>
-          <p className="text-xs italic text-muted-foreground">
-            more detailed blogs and less sarcasm —{' '}
+          <p className="text-sm text-muted-foreground">
+            More detail, process notes, and project timelines live in{' '}
             <Link
               to="/projects"
-              className="underline decoration-primary underline-offset-4 hover:text-primary"
+              className="text-primary underline underline-offset-4"
             >
-              see all projects
+              the full projects archive
             </Link>
             .
           </p>
         </Section>
       </motion.div>
 
-      <motion.div variants={item}>
-        <Section title="certificates">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-4">
-            {certificates.slice(0, 6).map((cert: CertificateMeta) => (
+      <motion.div
+        variants={item}
+        className="grid gap-10 xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1.14fr)]"
+      >
+        <Section title="blogs">
+          <div className="divide-y divide-border/25">
+            {featuredPosts.map((post: BlogMeta) => (
               <Link
-                key={cert.id}
-                to="/certificates/$slug"
-                params={{ slug: cert.slug }}
-                className="group animus-corner relative flex flex-col gap-2 p-4 border border-border/20 bg-card/10 hover:border-primary/50 transition-all duration-500 overflow-hidden min-h-44"
+                key={post.slug}
+                to="/blog/$slug"
+                params={{ slug: post.slug }}
+                className="group grid gap-3 py-4 sm:grid-cols-[110px_minmax(0,1fr)] sm:gap-6"
               >
-                {cert.image_url && (
-                  <>
-                    <img
-                      src={cert.image_url}
-                      alt={cert.title}
-                      referrerPolicy="no-referrer"
-                      crossOrigin="anonymous"
-                      className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-70 transition-opacity duration-700 scale-110"
-                    />
-                    <div className="absolute inset-0 bg-linear-to-t from-background via-background/70 to-background/30" />
-                  </>
-                )}
-                <div className="relative z-10 flex flex-col gap-1.5">
-                  <span className="text-[9px] text-primary/80 font-mono uppercase tracking-[0.2em]">
-                    {cert.issuer}
-                  </span>
-                  <h3 className="text-sm font-bold tracking-tight text-foreground group-hover:text-primary transition-colors line-clamp-2">
-                    {cert.title}
+                <div className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                  {formatDate(post.date)}
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-xl font-semibold leading-tight transition-colors group-hover:text-primary">
+                    {post.title}
                   </h3>
-                  <span className="text-[9px] text-muted-foreground font-mono">
-                    {cert.issued}
-                  </span>
-                  {cert.skills.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mt-1">
-                      {cert.skills.slice(0, 2).map((skill) => (
-                        <span
-                          key={skill}
-                          className="text-[8px] px-1.5 py-0.5 rounded-xs bg-primary/5 text-primary/70 border border-primary/20 font-mono tracking-tighter"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  )}
+                  <p className="text-sm leading-7 text-foreground/72">
+                    {post.summary}
+                  </p>
+                  {post.tags.length > 0 ? (
+                    <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+                      {post.tags.slice(0, 3).join(' · ')}
+                    </p>
+                  ) : null}
                 </div>
               </Link>
             ))}
           </div>
-          <p className="text-xs italic text-muted-foreground">
-            an opinionated set of —{' '}
+          <p className="text-sm text-muted-foreground">
+            Short notes and build logs continue in{' '}
             <Link
-              to="/certificates"
-              className="underline decoration-primary underline-offset-4 hover:text-primary"
+              to="/blog"
+              className="text-primary underline underline-offset-4"
             >
-              see all certificates
+              the writing index
             </Link>
             .
           </p>
         </Section>
-      </motion.div>
 
-      <motion.div variants={item}>
         <Section title="healthstat">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-            <StatCard
-              label="steps"
-              samples={sanitizeSamples(health.steps)}
-              unit="steps"
-              type="sum"
-            />
-            <StatCard
-              label="energy"
-              samples={sanitizeSamples(health.activeEnergy)}
-              unit="kcal"
-              type="sum"
-              format={(v) => formatMetricValue(v, 0)}
-            />
-            <StatCard
-              label="heart rate"
-              samples={sanitizeSamples<HealthSample>(health.heartRate).map(
-                (s) => {
-                  const val = Number(s.value)
-                  const start = new Date(s.startDate).getTime()
-                  const end = new Date(s.endDate).getTime()
-                  const minutes = (end - start) / (1000 * 60)
+          <div className="grid gap-8">
+            <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2 xl:grid-cols-3">
+              <StatCard
+                label="steps"
+                samples={sanitizeSamples(health.steps)}
+                unit="steps"
+                type="sum"
+              />
+              <StatCard
+                label="energy"
+                samples={sanitizeSamples(health.activeEnergy)}
+                unit="kcal"
+                type="sum"
+                format={(v) => formatMetricValue(v, 0)}
+              />
+              <StatCard
+                label="heart rate"
+                samples={sanitizeSamples<HealthSample>(health.heartRate).map(
+                  (sample) => {
+                    const value = Number(sample.value)
+                    const start = new Date(sample.startDate).getTime()
+                    const end = new Date(sample.endDate).getTime()
+                    const minutes = (end - start) / (1000 * 60)
+                    const bpm =
+                      value > 300 && minutes > 0 ? value / minutes : value
 
-                  // If value is > 500, it's likely total beats in that period, calculate BPM
-                  // Otherwise treat as raw BPM
-                  const bpm = val > 300 && minutes > 0 ? val / minutes : val
+                    return {
+                      ...sample,
+                      value: bpm,
+                    } as HealthSample & { value: number }
+                  },
+                )}
+                unit="bpm"
+                type="avg"
+                format={(v) => formatMetricValue(v, 0)}
+              />
+              <StatCard
+                label="distance"
+                samples={sanitizeSamples(health.distance)}
+                unit="km"
+                type="sum"
+                format={(v) => formatMetricValue(v, 2)}
+              />
+              <StatCard
+                label="sleep"
+                samples={sanitizeSamples(health.sleep)}
+                unit="hrs"
+                type="sum"
+                format={(v) => formatMetricValue(v, 1)}
+              />
+              <StatCard
+                label="spO2"
+                samples={sanitizeSamples(health.spO2)}
+                unit="%"
+                type="avg"
+                format={(v) => formatMetricValue(v, 1)}
+              />
+            </div>
 
-                  return {
-                    ...s,
-                    value: bpm,
-                  } as HealthSample & { value: number }
-                },
-              )}
-              unit="bpm"
-              type="avg"
-              format={(v) => formatMetricValue(v, 0)}
-            />
-            <StatCard
-              label="distance"
-              samples={sanitizeSamples(health.distance)}
-              unit="km"
-              type="sum"
-              format={(v) => formatMetricValue(v, 2)}
-            />
-            <StatCard
-              label="sleep"
-              samples={sanitizeSamples(health.sleep)}
-              unit="hrs"
-              type="sum"
-              format={(v) => formatMetricValue(v, 1)}
-            />
-            <StatCard
-              label="spO2"
-              samples={sanitizeSamples(health.spO2)}
-              unit="%"
-              type="avg"
-              format={(v) => formatMetricValue(v, 1)}
-            />
+            <Link to="/readme" className="block">
+              <GitHubHeatmap username={siteInfo.githubUsername} />
+            </Link>
+
+            {health.updatedAt && isMounted ? (
+              <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+                last updated {new Date(health.updatedAt).toLocaleString()}
+              </p>
+            ) : null}
           </div>
-          {health.updatedAt && isMounted && (
-            <p className="text-[10px] italic text-muted-foreground mt-4">
-              last updated: {new Date(health.updatedAt).toLocaleString()}
-            </p>
-          )}
         </Section>
       </motion.div>
 
-      <motion.div variants={item}>
+      <motion.div
+        variants={item}
+        className="grid gap-10 xl:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)]"
+      >
         <Section title="pinterest">
-          {pinterestData.pins.length > 0 ? (
-            <div className="flex flex-col gap-3">
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
-                {pinterestData.pins
-                  .slice(0, 6)
-                  .map((pin: PinterestCreatedPin) => (
-                    <a
-                      key={pin.id}
-                      href={pin.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group animus-corner border border-border/30 bg-card/10 overflow-hidden hover:border-primary/50 transition-all duration-300"
-                    >
+          {featuredPins.length > 0 ? (
+            <div className="flex flex-col gap-6">
+              <div className="columns-2 gap-4 sm:columns-3">
+                {featuredPins.map((pin: PinterestCreatedPin) => (
+                  <a
+                    key={pin.id}
+                    href={pin.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="media-hover-parent group mb-4 block break-inside-avoid"
+                  >
+                    <figure className="relative overflow-hidden rounded-3xl bg-muted/20">
                       <img
                         src={pin.imageUrl}
                         alt={pin.title}
                         loading="lazy"
                         width={pin.imageWidth}
                         height={pin.imageHeight}
-                        className="w-full h-36 sm:h-40 object-center transition-transform duration-500 group-hover:scale-[1.03] grayscale group-hover:grayscale-0 opacity-80 group-hover:opacity-100"
+                        className="media-hover-image media-hover-desaturate media-hover-fade h-auto w-full object-cover"
                       />
-                      <div className="p-2.5">
-                        <p className="text-[10px] italic line-clamp-2 group-hover:text-primary transition-colors">
-                          {pin.title}
-                        </p>
-                      </div>
-                    </a>
-                  ))}
+                      <div className="absolute inset-0 bg-linear-to-t from-black/78 via-transparent to-transparent" />
+                      <figcaption className="absolute inset-x-0 bottom-0 p-3 text-[11px] leading-6 text-white/90">
+                        {pin.title}
+                      </figcaption>
+                    </figure>
+                  </a>
+                ))}
               </div>
-              <p className="text-xs italic text-muted-foreground">
-                fresh pins from my created board —{' '}
+              <p className="text-sm text-muted-foreground">
+                The mobile version now keeps these pins in full color by
+                default. Browse more in the{' '}
                 <Link
-                  to="/pinterest/gallery"
-                  className="underline decoration-primary underline-offset-4 hover:text-primary"
+                  to="/pinterest"
+                  className="text-primary underline underline-offset-4"
                 >
-                  see full gallery
+                  full Pinterest gallery
                 </Link>
                 .
               </p>
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground italic">
-              couldn&apos;t load pins right now. check my{' '}
+            <p className="text-sm text-muted-foreground">
+              Couldn&apos;t load pins right now. You can still open the{' '}
               <a
                 href={pinterest.createdUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline decoration-primary underline-offset-4 hover:text-primary"
+                className="text-primary underline underline-offset-4"
               >
-                pinterest created feed
+                Pinterest created feed
               </a>
               .
             </p>
           )}
         </Section>
-      </motion.div>
 
-      <motion.div variants={item} className="max-w-370 mx-auto w-full">
-        <Section title="">
-          {/* Card stack on smaller screens */}
-          <div className="xl:hidden">
-            <CardStack
-              items={socialCards}
-              className="mx-auto"
-              cardClassName="animus-corner"
-              offset={9}
-              scaleFactor={0.04}
-            />
-          </div>
-          {/* Side by side on large screens */}
-          <div className="hidden xl:grid grid-cols-2 gap-6">
-            {socialCards.map((card) => (
-              <div
-                key={card.id}
-                className="animus-corner h-full overflow-hidden shadow-xl backdrop-blur-xs"
+        <Section title="certificates">
+          <div className="divide-y divide-border/25">
+            {featuredCertificates.map((cert: CertificateMeta) => (
+              <Link
+                key={cert.id}
+                to="/certificates/$slug"
+                params={{ slug: cert.slug }}
+                className="grid gap-3 py-4 text-sm transition-colors hover:text-primary sm:grid-cols-[minmax(0,1fr)_120px]"
               >
-                <div className="h-full text-sm text-foreground/90">
-                  {card.content}
+                <div className="space-y-1">
+                  <p className="text-[10px] uppercase tracking-[0.24em] text-primary/75">
+                    {cert.issuer}
+                  </p>
+                  <h3 className="text-base font-semibold leading-7 text-foreground">
+                    {cert.title}
+                  </h3>
+                  {cert.skills.length > 0 ? (
+                    <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+                      {cert.skills.slice(0, 3).join(' · ')}
+                    </p>
+                  ) : null}
                 </div>
-              </div>
+                <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground sm:text-right">
+                  {cert.issued}
+                </div>
+              </Link>
             ))}
           </div>
+          <p className="text-sm text-muted-foreground -mt-3.5">
+            A longer credential ledger lives in{' '}
+            <Link
+              to="/certificates"
+              className="text-primary underline underline-offset-4"
+            >
+              the certificates page
+            </Link>
+            .
+          </p>
         </Section>
       </motion.div>
 
-      <motion.div variants={item} className="max-w-3xl mx-auto w-full">
+      <motion.div variants={item}>
         <Section title="contact">
-          <div className="flex items-baseline gap-2 relative">
-            <p>
-              interested to talk? read my{' '}
-              {contactLinks.map((link, i) => (
-                <span key={link.label}>
-                  <Link
-                    to={link.url}
-                    className="underline decoration-primary underline-offset-4"
-                    rel="me"
+          <div className="relative overflow-hidden border-b border-border/20 pb-8">
+            <div className="pointer-events-none absolute inset-x-[14%] top-[8%] h-24 rounded-full bg-primary/14 blur-3xl" />
+            <div className="pointer-events-none absolute right-[8%] top-[18%] h-72 w-full sm:w-72 rounded-full bg-primary/10 blur-[120px]" />
+
+            <div className="media-hover-parent absolute inset-y-0 left-[34%] right-[-6%]">
+              <img
+                src={siteImages.profilePhoto}
+                alt={siteInfo.name}
+                className="hero-blend-media absolute inset-0 h-full w-full object-contain object-bottom sm:object-cover sm:object-center"
+              />
+              <div className="absolute inset-0 bg-linear-to-l from-background/10 via-background/58 to-background" />
+              <div className="absolute inset-y-0 right-[-2%] w-[24%] bg-linear-to-l from-background via-background to-transparent blur-3xl" />
+              <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent opacity-90" />
+            </div>
+
+            <div className="hero-grid-overlay absolute inset-y-[10%] right-[2%] hidden w-[46%] md:block" />
+
+            <div className="relative z-10 grid gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,0.78fr)] lg:items-end">
+              <div className="grid gap-6 py-2 lg:pr-12">
+                <div className="flex items-center justify-between gap-4 text-[10px] uppercase tracking-[0.28em] text-foreground/52">
+                  <span>{siteInfo.location}</span>
+                  <span>
+                    {siteMeta.alternateUrls.gravatarDomain.replace(
+                      'https://',
+                      '',
+                    )}
+                  </span>
+                </div>
+
+                <div className="grid gap-4">
+                  <h2 className="max-w-4xl font-serif text-4xl leading-none text-foreground sm:text-5xl lg:text-6xl">
+                    Say hello when the work needs clarity, pace, and someone who
+                    can ship the whole thing.
+                  </h2>
+                  <p className="max-w-3xl text-base leading-8 text-foreground/78 sm:text-lg">
+                    Read my{' '}
+                    {contactLinks.map((link, index) => (
+                      <span key={link.label}>
+                        <Link
+                          to={link.url}
+                          className="text-primary underline underline-offset-4"
+                          rel="me"
+                        >
+                          {link.label}
+                        </Link>
+                        {index < contactLinks.length - 1 ? ', ' : ' '}
+                      </span>
+                    ))}
+                    or book a call on{' '}
+                    <a
+                      href={siteInfo.calLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary underline underline-offset-4"
+                    >
+                      cal.com
+                    </a>
+                    . The easiest version is still the best one: open a link,
+                    get context quickly, and start building.
+                  </p>
+                </div>
+
+                <div className="grid gap-4 border-t border-border/25 pt-5 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center">
+                  <a
+                    href={gravatar.profileUrl}
+                    target="_blank"
+                    rel="noopener noreferrer me"
+                    className="shrink-0"
                   >
-                    {link.label}
-                  </Link>
-                  {i < contactLinks.length - 1 ? ', ' : ' '}
-                </span>
-              ))}
-              or book a call with me on
-              <button
-                data-cal-namespace="connect"
-                data-cal-link={siteInfo.calLink}
-                data-cal-config='{"layout":"week_view","useSlotsViewOnSmallScreen":"true"}'
-                className="underline decoration-primary pl-1 inline-flex items-center gap-1 group cursor-pointer"
-              >
-                cal.com
-                <CalendarIcon
-                  size={16}
-                  className="inline-block mr-1 mb-0.5 text-primary"
-                />
-              </button>
-              .
-            </p>
-            <img
-              src="/frieren/fern.svg"
-              className="h-16 sm:h-22 inline-block absolute -right-4 -top-6 sm:-top-4 transform -translate-y-1/2"
-            />
+                    <GravatarAvatar
+                      hash={avatarHash}
+                      size={76}
+                      alt={`${siteInfo.name} contact avatar`}
+                      className="h-19 w-19 border border-primary/20"
+                    />
+                  </a>
+                  <div className="grid gap-2">
+                    <p className="text-[10px] uppercase tracking-[0.24em] text-primary/75">
+                      public profile
+                    </p>
+                    <p className="max-w-2xl text-sm leading-7 text-foreground/72">
+                      {profile?.description || siteInfo.tagline}
+                    </p>
+                    {profile?.verified_accounts?.length ? (
+                      <GravatarSocialLinks
+                        accounts={profile.verified_accounts}
+                        iconSize={22}
+                        className="gap-4"
+                      />
+                    ) : null}
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid gap-2 sm:px-6">
+                <Link
+                  to="/readme"
+                  className="flex items-center justify-between gap-4 border-b border-border/25 py-3 text-sm leading-7 text-foreground/76 transition-colors hover:text-primary"
+                >
+                  <span>README</span>
+                  <span className="text-muted-foreground">reference</span>
+                </Link>
+                <Link
+                  to="/resume"
+                  className="flex items-center justify-between gap-4 border-b border-border/25 py-3 text-sm leading-7 text-foreground/76 transition-colors hover:text-primary"
+                >
+                  <span>Resume</span>
+                  <span className="text-muted-foreground">experience</span>
+                </Link>
+                <Link
+                  to="/blog"
+                  className="flex items-center justify-between gap-4 border-b border-border/25 py-3 text-sm leading-7 text-foreground/76 transition-colors hover:text-primary"
+                >
+                  <span>Writing</span>
+                  <span className="text-muted-foreground">notes</span>
+                </Link>
+                <a
+                  href={gravatar.profileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer me"
+                  className="flex items-center justify-between gap-4 border-b border-border/25 py-3 text-sm leading-7 text-foreground/76 transition-colors hover:text-primary"
+                >
+                  <span>Gravatar</span>
+                  <span className="text-muted-foreground">identity</span>
+                </a>
+              </div>
+            </div>
           </div>
         </Section>
-        <p className="mt-4 text-center font-mono text-[10px] tracking-widest text-muted-foreground/40 select-none flex flex-col sm:flex-row items-center gap-1 justify-between">
-          <span>Yes, This portfolio can run DOOM</span>
-          <span className="text-md">Konami Code: ↑ ↑ ↓ ↓ ← → ← → b a</span>
-        </p>
       </motion.div>
+
+      <motion.p
+        variants={item}
+        className="flex flex-col items-center justify-between gap-1 text-center font-mono text-[10px] tracking-[0.24em] text-muted-foreground/60 sm:flex-row sm:text-left"
+      >
+        <span>Yes, this portfolio can run DOOM.</span>
+        <span>Konami Code: ↑ ↑ ↓ ↓ ← → ← → b a</span>
+      </motion.p>
     </motion.div>
   )
 }

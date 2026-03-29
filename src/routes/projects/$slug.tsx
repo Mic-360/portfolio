@@ -120,13 +120,40 @@ function ProjectDetail() {
         <h1 className="text-lg font-semibold italic">project not found</h1>
         <Link
           to="/projects"
-          className="text-xs uppercase tracking-[0.2em] text-primary hover:text-primary/80"
+          className="text-xs uppercase tracking-[0.2em] text-primary transition-colors hover:text-primary/80"
         >
           back to projects
         </Link>
       </section>
     )
   }
+
+  const projectVisual = project.image || `/og/projects/${project.slug}`
+  const detailRows = [
+    {
+      label: 'published',
+      value: formatDate(project.date),
+    },
+    {
+      label: 'stack',
+      value:
+        project.stack.length > 0
+          ? project.stack.join(' · ')
+          : 'full stack build',
+    },
+    {
+      label: 'categories',
+      value:
+        project.categories.length > 0
+          ? project.categories.join(' · ')
+          : 'product engineering',
+    },
+    {
+      label: 'tags',
+      value:
+        project.tags.length > 0 ? project.tags.join(' · ') : 'selected work',
+    },
+  ]
 
   const container = {
     hidden: { opacity: 0 },
@@ -139,8 +166,8 @@ function ProjectDetail() {
   }
 
   const item = {
-    hidden: { opacity: 0, y: 10 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+    hidden: { opacity: 0, y: 14 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.45 } },
   }
 
   return (
@@ -148,99 +175,171 @@ function ProjectDetail() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="flex flex-col gap-8 pb-12 max-w-4xl mx-auto w-full"
+      className="mx-auto flex w-full max-w-[1500px] flex-col gap-14 pb-16"
     >
-      <header className="flex flex-col gap-4">
-        <motion.div variants={item}>
+      <motion.section
+        variants={item}
+        className="relative overflow-hidden border-b border-border/20 pb-12"
+      >
+        <div className="pointer-events-none absolute inset-x-[16%] top-[10%] h-28 rounded-full bg-primary/14 blur-3xl" />
+        <div className="pointer-events-none absolute right-[8%] top-[12%] h-72 w-72 rounded-full bg-primary/8 blur-[120px]" />
+
+        <div className="flex items-center justify-between gap-4 mb-6">
+          <p className="text-lg uppercase tracking-[0.28em] text-primary/75">
+            project dossier
+          </p>
           <Link
             to="/projects"
-            className="group inline-flex items-center gap-1 italic text-muted-foreground hover:text-primary transition-colors duration-300"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
           >
-            <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
-              ←
-            </span>
-            back to projects
+            <span>←</span>
+            archive
           </Link>
-        </motion.div>
-
-        <div className="space-y-2">
-          <motion.h1
-            variants={item}
-            className="text-4xl font-black italic tracking-tighter text-foreground uppercase"
-          >
-            {project.title}
-          </motion.h1>
-          <motion.p
-            variants={item}
-            className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary"
-          >
-            {formatDate(project.date)}
-          </motion.p>
         </div>
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.76fr)_minmax(0,1.24fr)] lg:items-end">
+          <div className="flex flex-col gap-7 pt-6 lg:pt-10">
+            <div className="grid gap-4">
+              <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                {formatDate(project.date)}
+              </p>
+              <h1 className="max-w-3xl font-serif text-5xl leading-none text-foreground sm:text-6xl xl:text-7xl">
+                {project.title}
+              </h1>
+              <p className="max-w-xl text-base leading-8 text-foreground/76 sm:text-lg">
+                {project.summary}
+              </p>
+            </div>
 
-        <motion.p
-          variants={item}
-          className="text-xl leading-relaxed text-foreground/80 font-medium italic max-w-2xl"
-        >
-          {project.summary}
-        </motion.p>
+            <div className="grid gap-5 border-t border-border/25 pt-5 sm:grid-cols-2">
+              <div className="space-y-1">
+                <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                  build lane
+                </p>
+                <p className="text-sm leading-7 text-foreground/76">
+                  {project.categories.length > 0
+                    ? project.categories.join(' · ')
+                    : 'selected work'}
+                </p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                  quick take
+                </p>
+                <p className="text-sm leading-7 text-foreground/76">
+                  Built as a full project story with implementation notes,
+                  supporting visuals, and direct links out.
+                </p>
+              </div>
+            </div>
+          </div>
 
-        {project.stack.length > 0 && (
-          <motion.div variants={item} className="flex flex-col gap-2">
-            <span className="text-[9px] uppercase tracking-[0.3em] text-muted-foreground font-bold">
-              Built with
-            </span>
-            <div className="flex flex-wrap gap-2">
-              {project.stack.map((tech) => (
-                <span
-                  key={tech}
-                  className="text-[9px] uppercase tracking-[0.2em] px-3 py-1 rounded-sm border border-primary/30 bg-primary/5 text-primary/80 hover:bg-primary/10 hover:text-primary transition-colors duration-200"
-                >
-                  {tech}
-                </span>
+          <div className="relative min-h-[320px] lg:min-h-[520px]">
+            <img
+              src={projectVisual}
+              alt={project.title}
+              className="hero-blend-media media-hover-image media-hover-fade absolute inset-y-[7%] right-0 h-[86%] w-[96%] object-contain"
+            />
+            <div className="hero-grid-overlay absolute inset-y-[10%] right-[4%] w-[82%]" />
+            <div className="pointer-events-none absolute inset-y-[14%] right-[14%] w-[36%] border-l border-primary/18" />
+
+            <div className="absolute inset-x-0 top-0 flex items-center justify-between gap-4 text-[10px] uppercase tracking-[0.28em] text-foreground/48">
+              <span>{project.slug}</span>
+              <span>selected build</span>
+            </div>
+
+            <div className="absolute inset-x-0 bottom-[5%] flex max-w-[80%] flex-col gap-2">
+              <p className="text-[10px] uppercase tracking-[0.28em] text-primary/75">
+                project surface
+              </p>
+              <p className="text-sm leading-7 text-foreground/72">
+                Visual preview on the right, full build notes below.
+              </p>
+            </div>
+          </div>
+        </div>
+      </motion.section>
+
+      <motion.section
+        variants={item}
+        className="grid gap-12 lg:grid-cols-[minmax(220px,0.34fr)_minmax(0,0.66fr)]"
+      >
+        <aside className="grid content-start gap-10 lg:sticky lg:top-24">
+          <div className="grid gap-5">
+            <div className="flex items-center gap-4">
+              <p className="shrink-0 text-[10px] uppercase tracking-[0.26em] text-primary/75">
+                technical rail
+              </p>
+              <div className="h-px flex-1 bg-linear-to-r from-primary/30 to-transparent" />
+            </div>
+
+            <div className="divide-y divide-border/20">
+              {detailRows.map((row) => (
+                <div key={row.label} className="py-3 first:pt-0">
+                  <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+                    {row.label}
+                  </p>
+                  <p className="mt-2 text-sm leading-7 text-foreground/76">
+                    {row.value}
+                  </p>
+                </div>
               ))}
             </div>
-          </motion.div>
-        )}
+          </div>
 
-        {project.links.length > 0 && (
-          <motion.div variants={item} className="flex flex-wrap gap-6 mt-2">
-            {project.links.map((link) => (
-              <a
-                key={link.url}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[10px] uppercase tracking-[0.2em] font-black underline decoration-primary/60 underline-offset-10 hover:text-primary hover:decoration-primary transition-all duration-300 hover:decoration-4"
-              >
-                {link.label} ↗
-              </a>
-            ))}
-          </motion.div>
-        )}
-        <motion.div
-          variants={item}
-          className="animus-sync-bar mt-6 opacity-50"
-        />
-      </header>
+          {project.links.length > 0 ? (
+            <div className="grid gap-5">
+              <div className="flex items-center gap-4">
+                <p className="shrink-0 text-[10px] uppercase tracking-[0.26em] text-primary/75">
+                  outbound links
+                </p>
+                <div className="h-px flex-1 bg-linear-to-r from-primary/30 to-transparent" />
+              </div>
 
-      <motion.div
-        variants={item}
-        className="mdx-content flex flex-col gap-6 text-foreground leading-relaxed text-lg"
-        dangerouslySetInnerHTML={{ __html: project.html }}
-      />
+              <div className="divide-y divide-border/20">
+                {project.links.map((link, index) => (
+                  <a
+                    key={`${link.label}-${link.url}-${index}`}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between gap-4 py-3 text-sm leading-7 text-foreground/76 transition-colors hover:text-primary"
+                  >
+                    <span>{link.label}</span>
+                    <span className="text-muted-foreground">↗</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          ) : null}
+        </aside>
+
+        <div className="grid min-w-0 gap-6">
+          <div className="flex items-center gap-4">
+            <p className="shrink-0 text-[10px] uppercase tracking-[0.26em] text-primary/75">
+              build notes
+            </p>
+            <div className="h-px flex-1 bg-linear-to-r from-primary/30 to-transparent" />
+          </div>
+
+          <div
+            className="mdx-content min-w-0 flex flex-col gap-6 text-lg leading-relaxed text-foreground/86"
+            dangerouslySetInnerHTML={{ __html: project.html }}
+          />
+        </div>
+      </motion.section>
 
       <motion.footer
         variants={item}
-        className="pt-12 border-t border-border/50"
+        className="flex flex-col gap-4 border-t border-border/20 pt-6 sm:flex-row sm:items-center sm:justify-between"
       >
+        <p className="max-w-2xl text-sm leading-7 text-muted-foreground">
+          More builds in the archive to follow.
+        </p>
         <Link
           to="/projects"
-          className="group inline-flex items-center gap-2 italic text-muted-foreground hover:text-primary transition-colors duration-300 text-sm"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
         >
-          <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
-            ←
-          </span>
+          <span>←</span>
           see more projects
         </Link>
       </motion.footer>

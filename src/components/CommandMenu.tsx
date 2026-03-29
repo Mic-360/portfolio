@@ -25,6 +25,12 @@ import {
 } from 'lucide-react'
 import * as React from 'react'
 
+import type { BlogMeta, CertificateMeta, ProjectMeta } from '@/lib/content'
+import {
+  getBlogIndex,
+  getCertificateIndex,
+  getProjectIndex,
+} from '@/lib/content'
 import {
   CommandDialog,
   CommandEmpty,
@@ -37,14 +43,33 @@ import {
 } from '@/components/ui/command'
 import { siteInfo, socialLinks } from '@/config/site-data'
 import { useTheme } from '@/components/ThemeProvider'
-import type { BlogMeta, CertificateMeta, ProjectMeta } from '@/lib/content'
-import {
-  getBlogIndex,
-  getCertificateIndex,
-  getProjectIndex,
-} from '@/lib/content'
+
+function getStableShortcutLabel(shortcut: string) {
+  return shortcut.replace(/Mod/g, 'Ctrl')
+}
+
+function useMounted() {
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  return mounted
+}
+
+function ShortcutText({
+  mounted,
+  shortcut,
+}: {
+  mounted: boolean
+  shortcut: string
+}) {
+  return mounted ? formatForDisplay(shortcut) : getStableShortcutLabel(shortcut)
+}
 
 export function CommandMenu() {
+  const mounted = useMounted()
   const [open, setOpen] = React.useState(false)
   const navigate = useNavigate()
   const { setMode } = useTheme()
@@ -127,7 +152,7 @@ export function CommandMenu() {
             <ArrowLeft />
             <span>Back</span>
             <CommandShortcut>
-              {formatForDisplay('Mod+Backspace')}
+              <ShortcutText mounted={mounted} shortcut="Mod+Backspace" />
             </CommandShortcut>
           </CommandItem>
         </CommandGroup>
@@ -139,42 +164,58 @@ export function CommandMenu() {
           <CommandItem onSelect={() => handleNavigate('/')}>
             <Home />
             <span>home</span>
-            <CommandShortcut>{formatForDisplay('Mod+H')}</CommandShortcut>
+            <CommandShortcut>
+              <ShortcutText mounted={mounted} shortcut="Mod+H" />
+            </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/about')}>
             <User />
             <span>about</span>
-            <CommandShortcut>{formatForDisplay('Mod+A')}</CommandShortcut>
+            <CommandShortcut>
+              <ShortcutText mounted={mounted} shortcut="Mod+A" />
+            </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/blog')}>
             <BookOpen />
             <span>blog</span>
-            <CommandShortcut>{formatForDisplay('Mod+B')}</CommandShortcut>
+            <CommandShortcut>
+              <ShortcutText mounted={mounted} shortcut="Mod+B" />
+            </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/projects')}>
             <FolderOpen />
             <span>projects</span>
-            <CommandShortcut>{formatForDisplay('Mod+P')}</CommandShortcut>
+            <CommandShortcut>
+              <ShortcutText mounted={mounted} shortcut="Mod+P" />
+            </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/pinterest/gallery')}>
             <Image />
             <span>pinterest gallery</span>
-            <CommandShortcut>{formatForDisplay('Mod+I')}</CommandShortcut>
+            <CommandShortcut>
+              <ShortcutText mounted={mounted} shortcut="Mod+I" />
+            </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/resume')}>
             <FileText />
             <span>resume</span>
-            <CommandShortcut>{formatForDisplay('Mod+R')}</CommandShortcut>
+            <CommandShortcut>
+              <ShortcutText mounted={mounted} shortcut="Mod+R" />
+            </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/bento')}>
             <Briefcase />
             <span>bento</span>
-            <CommandShortcut>{formatForDisplay('Mod+E')}</CommandShortcut>
+            <CommandShortcut>
+              <ShortcutText mounted={mounted} shortcut="Mod+E" />
+            </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/readme')}>
             <Github />
             <span>readme</span>
-            <CommandShortcut>{formatForDisplay('Mod+G')}</CommandShortcut>
+            <CommandShortcut>
+              <ShortcutText mounted={mounted} shortcut="Mod+G" />
+            </CommandShortcut>
           </CommandItem>
         </CommandGroup>
 
@@ -206,17 +247,23 @@ export function CommandMenu() {
           <CommandItem onSelect={() => handleNavigate('/rss')}>
             <Rss />
             <span>rss feed</span>
-            <CommandShortcut>{formatForDisplay('Mod+F')}</CommandShortcut>
+            <CommandShortcut>
+              <ShortcutText mounted={mounted} shortcut="Mod+F" />
+            </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/llms-full/txt')}>
             <Bot />
             <span>llms-full.txt</span>
-            <CommandShortcut>{formatForDisplay('Mod+L')}</CommandShortcut>
+            <CommandShortcut>
+              <ShortcutText mounted={mounted} shortcut="Mod+L" />
+            </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/sitemap/xml')}>
             <Map />
             <span>sitemap</span>
-            <CommandShortcut>{formatForDisplay('Mod+M')}</CommandShortcut>
+            <CommandShortcut>
+              <ShortcutText mounted={mounted} shortcut="Mod+M" />
+            </CommandShortcut>
           </CommandItem>
         </CommandGroup>
 
@@ -314,11 +361,13 @@ export function CommandMenu() {
 
 /** Small inline hint for keyboard navigation — place in footer or hero */
 export function KeyboardHint() {
+  const mounted = useMounted()
+
   return (
     <p className="hidden sm:inline-flex items-center gap-1.5 text-[8px] uppercase tracking-[0.15em] text-muted-foreground select-none">
       press{' '}
       <kbd className="inline-flex items-center gap-0.5 rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] font-medium text-muted-foreground">
-        {formatForDisplay('Mod+K')}
+        <ShortcutText mounted={mounted} shortcut="Mod+K" />
       </kbd>{' '}
       to navigate this site via keyboard
     </p>

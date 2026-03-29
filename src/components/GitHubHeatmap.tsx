@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-// @ts-ignore
+// @ts-ignore: cal-heatmap ships without compatible types for this import path.
 import CalHeatmap from 'cal-heatmap'
 import 'cal-heatmap/cal-heatmap.css'
-// @ts-ignore
+// @ts-ignore: plugin modules do not expose typed entry points.
 import Tooltip from 'cal-heatmap/plugins/Tooltip'
-// @ts-ignore
+// @ts-ignore: plugin modules do not expose typed entry points.
 import LegendLite from 'cal-heatmap/plugins/LegendLite'
-// @ts-ignore
+// @ts-ignore: plugin modules do not expose typed entry points.
 import CalendarLabel from 'cal-heatmap/plugins/CalendarLabel'
 import dayjs from 'dayjs'
 import localeData from 'dayjs/plugin/localeData'
@@ -229,12 +229,12 @@ export default function GitHubHeatmap({ username }: GitHubHeatmapProps) {
   return (
     <div
       ref={wrapperRef}
-      className="flex flex-col gap-4 w-full max-w-370 mx-auto p-1 shadow-inner group transition-all"
+      className="mx-auto flex w-full max-w-370 flex-col gap-5"
     >
-      <div className="flex justify-between items-end mb-1">
+      <div className="mb-1 flex items-end justify-between gap-4">
         <div className="flex flex-col gap-1">
-          <h3 className="text-xs font-black uppercase tracking-[0.3em] text-primary italic">
-            Contribution Matrix
+          <h3 className="text-xs font-semibold uppercase tracking-[0.26em] text-primary/85">
+            GitHub Activity
           </h3>
           <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
             {total
@@ -253,37 +253,33 @@ export default function GitHubHeatmap({ username }: GitHubHeatmapProps) {
         )}
       </div>
 
-      <div className="relative flex justify-center w-full overflow-hidden">
+      <div className="relative flex w-full justify-center overflow-hidden">
         <div ref={containerRef} className="max-w-full" />
-
-        {/* Decorative els */}
-        <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-primary/20 pointer-events-none group-hover:border-primary/50 transition-colors" />
-        <div className="absolute bottom-4 left-0 w-2 h-2 border-b-2 border-l-2 border-primary/20 pointer-events-none group-hover:border-primary/50 transition-colors" />
       </div>
 
-      <div className="flex justify-between items-center">
-        <div className="flex gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-t border-border/35 pt-3">
+        <div className="flex gap-4">
           <button
             onClick={handlePrevious}
-            className="px-3 py-1 text-[10px] uppercase tracking-widest font-bold bg-muted/30 hover:bg-primary hover:text-background rounded transition-all active:scale-95"
+            className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground transition-colors hover:text-primary active:scale-95"
           >
             ← Previous
           </button>
           <button
             onClick={handleNext}
-            className="px-3 py-1 text-[10px] uppercase tracking-widest font-bold bg-muted/30 hover:bg-primary hover:text-background rounded transition-all active:scale-95"
+            className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground transition-colors hover:text-primary active:scale-95"
           >
             Next →
           </button>
         </div>
 
-        <div className="hidden md:flex items-center gap-2 text-[10px] text-muted-foreground font-medium">
+        <div className="flex items-center gap-2 text-[10px] font-medium text-muted-foreground">
           <span className="opacity-60">Less</span>
           <div id="cal-heatmap-legend" className="flex items-center"></div>
           <span className="opacity-60">More</span>
         </div>
       </div>
-      <p className="text-xs italic text-muted-foreground">
+      <p className="text-xs text-muted-foreground">
         click the graph to view my full github readme.
       </p>
     </div>
