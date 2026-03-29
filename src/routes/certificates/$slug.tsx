@@ -1,5 +1,6 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { motion } from 'motion/react'
+
 import { siteMeta } from '@/config/site-data'
 import { getCertificateBySlug } from '@/lib/content'
 
@@ -72,9 +73,24 @@ export const Route = createFileRoute('/certificates/$slug')({
             '@context': 'https://schema.org',
             '@type': 'BreadcrumbList',
             itemListElement: [
-              { '@type': 'ListItem', position: 1, name: 'Home', item: siteMeta.baseUrl },
-              { '@type': 'ListItem', position: 2, name: 'Certificates', item: `${siteMeta.baseUrl}/certificates` },
-              { '@type': 'ListItem', position: 3, name: certificate.title, item: canonicalUrl },
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: siteMeta.baseUrl,
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Certificates',
+                item: `${siteMeta.baseUrl}/certificates`,
+              },
+              {
+                '@type': 'ListItem',
+                position: 3,
+                name: certificate.title,
+                item: canonicalUrl,
+              },
             ],
           }),
         },
@@ -90,18 +106,41 @@ function CertificateDetail() {
   if (!certificate) {
     return (
       <section className="flex flex-col gap-4">
-        <h1 className="text-lg font-semibold italic">
+        <h1 className="font-serif text-3xl text-foreground">
           certificate not found
         </h1>
         <Link
           to="/"
-          className="text-xs uppercase tracking-[0.2em] text-primary hover:text-primary/80"
+          className="text-sm text-muted-foreground transition-colors hover:text-primary"
         >
-          back to home
+          ← back to home
         </Link>
       </section>
     )
   }
+
+  const detailRows = [
+    {
+      label: 'issuer',
+      value: certificate.issuer,
+    },
+    {
+      label: 'issued',
+      value: certificate.issued,
+    },
+    {
+      label: 'expires',
+      value: certificate.expires || 'No listed expiry',
+    },
+    ...(certificate.credential_id
+      ? [
+          {
+            label: 'credential id',
+            value: certificate.credential_id,
+          },
+        ]
+      : []),
+  ]
 
   const container = {
     hidden: { opacity: 0 },
@@ -114,8 +153,8 @@ function CertificateDetail() {
   }
 
   const item = {
-    hidden: { opacity: 0, y: 10 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+    hidden: { opacity: 0, y: 12 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.45 } },
   }
 
   return (
@@ -123,103 +162,180 @@ function CertificateDetail() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="flex flex-col gap-8 max-w-4xl mx-auto w-full"
+      className="mx-auto flex w-full max-w-6xl flex-col gap-14 pb-16"
     >
-      {/* Faded banner image */}
-      {certificate.image_url && (
-        <motion.div
-          variants={item}
-          className="relative -mx-4 -mt-3.5 h-64 sm:h-96 overflow-hidden rounded-b-sm"
-        >
-          <img
-            src={certificate.image_url}
-            alt={certificate.title}
-            referrerPolicy="no-referrer"
-            crossOrigin="anonymous"
-            className="absolute inset-0 w-full h-full object-center opacity-80 scale-105"
-          />
-          <div className="absolute inset-0 bg-linear-to-b from-transparent via-background/60 to-background" />
-        </motion.div>
-      )}
+      <motion.section
+        variants={item}
+        className="relative overflow-hidden border-b border-border/20 pb-12"
+      >
+        <div className="pointer-events-none absolute inset-x-[16%] top-[10%] h-28 rounded-full bg-primary/14 blur-3xl" />
+        <div className="pointer-events-none absolute right-[8%] top-[12%] h-72 w-72 rounded-full bg-primary/8 blur-[120px]" />
 
-      <header className="flex flex-col gap-4">
-        <motion.div variants={item}>
-          <Link
-            to="/"
-            className="group inline-flex items-center gap-1 italic text-muted-foreground hover:text-primary transition-colors duration-300"
-          >
-            <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
-              &larr;
-            </span>
-            back to home
-          </Link>
-        </motion.div>
+        <div className="flex flex-col gap-7 pt-6 lg:pt-10">
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-lg uppercase tracking-[0.28em] text-primary/75">
+              credential dossier
+            </p>
+            <Link
+              to="/certificates"
+              className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
+            >
+              <span>←</span>
+              archive
+            </Link>
+          </div>
 
-        <div className="space-y-2">
-          <motion.h1
-            variants={item}
-            className="text-4xl font-black italic tracking-tighter text-foreground uppercase"
-          >
-            {certificate.title}
-          </motion.h1>
-          <motion.div
-            variants={item}
-            className="flex flex-wrap items-center gap-3 text-[10px] uppercase tracking-[0.3em] font-bold text-primary"
-          >
-            <span>{certificate.issuer}</span>
-            <span className="text-muted-foreground">/</span>
-            <span>{certificate.issued}</span>
-            {certificate.expires && (
-              <>
-                <span className="text-muted-foreground">/</span>
-                <span className="text-muted-foreground">
-                  expires {certificate.expires}
-                </span>
-              </>
-            )}
-          </motion.div>
+          <div className="grid gap-4">
+            <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+              {certificate.issued}
+            </p>
+            <h1 className="font-serif text-5xl leading-none text-foreground sm:text-6xl xl:text-7xl">
+              {certificate.title}
+            </h1>
+            <p className="max-w-4xl text-base leading-8 text-foreground/76 sm:text-lg">
+              Issued by {certificate.issuer}
+              {certificate.expires
+                ? ` and currently valid through ${certificate.expires}.`
+                : '.'}
+            </p>
+          </div>
+
+          <div className="grid gap-5 border-t border-border/25 pt-5 sm:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+            <div className="space-y-1">
+              <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                record type
+              </p>
+              <p className="text-sm leading-7 text-foreground/76">
+                Verified credential with issuer, timeline, and skills.
+              </p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                proof
+              </p>
+              <p className="text-sm leading-7 text-foreground/76">
+                Public verification link and issuer metadata are kept alongside
+                the credential details below.
+              </p>
+            </div>
+          </div>
         </div>
+      </motion.section>
 
-        {certificate.credential_id && (
-          <motion.div variants={item} className="flex flex-col gap-1">
-            <span className="text-[9px] uppercase tracking-[0.3em] text-muted-foreground font-bold">
-              Credential ID
-            </span>
-            <span className="text-sm font-mono text-foreground/70">
-              {certificate.credential_id}
-            </span>
-          </motion.div>
-        )}
+      <motion.section
+        variants={item}
+        className="grid gap-12 lg:grid-cols-[minmax(220px,0.34fr)_minmax(0,0.66fr)]"
+      >
+        <aside className="grid content-start gap-10 lg:sticky lg:top-24">
+          <div className="grid gap-5">
+            <div className="flex items-center gap-4">
+              <p className="shrink-0 text-[10px] uppercase tracking-[0.26em] text-primary/75">
+                credential rail
+              </p>
+              <div className="h-px flex-1 bg-linear-to-r from-primary/30 to-transparent" />
+            </div>
 
-        {certificate.skills.length > 0 && (
-          <motion.div variants={item} className="flex flex-col gap-2">
-            <span className="text-[9px] uppercase tracking-[0.3em] text-muted-foreground font-bold">
-              Skills
-            </span>
-            <div className="flex flex-wrap gap-2">
-              {certificate.skills.map((skill) => (
-                <span
-                  key={skill}
-                  className="text-[9px] uppercase tracking-[0.2em] px-3 py-1 rounded-sm border border-primary/30 bg-primary/5 text-primary/80 hover:bg-primary/10 hover:text-primary transition-colors duration-200"
-                >
-                  {skill}
-                </span>
+            <div className="divide-y divide-border/20">
+              {detailRows.map((row) => (
+                <div key={row.label} className="py-3 first:pt-0">
+                  <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+                    {row.label}
+                  </p>
+                  <p className="mt-2 text-sm leading-7 text-foreground/76 break-words">
+                    {row.value}
+                  </p>
+                </div>
               ))}
             </div>
-          </motion.div>
-        )}
+          </div>
 
-        <motion.div variants={item} className="flex flex-wrap gap-6 mt-2">
-          <a
-            href={certificate.verify_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[10px] uppercase tracking-[0.2em] font-black underline decoration-primary/60 underline-offset-10 hover:text-primary hover:decoration-primary transition-all duration-300 hover:decoration-4"
-          >
-            verify credential
-          </a>
-        </motion.div>
-      </header>
+          <div className="grid gap-5">
+            <div className="flex items-center gap-4">
+              <p className="shrink-0 text-[10px] uppercase tracking-[0.26em] text-primary/75">
+                verification
+              </p>
+              <div className="h-px flex-1 bg-linear-to-r from-primary/30 to-transparent" />
+            </div>
+
+            <a
+              href={certificate.verify_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-between gap-4 border-b border-border/20 py-3 text-sm leading-7 text-foreground/76 transition-colors hover:text-primary"
+            >
+              <span>Verify credential</span>
+              <span className="text-muted-foreground">↗</span>
+            </a>
+          </div>
+        </aside>
+
+        <div className="grid gap-6">
+          {certificate.image_url ? (
+            <div className="relative min-h-[280px] border-b border-border/20 pb-6">
+              <img
+                src={certificate.image_url}
+                alt={certificate.title}
+                referrerPolicy="no-referrer"
+                crossOrigin="anonymous"
+                className="hero-blend-media media-hover-image media-hover-fade h-full w-full object-contain"
+              />
+              <div className="hero-grid-overlay absolute inset-0" />
+              <div className="absolute inset-x-0 top-0 flex items-center justify-between gap-4 text-[10px] uppercase tracking-[0.28em] text-foreground/48">
+                <span>{certificate.issuer}</span>
+                <span>credential image</span>
+              </div>
+            </div>
+          ) : null}
+
+          <div className="flex items-center gap-4">
+            <p className="shrink-0 text-[10px] uppercase tracking-[0.26em] text-primary/75">
+              competency
+            </p>
+            <div className="h-px flex-1 bg-linear-to-r from-primary/30 to-transparent" />
+          </div>
+
+          <div className="grid gap-5 border-t border-border/20 pt-5">
+            <p className="max-w-2xl text-base leading-8 text-foreground/76">
+              The credential maps to the following skill areas and serves as a
+              public record of training, assessment, or completion.
+            </p>
+
+            <div className="divide-y divide-border/20">
+              {certificate.skills.length > 0 ? (
+                certificate.skills.map((skill, index) => (
+                  <div
+                    key={`${skill}-${index}`}
+                    className="py-3 text-sm leading-7 text-foreground/76"
+                  >
+                    {skill}
+                  </div>
+                ))
+              ) : (
+                <div className="py-3 text-sm leading-7 text-muted-foreground">
+                  No skills listed for this credential.
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </motion.section>
+
+      <motion.footer
+        variants={item}
+        className="flex flex-col gap-4 border-t border-border/20 pt-6 sm:flex-row sm:items-center sm:justify-between"
+      >
+        <p className="max-w-2xl text-sm leading-7 text-muted-foreground">
+          More credentials in the archive with calmer visual
+          planes, straightforward facts, and clear verification.
+        </p>
+        <Link
+          to="/certificates"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
+        >
+          <span>←</span>
+          back to certificates
+        </Link>
+      </motion.footer>
     </motion.article>
   )
 }
