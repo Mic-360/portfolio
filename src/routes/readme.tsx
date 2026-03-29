@@ -1,5 +1,7 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
+import { motion } from 'motion/react'
 import type { ImgHTMLAttributes } from 'react'
+
 import { siteImages, siteMeta } from '@/config/site-data'
 
 export const Route = createFileRoute('/readme')({
@@ -34,8 +36,18 @@ export const Route = createFileRoute('/readme')({
             '@context': 'https://schema.org',
             '@type': 'BreadcrumbList',
             itemListElement: [
-              { '@type': 'ListItem', position: 1, name: 'Home', item: siteMeta.baseUrl },
-              { '@type': 'ListItem', position: 2, name: 'README', item: canonicalUrl },
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: siteMeta.baseUrl,
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'README',
+                item: canonicalUrl,
+              },
             ],
           }),
         },
@@ -71,264 +83,361 @@ function ReadmeImage({
 }
 
 function ReadmePage() {
-  return (
-    <article className="flex flex-col gap-12 max-w-5xl mx-auto w-full">
-      {/* Profile Image and GitHub Stats Section */}
-      <section className="flex flex-col md:flex-row items-center justify-center gap-10">
-        <div className="w-40 h-40 shrink-0 relative">
-          <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl animate-pulse" />
-          <ReadmeImage
-            src={siteImages.profilePhoto}
-            alt="Bhaumic Singh — Profile Photo"
-            width={160}
-            height={160}
-            className="w-full h-full rounded-full border-2 border-primary shadow-2xl relative z-10 object-cover"
-          />
-        </div>
-        <div className="w-full flex-1">
-          <ReadmeImage
-            src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=mic-360&theme=transparent"
-            alt="Stats"
-            width={495}
-            height={195}
-            className="w-full h-auto filter drop-shadow-md"
-          />
-        </div>
-      </section>
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+      },
+    },
+  }
 
-      {/* Summary Cards Section */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {[
-          'repos-per-language',
-          'most-commit-language',
-          'stats',
-          'productive-time?utcOffset=5.30',
-        ].map((type) => (
-          <div
-            key={type}
-            className="bg-card/20 shadow-2xl overflow-hidden border border-border/50 hover:border-primary/30 transition-colors"
-          >
+  const item = {
+    hidden: { opacity: 0, y: 14 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.45 } },
+  }
+
+  const summaryCards = [
+    {
+      key: 'stats',
+      label: 'stats',
+      src: 'https://github-profile-summary-cards.vercel.app/api/cards/stats?username=mic-360&theme=transparent',
+    },
+    {
+      key: 'repos-per-language',
+      label: 'repos per language',
+      src: 'https://github-profile-summary-cards.vercel.app/api/cards/repos-per-language?username=mic-360&theme=transparent',
+    },
+    {
+      key: 'most-commit-language',
+      label: 'most commit language',
+      src: 'https://github-profile-summary-cards.vercel.app/api/cards/most-commit-language?username=mic-360&theme=transparent',
+    },
+    {
+      key: 'productive-time',
+      label: 'productive time',
+      src: 'https://github-profile-summary-cards.vercel.app/api/cards/productive-time?utcOffset=5.30&username=mic-360&theme=transparent',
+    },
+  ]
+
+  const toolIcons = [
+    { src: 'nextjs/nextjs-original.svg', alt: 'Next.js' },
+    { src: 'react/react-original.svg', alt: 'React' },
+    { src: 'nodejs/nodejs-original.svg', alt: 'Node.js' },
+    { src: 'bun/bun-original.svg', alt: 'Bun' },
+    { src: 'git/git-original.svg', alt: 'Git' },
+    { src: 'cloudflare/cloudflare-original.svg', alt: 'Cloudflare' },
+    { src: 'typescript/typescript-original.svg', alt: 'TypeScript' },
+    { src: 'android/android-plain.svg', alt: 'Android' },
+    { src: 'flutter/flutter-original.svg', alt: 'Flutter' },
+    { src: 'googlecloud/googlecloud-original.svg', alt: 'Google Cloud' },
+    { src: 'python/python-original.svg', alt: 'Python' },
+    { src: 'ubuntu/ubuntu-original.svg', alt: 'Ubuntu' },
+    { src: 'java/java-original.svg', alt: 'Java' },
+    { src: 'go/go-original.svg', alt: 'Go' },
+    { src: 'rust/rust-original.svg', alt: 'Rust' },
+    { src: 'terraform/terraform-original.svg', alt: 'Terraform' },
+    { src: 'astro/astro-original.svg', alt: 'Astro' },
+    { src: 'redis/redis-original.svg', alt: 'Redis' },
+    { src: 'graphql/graphql-plain.svg', alt: 'GraphQL' },
+    { src: 'firebase/firebase-original.svg', alt: 'Firebase' },
+  ]
+
+  const workspace = [
+    'Android 13',
+    'ASUS ROG Flow',
+    'Windows 11 Insider',
+    'Ubuntu 24.04',
+    'AMD Ryzen 9 5980HS',
+    '32GB RAM',
+  ]
+
+  const socials = [
+    { href: 'https://github.com/Mic-360', label: 'GitHub' },
+    { href: 'https://www.linkedin.com/in/bhaumic/', label: 'LinkedIn' },
+    { href: 'https://x.com/bhaumicsingh', label: 'X' },
+    { href: 'https://www.instagram.com/bhaumic.singh/', label: 'Instagram' },
+  ]
+
+  return (
+    <motion.article
+      variants={container}
+      initial="hidden"
+      animate="show"
+      className="mx-auto flex w-full max-w-6xl flex-col gap-14"
+    >
+      <motion.section
+        variants={item}
+        className="relative min-h-[580px] overflow-hidden"
+      >
+        <div className="pointer-events-none absolute inset-x-[16%] top-[14%] h-28 rounded-full bg-primary/14 blur-3xl" />
+        <div className="pointer-events-none absolute right-[8%] top-[12%] h-72 w-72 rounded-full bg-primary/8 blur-[120px]" />
+
+        <div className="grid min-h-[580px] gap-10 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:items-end">
+          <div className="flex flex-col gap-7 pt-8 lg:pt-12">
+            <div className="flex items-center gap-4">
+              <div className="relative h-20 w-20 shrink-0">
+                <div className="absolute inset-0 rounded-full bg-primary/16 blur-xl" />
+                <ReadmeImage
+                  src={siteImages.profilePhoto}
+                  alt="Bhaumic Singh — Profile Photo"
+                  width={80}
+                  height={80}
+                  className="relative h-20 w-20 rounded-full border border-primary/35 object-cover"
+                />
+              </div>
+              <div className="grid gap-1 text-sm text-foreground/72">
+                <span className="text-[10px] uppercase tracking-[0.28em] text-primary/75">
+                  readme
+                </span>
+                <span>Bhaumic Singh</span>
+              </div>
+            </div>
+
+            <div className="grid gap-4">
+              <p className="text-[10px] uppercase tracking-[0.28em] text-primary/75">
+                technical dossier
+              </p>
+              <h1 className="max-w-xl font-serif text-5xl leading-none text-foreground sm:text-6xl">
+                Public work, stack, and the systems behind it.
+              </h1>
+              <p className="max-w-lg text-base leading-8 text-foreground/76">
+                A refined version of the GitHub README, shaped to match the
+                homepage: fewer widget boxes, clearer sections, and a stronger
+                editorial rhythm around code, tools, and output.
+              </p>
+            </div>
+
+            <div className="grid gap-4 border-t border-border/25 pt-5 sm:grid-cols-2">
+              <div className="space-y-1">
+                <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                  profile
+                </p>
+                <a
+                  href="https://github.com/Mic-360"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-foreground/78 transition-colors hover:text-primary"
+                >
+                  github.com/Mic-360
+                </a>
+              </div>
+              <div className="space-y-1">
+                <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                  focus
+                </p>
+                <p className="text-sm text-foreground/78">
+                  web, android, AI, cloud
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="relative min-h-[340px] lg:min-h-[450px]">
+            <div className="pointer-events-none absolute inset-y-[8%] right-[4%] w-[84%] border-l border-primary/18" />
             <ReadmeImage
-              src={`https://github-profile-summary-cards.vercel.app/api/cards/${type.includes('?') ? type + '&' : type + '?'}username=mic-360&theme=transparent`}
-              alt={type}
+              src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=mic-360&theme=transparent"
+              alt="GitHub profile summary"
               width={495}
               height={195}
-              className="w-full h-auto"
+              className="hero-blend-media media-hover-image media-hover-fade absolute inset-y-[8%] right-0 h-[84%] w-[96%] object-contain"
             />
-          </div>
-        ))}
-      </section>
-
-      {/* Metrics Section */}
-      <section className="w-full shadow-2xl overflow-hidden border border-border/50 bg-card/20 p-2">
-        <ReadmeImage
-          src="https://raw.githubusercontent.com/Mic-360/Mic-360/main/github-metrics.svg"
-          alt="Contributions Metrics"
-          width={1200}
-          height={480}
-          className="w-full h-auto rounded-lg"
-        />
-      </section>
-
-      {/* Languages and Tools Section */}
-      <section className="flex flex-col gap-8 text-center py-8 relative">
-        <div className="absolute inset-0 m-auto w-60 h-60 lg:w-80 lg:h-80 bg-primary/40 rounded-full blur-[100px] pointer-events-none z-0 animate-[float_10s_ease-in-out_infinite]" />
-        <h2 className="text-2xl font-black italic uppercase tracking-tighter relative z-10">
-          <span className="text-primary mr-2">/</span>
-          Languages and Tools
-        </h2>
-        <div className="flex flex-wrap justify-center gap-6 md:gap-8 relative z-10">
-          {[
-            { src: 'nextjs/nextjs-original.svg', alt: 'Next.js' },
-            { src: 'react/react-original.svg', alt: 'React' },
-            { src: 'nodejs/nodejs-original.svg', alt: 'Node.js' },
-            { src: 'bun/bun-original.svg', alt: 'Bun' },
-            { src: 'git/git-original.svg', alt: 'Git' },
-            {
-              src: 'amazonwebservices/amazonwebservices-plain-wordmark.svg',
-              alt: 'AWS',
-            },
-            { src: 'cloudflare/cloudflare-original.svg', alt: 'Cloudflare' },
-            { src: 'typescript/typescript-original.svg', alt: 'TypeScript' },
-            { src: 'android/android-plain.svg', alt: 'Android' },
-            { src: 'cplusplus/cplusplus-original.svg', alt: 'C++' },
-            { src: 'flutter/flutter-original.svg', alt: 'Flutter' },
-            {
-              src: 'googlecloud/googlecloud-original.svg',
-              alt: 'Google Cloud',
-            },
-            { src: 'python/python-original.svg', alt: 'Python' },
-            { src: 'ubuntu/ubuntu-original.svg', alt: 'Ubuntu' },
-            { src: 'java/java-original.svg', alt: 'Java' },
-            { src: 'csharp/csharp-original.svg', alt: 'C#' },
-            { src: 'gitlab/gitlab-original.svg', alt: 'Gitlab' },
-            { src: 'go/go-original.svg', alt: 'Go' },
-            { src: 'rust/rust-original.svg', alt: 'Rust' },
-            { src: 'terraform/terraform-original.svg', alt: 'Terraform' },
-            { src: 'svelte/svelte-original.svg', alt: 'Svelte' },
-            { src: 'astro/astro-original.svg', alt: 'Astro' },
-            { src: 'redis/redis-original.svg', alt: 'Redis' },
-            { src: 'llvm/llvm-original.svg', alt: 'LLVM' },
-            { src: 'kubernetes/kubernetes-original.svg', alt: 'Kubernetes' },
-            { src: 'jupyter/jupyter-original-wordmark.svg', alt: 'Jupyter' },
-            { src: 'grafana/grafana-original.svg', alt: 'Grafana' },
-            { src: 'graphql/graphql-plain.svg', alt: 'GraphQL' },
-            {
-              src: 'githubactions/githubactions-original.svg',
-              alt: 'GitHub Actions',
-            },
-            { src: 'firebase/firebase-original.svg', alt: 'Firebase' },
-          ].map((icon) => (
-            <div
-              key={icon.alt}
-              className="hover:scale-[1.2] hover:rotate-[5deg] transition-transform"
-            >
-              <ReadmeImage
-                src={`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${icon.src}`}
-                alt={icon.alt}
-                width={44}
-                height={44}
-                className="w-11 h-11 grayscale-0 hover:grayscale transition-all duration-300"
-              />
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Workspace Section */}
-      <section className="flex flex-col gap-6 text-center p-8">
-        <h4 className="text-2xl font-black italic uppercase tracking-tighter">
-          My Workspace
-        </h4>
-        <div className="flex flex-wrap justify-center gap-3">
-          {[
-            {
-              src: 'https://img.shields.io/badge/Android%2013-3DDC84?style=for-the-badge&logo=android&logoColor=white',
-              alt: 'Android',
-            },
-            {
-              src: 'https://img.shields.io/badge/asus%20ROG%20Flow-000000?style=for-the-badge&logo=asus&logoColor=white',
-              alt: 'Asus',
-            },
-            {
-              src: 'https://img.shields.io/badge/windows%2011 insider-%230078D6.svg?&style=for-the-badge&logo=windows&logoColor=white',
-              alt: 'Windows',
-            },
-            {
-              src: 'https://img.shields.io/badge/Ubuntu%2024.04-E95420?style=for-the-badge&logo=ubuntu&logoColor=white',
-              alt: 'Ubuntu',
-            },
-            {
-              src: 'https://img.shields.io/badge/AMD%20Ryzen_9_5980HS-ED1C24?style=for-the-badge&logo=amd&logoColor=white',
-              alt: 'AMD',
-            },
-            {
-              src: 'https://img.shields.io/badge/RAM-32GB-%230071C5.svg?&style=for-the-badge&logoColor=white',
-              alt: 'RAM',
-            },
-          ].map((badge) => (
-            <div
-              key={badge.alt}
-              className="hover:scale-105 hover:-translate-y-0.5 transition-transform"
-            >
-              <ReadmeImage
-                src={badge.src}
-                alt={badge.alt}
-                width={160}
-                height={28}
-                className="h-7 w-auto shadow-2xl"
-              />
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Connect With Me Section */}
-      <section className="flex flex-col gap-10 text-center p-10 shadow-inner relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-32 h-32 -mr-16 -mt-16 blur-3xl" />
-        <div className="flex flex-col gap-3 relative z-10">
-          <h2 className="text-3xl font-black italic uppercase tracking-tighter">
-            Connect With Me
-          </h2>
-          <div className="flex justify-center">
-            <ReadmeImage
-              src="https://komarev.com/ghpvc/?username=mic-360&style=for-the-badge&color=blueviolet"
-              alt="Profile views"
-              width={176}
-              height={28}
-              className="h-8 w-auto"
-            />
+            <div className="hero-grid-overlay absolute inset-y-[12%] right-[4%] w-[80%]" />
           </div>
         </div>
+      </motion.section>
 
-        <div className="flex flex-col gap-8 relative z-10">
-          <p className="font-medium italic text-muted-foreground text-lg">
-            Consider giving my work a ⭐ to show some ❤️
+      <motion.section variants={item} className="grid gap-8">
+        <div className="flex items-center gap-4">
+          <p className="shrink-0 text-[10px] uppercase tracking-[0.26em] text-primary/75">
+            profile summary
           </p>
-          <div className="flex flex-wrap justify-center gap-6">
-            {[
-              {
-                href: 'https://www.facebook.com/fb.bhaumic.singh',
-                src: 'https://img.shields.io/badge/Facebook-1877F2?style=flat&logo=facebook&logoColor=white&color=black',
-                alt: 'Facebook',
-              },
-              {
-                href: 'https://www.instagram.com/bhaumic.singh/',
-                src: 'https://img.shields.io/badge/Instagram-E4405F?style=flat&logo=instagram&logoColor=white&color=black',
-                alt: 'Instagram',
-              },
-              {
-                href: 'https://www.linkedin.com/in/bhaumic/',
-                src: 'https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white&color=black',
-                alt: 'LinkedIn',
-              },
-              {
-                href: 'https://x.com/bhaumicsingh',
-                src: 'https://img.shields.io/badge/X-000000?style=flat&logo=x&logoColor=white&color=black',
-                alt: 'X',
-              },
-            ].map((social) => (
+          <div className="h-px flex-1 bg-linear-to-r from-primary/30 to-transparent" />
+        </div>
+
+        <div className="divide-y divide-border/25">
+          {summaryCards.map((card, index) => (
+            <div
+              key={card.key}
+              className="group relative min-h-[210px] py-7 first:pt-0 last:pb-0"
+            >
+              <div
+                className={`media-hover-parent pointer-events-none absolute inset-y-0 ${
+                  index % 2 === 0 ? 'left-[24%] right-0' : 'left-0 right-[24%]'
+                }`}
+              >
+                <ReadmeImage
+                  src={card.src}
+                  alt={card.label}
+                  width={495}
+                  height={195}
+                  className="media-hover-image media-hover-fade absolute inset-0 h-full w-full object-contain"
+                />
+                <div
+                  className={`absolute inset-0 ${
+                    index % 2 === 0
+                      ? 'bg-linear-to-r from-background via-background/64 to-transparent'
+                      : 'bg-linear-to-l from-background via-background/64 to-transparent'
+                  }`}
+                />
+              </div>
+
+              <div className="relative z-10 grid h-full items-center md:grid-cols-2">
+                <div
+                  className={`flex max-w-md flex-col gap-3 ${
+                    index % 2 === 0
+                      ? 'md:col-start-1'
+                      : 'md:col-start-2 md:justify-self-end md:text-right'
+                  }`}
+                >
+                  <p className="text-[10px] uppercase tracking-[0.24em] text-primary/75">
+                    {card.label}
+                  </p>
+                  <h2 className="font-serif text-3xl leading-tight text-foreground">
+                    {card.label === 'stats' && 'A quick read on activity and footprint.'}
+                    {card.label === 'repos per language' &&
+                      'Language mix across active repositories.'}
+                    {card.label === 'most commit language' &&
+                      'Where the heaviest implementation time went.'}
+                    {card.label === 'productive time' &&
+                      'When most of the visible work actually happens.'}
+                  </h2>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </motion.section>
+
+      <motion.section variants={item} className="grid gap-6">
+        <div className="flex items-center gap-4">
+          <p className="shrink-0 text-[10px] uppercase tracking-[0.26em] text-primary/75">
+            contribution map
+          </p>
+          <div className="h-px flex-1 bg-linear-to-r from-primary/30 to-transparent" />
+        </div>
+
+        <div className="relative min-h-[320px] overflow-hidden">
+          <ReadmeImage
+            src="https://raw.githubusercontent.com/Mic-360/Mic-360/main/github-metrics.svg"
+            alt="Contributions Metrics"
+            width={1200}
+            height={480}
+            className="media-hover-image media-hover-fade h-full w-full object-contain"
+          />
+        </div>
+      </motion.section>
+
+      <motion.section
+        variants={item}
+        className="grid gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(260px,0.92fr)]"
+      >
+        <div className="grid gap-6">
+          <div className="flex items-center gap-4">
+            <p className="shrink-0 text-[10px] uppercase tracking-[0.26em] text-primary/75">
+              languages and tools
+            </p>
+            <div className="h-px flex-1 bg-linear-to-r from-primary/30 to-transparent" />
+          </div>
+
+          <div className="grid grid-cols-3 gap-x-6 gap-y-8 sm:grid-cols-4 lg:grid-cols-5">
+            {toolIcons.map((icon) => (
+              <div
+                key={icon.alt}
+                className="media-hover-parent flex flex-col items-center gap-3 text-center"
+              >
+                <ReadmeImage
+                  src={`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${icon.src}`}
+                  alt={icon.alt}
+                  width={44}
+                  height={44}
+                  className="media-hover-image h-11 w-11 object-contain"
+                />
+                <span className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                  {icon.alt}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid gap-6">
+          <div className="flex items-center gap-4">
+            <p className="shrink-0 text-[10px] uppercase tracking-[0.26em] text-primary/75">
+              workspace
+            </p>
+            <div className="h-px flex-1 bg-linear-to-r from-primary/30 to-transparent" />
+          </div>
+
+          <div className="divide-y divide-border/25">
+            {workspace.map((itemLabel) => (
+              <div
+                key={itemLabel}
+                className="py-3 text-sm leading-7 text-foreground/76"
+              >
+                {itemLabel}
+              </div>
+            ))}
+          </div>
+        </div>
+      </motion.section>
+
+      <motion.section
+        variants={item}
+        className="grid gap-10 lg:grid-cols-[minmax(0,0.94fr)_minmax(0,1.06fr)] lg:items-end"
+      >
+        <div className="grid gap-4">
+          <p className="text-[10px] uppercase tracking-[0.26em] text-primary/75">
+            public links
+          </p>
+          <h2 className="max-w-lg font-serif text-4xl leading-tight text-foreground">
+            The public-facing version of the work stays readable here too.
+          </h2>
+          <p className="max-w-lg text-base leading-8 text-foreground/76">
+            Follow the repositories, connect directly, or browse the rest of the
+            portfolio without leaving the same visual system.
+          </p>
+
+          <div className="divide-y divide-border/25">
+            {socials.map((social) => (
               <a
-                key={social.alt}
+                key={social.label}
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="shadow-md hover:shadow-xl hover:scale-110 hover:-translate-y-0.5 transition-all overflow-hidden"
+                className="flex items-center justify-between gap-4 py-3 text-sm transition-colors hover:text-primary"
               >
-                <ReadmeImage
-                  src={social.src}
-                  className="h-10 w-auto"
-                  alt={social.alt}
-                  width={120}
-                  height={30}
-                />
+                <span>{social.label}</span>
+                <span className="text-muted-foreground">↗</span>
               </a>
             ))}
           </div>
         </div>
-      </section>
 
-      <div className="flex justify-center overflow-hidden border border-border/50 shadow-2xl">
-        <ReadmeImage
-          src="https://raw.githubusercontent.com/Mic-360/Mic-360/main/space-shooter.gif"
-          alt="Space Shooter"
-          width={640}
-          height={360}
-          className="w-full max-w-4xl h-auto"
-        />
-      </div>
+        <div className="media-hover-parent relative min-h-[280px] overflow-hidden">
+          <ReadmeImage
+            src="https://raw.githubusercontent.com/Mic-360/Mic-360/main/space-shooter.gif"
+            alt="Space Shooter"
+            width={640}
+            height={360}
+            className="hero-blend-media media-hover-image media-hover-fade h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-linear-to-r from-background/20 via-transparent to-transparent" />
+        </div>
+      </motion.section>
 
-      <footer>
+      <motion.footer
+        variants={item}
+        className="border-t border-border/25 pt-6"
+      >
         <Link
           to="/"
-          className="group inline-flex items-center gap-2 italic text-muted-foreground hover:text-primary transition-colors text-lg"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
         >
-          <span className="transform group-hover:-translate-x-1 transition-transform">
-            ←
-          </span>
-          back
+          ← back
         </Link>
-      </footer>
-    </article>
+      </motion.footer>
+    </motion.article>
   )
 }
