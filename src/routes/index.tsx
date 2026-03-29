@@ -275,9 +275,6 @@ function App() {
               book a call
             </a>
           </div>
-          <div className="lg:hidden">
-            <KeyboardHint />
-          </div>
         </div>
 
         <div className="relative min-h-105 lg:min-h-125">
@@ -293,28 +290,30 @@ function App() {
           </div>
 
           <div className="absolute inset-0">
-            <img
-              src={siteImages.banner}
-              alt="Featured work backdrop"
-              className="hero-blend-media media-hover-image media-hover-fade absolute inset-y-[7%] right-0 h-[86%] w-[90%] object-cover"
+            <video
+              src="/horizon.mp4"
+              className="hero-blend-media media-hover-image media-hover-fade absolute inset-y-[7%] right-0 h-[95%] w-full object-cover"
+              autoPlay
+              loop
+              muted
             />
             <div className="hero-grid-overlay absolute inset-y-[8%] right-[3%] w-[82%]" />
             <div className="pointer-events-none absolute inset-y-[14%] right-[12%] w-[42%] border-l border-primary/18" />
           </div>
 
-          <div className="absolute inset-x-0 bottom-[6%] flex flex-col gap-4 sm:max-w-[82%]">
-            <div className="flex items-center gap-4">
+          <div className="absolute inset-x-0 bottom-0 flex flex-col gap-4">
+            <div className="flex items-center gap-4 sm:max-w-[82%]">
               <a
                 href={gravatar.profileUrl}
                 target="_blank"
                 rel="noopener noreferrer me"
                 className="shrink-0"
               >
-                <GravatarAvatar
-                  hash={avatarHash}
-                  size={72}
-                  alt={`${siteInfo.name} avatar`}
-                  className="h-18 w-18 border border-white/10 shadow-2xl"
+                <img
+                  src="/icon.svg"
+                  width={72}
+                  height={72}
+                  className="h-18 w-18"
                 />
               </a>
               <div className="min-w-0 text-foreground">
@@ -328,16 +327,25 @@ function App() {
                   className="mt-2 block text-xl font-semibold leading-tight transition-colors hover:text-primary sm:text-2xl"
                 >
                   {siteInfo.currentRole}
-                  <div className="block text-base font-normal sm:inline sm:pl-2">
+                  <p className="block text-base font-normal sm:inline sm:pl-2">
                     at {siteInfo.currentCompany}
-                  </div>
+                  </p>
                 </a>
               </div>
             </div>
 
-            <p className="max-w-xl text-sm leading-7 text-foreground/74 sm:text-base">
-              {profile?.description || siteInfo.currentSummary}
-            </p>
+            <div className="relative isolate w-full">
+              <p className="relative z-10 max-w-xl text-sm leading-7 text-foreground/74 sm:text-base">
+                Current favorite game -{' '}
+                <em className="italic font-medium">{siteInfo.currentGame}</em>
+                .{' '}
+              </p>
+              <img
+                src="/aloy.png"
+                alt="Aloy from Horizon Zero Dawn"
+                className="absolute right-0 bottom-0 z-0 h-auto w-12 sm:w-16 lg:w-24 xl:w-32"
+              />
+            </div>
           </div>
         </div>
       </motion.section>

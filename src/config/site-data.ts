@@ -10,6 +10,7 @@ export const siteInfo = {
   buildLine: 'bleeding edge things.',
   location: 'Prayagraj, India',
   locationNative: 'प्रयागराज, भारत',
+  currentGame: 'Horizon Forbidden West',
   currentRole: 'Full Stack software engineer',
   currentCompany: 'KarkhanaHub.com',
   currentCompanyUrl: 'https://karkhanahub.com/',
