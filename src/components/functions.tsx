@@ -13,57 +13,62 @@ function Section({
   title: string
   children: React.ReactNode
 }) {
+  const titleContent =
+    title === 'blogs' ? (
+      <span>
+        <PenIcon size={16} className="inline-block mr-2 h-8 w-8" />
+        {title}
+      </span>
+    ) : title === 'projects' ? (
+      <span>
+        <LayersIcon size={18} className="inline-block mr-2 h-8 w-8" />
+        {title}
+      </span>
+    ) : title === 'certificates' ? (
+      <span>
+        <Award size={16} className="inline-block mr-2 h-8 w-8" />
+        {title}
+      </span>
+    ) : title === 'current' ? (
+      <>
+        <CurrentIcon size={18} className="inline-block mr-2 h-8 w-8" />
+        {title}
+      </>
+    ) : title === 'previous' ? (
+      <>
+        <PreviousIcon size={18} className="inline-block mr-2 h-8 w-8" />
+        {title}
+      </>
+    ) : title === 'healthstat' ? (
+      <>
+        <HealthstatIcon size={18} className="inline-block mr-2 h-8 w-8" />
+        {title}
+      </>
+    ) : title === 'pinterest' ? (
+      <>
+        <ImagesIcon size={18} className="inline-block mr-2 h-8 w-8" />
+        {title}
+      </>
+    ) : (
+      title
+    )
+
   return (
     <motion.section
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
-      className="flex flex-col gap-2 my-4"
+      className="my-4 flex flex-col gap-6"
     >
-      <h2 className="font-semibold italic text-2xl underline underline-offset-2 decoration-primary flex items-center">
-        {title === 'blogs' ? (
-          <span>
-            <PenIcon size={20} className="inline-block mr-2" />
-            {title}
-          </span>
-        ) : title === 'projects' ? (
-          <span>
-            <LayersIcon size={24} className="inline-block mr-2" />
-            {title}
-          </span>
-        ) : title === 'certificates' ? (
-          <span>
-            <Award size={20} className="inline-block mr-2" />
-            {title}
-          </span>
-        ) : title === 'current' ? (
-          <>
-            <CurrentIcon size={24} className="inline-block mr-2" />
-            {title}
-          </>
-        ) : title === 'previous' ? (
-          <>
-            <PreviousIcon size={24} className="inline-block mr-2" />
-            {title}
-          </>
-        ) : title === 'healthstat' ? (
-          <>
-            <HealthstatIcon size={24} className="inline-block mr-2" />
-            {title}
-          </>
-        ) : title === 'pinterest' ? (
-          <>
-            <ImagesIcon size={24} className="inline-block mr-2" />
-            {title}
-          </>
-        ) : (
-          title
-        )}
-      </h2>
-      {title !== '' && title !== 'contact' && (
-        <div className="animus-sync-bar mb-2" />
-      )}
+      {title ? (
+        <div className="flex items-center gap-4">
+          <h2 className="shrink-0 text-lg font-semibold uppercase tracking-[0.32em] text-primary/85">
+            {titleContent}
+          </h2>
+          <div className="h-px flex-1 bg-linear-to-r from-primary/30 via-border/40 to-transparent" />
+        </div>
+      ) : null}
       {children}
     </motion.section>
   )
@@ -112,7 +117,7 @@ function Sparkline({
     .join(' ')
 
   return (
-    <div className="relative overflow-hidden bg-foreground/10 border border-primary/20 rounded-xs group-hover:border-primary/40 transition-colors">
+    <div className="relative overflow-hidden rounded-xl bg-linear-to-b from-primary/[0.08] via-transparent to-transparent">
       {/* Grid Pattern */}
       <div
         className="absolute inset-0 z-0 opacity-10 pointer-events-none"
@@ -121,6 +126,8 @@ function Sparkline({
           backgroundSize: '10% 25%',
         }}
       />
+      <div className="absolute inset-x-0 top-0 h-px bg-border/40" />
+      <div className="absolute inset-x-0 bottom-0 h-px bg-border/25" />
 
       <svg
         viewBox={`0 0 ${width} ${height}`}
@@ -229,30 +236,27 @@ function StatCard({
 
   return (
     <motion.div
-      whileHover={{ y: -2, transition: { duration: 0.2 } }}
-      className="group flex flex-col gap-3 p-3 rounded-xs border border-primary/20 bg-background/50 hover:bg-primary/5 transition-all duration-500 relative overflow-hidden"
+      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 12 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.35, ease: 'easeOut' }}
+      className="flex flex-col gap-4 border-t border-border/35 pt-4"
     >
-      {/* Decorative HUD corners */}
-      <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-primary/40 group-hover:border-primary transition-colors" />
-      <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-primary/40 group-hover:border-primary transition-colors" />
-      <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-primary/40 group-hover:border-primary transition-colors" />
-      <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-primary/40 group-hover:border-primary transition-colors" />
-
-      <div className="flex justify-between items-start z-10">
+      <div className="z-10 flex items-start justify-between gap-4">
         <div className="flex flex-col gap-0.5">
-          <span className="text-[10px] uppercase font-mono tracking-[0.2em] text-primary/60 group-hover:text-primary/90 transition-colors">
+          <span className="text-[10px] font-mono uppercase tracking-[0.24em] text-primary/70">
             {label}
           </span>
           <div className="flex items-baseline gap-1.5">
-            <span className="text-2xl font-black italic tracking-tighter tabular-nums drop-shadow-[0_0_5px_var(--primary)]">
+            <span className="text-2xl font-semibold tracking-tight tabular-nums">
               {format(mainValue)}
             </span>
-            <span className="text-[10px] uppercase font-mono tracking-tight text-muted-foreground">
+            <span className="text-[10px] font-mono uppercase tracking-tight text-muted-foreground">
               {unit}
             </span>
           </div>
         </div>
-        <div className="flex flex-col items-end opacity-40 group-hover:opacity-100 transition-opacity">
+        <div className="flex flex-col items-end opacity-50">
           <div className="w-1.5 h-1.5 rounded-full bg-primary" />
           <span className="text-[6px] font-mono mt-1">REC</span>
         </div>
@@ -261,7 +265,7 @@ function StatCard({
       <Sparkline data={graphData} color="var(--primary)" />
 
       {showStats && graphData.length > 0 && (
-        <div className="grid grid-cols-3 gap-1 text-[9px] opacity-60 group-hover:opacity-100 transition-opacity z-10">
+        <div className="z-10 grid grid-cols-3 gap-1 text-[9px] opacity-80">
           <div className="text-center">
             <span className="block font-mono">avg</span>
             <span className="text-primary/80">{format(avg)}</span>
