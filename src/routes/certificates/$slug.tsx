@@ -162,7 +162,7 @@ function CertificateDetail() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="mx-auto flex w-full max-w-6xl flex-col gap-14 pb-16"
+      className="mx-auto flex w-full max-w-[1500px] flex-col gap-14 pb-16"
     >
       <motion.section
         variants={item}
@@ -325,8 +325,8 @@ function CertificateDetail() {
         className="flex flex-col gap-4 border-t border-border/20 pt-6 sm:flex-row sm:items-center sm:justify-between"
       >
         <p className="max-w-2xl text-sm leading-7 text-muted-foreground">
-          More credentials in the archive with calmer visual
-          planes, straightforward facts, and clear verification.
+          More credentials in the archive with calmer visual planes,
+          straightforward facts, and clear verification.
         </p>
         <Link
           to="/certificates"

@@ -177,7 +177,7 @@ function BlogPost() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="mx-auto flex w-full max-w-6xl flex-col gap-14 pb-16"
+      className="mx-auto flex w-full max-w-[1500px] flex-col gap-14 pb-16"
     >
       <motion.section
         variants={item}
