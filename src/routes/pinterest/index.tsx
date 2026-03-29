@@ -5,6 +5,7 @@ import { motion } from 'motion/react'
 import type { PinterestCreatedPin } from '@/lib/pinterest'
 import { getPinterestCreatedPins } from '@/lib/pinterest'
 import { siteMeta } from '@/config/site-data'
+import { cn } from '@/lib/utils'
 
 export const Route = createFileRoute('/pinterest/')({
   loader: async () => {
@@ -99,42 +100,43 @@ function PinterestIndexPage() {
         <div className="pointer-events-none absolute inset-x-[18%] top-[8%] h-28 rounded-full bg-primary/14 blur-3xl" />
         <div className="pointer-events-none absolute right-[6%] top-[10%] h-72 w-72 rounded-full bg-primary/8 blur-[120px]" />
 
-            <div className="flex items-center justify-between gap-4 pb-6">
-              <div className="flex items-center gap-3">
-                <span className="text-primary">
-                  <ImageIcon size={18} />
-                </span>
-                <span className="text-[10px] uppercase tracking-[0.28em] text-primary/75">
-                  pinterest
-                </span>
-              </div>
-              <Link
-                to="/"
-                className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
-              >
-                <span>←</span>
-                home
-              </Link>
-            </div>
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:items-end">
+        <div className="flex items-center justify-between gap-4 pb-6">
+          <div className="flex items-center gap-3">
+            <span className="text-primary">
+              <ImageIcon size={22} />
+            </span>
+            <span className="text-lg uppercase tracking-[0.28em] text-primary/75">
+              pinterest
+            </span>
+          </div>
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
+          >
+            <span>←</span>
+            home
+          </Link>
+        </div>
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:items-start">
           <div className="flex flex-col gap-7 pt-6 lg:pt-10">
-
             <div className="grid gap-4">
               <h1 className="max-w-3xl font-serif text-5xl leading-none text-foreground sm:text-6xl xl:text-7xl">
                 Visual studies, poster-like pins, and a live stream from the
                 created feed.
               </h1>
               <p className="max-w-xl text-base leading-8 text-foreground/76 sm:text-lg">
-                This page keeps calmer framing of pins, but it
-                allows download of assets and provides visual previews, route
-                choices, and the jump into the full masonry gallery.
+                This page keeps calmer framing of pins, but it allows download
+                of assets and provides visual previews, route choices, and the
+                jump into the full masonry gallery.
               </p>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-3">
-              <PinterestInfoCard label="created pins" value={`${pins.length}`} />
-              <PinterestInfoCard label="source" value="Pinterest Created" />
-              <PinterestInfoCard label="last sync" value={lastSyncLabel} />
+              <PinterestInfoCard
+                label="created pins"
+                value={`${pins.length}`}
+              />
+              <PinterestInfoCard label="last sync" value={lastSyncLabel} className="sm:col-span-2" />
             </div>
           </div>
 
@@ -203,53 +205,6 @@ function PinterestIndexPage() {
           />
         </div>
       </motion.section>
-
-      <motion.section variants={item} className="grid gap-6">
-        <div className="flex items-center gap-4">
-          <p className="shrink-0 text-[10px] uppercase tracking-[0.26em] text-primary/75">
-            selected pins
-          </p>
-          <div className="h-px flex-1 bg-linear-to-r from-primary/30 to-transparent" />
-        </div>
-
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {leadPins.map((pin, index) => (
-            <a
-              key={`${pin.id}-selected-${index}`}
-              href={pin.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group block"
-            >
-              <article className="overflow-hidden rounded-[1.6rem] border border-border/25 bg-card/20 transition-colors hover:border-primary/35">
-                <div className="overflow-hidden">
-                  <img
-                    src={pin.imageUrl}
-                    alt={pin.title}
-                    loading="lazy"
-                    width={pin.imageWidth}
-                    height={pin.imageHeight}
-                    className="h-auto w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                  />
-                </div>
-                <div className="grid gap-2 p-4">
-                  <p className="text-[10px] uppercase tracking-[0.22em] text-primary/75">
-                    pin {String(index + 1).padStart(2, '0')}
-                  </p>
-                  <h3 className="text-sm font-medium leading-6 text-foreground transition-colors group-hover:text-primary">
-                    {pin.title}
-                  </h3>
-                  {pin.description ? (
-                    <p className="text-[11px] leading-6 text-muted-foreground/84 line-clamp-3">
-                      {pin.description}
-                    </p>
-                  ) : null}
-                </div>
-              </article>
-            </a>
-          ))}
-        </div>
-      </motion.section>
     </motion.section>
   )
 }
@@ -257,12 +212,19 @@ function PinterestIndexPage() {
 function PinterestInfoCard({
   label,
   value,
+  className,
 }: {
   label: string
   value: string
+  className?: string
 }) {
   return (
-    <div className="rounded-[1.4rem] border border-border/25 bg-card/18 p-4">
+    <div
+      className={cn(
+        className,
+        'rounded-[1.4rem] border border-border/25 bg-card/18 p-4',
+      )}
+    >
       <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
         {label}
       </p>
@@ -294,7 +256,7 @@ function PinterestPreviewCard({
           loading="lazy"
           width={pin.imageWidth}
           height={pin.imageHeight}
-          className="h-auto w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+          className="h-72 w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
         />
       </div>
       <div className="grid gap-1 p-4">
