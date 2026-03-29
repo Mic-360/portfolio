@@ -25,6 +25,12 @@ import {
 } from 'lucide-react'
 import * as React from 'react'
 
+import type { BlogMeta, CertificateMeta, ProjectMeta } from '@/lib/content'
+import {
+  getBlogIndex,
+  getCertificateIndex,
+  getProjectIndex,
+} from '@/lib/content'
 import {
   CommandDialog,
   CommandEmpty,
@@ -37,12 +43,22 @@ import {
 } from '@/components/ui/command'
 import { siteInfo, socialLinks } from '@/config/site-data'
 import { useTheme } from '@/components/ThemeProvider'
-import type { BlogMeta, CertificateMeta, ProjectMeta } from '@/lib/content'
-import {
-  getBlogIndex,
-  getCertificateIndex,
-  getProjectIndex,
-} from '@/lib/content'
+
+function getStableShortcutLabel(shortcut: string) {
+  return shortcut
+    .replace(/Mod/g, 'Ctrl')
+    .replace(/Backspace/g, 'Backspace')
+}
+
+function ShortcutText({ shortcut }: { shortcut: string }) {
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  return mounted ? formatForDisplay(shortcut) : getStableShortcutLabel(shortcut)
+}
 
 export function CommandMenu() {
   const [open, setOpen] = React.useState(false)
@@ -127,7 +143,7 @@ export function CommandMenu() {
             <ArrowLeft />
             <span>Back</span>
             <CommandShortcut>
-              {formatForDisplay('Mod+Backspace')}
+              <ShortcutText shortcut="Mod+Backspace" />
             </CommandShortcut>
           </CommandItem>
         </CommandGroup>
@@ -139,42 +155,58 @@ export function CommandMenu() {
           <CommandItem onSelect={() => handleNavigate('/')}>
             <Home />
             <span>home</span>
-            <CommandShortcut>{formatForDisplay('Mod+H')}</CommandShortcut>
+            <CommandShortcut>
+              <ShortcutText shortcut="Mod+H" />
+            </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/about')}>
             <User />
             <span>about</span>
-            <CommandShortcut>{formatForDisplay('Mod+A')}</CommandShortcut>
+            <CommandShortcut>
+              <ShortcutText shortcut="Mod+A" />
+            </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/blog')}>
             <BookOpen />
             <span>blog</span>
-            <CommandShortcut>{formatForDisplay('Mod+B')}</CommandShortcut>
+            <CommandShortcut>
+              <ShortcutText shortcut="Mod+B" />
+            </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/projects')}>
             <FolderOpen />
             <span>projects</span>
-            <CommandShortcut>{formatForDisplay('Mod+P')}</CommandShortcut>
+            <CommandShortcut>
+              <ShortcutText shortcut="Mod+P" />
+            </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/pinterest/gallery')}>
             <Image />
             <span>pinterest gallery</span>
-            <CommandShortcut>{formatForDisplay('Mod+I')}</CommandShortcut>
+            <CommandShortcut>
+              <ShortcutText shortcut="Mod+I" />
+            </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/resume')}>
             <FileText />
             <span>resume</span>
-            <CommandShortcut>{formatForDisplay('Mod+R')}</CommandShortcut>
+            <CommandShortcut>
+              <ShortcutText shortcut="Mod+R" />
+            </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/bento')}>
             <Briefcase />
             <span>bento</span>
-            <CommandShortcut>{formatForDisplay('Mod+E')}</CommandShortcut>
+            <CommandShortcut>
+              <ShortcutText shortcut="Mod+E" />
+            </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/readme')}>
             <Github />
             <span>readme</span>
-            <CommandShortcut>{formatForDisplay('Mod+G')}</CommandShortcut>
+            <CommandShortcut>
+              <ShortcutText shortcut="Mod+G" />
+            </CommandShortcut>
           </CommandItem>
         </CommandGroup>
 
@@ -206,17 +238,23 @@ export function CommandMenu() {
           <CommandItem onSelect={() => handleNavigate('/rss')}>
             <Rss />
             <span>rss feed</span>
-            <CommandShortcut>{formatForDisplay('Mod+F')}</CommandShortcut>
+            <CommandShortcut>
+              <ShortcutText shortcut="Mod+F" />
+            </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/llms-full/txt')}>
             <Bot />
             <span>llms-full.txt</span>
-            <CommandShortcut>{formatForDisplay('Mod+L')}</CommandShortcut>
+            <CommandShortcut>
+              <ShortcutText shortcut="Mod+L" />
+            </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/sitemap/xml')}>
             <Map />
             <span>sitemap</span>
-            <CommandShortcut>{formatForDisplay('Mod+M')}</CommandShortcut>
+            <CommandShortcut>
+              <ShortcutText shortcut="Mod+M" />
+            </CommandShortcut>
           </CommandItem>
         </CommandGroup>
 
@@ -318,7 +356,7 @@ export function KeyboardHint() {
     <p className="hidden sm:inline-flex items-center gap-1.5 text-[8px] uppercase tracking-[0.15em] text-muted-foreground select-none">
       press{' '}
       <kbd className="inline-flex items-center gap-0.5 rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] font-medium text-muted-foreground">
-        {formatForDisplay('Mod+K')}
+        <ShortcutText shortcut="Mod+K" />
       </kbd>{' '}
       to navigate this site via keyboard
     </p>
