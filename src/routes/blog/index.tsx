@@ -147,8 +147,8 @@ function BlogIndex() {
             </h1>
             <p className="max-w-4xl text-base leading-8 text-foreground/76 sm:text-lg">
               Essays, postmortems, and sharp notes from web, Android, AI, and
-              systems builds. A quieter archive that stays clean, readable, and
-              a little more cinematic than a plain list of posts.
+              systems builds that stay clean, readable, and a little more
+              cinematic than a plain list of posts.
             </p>
           </div>
 
@@ -302,7 +302,7 @@ function BlogIndex() {
             atmosphere, quieter metadata, and cleaner long-form rhythm as the
             rest of the site.
           </p>
-        </div>{' '}
+        </div>
         <Link
           to="/"
           className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"

@@ -45,22 +45,31 @@ import { siteInfo, socialLinks } from '@/config/site-data'
 import { useTheme } from '@/components/ThemeProvider'
 
 function getStableShortcutLabel(shortcut: string) {
-  return shortcut
-    .replace(/Mod/g, 'Ctrl')
-    .replace(/Backspace/g, 'Backspace')
+  return shortcut.replace(/Mod/g, 'Ctrl')
 }
 
-function ShortcutText({ shortcut }: { shortcut: string }) {
+function useMounted() {
   const [mounted, setMounted] = React.useState(false)
 
   React.useEffect(() => {
     setMounted(true)
   }, [])
 
+  return mounted
+}
+
+function ShortcutText({
+  mounted,
+  shortcut,
+}: {
+  mounted: boolean
+  shortcut: string
+}) {
   return mounted ? formatForDisplay(shortcut) : getStableShortcutLabel(shortcut)
 }
 
 export function CommandMenu() {
+  const mounted = useMounted()
   const [open, setOpen] = React.useState(false)
   const navigate = useNavigate()
   const { setMode } = useTheme()
@@ -143,7 +152,7 @@ export function CommandMenu() {
             <ArrowLeft />
             <span>Back</span>
             <CommandShortcut>
-              <ShortcutText shortcut="Mod+Backspace" />
+              <ShortcutText mounted={mounted} shortcut="Mod+Backspace" />
             </CommandShortcut>
           </CommandItem>
         </CommandGroup>
@@ -156,56 +165,56 @@ export function CommandMenu() {
             <Home />
             <span>home</span>
             <CommandShortcut>
-              <ShortcutText shortcut="Mod+H" />
+              <ShortcutText mounted={mounted} shortcut="Mod+H" />
             </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/about')}>
             <User />
             <span>about</span>
             <CommandShortcut>
-              <ShortcutText shortcut="Mod+A" />
+              <ShortcutText mounted={mounted} shortcut="Mod+A" />
             </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/blog')}>
             <BookOpen />
             <span>blog</span>
             <CommandShortcut>
-              <ShortcutText shortcut="Mod+B" />
+              <ShortcutText mounted={mounted} shortcut="Mod+B" />
             </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/projects')}>
             <FolderOpen />
             <span>projects</span>
             <CommandShortcut>
-              <ShortcutText shortcut="Mod+P" />
+              <ShortcutText mounted={mounted} shortcut="Mod+P" />
             </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/pinterest/gallery')}>
             <Image />
             <span>pinterest gallery</span>
             <CommandShortcut>
-              <ShortcutText shortcut="Mod+I" />
+              <ShortcutText mounted={mounted} shortcut="Mod+I" />
             </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/resume')}>
             <FileText />
             <span>resume</span>
             <CommandShortcut>
-              <ShortcutText shortcut="Mod+R" />
+              <ShortcutText mounted={mounted} shortcut="Mod+R" />
             </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/bento')}>
             <Briefcase />
             <span>bento</span>
             <CommandShortcut>
-              <ShortcutText shortcut="Mod+E" />
+              <ShortcutText mounted={mounted} shortcut="Mod+E" />
             </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/readme')}>
             <Github />
             <span>readme</span>
             <CommandShortcut>
-              <ShortcutText shortcut="Mod+G" />
+              <ShortcutText mounted={mounted} shortcut="Mod+G" />
             </CommandShortcut>
           </CommandItem>
         </CommandGroup>
@@ -239,21 +248,21 @@ export function CommandMenu() {
             <Rss />
             <span>rss feed</span>
             <CommandShortcut>
-              <ShortcutText shortcut="Mod+F" />
+              <ShortcutText mounted={mounted} shortcut="Mod+F" />
             </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/llms-full/txt')}>
             <Bot />
             <span>llms-full.txt</span>
             <CommandShortcut>
-              <ShortcutText shortcut="Mod+L" />
+              <ShortcutText mounted={mounted} shortcut="Mod+L" />
             </CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigate('/sitemap/xml')}>
             <Map />
             <span>sitemap</span>
             <CommandShortcut>
-              <ShortcutText shortcut="Mod+M" />
+              <ShortcutText mounted={mounted} shortcut="Mod+M" />
             </CommandShortcut>
           </CommandItem>
         </CommandGroup>
@@ -352,11 +361,13 @@ export function CommandMenu() {
 
 /** Small inline hint for keyboard navigation — place in footer or hero */
 export function KeyboardHint() {
+  const mounted = useMounted()
+
   return (
     <p className="hidden sm:inline-flex items-center gap-1.5 text-[8px] uppercase tracking-[0.15em] text-muted-foreground select-none">
       press{' '}
       <kbd className="inline-flex items-center gap-0.5 rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] font-medium text-muted-foreground">
-        <ShortcutText shortcut="Mod+K" />
+        <ShortcutText mounted={mounted} shortcut="Mod+K" />
       </kbd>{' '}
       to navigate this site via keyboard
     </p>

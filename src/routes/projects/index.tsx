@@ -292,7 +292,7 @@ function ProjectsIndex() {
         variants={item}
         className="flex flex-col gap-4 border-t border-border/20 pt-6 sm:flex-row sm:items-end sm:justify-between"
       >
-        <div className='flex gap-6 items-end'>
+        <div className="flex gap-6 items-end">
           <img
             src="/frieren/frieren.svg"
             className="h-16 sm:h-22 inline-block align-bottom"
@@ -301,7 +301,7 @@ function ProjectsIndex() {
             Each project opens into a fuller build story with the technical
             breakdown, writing, and outbound links.
           </p>
-        </div>{' '}
+        </div>
         <Link
           to="/"
           className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"

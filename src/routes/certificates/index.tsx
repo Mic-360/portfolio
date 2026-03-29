@@ -296,7 +296,7 @@ function CertificatesIndex() {
             Each credential opens into a clearer detail view with verification,
             data, and the underlying skill list.
           </p>
-        </div>{' '}
+        </div>
         <Link
           to="/"
           className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"

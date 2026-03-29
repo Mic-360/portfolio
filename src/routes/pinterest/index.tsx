@@ -309,19 +309,25 @@ function PinterestPreviewCard({
   )
 }
 
-function ActionCard({
-  body,
-  href,
-  meta,
-  title,
-  to,
-}: {
+type ActionCardBaseProps = {
   body: string
-  href?: string
   meta: string
   title: string
-  to?: '/pinterest/gallery'
-}) {
+}
+
+type ActionCardInternalLinkProps = ActionCardBaseProps & {
+  to: '/pinterest/gallery'
+  href?: never
+}
+
+type ActionCardExternalLinkProps = ActionCardBaseProps & {
+  href: string
+  to?: never
+}
+
+type ActionCardProps = ActionCardInternalLinkProps | ActionCardExternalLinkProps
+
+function ActionCard({ body, href, meta, title, to }: ActionCardProps) {
   const content = (
     <article className="group flex h-full flex-col justify-between gap-6 rounded-[1.5rem] border border-border/25 bg-card/20 p-5 transition-colors hover:border-primary/35">
       <div className="space-y-2">

@@ -43,8 +43,14 @@ export const Route = createFileRoute('/api/pinterest/download')({
         const fileBaseName = sanitizeFilename(name) || 'pinterest-image'
 
         for (const candidate of candidates) {
+          const controller = new AbortController()
+          const timeout = setTimeout(() => {
+            controller.abort()
+          }, 7000)
+
           try {
             const upstream = await fetch(candidate, {
+              signal: controller.signal,
               headers: {
                 'User-Agent':
                   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
@@ -58,6 +64,11 @@ export const Route = createFileRoute('/api/pinterest/download')({
 
             const contentType =
               upstream.headers.get('content-type') || 'application/octet-stream'
+
+            if (!contentType.toLowerCase().startsWith('image/')) {
+              continue
+            }
+
             const extension =
               contentType.match(/image\/(jpeg|jpg|png|webp|gif|avif)/i)?.[1] ||
               candidate.match(/\.(jpg|jpeg|png|webp|gif|avif)$/i)?.[1] ||
@@ -73,6 +84,8 @@ export const Route = createFileRoute('/api/pinterest/download')({
             })
           } catch {
             continue
+          } finally {
+            clearTimeout(timeout)
           }
         }
 
