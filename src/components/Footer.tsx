@@ -6,11 +6,7 @@ import InstagramIcon from './ui/instagram-icon'
 import LinkedinIcon from './ui/linkedin-icon'
 import TwitterIcon from './ui/twitter-icon'
 
-import {
-  gravatar,
-  siteInfo,
-  socialLinks,
-} from '@/config/site-data'
+import { gravatar, siteInfo, socialLinks } from '@/config/site-data'
 
 const iconMap = {
   github: GithubIcon,
@@ -81,8 +77,7 @@ export default function Footer() {
 
           <div className="grid gap-6 lg:justify-self-end lg:text-right">
             <motion.a
-              href={gravatar.profileUrl}
-              target="_blank"
+              href="/about"
               rel="noopener noreferrer me"
               title="Scan to open the Gravatar profile"
               whileHover={{ y: -3 }}
