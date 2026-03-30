@@ -404,7 +404,7 @@ function App() {
       <motion.div variants={item}>
         <Section title="projects">
           <div className="divide-y divide-border/25">
-            {featuredProjects.map((project: ProjectMeta, index) => (
+            {featuredProjects.map((project: ProjectMeta, index: number) => (
               <Link
                 key={project.slug}
                 to="/projects/$slug"
@@ -547,7 +547,7 @@ function App() {
                     const value = Number(sample.value)
                     const start = new Date(sample.startDate).getTime()
                     const end = new Date(sample.endDate).getTime()
-                    const minutes = (end - start) / (1000 * 60)
+                    const minutes = (end - start) / (1000)
                     const bpm =
                       value > 300 && minutes > 0 ? value / minutes : value
 
@@ -733,7 +733,6 @@ function App() {
                     )}
                   </span>
                 </div>
-
                 <div className="grid gap-4">
                   <h2 className="max-w-4xl font-serif text-4xl leading-none text-foreground sm:text-5xl lg:text-6xl">
                     Say hello when the work needs clarity, pace, and someone who
