@@ -22,6 +22,7 @@ import GitHubHeatmap from '@/components/GitHubHeatmap'
 import GravatarAvatar from '@/components/gravatar/GravatarAvatar'
 import GravatarSocialLinks from '@/components/gravatar/GravatarSocialLinks'
 import { PreviousRoadmap } from '@/components/PreviousRoadmap'
+import { GamesCinematic } from '@/components/GamesCinematic'
 import CalendarIcon from '@/components/ui/calendar-icon'
 import { gravatarConfig } from '@/config/gravatar'
 import {
@@ -296,6 +297,7 @@ function App() {
               autoPlay
               loop
               muted
+              playsInline
             />
             <div className="hero-grid-overlay absolute inset-y-[8%] right-[3%] w-[82%]" />
             <div className="pointer-events-none absolute inset-y-[14%] right-[12%] w-[42%] border-l border-primary/18" />
@@ -477,7 +479,7 @@ function App() {
 
       <motion.div
         variants={item}
-        className="grid gap-10 xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1.14fr)]"
+        className="grid gap-10 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]"
       >
         <Section title="blogs">
           <div className="divide-y divide-border/25">
@@ -692,6 +694,10 @@ function App() {
             .
           </p>
         </Section>
+      </motion.div>
+
+      <motion.div variants={item}>
+        <GamesCinematic />
       </motion.div>
 
       <motion.div variants={item}>
