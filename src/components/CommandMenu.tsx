@@ -25,12 +25,13 @@ import {
 } from 'lucide-react'
 import * as React from 'react'
 
-import type { BlogMeta, CertificateMeta, ProjectMeta } from '@/lib/content'
+import type { BlogMeta, ProjectMeta } from '@/lib/content'
 import {
   getBlogIndex,
-  getCertificateIndex,
   getProjectIndex,
 } from '@/lib/content'
+import type { CertificateMeta } from '@/lib/certificates'
+import { getCertificateIndex } from '@/lib/certificates'
 import {
   CommandDialog,
   CommandEmpty,
