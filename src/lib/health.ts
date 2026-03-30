@@ -4,6 +4,7 @@
 
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
+import { getHealthDataInternal, writeHealthDataInternal } from './health.server'
 
 // ── Types / Schemas ──────────────────────────────────────────────────
 
@@ -32,7 +33,6 @@ export type HealthData = z.infer<typeof healthDataSchema>
 
 export const getHealthData = createServerFn({ method: 'GET' }).handler(
   async () => {
-    const { getHealthDataInternal } = await import('./health.server')
     return getHealthDataInternal()
   },
 )
@@ -40,7 +40,6 @@ export const getHealthData = createServerFn({ method: 'GET' }).handler(
 export const updateHealthData = createServerFn({ method: 'POST' })
   .inputValidator(healthDataSchema)
   .handler(async ({ data }) => {
-    const { writeHealthDataInternal } = await import('./health.server')
     return writeHealthDataInternal(data)
   })
 
