@@ -2,17 +2,16 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 
-import type { BlogMeta, CertificateMeta, ProjectMeta } from '@/lib/content'
-import {
-  getBlogIndex,
-  getCertificateIndex,
-  getProjectIndex,
-} from '@/lib/content'
+import type { BlogMeta, ProjectMeta } from '@/lib/content'
+import { getBlogIndex, getProjectIndex } from '@/lib/content'
+import type { CertificateMeta } from '@/lib/certificates'
+import { getCertificateIndex } from '@/lib/certificates'
 import { formatDate } from '@/lib/format'
 import { hashEmail } from '@/lib/gravatar'
 import { getGravatarProfile } from '@/lib/gravatar-profile'
 import type { HealthSample } from '@/lib/health'
 import { getHealthData } from '@/lib/health'
+import { getGamesData } from '@/lib/games'
 import type { PinterestCreatedPin } from '@/lib/pinterest'
 import { getPinterestCreatedPins } from '@/lib/pinterest'
 
@@ -50,6 +49,7 @@ export const Route = createFileRoute('/')({
       avatarHash,
       profile,
       pinterestData,
+      gamesData,
     ] = await Promise.all([
       getBlogIndex(),
       getProjectIndex(),
@@ -60,6 +60,7 @@ export const Route = createFileRoute('/')({
         data: gravatarConfig.slug,
       }),
       getPinterestCreatedPins(),
+      getGamesData(),
     ])
 
     return {
@@ -70,6 +71,7 @@ export const Route = createFileRoute('/')({
       avatarHash,
       profile,
       pinterestData,
+      gamesData,
     }
   },
   head: () => {
@@ -145,6 +147,7 @@ function App() {
     avatarHash,
     profile,
     pinterestData,
+    gamesData,
   } = Route.useLoaderData()
   const [isMounted, setIsMounted] = useState(false)
 
@@ -697,7 +700,7 @@ function App() {
       </motion.div>
 
       <motion.div variants={item}>
-        <GamesCinematic />
+        <GamesCinematic gamesData={gamesData} />
       </motion.div>
 
       <motion.div variants={item}>
