@@ -257,7 +257,7 @@ function StatCard({
           </div>
         </div>
         <div className="flex flex-col items-end opacity-50">
-          <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+          <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
           <span className="text-[6px] font-mono mt-1">REC</span>
         </div>
       </div>
@@ -284,4 +284,4 @@ function StatCard({
   )
 }
 
-export { Section, Sparkline, StatCard }
+export { Section, StatCard }
