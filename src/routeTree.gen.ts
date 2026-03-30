@@ -27,6 +27,8 @@ import { Route as LlmsFullTxtRouteImport } from './routes/llms-full.txt'
 import { Route as CertificatesSlugRouteImport } from './routes/certificates/$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
+import { Route as ApiGamesRouteImport } from './routes/api/games'
+import { Route as ApiCertificatesRouteImport } from './routes/api/certificates'
 import { Route as OgProjectsSlugRouteImport } from './routes/og/projects/$slug'
 import { Route as OgCertificatesSlugRouteImport } from './routes/og/certificates/$slug'
 import { Route as OgBlogSlugRouteImport } from './routes/og/blog/$slug'
@@ -123,6 +125,16 @@ const ApiHealthRoute = ApiHealthRouteImport.update({
   path: '/api/health',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiGamesRoute = ApiGamesRouteImport.update({
+  id: '/api/games',
+  path: '/api/games',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCertificatesRoute = ApiCertificatesRouteImport.update({
+  id: '/api/certificates',
+  path: '/api/certificates',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OgProjectsSlugRoute = OgProjectsSlugRouteImport.update({
   id: '/og/projects/$slug',
   path: '/og/projects/$slug',
@@ -156,6 +168,8 @@ export interface FileRoutesByFullPath {
   '/readme': typeof ReadmeRoute
   '/resume': typeof ResumeRoute
   '/rss': typeof RssRoute
+  '/api/certificates': typeof ApiCertificatesRoute
+  '/api/games': typeof ApiGamesRoute
   '/api/health': typeof ApiHealthRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/certificates/$slug': typeof CertificatesSlugRoute
@@ -181,6 +195,8 @@ export interface FileRoutesByTo {
   '/readme': typeof ReadmeRoute
   '/resume': typeof ResumeRoute
   '/rss': typeof RssRoute
+  '/api/certificates': typeof ApiCertificatesRoute
+  '/api/games': typeof ApiGamesRoute
   '/api/health': typeof ApiHealthRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/certificates/$slug': typeof CertificatesSlugRoute
@@ -207,6 +223,8 @@ export interface FileRoutesById {
   '/readme': typeof ReadmeRoute
   '/resume': typeof ResumeRoute
   '/rss': typeof RssRoute
+  '/api/certificates': typeof ApiCertificatesRoute
+  '/api/games': typeof ApiGamesRoute
   '/api/health': typeof ApiHealthRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/certificates/$slug': typeof CertificatesSlugRoute
@@ -234,6 +252,8 @@ export interface FileRouteTypes {
     | '/readme'
     | '/resume'
     | '/rss'
+    | '/api/certificates'
+    | '/api/games'
     | '/api/health'
     | '/blog/$slug'
     | '/certificates/$slug'
@@ -259,6 +279,8 @@ export interface FileRouteTypes {
     | '/readme'
     | '/resume'
     | '/rss'
+    | '/api/certificates'
+    | '/api/games'
     | '/api/health'
     | '/blog/$slug'
     | '/certificates/$slug'
@@ -284,6 +306,8 @@ export interface FileRouteTypes {
     | '/readme'
     | '/resume'
     | '/rss'
+    | '/api/certificates'
+    | '/api/games'
     | '/api/health'
     | '/blog/$slug'
     | '/certificates/$slug'
@@ -310,6 +334,8 @@ export interface RootRouteChildren {
   ReadmeRoute: typeof ReadmeRoute
   ResumeRoute: typeof ResumeRoute
   RssRoute: typeof RssRoute
+  ApiCertificatesRoute: typeof ApiCertificatesRoute
+  ApiGamesRoute: typeof ApiGamesRoute
   ApiHealthRoute: typeof ApiHealthRoute
   BlogSlugRoute: typeof BlogSlugRoute
   CertificatesSlugRoute: typeof CertificatesSlugRoute
@@ -457,6 +483,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiHealthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/games': {
+      id: '/api/games'
+      path: '/api/games'
+      fullPath: '/api/games'
+      preLoaderRoute: typeof ApiGamesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/certificates': {
+      id: '/api/certificates'
+      path: '/api/certificates'
+      fullPath: '/api/certificates'
+      preLoaderRoute: typeof ApiCertificatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/og/projects/$slug': {
       id: '/og/projects/$slug'
       path: '/og/projects/$slug'
@@ -502,6 +542,8 @@ const rootRouteChildren: RootRouteChildren = {
   ReadmeRoute: ReadmeRoute,
   ResumeRoute: ResumeRoute,
   RssRoute: RssRoute,
+  ApiCertificatesRoute: ApiCertificatesRoute,
+  ApiGamesRoute: ApiGamesRoute,
   ApiHealthRoute: ApiHealthRoute,
   BlogSlugRoute: BlogSlugRoute,
   CertificatesSlugRoute: CertificatesSlugRoute,
