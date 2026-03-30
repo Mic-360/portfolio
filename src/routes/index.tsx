@@ -193,7 +193,7 @@ function App() {
   }
 
   const featuredProjects = projects.slice(0, 4)
-  const featuredPosts = posts.slice(0, 4)
+  const featuredPosts = posts.slice(0, 5)
   const featuredCertificates = certificates.slice(0, 6)
   const featuredPins = pinterestData.pins.slice(0, 6)
 
@@ -533,6 +533,7 @@ function App() {
                 unit="steps"
                 type="sum"
                 chartType="bar"
+                color="#f97316"
               />
               <MetricRow
                 label="energy"
@@ -540,6 +541,7 @@ function App() {
                 unit="kcal"
                 type="sum"
                 chartType="area"
+                color="#ef4444"
                 format={(v: number) => formatMetricValue(v, 0)}
               />
               <MetricRow
@@ -562,6 +564,7 @@ function App() {
                 unit="bpm"
                 type="avg"
                 chartType="scatter"
+                color="#f43f5e"
                 format={(v: number) => formatMetricValue(v, 0)}
               />
               <MetricRow
@@ -570,6 +573,7 @@ function App() {
                 unit="km"
                 type="sum"
                 chartType="bar"
+                color="#3b82f6"
                 format={(v: number) => formatMetricValue(v, 2)}
               />
               <MetricRow
@@ -578,6 +582,7 @@ function App() {
                 unit="hrs"
                 type="sum"
                 chartType="area"
+                color="#818cf8"
                 format={(v: number) => formatMetricValue(v, 1)}
               />
               <MetricRow
@@ -586,6 +591,7 @@ function App() {
                 unit="%"
                 type="avg"
                 chartType="line"
+                color="#22d3ee"
                 format={(v: number) => formatMetricValue(v, 1)}
               />
             </div>

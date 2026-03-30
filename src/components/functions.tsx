@@ -286,6 +286,7 @@ function MetricRow({
   unit,
   type = 'sum',
   chartType = 'line',
+  color,
   format = (v: number) => v.toLocaleString(),
 }: {
   label: string
@@ -297,6 +298,7 @@ function MetricRow({
   unit: string
   type?: 'sum' | 'avg' | 'latest'
   chartType?: 'bar' | 'area' | 'scatter' | 'line'
+  color?: string
   format?: (v: number) => string
 }) {
   const processedData = (samples || []).map((s) => {
@@ -359,7 +361,7 @@ function MetricRow({
       <div className="min-w-0 flex-1 h-12">
         <InteractiveChart
           data={graphData}
-          color="var(--primary)"
+          color={color || 'var(--primary)'}
           type={chartType}
           height={48}
           formatValue={(v) => format(v) + ' ' + unit}
