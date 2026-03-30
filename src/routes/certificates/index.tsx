@@ -2,9 +2,9 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { Award } from 'lucide-react'
 import { motion } from 'motion/react'
 
-import type { CertificateMeta } from '@/lib/content'
+import type { CertificateMeta } from '@/lib/certificates'
 import { siteMeta } from '@/config/site-data'
-import { getCertificateIndex } from '@/lib/content'
+import { getCertificateIndex } from '@/lib/certificates'
 
 export const Route = createFileRoute('/certificates/')({
   loader: async () => ({
@@ -40,7 +40,7 @@ export const Route = createFileRoute('/certificates/')({
             url: canonicalUrl,
             mainEntity: {
               '@type': 'ItemList',
-              itemListElement: certificates.map((cert, index) => ({
+              itemListElement: certificates.map((cert: CertificateMeta, index: number) => ({
                 '@type': 'ListItem',
                 position: index + 1,
                 url: `${siteMeta.baseUrl}/certificates/${cert.slug}`,
@@ -80,7 +80,7 @@ export const Route = createFileRoute('/certificates/')({
 function CertificatesIndex() {
   const { certificates } = Route.useLoaderData()
   const issuers = Array.from(
-    new Set(certificates.map((certificate) => certificate.issuer)),
+    new Set(certificates.map((certificate: CertificateMeta) => certificate.issuer)),
   ).slice(0, 4)
 
   const container = {
@@ -166,7 +166,7 @@ function CertificatesIndex() {
       </motion.header>
 
       <div className="divide-y divide-border/20">
-        {certificates.map((certificate: CertificateMeta, index) => {
+        {certificates.map((certificate: CertificateMeta, index: number) => {
           const reverse = index % 2 === 1
 
           return (

@@ -2,7 +2,7 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { motion } from 'motion/react'
 
 import { siteMeta } from '@/config/site-data'
-import { getCertificateBySlug } from '@/lib/content'
+import { getCertificateBySlug } from '@/lib/certificates'
 
 export const Route = createFileRoute('/certificates/$slug')({
   loader: async ({ params }) => ({
@@ -241,7 +241,7 @@ function CertificateDetail() {
                   <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
                     {row.label}
                   </p>
-                  <p className="mt-2 text-sm leading-7 text-foreground/76 break-words">
+                  <p className="mt-2 text-sm leading-7 text-foreground/76 wrap-break-word">
                     {row.value}
                   </p>
                 </div>
@@ -302,7 +302,7 @@ function CertificateDetail() {
 
             <div className="divide-y divide-border/20">
               {certificate.skills.length > 0 ? (
-                certificate.skills.map((skill, index) => (
+                certificate.skills.map((skill: string, index: number) => (
                   <div
                     key={`${skill}-${index}`}
                     className="py-3 text-sm leading-7 text-foreground/76"

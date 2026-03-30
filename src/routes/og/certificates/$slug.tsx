@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { getCertificateBySlug } from '@/lib/content'
+import { getCertificateBySlug } from '@/lib/certificates'
 import { createOgImageResponse } from '@/lib/og'
 
 function withCrawlerHeaders(response: Response) {

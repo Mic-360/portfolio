@@ -1,5 +1,7 @@
 import { siteMeta } from '@/config/site-data'
-import { getBlogIndex, getCertificateIndex, getProjectIndex } from '@/lib/content'
+import { getBlogIndex, getProjectIndex } from '@/lib/content'
+import type { CertificateMeta } from '@/lib/certificates'
+import { getCertificateIndex } from '@/lib/certificates'
 import { createFileRoute } from '@tanstack/react-router'
 
 type SitemapImage = {
@@ -123,7 +125,7 @@ export const Route = createFileRoute('/sitemap/xml')({
             priority: '0.6',
             images: [],
           },
-          ...certificates.map((cert) => ({
+          ...certificates.map((cert: CertificateMeta) => ({
             loc: `${siteMeta.baseUrl}/certificates/${cert.slug}`,
             lastmod: cert.issued,
             changefreq: 'yearly',
@@ -148,7 +150,7 @@ export const Route = createFileRoute('/sitemap/xml')({
                 `    <priority>${url.priority}</priority>\n` +
                 url.images
                   .map(
-                    (image) =>
+                    (image: SitemapImage) =>
                       `    <image:image>\n` +
                       `      <image:loc>${escapeXml(image.loc)}</image:loc>\n` +
                       (image.caption

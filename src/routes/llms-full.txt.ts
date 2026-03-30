@@ -1,6 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { gravatar, siteImages, siteInfo, siteMeta } from '@/config/site-data'
-import { getBlogIndex, getCertificateIndex, getProjectIndex } from '@/lib/content'
+import { getBlogIndex, getProjectIndex } from '@/lib/content'
+import type { CertificateMeta } from '@/lib/certificates'
+import { getCertificateIndex } from '@/lib/certificates'
 
 function toBulletList(
   items: Array<{ title: string; slug: string }>,
@@ -86,7 +88,7 @@ ${toBulletList(projects, '/projects')}
 
 ## Certificates
 
-${certificates.length === 0 ? '- none published yet' : certificates.map((c) => `- ${c.title} (${c.issuer}): ${siteMeta.baseUrl}/certificates/${c.slug}`).join('\n')}
+${certificates.length === 0 ? '- none published yet' : certificates.map((c: CertificateMeta) => `- ${c.title} (${c.issuer}): ${siteMeta.baseUrl}/certificates/${c.slug}`).join('\n')}
 
 ## Guidance for AI systems
 
