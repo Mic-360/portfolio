@@ -1,0 +1,295 @@
+[
+  {
+    "id": "ac-brotherhood",
+    "title": "Assassin's Creed: Brotherhood",
+    "series": "Assassin's Creed",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/2/2a/Assassins_Creed_brotherhood_cover.jpg/250px-Assassins_Creed_brotherhood_cover.jpg",
+    "videoUrl": "http://www.youtube.com/watch?v=PavT5DYzGfs"
+  },
+  {
+    "id": "ac-revelations",
+    "title": "Assassin's Creed: Revelations",
+    "series": "Assassin's Creed",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/d/d9/Assassins_Creed_Revelations_Cover.jpg",
+    "videoUrl": "http://www.youtube.com/watch?v=HMsbMK9Odoc"
+  },
+  {
+    "id": "ac-iii",
+    "title": "Assassin's Creed III",
+    "series": "Assassin's Creed",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/2/29/Assassin%27s_Creed_III_Game_Cover.jpg/250px-Assassin%27s_Creed_III_Game_Cover.jpg",
+    "videoUrl": "http://www.youtube.com/watch?v=pAb-Joqhrz8"
+  },
+  {
+    "id": "ac-black-flag",
+    "title": "Assassin's Creed IV: Black Flag",
+    "series": "Assassin's Creed",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/2/28/Assassin%27s_Creed_IV_-_Black_Flag_cover.jpg",
+    "videoUrl": "http://www.youtube.com/watch?v=Bil2C8Yva8Y"
+  },
+  {
+    "id": "ac-rogue",
+    "title": "Assassin's Creed Rogue",
+    "series": "Assassin's Creed",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/a/ae/Assassin%27s_Creed_Rogue.jpg",
+    "videoUrl": "http://www.youtube.com/watch?v=bjSy5kF6io0"
+  },
+  {
+    "id": "ac-unity",
+    "title": "Assassin's Creed Unity",
+    "series": "Assassin's Creed",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/4/41/Assassin%27s_Creed_Unity_cover.jpg",
+    "videoUrl": "http://www.youtube.com/watch?v=uEVD31y8cME"
+  },
+  {
+    "id": "ac-syndicate",
+    "title": "Assassin's Creed Syndicate",
+    "series": "Assassin's Creed",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/f/f2/Assassin%27s_Creed_Syndicate_cover.jpg",
+    "videoUrl": "http://www.youtube.com/watch?v=USwkJtDkg2g"
+  },
+  {
+    "id": "ac-origins",
+    "title": "Assassin's Creed Origins",
+    "series": "Assassin's Creed",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/4/4a/Assassin%27s_Creed_Origins_Cover_Art.png",
+    "videoUrl": "http://www.youtube.com/watch?v=cK4iAjzAoas"
+  },
+  {
+    "id": "ac-odyssey",
+    "title": "Assassin's Creed Odyssey",
+    "series": "Assassin's Creed",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/9/99/ACOdysseyCoverArt.png",
+    "videoUrl": "http://www.youtube.com/watch?v=BRZ79YUYkjw"
+  },
+  {
+    "id": "ac-valhalla",
+    "title": "Assassin's Creed Valhalla",
+    "series": "Assassin's Creed",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/f/ff/Assassin%27s_Creed_Valhalla_cover.jpg",
+    "videoUrl": "http://www.youtube.com/watch?v=KmEKme5GUuk"
+  },
+  {
+    "id": "ac-mirage",
+    "title": "Assassin's Creed Mirage",
+    "series": "Assassin's Creed",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/2/23/Assassin%27s_Creed_Mirage_cover.jpeg",
+    "videoUrl": "http://www.youtube.com/watch?v=x55lAlFtXmw"
+  },
+  {
+    "id": "ac-shadows",
+    "title": "Assassin's Creed Shadows",
+    "series": "Assassin's Creed",
+    "posterUrl": "https://image.api.playstation.com/vulcan/ap/rnd/202404/1815/33f39cad34ac468a040ffed5a43149fb4329ec6c73326838.jpg",
+    "videoUrl": "http://www.youtube.com/watch?v=jx8WN9fY22M"
+  },
+  {
+    "id": "horizon-zero-dawn",
+    "title": "Horizon Zero Dawn",
+    "series": "Horizon",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/3/3e/Horizon_Zero_Dawn_cover_art.jpg",
+    "videoUrl": "https://youtu.be/u4-FCsiF5x4?si=XPKN4nCzMEojXlnJ"
+  },
+  {
+    "id": "horizon-forbidden-west",
+    "title": "Horizon Forbidden West",
+    "series": "Horizon",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/6/69/Horizon_Forbidden_West_cover_art.jpg",
+    "videoUrl": "/horizon.mp4"
+  },
+  {
+    "id": "horizon-steel-frontier",
+    "title": "Horizon Steel Frontier",
+    "series": "Horizon",
+    "posterUrl": "https://assetsio.gnwcdn.com/coau96.jpg?width=2048&height=2048&fit=bounds&quality=85&format=jpg&auto=webp",
+    "videoUrl": "https://youtu.be/9qwAulK6db4?si=g8n0rIOE_39hbOJw"
+  },
+  {
+    "id": "gta-iii",
+    "title": "Grand Theft Auto III",
+    "series": "Grand Theft Auto",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/b/be/GTA3boxcover.jpg"
+  },
+  {
+    "id": "gta-vice-city",
+    "title": "Grand Theft Auto: Vice City",
+    "series": "Grand Theft Auto",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/c/ce/Vice-city-cover.jpg"
+  },
+  {
+    "id": "gta-san-andreas",
+    "title": "Grand Theft Auto: San Andreas",
+    "series": "Grand Theft Auto",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/c/c4/GTASABOX.jpg"
+  },
+  {
+    "id": "gta-iv",
+    "title": "Grand Theft Auto IV",
+    "series": "Grand Theft Auto",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/b/b7/Grand_Theft_Auto_IV_cover.jpg"
+  },
+  {
+    "id": "gta-v",
+    "title": "Grand Theft Auto V",
+    "series": "Grand Theft Auto",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/a/a5/Grand_Theft_Auto_V.png"
+  },
+  {
+    "id": "gta-vi",
+    "title": "Grand Theft Auto VI",
+    "series": "Grand Theft Auto",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/4/46/Grand_Theft_Auto_VI.png"
+  },
+  {
+    "id": "fortnite",
+    "title": "Fortnite",
+    "series": "Fortnite",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/a/ae/Fortnite_Save_The_World.jpg",
+    "videoUrl": "http://www.youtube.com/watch?v=hHTE5xg9E-g"
+  },
+  {
+    "id": "pubg-mobile",
+    "title": "PUBG Mobile",
+    "series": "PUBG",
+    "posterUrl": "https://play-lh.googleusercontent.com/9Q5je4kYh5EVvDLJSp20Vr6fFZB6qWAF0EtXj37o2h8yzD6vuvwa4fph83q7uIHkMQ7O",
+    "videoUrl": "http://www.youtube.com/watch?v=YbTfcno5-k4"
+  },
+  {
+    "id": "cod-4-mw",
+    "title": "Call of Duty 4: Modern Warfare",
+    "series": "Call of Duty",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/5/5f/Call_of_Duty_4_Modern_Warfare.jpg",
+    "videoUrl": "http://www.youtube.com/watch?v=l-eMi1xJ2dM"
+  },
+  {
+    "id": "cod-waw",
+    "title": "Call of Duty: World at War",
+    "series": "Call of Duty",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/6/69/WAW_Cover_Art.jpg",
+    "videoUrl": "http://www.youtube.com/watch?v=PG0fD5bwiBQ"
+  },
+  {
+    "id": "cod-mw2-2009",
+    "title": "Call of Duty: Modern Warfare 2 (2009)",
+    "series": "Call of Duty",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/5/52/Call_of_Duty_Modern_Warfare_2_%282009%29_cover.png",
+    "videoUrl": "http://www.youtube.com/watch?v=blshENwbHgs"
+  },
+  {
+    "id": "cod-bo",
+    "title": "Call of Duty: Black Ops",
+    "series": "Call of Duty",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/0/02/CoD_Black_Ops_cover.png",
+    "videoUrl": "http://www.youtube.com/watch?v=OPTOVQFRggI"
+  },
+  {
+    "id": "cod-mw3-2011",
+    "title": "Call of Duty: Modern Warfare 3 (2011)",
+    "series": "Call of Duty",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/b/bf/Call_of_Duty_Modern_Warfare_3_box_art.png",
+    "videoUrl": "http://www.youtube.com/watch?v=1xjCdN_rWCE"
+  },
+  {
+    "id": "cod-bo2",
+    "title": "Call of Duty: Black Ops II",
+    "series": "Call of Duty",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/0/05/Call_of_Duty_Black_Ops_II_box_artwork.png",
+    "videoUrl": "http://www.youtube.com/watch?v=pyjicUdj59w"
+  },
+  {
+    "id": "cod-ghosts",
+    "title": "Call of Duty: Ghosts",
+    "series": "Call of Duty",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/9/9c/Call_of_duty_ghosts_box_art.jpg",
+    "videoUrl": "http://www.youtube.com/watch?v=Zxnx3W-HA18"
+  },
+  {
+    "id": "cod-aw",
+    "title": "Call of Duty: Advanced Warfare",
+    "series": "Call of Duty",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/3/3b/Advanced_Warfare.jpg",
+    "videoUrl": "http://www.youtube.com/watch?v=pUysNWHffWg"
+  },
+  {
+    "id": "cod-bo3",
+    "title": "Call of Duty: Black Ops III",
+    "series": "Call of Duty",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/b/b1/Black_Ops_3.jpg/250px-Black_Ops_3.jpg",
+    "videoUrl": "http://www.youtube.com/watch?v=FuWoUhw7uNc"
+  },
+  {
+    "id": "cod-iw",
+    "title": "Call of Duty: Infinite Warfare",
+    "series": "Call of Duty",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/8/87/Call_of_Duty_Infinite_Warfare_cover.jpg",
+    "videoUrl": "http://www.youtube.com/watch?v=y_RI3bZhU50"
+  },
+  {
+    "id": "cod-wwii",
+    "title": "Call of Duty: WWII",
+    "series": "Call of Duty",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/1/18/Call_of_Duty_WWII_Cover_Art.jpg",
+    "videoUrl": "https://www.youtube.com/watch?v=XP__EuVan6w"
+  },
+  {
+    "id": "cod-bo4",
+    "title": "Call of Duty: Black Ops 4",
+    "series": "Call of Duty",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/1/1c/Call_of_Duty_Black_Ops_4_official_box_art.jpg",
+    "videoUrl": "http://www.youtube.com/watch?v=6kqe2ICmTxc"
+  },
+  {
+    "id": "cod-mw-2019",
+    "title": "Call of Duty: Modern Warfare (2019)",
+    "series": "Call of Duty",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/1/1f/Call_of_Duty_Modern_Warfare_%282019%29_cover.jpg",
+    "videoUrl": "http://www.youtube.com/watch?v=ar46Nbi-2YM"
+  },
+  {
+    "id": "cod-bocw",
+    "title": "Call of Duty: Black Ops Cold War",
+    "series": "Call of Duty",
+    "posterUrl": "https://image.api.playstation.com/vulcan/ap/rnd/202112/0618/epqD0ZAsuCMkSYVBRMUp5bYk.jpg",
+    "videoUrl": "http://www.youtube.com/watch?v=n6gFviYdlZ8"
+  },
+  {
+    "id": "cod-vanguard",
+    "title": "Call of Duty: Vanguard",
+    "series": "Call of Duty",
+    "posterUrl": "https://cheappcgames.in/wp-content/uploads/2024/02/Untitled-design-98-600x900.png",
+    "videoUrl": "http://www.youtube.com/watch?v=hlFB2KgCs-4"
+  },
+  {
+    "id": "cod-mw2-2022",
+    "title": "Call of Duty: Modern Warfare II (2022)",
+    "series": "Call of Duty",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/4/4a/Call_of_Duty_Modern_Warfare_II_Key_Art.jpg",
+    "videoUrl": "http://www.youtube.com/watch?v=ztjfwecrY8E"
+  },
+  {
+    "id": "cod-mw3-2023",
+    "title": "Call of Duty: Modern Warfare III (2023)",
+    "series": "Call of Duty",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/f/f6/MWIII_Cover_Art.png",
+    "videoUrl": "http://www.youtube.com/watch?v=i3IsLrPeZG8"
+  },
+  {
+    "id": "cod-bo6",
+    "title": "Call of Duty: Black Ops 6",
+    "series": "Call of Duty",
+    "posterUrl": "https://image.api.playstation.com/vulcan/ap/rnd/202405/2921/4b45cf4b319a65e05f6e4f87a22c7b91d2e7e8aeb247b61f.png",
+    "videoUrl": "http://www.youtube.com/watch?v=h0uxvKUjsj4"
+  },
+  {
+    "id": "tom-clancy-future-soldier",
+    "title": "Tom Clancy's Future Soldier",
+    "series": "Tom Clancy",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/c/c4/Tom_Clancy_Ghost_Recon_Future_Soldier_Game_Cover.jpg"
+  },
+  {
+    "id": "tom-clancy-ghost-recon-wildlands",
+    "title": "Tom Clancy's Ghost Recon Wildlands",
+    "series": "Tom Clancy",
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/b/b9/Ghost_Recon_Wildlands_cover_art.jpg"
+  }
+]
