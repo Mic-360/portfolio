@@ -39,15 +39,7 @@ export const healthDataSchema = z.object({
 
 export type HealthData = z.infer<typeof healthDataSchema>
 
-const METRIC_KEYS = [
-  'steps',
-  'activeEnergy',
-  'restingEnergy',
-  'distance',
-  'spO2',
-  'sleep',
-  'heartRate',
-] as const
+
 
 function getBundledHealthData(): HealthData {
   const raw = Object.values(HEALTH_SOURCES)[0]
@@ -101,15 +93,9 @@ function readHealthData(): HealthData {
 }
 
 function writeHealthData(data: HealthData) {
-  const existing = readHealthData()
-
-  const merged: HealthData = { updatedAt: new Date().toISOString() }
-
-  for (const key of METRIC_KEYS) {
-    const incoming = data[key]
-    const current = existing[key]
-    // Use incoming if it has data, otherwise keep existing
-    merged[key] = incoming?.length ? incoming : current
+  const merged: HealthData = { 
+    ...data,
+    updatedAt: new Date().toISOString() 
   }
 
   inMemoryHealthData = healthDataSchema.parse(merged)
