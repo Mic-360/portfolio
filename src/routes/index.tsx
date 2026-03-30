@@ -16,7 +16,7 @@ import type { PinterestCreatedPin } from '@/lib/pinterest'
 import { getPinterestCreatedPins } from '@/lib/pinterest'
 
 import { KeyboardHint } from '@/components/CommandMenu'
-import { Section, StatCard } from '@/components/functions'
+import { Section, MetricRow } from '@/components/functions'
 import GitHubHeatmap from '@/components/GitHubHeatmap'
 import GravatarAvatar from '@/components/gravatar/GravatarAvatar'
 import GravatarSocialLinks from '@/components/gravatar/GravatarSocialLinks'
@@ -526,28 +526,30 @@ function App() {
 
         <Section title="healthstat">
           <div className="grid gap-8">
-            <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2 xl:grid-cols-3">
-              <StatCard
+            <div className="flex flex-col divide-y divide-border/20">
+              <MetricRow
                 label="steps"
                 samples={sanitizeSamples(health.steps)}
                 unit="steps"
                 type="sum"
+                chartType="bar"
               />
-              <StatCard
+              <MetricRow
                 label="energy"
                 samples={sanitizeSamples(health.activeEnergy)}
                 unit="kcal"
                 type="sum"
-                format={(v) => formatMetricValue(v, 0)}
+                chartType="area"
+                format={(v: number) => formatMetricValue(v, 0)}
               />
-              <StatCard
+              <MetricRow
                 label="heart rate"
                 samples={sanitizeSamples<HealthSample>(health.heartRate).map(
                   (sample) => {
                     const value = Number(sample.value)
                     const start = new Date(sample.startDate).getTime()
                     const end = new Date(sample.endDate).getTime()
-                    const minutes = (end - start) / (1000)
+                    const minutes = (end - start) / 1000
                     const bpm =
                       value > 300 && minutes > 0 ? value / minutes : value
 
@@ -559,28 +561,32 @@ function App() {
                 )}
                 unit="bpm"
                 type="avg"
-                format={(v) => formatMetricValue(v, 0)}
+                chartType="scatter"
+                format={(v: number) => formatMetricValue(v, 0)}
               />
-              <StatCard
+              <MetricRow
                 label="distance"
                 samples={sanitizeSamples(health.distance)}
                 unit="km"
                 type="sum"
-                format={(v) => formatMetricValue(v, 2)}
+                chartType="bar"
+                format={(v: number) => formatMetricValue(v, 2)}
               />
-              <StatCard
+              <MetricRow
                 label="sleep"
                 samples={sanitizeSamples(health.sleep)}
                 unit="hrs"
                 type="sum"
-                format={(v) => formatMetricValue(v, 1)}
+                chartType="area"
+                format={(v: number) => formatMetricValue(v, 1)}
               />
-              <StatCard
+              <MetricRow
                 label="spO2"
                 samples={sanitizeSamples(health.spO2)}
                 unit="%"
                 type="avg"
-                format={(v) => formatMetricValue(v, 1)}
+                chartType="line"
+                format={(v: number) => formatMetricValue(v, 1)}
               />
             </div>
 
