@@ -22,3 +22,5 @@ env:
   # See https://firebase.google.com/docs/app-hosting/configure#secret-parameters
   - variable: GRAVATAR_API_KEY
     secret: GRAVATAR_API_KEY
+  - variable: POST_API_KEY
+    secret: POST_API_KEY
