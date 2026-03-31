@@ -7,9 +7,20 @@ import {
 } from 'react'
 import type { ReactNode } from 'react'
 
-export type ThemeMode = 'normal' | 'sunny' | 'midnight'
+export type ThemeMode =
+  | 'normal'
+  | 'sunny'
+  | 'midnight'
+  | 'autumn'
+  | 'frieren'
 
-const CYCLE_ORDER: Array<ThemeMode> = ['normal', 'sunny', 'midnight']
+const CYCLE_ORDER: Array<ThemeMode> = [
+  'normal',
+  'sunny',
+  'midnight',
+  'autumn',
+  'frieren',
+]
 
 interface ThemeContextType {
   mode: ThemeMode
@@ -38,6 +49,12 @@ function applyThemeAttributes(newMode: ThemeMode) {
       break
     case 'midnight':
       html.setAttribute('data-theme', 'midnight')
+      break
+    case 'autumn':
+      html.setAttribute('data-theme', 'sunny')
+      break
+    case 'frieren':
+      html.setAttribute('data-theme', 'frieren')
       break
   }
 }

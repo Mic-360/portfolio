@@ -1,9 +1,11 @@
 import {
   IconArticle,
+  IconBook2,
   IconBrandGithub,
   IconFileText,
   IconFolder,
   IconHome,
+  IconLeaf,
   IconMessage,
   IconMoon,
   IconMoonStars,
@@ -20,6 +22,8 @@ const themeIcons: Record<ThemeMode, React.ReactNode> = {
   normal: <IconMoon className="h-full w-full text-foreground" />,
   sunny: <IconSunHigh className="h-full w-full text-foreground" />,
   midnight: <IconMoonStars className="h-full w-full text-foreground" />,
+  autumn: <IconLeaf className="h-full w-full text-foreground" />,
+  frieren: <IconBook2 className="h-full w-full text-foreground" />,
 }
 
 export function FloatingNavDock() {

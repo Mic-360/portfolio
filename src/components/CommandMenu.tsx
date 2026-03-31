@@ -4,6 +4,7 @@ import {
   ArrowLeft,
   Award,
   BookOpen,
+  BookSearch,
   Bot,
   Briefcase,
   Calendar,
@@ -13,6 +14,7 @@ import {
   Home,
   Image,
   Instagram,
+  Leaf,
   Linkedin,
   Map,
   Moon,
@@ -26,11 +28,11 @@ import {
 import * as React from 'react'
 
 import type { BlogMeta, ProjectMeta } from '@/lib/content'
+import type { CertificateMeta } from '@/lib/certificates'
 import {
   getBlogIndex,
   getProjectIndex,
 } from '@/lib/content'
-import type { CertificateMeta } from '@/lib/certificates'
 import { getCertificateIndex } from '@/lib/certificates'
 import {
   CommandDialog,
@@ -287,17 +289,50 @@ export function CommandMenu() {
 
         {/* ── Theme ── */}
         <CommandGroup heading="Theme">
-          <CommandItem onSelect={() => { setMode('normal'); setOpen(false) }}>
+          <CommandItem
+            onSelect={() => {
+              setMode('normal')
+              setOpen(false)
+            }}
+          >
             <Moon />
             <span>default</span>
           </CommandItem>
-          <CommandItem onSelect={() => { setMode('sunny'); setOpen(false) }}>
+          <CommandItem
+            onSelect={() => {
+              setMode('sunny')
+              setOpen(false)
+            }}
+          >
             <Sun />
             <span>sunny</span>
           </CommandItem>
-          <CommandItem onSelect={() => { setMode('midnight'); setOpen(false) }}>
+          <CommandItem
+            onSelect={() => {
+              setMode('midnight')
+              setOpen(false)
+            }}
+          >
             <MoonStar />
             <span>midnight</span>
+          </CommandItem>
+          <CommandItem
+            onSelect={() => {
+              setMode('autumn')
+              setOpen(false)
+            }}
+          >
+            <Leaf />
+            <span>autumn</span>
+          </CommandItem>
+          <CommandItem
+            onSelect={() => {
+              setMode('frieren')
+              setOpen(false)
+            }}
+          >
+            <BookSearch />
+            <span>frieren</span>
           </CommandItem>
         </CommandGroup>
 
