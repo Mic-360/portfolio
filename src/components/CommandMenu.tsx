@@ -14,7 +14,6 @@ import {
   Home,
   Image,
   Instagram,
-  Leaf,
   Linkedin,
   Map,
   Moon,

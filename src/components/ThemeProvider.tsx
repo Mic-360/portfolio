@@ -3,15 +3,22 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useState,
+  useRef,
+  useState
 } from 'react'
-import type { ReactNode } from 'react'
+import { AnimatePresence, motion } from 'motion/react'
+import type {CSSProperties, ReactNode } from 'react';
 
 export type ThemeMode =
   | 'normal'
   | 'sunny'
   | 'midnight'
   | 'frieren'
+
+export interface ThemeTransitionOrigin {
+  x: number
+  y: number
+}
 
 const CYCLE_ORDER: Array<ThemeMode> = [
   'normal',
@@ -22,8 +29,8 @@ const CYCLE_ORDER: Array<ThemeMode> = [
 
 interface ThemeContextType {
   mode: ThemeMode
-  setMode: (mode: ThemeMode) => void
-  cycleTheme: () => void
+  setMode: (mode: ThemeMode, origin?: ThemeTransitionOrigin) => void
+  cycleTheme: (origin?: ThemeTransitionOrigin) => void
 }
 
 const ThemeContext = createContext<ThemeContextType>({
@@ -54,8 +61,73 @@ function applyThemeAttributes(newMode: ThemeMode) {
   }
 }
 
+function resolveTransitionOrigin(origin?: ThemeTransitionOrigin) {
+  if (origin) {
+    return origin
+  }
+
+  if (typeof document === 'undefined' || typeof window === 'undefined') {
+    return { x: 0, y: 0 }
+  }
+
+  const activeElement = document.activeElement
+  if (activeElement instanceof HTMLElement) {
+    const rect = activeElement.getBoundingClientRect()
+    if (rect.width > 0 && rect.height > 0) {
+      return {
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2,
+      }
+    }
+  }
+
+  return {
+    x: window.innerWidth / 2,
+    y: window.innerHeight / 2,
+  }
+}
+
+function getTransitionRadius(origin: ThemeTransitionOrigin) {
+  if (typeof window === 'undefined') {
+    return 0
+  }
+
+  return Math.hypot(
+    Math.max(origin.x, window.innerWidth - origin.x),
+    Math.max(origin.y, window.innerHeight - origin.y),
+  )
+}
+
+function applyTransitionMetadata(origin: ThemeTransitionOrigin) {
+  const html = document.documentElement
+  html.style.setProperty('--theme-transition-x', `${origin.x}px`)
+  html.style.setProperty('--theme-transition-y', `${origin.y}px`)
+  html.style.setProperty(
+    '--theme-transition-radius',
+    `${getTransitionRadius(origin)}px`,
+  )
+  html.setAttribute('data-theme-transition', 'radial')
+}
+
+function clearTransitionMetadata() {
+  const html = document.documentElement
+  html.removeAttribute('data-theme-transition')
+  html.style.removeProperty('--theme-transition-x')
+  html.style.removeProperty('--theme-transition-y')
+  html.style.removeProperty('--theme-transition-radius')
+}
+
+interface ThemeTransitionState {
+  key: number
+  origin: ThemeTransitionOrigin
+  radius: number
+}
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [mode, setModeState] = useState<ThemeMode>('normal')
+  const [transitionState, setTransitionState] =
+    useState<ThemeTransitionState | null>(null)
+  const transitionTimeoutRef = useRef<number | null>(null)
 
   useEffect(() => {
     const stored = localStorage.getItem('theme-mode') as ThemeMode | null
@@ -65,25 +137,110 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
+  useEffect(() => {
+    return () => {
+      if (transitionTimeoutRef.current !== null) {
+        window.clearTimeout(transitionTimeoutRef.current)
+      }
+    }
+  }, [])
+
   const setMode = useCallback(
-    (newMode: ThemeMode) => {
+    (newMode: ThemeMode, origin?: ThemeTransitionOrigin) => {
       if (newMode === mode) return
+
       setModeState(newMode)
       localStorage.setItem('theme-mode', newMode)
       applyThemeAttributes(newMode)
+
+      if (
+        typeof document === 'undefined' ||
+        typeof window === 'undefined' ||
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      ) {
+        clearTransitionMetadata()
+        setTransitionState(null)
+        return
+      }
+
+      const transitionOrigin = resolveTransitionOrigin(origin)
+      const radius = getTransitionRadius(transitionOrigin)
+      applyTransitionMetadata(transitionOrigin)
+      setTransitionState({
+        key: Date.now(),
+        origin: transitionOrigin,
+        radius,
+      })
+
+      if (transitionTimeoutRef.current !== null) {
+        window.clearTimeout(transitionTimeoutRef.current)
+      }
+
+      transitionTimeoutRef.current = window.setTimeout(() => {
+        clearTransitionMetadata()
+        setTransitionState(null)
+        transitionTimeoutRef.current = null
+      }, 520)
     },
     [mode],
   )
 
-  const cycleTheme = useCallback(() => {
+  const cycleTheme = useCallback((origin?: ThemeTransitionOrigin) => {
     const idx = CYCLE_ORDER.indexOf(mode)
     const next = CYCLE_ORDER[(idx + 1) % CYCLE_ORDER.length]
-    setMode(next)
+    setMode(next, origin)
   }, [mode, setMode])
 
   return (
     <ThemeContext.Provider value={{ mode, setMode, cycleTheme }}>
       {children}
+      <AnimatePresence>
+        {transitionState ? (
+          <ThemeTransitionOverlay
+            key={transitionState.key}
+            origin={transitionState.origin}
+            radius={transitionState.radius}
+          />
+        ) : null}
+      </AnimatePresence>
     </ThemeContext.Provider>
+  )
+}
+
+function ThemeTransitionOverlay({
+  origin,
+  radius,
+}: {
+  origin: ThemeTransitionOrigin
+  radius: number
+}) {
+  const style = {
+    '--theme-transition-x': `${origin.x}px`,
+    '--theme-transition-y': `${origin.y}px`,
+  } as CSSProperties
+
+  const expandedRadius = Math.max(radius, 1)
+
+  return (
+    <motion.div
+      aria-hidden
+      className="theme-transition-overlay"
+      style={style}
+      initial={{
+        opacity: 0,
+        clipPath: `circle(0px at ${origin.x}px ${origin.y}px)`,
+        filter: 'blur(0px) saturate(1.05)',
+      }}
+      animate={{
+        opacity: [0, 0.92, 0.22, 0],
+        clipPath: `circle(${expandedRadius}px at ${origin.x}px ${origin.y}px)`,
+        filter: ['blur(0px) saturate(1.05)', 'blur(0px) saturate(1)', 'blur(2px) saturate(0.98)', 'blur(8px) saturate(0.95)'],
+      }}
+      exit={{ opacity: 0 }}
+      transition={{
+        duration: 0.5,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+    />
   )
 }

@@ -23,7 +23,7 @@ export type DockItem = {
   icon: React.ReactNode
   href?: string
   rel?: string
-  onClick?: () => void
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 export const FloatingDock = ({
@@ -79,7 +79,7 @@ const FloatingDockMobile = ({
                 {item.onClick ? (
                   <button
                     onClick={item.onClick}
-                    className="flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-md border border-border"
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background/70 backdrop-blur-md transition-[transform,background-color,border-color,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:bg-background/88 hover:shadow-[0_10px_28px_-18px_color-mix(in_oklab,var(--primary)_60%,transparent)]"
                   >
                     <div className="h-4 w-4">{item.icon}</div>
                   </button>
@@ -87,7 +87,7 @@ const FloatingDockMobile = ({
                   <a
                     href={item.href}
                     rel={item.rel}
-                    className="flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-md border border-border"
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background/70 backdrop-blur-md transition-[transform,background-color,border-color,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:bg-background/88 hover:shadow-[0_10px_28px_-18px_color-mix(in_oklab,var(--primary)_60%,transparent)]"
                   >
                     <div className="h-4 w-4">{item.icon}</div>
                   </a>
@@ -99,7 +99,7 @@ const FloatingDockMobile = ({
       </AnimatePresence>
       <button
         onClick={() => setOpen(!open)}
-        className="flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-md border border-border"
+        className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background/78 backdrop-blur-md transition-[transform,background-color,border-color,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:bg-background/88 hover:shadow-[0_10px_28px_-18px_color-mix(in_oklab,var(--primary)_60%,transparent)]"
       >
         <IconLayoutNavbarCollapse className="h-5 w-5 text-muted-foreground" />
       </button>
@@ -144,7 +144,7 @@ function IconContainer({
   icon: React.ReactNode
   href?: string
   rel?: string
-  onClick?: () => void
+  onClick?: DockItem['onClick']
 }) {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -223,14 +223,21 @@ function IconContainer({
 
   if (onClick) {
     return (
-      <button onClick={onClick} className="backdrop-blur-md p-1 rounded-full border border-border cursor-pointer">
+      <button
+        onClick={onClick}
+        className="cursor-pointer rounded-full border border-border bg-background/72 p-1 backdrop-blur-md transition-[transform,background-color,border-color,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:bg-background/88 hover:shadow-[0_12px_30px_-18px_color-mix(in_oklab,var(--primary)_68%,transparent)]"
+      >
         {content}
       </button>
     )
   }
 
   return (
-    <a href={href} rel={rel} className="backdrop-blur-md p-1 rounded-full border border-border">
+    <a
+      href={href}
+      rel={rel}
+      className="rounded-full border border-border bg-background/72 p-1 backdrop-blur-md transition-[transform,background-color,border-color,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:bg-background/88 hover:shadow-[0_12px_30px_-18px_color-mix(in_oklab,var(--primary)_68%,transparent)]"
+    >
       {content}
     </a>
   )
