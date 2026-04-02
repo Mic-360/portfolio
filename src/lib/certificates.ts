@@ -4,6 +4,7 @@
 
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
+import { getCertificateBySlugInternal, getCertificateIndexInternal, updateCertificatesDataInternal } from './certificates.server'
 
 // ── Types / Schemas ──────────────────────────────────────────────────
 
@@ -20,28 +21,27 @@ export const certificateSchema = z.object({
   image_url: z.string(),
 })
 
-export type CertificateMeta = z.infer<typeof certificateSchema>
-
 export const updateCertificatesSchema = z.array(certificateSchema.omit({ slug: true }))
+
+export type CertificateMeta = z.infer<typeof certificateSchema>
+export type CertificateUpdateInput = z.infer<typeof updateCertificatesSchema>[number]
 
 // ── Server functions (RPC bridge) ────────────────────────────────────
 
 export const getCertificateIndex = createServerFn({ method: 'GET' })
-  .handler(async () => {
-    const { getCertificateIndexInternal } = await import('./certificates.server')
+  .handler(() => {
+
     return getCertificateIndexInternal()
   })
 
 export const getCertificateBySlug = createServerFn({ method: 'GET' })
   .inputValidator(z.object({ slug: z.string() }))
-  .handler(async ({ data }) => {
-    const { getCertificateBySlugInternal } = await import('./certificates.server')
+  .handler(({ data }) => {
     return getCertificateBySlugInternal(data.slug)
   })
 
 export const updateCertificatesData = createServerFn({ method: 'POST' })
   .inputValidator(updateCertificatesSchema)
-  .handler(async ({ data }) => {
-    const { updateCertificatesDataInternal } = await import('./certificates.server')
+  .handler(({ data }) => {
     return updateCertificatesDataInternal(data)
   })

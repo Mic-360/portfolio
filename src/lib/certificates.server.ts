@@ -3,7 +3,8 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { z } from 'zod'
-import { certificateSchema, type CertificateMeta } from './certificates'
+import { certificateSchema } from './certificates'
+import type { CertificateMeta, CertificateUpdateInput } from './certificates';
 
 const CERTIFICATE_SOURCES: Record<string, string> = import.meta.glob(
   '../content/certificate.json',
@@ -17,7 +18,7 @@ const CERTIFICATE_SOURCES: Record<string, string> = import.meta.glob(
 const DATA_DIR = join(process.cwd(), '.data')
 const DATA_FILE = join(DATA_DIR, 'certificate.json')
 
-let inMemoryCertificatesData: CertificateMeta[] | null = null
+let inMemoryCertificatesData: Array<CertificateMeta> | null = null
 
 const certificatesDataSchema = z.array(certificateSchema)
 
@@ -28,14 +29,14 @@ function slugify(title: string): string {
     .replace(/(^-|-$)/g, '')
 }
 
-function processCertificates(raw: any[]): CertificateMeta[] {
+function processCertificates(raw: Array<any>): Array<CertificateMeta> {
   return raw.map((cert) => ({
     ...cert,
     slug: slugify(cert.title),
   }))
 }
 
-function getBundledCertificatesData(): CertificateMeta[] {
+function getBundledCertificatesData(): Array<CertificateMeta> {
   const raw = Object.values(CERTIFICATE_SOURCES)[0]
   if (!raw) {
     return []
@@ -51,7 +52,7 @@ function getBundledCertificatesData(): CertificateMeta[] {
   }
 }
 
-function readPersistedData(): CertificateMeta[] | null {
+function readPersistedData(): Array<CertificateMeta> | null {
   try {
     const raw = readFileSync(DATA_FILE, 'utf-8')
     const parsed = JSON.parse(raw)
@@ -62,7 +63,7 @@ function readPersistedData(): CertificateMeta[] | null {
   }
 }
 
-function persistData(data: CertificateMeta[]): void {
+function persistData(data: Array<CertificateMeta>): void {
   try {
     mkdirSync(DATA_DIR, { recursive: true })
     writeFileSync(DATA_FILE, JSON.stringify(data, null, 2))
@@ -71,7 +72,7 @@ function persistData(data: CertificateMeta[]): void {
   }
 }
 
-function readCertificateIndex(): CertificateMeta[] {
+function readCertificateIndex(): Array<CertificateMeta> {
   try {
     if (inMemoryCertificatesData) {
       return inMemoryCertificatesData
@@ -95,15 +96,15 @@ function readCertificateBySlug(slug: string): CertificateMeta | null {
   return certs.find((c) => c.slug === slug) ?? null
 }
 
-function updateCertificatesData(newCerts: CertificateMeta[]) {
+function updateCertificatesData(newCerts: Array<CertificateUpdateInput>) {
   const existingRecords = readCertificateIndex()
   let hasChanges = false
 
   for (const cert of newCerts) {
     // Matching logic for duplicates: title OR credential_id OR verify_url
-    const duplicate = existingRecords.some((existing) => 
-      (existing.title === cert.title) || 
-      (cert.credential_id && existing.credential_id === cert.credential_id) || 
+    const duplicate = existingRecords.some((existing) =>
+      (existing.title === cert.title) ||
+      (cert.credential_id && existing.credential_id === cert.credential_id) ||
       (existing.verify_url === cert.verify_url)
     )
 
