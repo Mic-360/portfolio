@@ -13,6 +13,7 @@ import { useKonamiCode } from '../hooks/useKonamiCode'
 import { CommandMenu } from '../components/CommandMenu'
 import { FloatingNavDock } from '../components/FloatingNavDock'
 import Footer from '../components/Footer'
+import { GoogleAnalyticsTracker } from '../components/GoogleAnalyticsTracker'
 import { ThemeProvider } from '../components/ThemeProvider'
 import { BacklightFilterDefs } from '../components/ui/backlight'
 import { VideoBackground } from '../components/VideoBackground'
@@ -424,6 +425,7 @@ function NotFound() {
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   const [showDoom, setShowDoom] = useState(false)
+  const gaMeasurementId = env.VITE_GA_MEASUREMENT_ID
   useKonamiCode(useCallback(() => setShowDoom(true), []))
 
   useEffect(() => {
@@ -487,25 +489,34 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     <html data-theme="dark" suppressHydrationWarning>
       <head>
         <HeadContent />
-        {/* Google Analytics - Replace G-XXXXXXXXXX with actual tracking ID */}
-        <script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-GY82L37E2F"
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-GY82L37E2F');
-            `,
-          }}
-        />
+        {gaMeasurementId ? (
+          <>
+            <script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
+            />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  window.gtag = window.gtag || function(){window.dataLayer.push(arguments);};
+                  window.gtag('js', new Date());
+                  window.gtag('config', ${JSON.stringify(gaMeasurementId)}, {
+                    send_page_view: false,
+                    anonymize_ip: true,
+                  });
+                `,
+              }}
+            />
+          </>
+        ) : null}
       </head>
       <body className="bg-background text-foreground antialiased">
         <BacklightFilterDefs />
         <ThemeProvider>
+          {gaMeasurementId ? (
+            <GoogleAnalyticsTracker measurementId={gaMeasurementId} />
+          ) : null}
           <VideoBackground />
           <FeedbackHandler />
           <CommandMenu />

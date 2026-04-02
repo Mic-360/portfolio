@@ -16,6 +16,7 @@ export const env = createEnv({
 
   client: {
     VITE_APP_TITLE: z.string().min(1).optional(),
+    VITE_GA_MEASUREMENT_ID: z.string().min(1).optional(),
     VITE_GOOGLE_SITE_VERIFICATION: z.string().min(1).optional(),
     VITE_BING_SITE_VERIFICATION: z.string().min(1).optional(),
     VITE_YANDEX_SITE_VERIFICATION: z.string().min(1).optional(),
