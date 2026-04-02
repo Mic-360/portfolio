@@ -318,15 +318,6 @@ export function CommandMenu() {
           </CommandItem>
           <CommandItem
             onSelect={() => {
-              setMode('autumn')
-              setOpen(false)
-            }}
-          >
-            <Leaf />
-            <span>autumn</span>
-          </CommandItem>
-          <CommandItem
-            onSelect={() => {
               setMode('frieren')
               setOpen(false)
             }}

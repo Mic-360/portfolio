@@ -11,14 +11,12 @@ export type ThemeMode =
   | 'normal'
   | 'sunny'
   | 'midnight'
-  | 'autumn'
   | 'frieren'
 
 const CYCLE_ORDER: Array<ThemeMode> = [
   'normal',
   'sunny',
   'midnight',
-  'autumn',
   'frieren',
 ]
 
@@ -49,9 +47,6 @@ function applyThemeAttributes(newMode: ThemeMode) {
       break
     case 'midnight':
       html.setAttribute('data-theme', 'midnight')
-      break
-    case 'autumn':
-      html.setAttribute('data-theme', 'sunny')
       break
     case 'frieren':
       html.setAttribute('data-theme', 'frieren')
