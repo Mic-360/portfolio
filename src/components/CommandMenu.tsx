@@ -147,8 +147,6 @@ export function CommandMenu() {
       <CommandInput placeholder="type a command or search..." />
       <CommandList className="scrollbar-hide">
         <CommandEmpty>no results found.</CommandEmpty>
-
-        {/* ── Navigation ── */}
         <CommandGroup heading="Navigation">
           <CommandItem onSelect={handleGoBack}>
             <ArrowLeft />
@@ -160,8 +158,6 @@ export function CommandMenu() {
         </CommandGroup>
 
         <CommandSeparator />
-
-        {/* ── Pages ── */}
         <CommandGroup heading="Pages">
           <CommandItem onSelect={() => handleNavigate('/')}>
             <Home />
@@ -222,8 +218,6 @@ export function CommandMenu() {
         </CommandGroup>
 
         <CommandSeparator />
-
-        {/* ── Social ── */}
         <CommandGroup heading="Social">
           {socialLinks
             .filter((link) => link.label !== 'rss')
@@ -243,8 +237,6 @@ export function CommandMenu() {
         </CommandGroup>
 
         <CommandSeparator />
-
-        {/* ── Feeds & Meta ── */}
         <CommandGroup heading="Feeds & Meta">
           <CommandItem onSelect={() => handleNavigate('/rss')}>
             <Rss />
@@ -270,8 +262,6 @@ export function CommandMenu() {
         </CommandGroup>
 
         <CommandSeparator />
-
-        {/* ── Actions ── */}
         <CommandGroup heading="Actions">
           <CommandItem
             onSelect={() =>
@@ -285,8 +275,6 @@ export function CommandMenu() {
         </CommandGroup>
 
         <CommandSeparator />
-
-        {/* ── Theme ── */}
         <CommandGroup heading="Theme">
           <CommandItem
             onSelect={() => {
@@ -327,8 +315,6 @@ export function CommandMenu() {
         </CommandGroup>
 
         <CommandSeparator />
-
-        {/* ── Blogs ── */}
         {blogs.length > 0 && (
           <CommandGroup heading="Blogs">
             {blogs.map((post, i) => (
@@ -345,8 +331,6 @@ export function CommandMenu() {
         )}
 
         <CommandSeparator />
-
-        {/* ── Projects ── */}
         {projects.length > 0 && (
           <CommandGroup heading="Projects">
             {projects.map((project) => (
@@ -362,8 +346,6 @@ export function CommandMenu() {
         )}
 
         <CommandSeparator />
-
-        {/* ── Certificates ── */}
         {certificates.length > 0 && (
           <CommandGroup heading="Certificates">
             {certificates.map((cert) => (

@@ -1,6 +1,6 @@
 import { motion } from 'motion/react'
 import { Award, ImagesIcon } from 'lucide-react'
-import { useState, useRef } from 'react'
+import { useRef, useState } from 'react'
 import CurrentIcon from '@/components/ui/current-icon'
 import HealthstatIcon from '@/components/ui/healthstat-icon'
 import LayersIcon from '@/components/ui/layers-icon'

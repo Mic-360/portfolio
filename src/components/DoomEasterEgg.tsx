@@ -81,9 +81,9 @@ export function DoomEasterEgg({ onClose }: { onClose: () => void }) {
     // Catch js-dos internal Preact errors that escape its error boundary
     const errorHandler = (event: ErrorEvent) => {
       if (
-        event.filename?.includes('js-dos') ||
+        event.filename.includes('js-dos') ||
         (event.error instanceof TypeError &&
-          event.message?.includes('setState'))
+          event.message.includes('setState'))
       ) {
         event.preventDefault()
         if (!cancelled) {
@@ -120,6 +120,7 @@ export function DoomEasterEgg({ onClose }: { onClose: () => void }) {
         dosInstanceRef.current = instance
 
         // If unmounted while Dos() was resolving, stop immediately
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (cancelled) {
           instance.stop().catch(() => {})
           return

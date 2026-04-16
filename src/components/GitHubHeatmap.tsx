@@ -34,14 +34,14 @@ function getResponsiveConfig(width: number): ResponsiveConfig {
 function useContributions(username: string) {
   const [loading, setLoading] = useState(true)
   const [total, setTotal] = useState<number | null>(null)
-  const [contributions, setContributions] = useState<ContributionEntry[]>([])
+  const [contributions, setContributions] = useState<Array<ContributionEntry>>([])
 
   useEffect(() => {
     setLoading(true)
     const currentYear = new Date().getFullYear()
     const lastYear = currentYear - 1
 
-    const flatten = (data: any): ContributionEntry[] =>
+    const flatten = (data: any): Array<ContributionEntry> =>
       (data?.contributions || []).flat().map((d: any) => ({
         date: d.date,
         value: d.contributionCount,
@@ -268,14 +268,14 @@ export default function GitHubHeatmap({ username }: GitHubHeatmapProps) {
           <button
             type="button"
             onClick={handlePrevious}
-            className="rounded-lg px-2.5 py-1 text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 transition-all duration-200 hover:bg-foreground/[0.04] hover:text-primary active:scale-95"
+            className="rounded-lg px-2.5 py-1 text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 transition-all duration-200 hover:bg-foreground/4 hover:text-primary active:scale-95"
           >
             &larr; Prev
           </button>
           <button
             type="button"
             onClick={handleNext}
-            className="rounded-lg px-2.5 py-1 text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 transition-all duration-200 hover:bg-foreground/[0.04] hover:text-primary active:scale-95"
+            className="rounded-lg px-2.5 py-1 text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 transition-all duration-200 hover:bg-foreground/4 hover:text-primary active:scale-95"
           >
             Next &rarr;
           </button>

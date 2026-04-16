@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
-import { motion, useMotionValue, animate } from 'motion/react'
+import { animate, motion, useMotionValue } from 'motion/react'
 
-import { type GameMeta } from '@/lib/games'
+import type {GameMeta} from '@/lib/games';
 
 function getYoutubeId(url: string) {
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
@@ -15,7 +15,7 @@ function MarqueeRow({
   speed = 40,
   offset = 0,
 }: {
-  items: GameMeta[]
+  items: Array<GameMeta>
   direction?: 1 | -1
   speed?: number
   offset?: number
@@ -152,7 +152,7 @@ function GamePoster({ game }: { game: GameMeta }) {
 // Memoize poster to prevent re-renders when the row-level pause state changes
 const GamePosterMemo = memo(GamePoster)
 
-export function GamesCinematic({ gamesData }: { gamesData: GameMeta[] }) {
+export function GamesCinematic({ gamesData }: { gamesData: Array<GameMeta> }) {
   // Split games into 2 rows for the cinematic density
   const half = Math.ceil(gamesData.length / 2)
   const row1 = gamesData.slice(0, half)
