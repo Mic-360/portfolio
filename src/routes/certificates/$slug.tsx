@@ -2,8 +2,8 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { Award } from 'lucide-react'
 import { motion } from 'motion/react'
 
-import { siteMeta } from '@/config/site-data'
 import type { CertificateMeta } from '@/lib/certificates'
+import { siteMeta } from '@/config/site-data'
 import { getCertificateBySlug, getCertificateIndex } from '@/lib/certificates'
 
 export const Route = createFileRoute('/certificates/$slug')({
@@ -172,9 +172,8 @@ function CertificateDetail() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="mx-auto flex w-full max-w-[1500px] flex-col gap-16 pb-16 md:gap-24"
+      className="mx-auto flex w-full max-w-375 flex-col gap-16 pb-16 md:gap-24"
     >
-      {/* Back navigation */}
       <motion.div
         variants={item}
         className="flex items-center justify-between gap-4"
@@ -191,7 +190,6 @@ function CertificateDetail() {
         </Link>
       </motion.div>
 
-      {/* Hero header */}
       <motion.section variants={item} className="pb-4">
         <div className="flex flex-col gap-6">
           <div className="flex flex-wrap items-center gap-3">
@@ -227,12 +225,10 @@ function CertificateDetail() {
         <div className="mt-8 h-px w-full bg-border/10" />
       </motion.section>
 
-      {/* Content area */}
       <motion.section
         variants={item}
         className="grid gap-12 lg:grid-cols-[minmax(180px,0.22fr)_minmax(0,0.78fr)]"
       >
-        {/* Left sidebar: metadata */}
         <aside className="grid content-start gap-8 lg:sticky lg:top-24 lg:self-start">
           <div className="grid gap-4">
             <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
@@ -247,7 +243,7 @@ function CertificateDetail() {
                   <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/40">
                     {row.label}
                   </p>
-                  <p className="mt-1 break-words text-sm leading-6 text-foreground/70">
+                  <p className="mt-1 wrap-break-word text-sm leading-6 text-foreground/70">
                     {row.value}
                   </p>
                 </div>
@@ -266,9 +262,7 @@ function CertificateDetail() {
           </a>
         </aside>
 
-        {/* Right: certificate image + skills */}
         <div className="grid gap-12">
-          {/* Certificate image */}
           {certificate.image_url ? (
             <motion.div
               initial={{ opacity: 0, scale: 0.96 }}
@@ -278,7 +272,7 @@ function CertificateDetail() {
                 duration: 0.8,
                 ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
               }}
-              className="overflow-hidden rounded-3xl border border-border/10 bg-foreground/[0.02] p-6 sm:p-10"
+              className="overflow-hidden rounded-3xl border border-border/10 bg-foreground/2 p-6 sm:p-10"
             >
               <img
                 src={certificate.image_url}
@@ -289,12 +283,11 @@ function CertificateDetail() {
               />
             </motion.div>
           ) : (
-            <div className="flex aspect-[16/9] items-center justify-center rounded-3xl border border-border/10 bg-foreground/[0.02]">
+            <div className="flex aspect-video items-center justify-center rounded-3xl border border-border/10 bg-foreground/2">
               <Award size={48} className="text-muted-foreground/20" />
             </div>
           )}
 
-          {/* Skills */}
           <div className="grid gap-6">
             <div className="grid gap-2">
               <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
@@ -323,7 +316,7 @@ function CertificateDetail() {
                         number,
                       ],
                     }}
-                    className="rounded-full border border-border/15 bg-foreground/[0.03] px-4 py-2 text-sm font-medium text-foreground/70 transition-colors duration-300 hover:border-primary/30 hover:text-primary"
+                    className="rounded-full border border-border/15 bg-foreground/3 px-4 py-2 text-sm font-medium text-foreground/70 transition-colors duration-300 hover:border-primary/30 hover:text-primary"
                   >
                     {skill}
                   </motion.span>
@@ -338,7 +331,6 @@ function CertificateDetail() {
         </div>
       </motion.section>
 
-      {/* Prev/Next navigation */}
       <motion.section
         variants={item}
         className="border-t border-border/10 pt-8"
@@ -348,7 +340,7 @@ function CertificateDetail() {
             <Link
               to="/certificates/$slug"
               params={{ slug: prevCert.slug }}
-              className="group flex flex-col gap-2 rounded-2xl p-5 transition-colors duration-300 hover:bg-foreground/[0.03]"
+              className="group flex flex-col gap-2 rounded-2xl p-5 transition-colors duration-300 hover:bg-foreground/3"
             >
               <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
                 &larr; Previous
@@ -368,7 +360,7 @@ function CertificateDetail() {
             <Link
               to="/certificates/$slug"
               params={{ slug: nextCert.slug }}
-              className="group flex flex-col gap-2 rounded-2xl p-5 text-right transition-colors duration-300 hover:bg-foreground/[0.03] sm:items-end"
+              className="group flex flex-col gap-2 rounded-2xl p-5 text-right transition-colors duration-300 hover:bg-foreground/3 sm:items-end"
             >
               <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
                 Next &rarr;
@@ -384,7 +376,6 @@ function CertificateDetail() {
         </div>
       </motion.section>
 
-      {/* Footer */}
       <motion.footer
         variants={item}
         className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
@@ -394,7 +385,7 @@ function CertificateDetail() {
         </p>
         <Link
           to="/certificates"
-          className="inline-flex items-center gap-2 rounded-full bg-foreground/[0.05] px-5 py-2.5 text-sm text-muted-foreground/60 transition-all duration-300 hover:bg-foreground/[0.08] hover:text-foreground"
+          className="inline-flex items-center gap-2 rounded-full bg-foreground/5 px-5 py-2.5 text-sm text-muted-foreground/60 transition-all duration-300 hover:bg-foreground/8 hover:text-foreground"
         >
           <span>&larr;</span>
           All certificates

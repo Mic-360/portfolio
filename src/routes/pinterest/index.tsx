@@ -2,8 +2,8 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { ImageIcon } from 'lucide-react'
 import { motion } from 'motion/react'
 
-import { siteMeta } from '@/config/site-data'
 import type { PinterestCreatedPin } from '@/lib/pinterest'
+import { siteMeta } from '@/config/site-data'
 import { getPinterestCreatedPins } from '@/lib/pinterest'
 
 export const Route = createFileRoute('/pinterest/')({
@@ -100,7 +100,6 @@ function PinterestIndexPage() {
       animate="show"
       className="flex flex-col gap-16"
     >
-      {/* Header */}
       <motion.header variants={item} className="relative overflow-hidden pb-8">
         <div className="pointer-events-none absolute inset-x-[18%] top-[8%] h-28 rounded-full bg-primary/10 blur-3xl" />
         <div className="pointer-events-none absolute right-[6%] top-[10%] h-72 w-72 rounded-full bg-primary/6 blur-[120px]" />
@@ -155,51 +154,47 @@ function PinterestIndexPage() {
         </div>
       </motion.header>
 
-      {/* Hero pin — cinematic full-width */}
-      {heroPin ? (
-        <motion.div variants={item}>
-          <a
-            href={heroPin.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group block"
+      <motion.div variants={item}>
+        <a
+          href={heroPin.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group block"
+        >
+          <motion.div
+            whileHover={{ y: -4 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            className="project-card-apple relative overflow-hidden rounded-2xl border border-border/10"
           >
-            <motion.div
-              whileHover={{ y: -4 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-              className="project-card-apple relative overflow-hidden rounded-2xl border border-border/10"
-            >
-              <div className="media-hover-parent relative aspect-[21/9] sm:aspect-[21/8]">
-                <img
-                  src={heroPin.imageUrl}
-                  alt={heroPin.title}
-                  width={heroPin.imageWidth}
-                  height={heroPin.imageHeight}
-                  className="media-hover-image absolute inset-0 h-full w-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-              </div>
-              <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
-                <div className="flex items-end justify-between gap-4">
-                  <div className="flex flex-col gap-2">
-                    <span className="text-[10px] uppercase tracking-[0.25em] text-white/50">
-                      Featured Pin
-                    </span>
-                    <h2 className="max-w-xl font-serif text-xl leading-tight tracking-tight text-white sm:text-2xl lg:text-3xl">
-                      {heroPin.title}
-                    </h2>
-                  </div>
-                  <span className="text-sm text-white/50 transition-transform duration-300 group-hover:translate-x-1">
-                    &nearr;
+            <div className="media-hover-parent relative aspect-21/9 sm:aspect-21/8">
+              <img
+                src={heroPin.imageUrl}
+                alt={heroPin.title}
+                width={heroPin.imageWidth}
+                height={heroPin.imageHeight}
+                className="media-hover-image absolute inset-0 h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
+            </div>
+            <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
+              <div className="flex items-end justify-between gap-4">
+                <div className="flex flex-col gap-2">
+                  <span className="text-[10px] uppercase tracking-[0.25em] text-white/50">
+                    Featured Pin
                   </span>
+                  <h2 className="max-w-xl font-serif text-xl leading-tight tracking-tight text-white sm:text-2xl lg:text-3xl">
+                    {heroPin.title}
+                  </h2>
                 </div>
+                <span className="text-sm text-white/50 transition-transform duration-300 group-hover:translate-x-1">
+                  &nearr;
+                </span>
               </div>
-            </motion.div>
-          </a>
-        </motion.div>
-      ) : null}
+            </div>
+          </motion.div>
+        </a>
+      </motion.div>
 
-      {/* Preview grid */}
       {previewPins.length > 0 ? (
         <motion.div
           variants={item}
@@ -232,7 +227,7 @@ function PinterestIndexPage() {
                   }}
                   className="project-card-apple flex h-full flex-col overflow-hidden rounded-2xl border border-border/10 bg-card/50"
                 >
-                  <div className="media-hover-parent relative aspect-[4/3] overflow-hidden">
+                  <div className="media-hover-parent relative aspect-4/3 overflow-hidden">
                     <img
                       src={pin.imageUrl}
                       alt={pin.title}
@@ -241,7 +236,7 @@ function PinterestIndexPage() {
                       height={pin.imageHeight}
                       className="media-hover-image absolute inset-0 h-full w-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-card/50 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-linear-to-t from-card/50 via-transparent to-transparent" />
                   </div>
                   <div className="flex flex-1 items-center justify-between gap-3 p-4">
                     <h3 className="line-clamp-2 text-sm font-medium tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
@@ -258,7 +253,6 @@ function PinterestIndexPage() {
         </motion.div>
       ) : null}
 
-      {/* Action cards */}
       <motion.section
         variants={item}
         className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
@@ -283,7 +277,6 @@ function PinterestIndexPage() {
         />
       </motion.section>
 
-      {/* Footer */}
       <motion.footer
         variants={item}
         className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-end sm:justify-between"

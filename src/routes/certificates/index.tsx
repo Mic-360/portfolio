@@ -3,8 +3,8 @@ import { Award } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useState } from 'react'
 
-import { siteMeta } from '@/config/site-data'
 import type { CertificateMeta } from '@/lib/certificates'
+import { siteMeta } from '@/config/site-data'
 import { getCertificateIndex } from '@/lib/certificates'
 
 export const Route = createFileRoute('/certificates/')({
@@ -119,7 +119,6 @@ function CertificatesIndex() {
       animate="show"
       className="flex flex-col gap-16"
     >
-      {/* Header */}
       <motion.header variants={item} className="relative overflow-hidden pb-8">
         <div className="pointer-events-none absolute inset-x-[18%] top-[8%] h-28 rounded-full bg-primary/10 blur-3xl" />
         <div className="pointer-events-none absolute right-[6%] top-[10%] h-72 w-72 rounded-full bg-primary/6 blur-[120px]" />
@@ -174,7 +173,6 @@ function CertificatesIndex() {
         </div>
       </motion.header>
 
-      {/* Issuer filter bar */}
       {allIssuers.length > 0 ? (
         <motion.div
           variants={item}
@@ -212,7 +210,6 @@ function CertificatesIndex() {
         </motion.div>
       ) : null}
 
-      {/* Certificates grid */}
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         <AnimatePresence mode="popLayout">
           {filteredCertificates.map(
@@ -250,12 +247,11 @@ function CertificatesIndex() {
                         isHero ? 'sm:flex-row' : ''
                       }`}
                     >
-                      {/* Image area */}
                       <div
-                        className={`media-hover-parent relative overflow-hidden bg-foreground/[0.02] ${
+                        className={`media-hover-parent relative overflow-hidden bg-foreground/2 ${
                           isHero
-                            ? 'aspect-[4/3] sm:aspect-auto sm:w-[45%]'
-                            : 'aspect-[16/10]'
+                            ? 'aspect-4/3 sm:aspect-auto sm:w-[45%]'
+                            : 'aspect-16/10'
                         }`}
                       >
                         {certificate.image_url ? (
@@ -275,10 +271,9 @@ function CertificatesIndex() {
                             />
                           </div>
                         )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-card/40 via-transparent to-transparent" />
+                        <div className="absolute inset-0 bg-linear-to-t from-card/40 via-transparent to-transparent" />
                       </div>
 
-                      {/* Info section */}
                       <div
                         className={`flex flex-1 flex-col justify-between gap-4 p-5 sm:p-6 ${
                           isHero ? 'sm:py-8' : ''
@@ -312,7 +307,7 @@ function CertificatesIndex() {
                                 .map((skill: string) => (
                                   <span
                                     key={skill}
-                                    className="rounded-full border border-border/15 bg-foreground/[0.03] px-2.5 py-0.5 text-[10px] font-medium text-muted-foreground/55"
+                                    className="rounded-full border border-border/15 bg-foreground/3 px-2.5 py-0.5 text-[10px] font-medium text-muted-foreground/55"
                                   >
                                     {skill}
                                   </span>
@@ -341,7 +336,6 @@ function CertificatesIndex() {
         </AnimatePresence>
       </div>
 
-      {/* Footer */}
       <motion.footer
         variants={item}
         className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-end sm:justify-between"

@@ -2,8 +2,8 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { ImageIcon } from 'lucide-react'
 import { motion } from 'motion/react'
 
-import { pinterest, siteMeta } from '@/config/site-data'
 import type { PinterestCreatedPin } from '@/lib/pinterest'
+import { pinterest, siteMeta } from '@/config/site-data'
 import { getPinterestCreatedPins } from '@/lib/pinterest'
 
 export const Route = createFileRoute('/pinterest/gallery')({

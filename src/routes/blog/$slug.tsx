@@ -1,10 +1,10 @@
-import { siteMeta } from '@/config/site-data'
-import type { BlogMeta } from '@/lib/content'
-import { getBlogIndex, getBlogPostBySlug } from '@/lib/content'
-import { formatDate } from '@/lib/format'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { motion, useScroll, useSpring } from 'motion/react'
 import { useEffect, useState } from 'react'
+import type { BlogMeta } from '@/lib/content'
+import { siteMeta } from '@/config/site-data'
+import { getBlogIndex, getBlogPostBySlug } from '@/lib/content'
+import { formatDate } from '@/lib/format'
 
 export const Route = createFileRoute('/blog/$slug')({
   loader: async ({ params }) => {
@@ -144,7 +144,7 @@ function ReadingProgress() {
 type TocHeading = { id: string; text: string; level: number }
 
 function TableOfContents() {
-  const [headings, setHeadings] = useState<TocHeading[]>([])
+  const [headings, setHeadings] = useState<Array<TocHeading>>([])
   const [activeId, setActiveId] = useState<string>('')
 
   useEffect(() => {
@@ -152,7 +152,7 @@ function TableOfContents() {
     if (!container) return
 
     const elements = container.querySelectorAll('h2[id], h3[id]')
-    const items: TocHeading[] = []
+    const items: Array<TocHeading> = []
     elements.forEach((el) => {
       items.push({
         id: el.id,
@@ -278,7 +278,7 @@ function BlogPost() {
         variants={container}
         initial="hidden"
         animate="show"
-        className="mx-auto flex w-full max-w-[1500px] flex-col gap-16 pb-16 md:gap-24"
+        className="mx-auto flex w-full max-w-375 flex-col gap-16 pb-16 md:gap-24"
       >
         {/* Back navigation */}
         <motion.div
@@ -323,7 +323,7 @@ function BlogPost() {
                 {taxonomies.map((entry, index) => (
                   <span
                     key={`${entry}-${index}`}
-                    className="rounded-full border border-border/15 bg-foreground/[0.03] px-3 py-1 text-[11px] font-medium text-muted-foreground/55"
+                    className="rounded-full border border-border/15 bg-foreground/3 px-3 py-1 text-[11px] font-medium text-muted-foreground/55"
                   >
                     {entry}
                   </span>
@@ -390,7 +390,7 @@ function BlogPost() {
               <Link
                 to="/blog/$slug"
                 params={{ slug: prevPost.slug }}
-                className="group flex flex-col gap-2 rounded-2xl p-5 transition-colors duration-300 hover:bg-foreground/[0.03]"
+                className="group flex flex-col gap-2 rounded-2xl p-5 transition-colors duration-300 hover:bg-foreground/3"
               >
                 <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
                   &larr; Previous
@@ -410,7 +410,7 @@ function BlogPost() {
               <Link
                 to="/blog/$slug"
                 params={{ slug: nextPost.slug }}
-                className="group flex flex-col gap-2 rounded-2xl p-5 text-right transition-colors duration-300 hover:bg-foreground/[0.03] sm:items-end"
+                className="group flex flex-col gap-2 rounded-2xl p-5 text-right transition-colors duration-300 hover:bg-foreground/3 sm:items-end"
               >
                 <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
                   Next &rarr;
@@ -436,7 +436,7 @@ function BlogPost() {
           </p>
           <Link
             to="/blog"
-            className="inline-flex items-center gap-2 rounded-full bg-foreground/[0.05] px-5 py-2.5 text-sm text-muted-foreground/60 transition-all duration-300 hover:bg-foreground/[0.08] hover:text-foreground"
+            className="inline-flex items-center gap-2 rounded-full bg-foreground/5 px-5 py-2.5 text-sm text-muted-foreground/60 transition-all duration-300 hover:bg-foreground/8 hover:text-foreground"
           >
             <span>&larr;</span>
             All posts
