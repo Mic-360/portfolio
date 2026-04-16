@@ -204,7 +204,7 @@ function App() {
   const featuredProjects = projects.slice(0, 5)
   const featuredPosts = posts.slice(0, 5)
   const featuredCertificates = certificates.slice(0, 6)
-  const featuredPins = pinterestData.pins.slice(0, 6)
+  const featuredPins = pinterestData.pins.slice(0, 4)
 
   return (
     <motion.div
@@ -871,43 +871,76 @@ function App() {
         <Section title="pinterest">
           {featuredPins.length > 0 ? (
             <div className="flex flex-col gap-6">
-              <div className="columns-2 gap-4 sm:columns-3">
-                {featuredPins.map((pin: PinterestCreatedPin) => (
+              {/* Hero pin */}
+              {featuredPins[0] ? (
+                <a
+                  href={featuredPins[0].url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group block"
+                >
+                  <div className="project-card-apple relative overflow-hidden rounded-2xl border border-border/10">
+                    <div className="media-hover-parent relative aspect-[16/9]">
+                      <img
+                        src={featuredPins[0].imageUrl}
+                        alt={featuredPins[0].title}
+                        loading="lazy"
+                        width={featuredPins[0].imageWidth}
+                        height={featuredPins[0].imageHeight}
+                        className="media-hover-image absolute inset-0 h-full w-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                    </div>
+                    <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
+                      <p className="line-clamp-2 font-serif text-sm leading-tight tracking-tight text-white sm:text-base">
+                        {featuredPins[0].title}
+                      </p>
+                    </div>
+                  </div>
+                </a>
+              ) : null}
+
+              {/* Remaining pins grid */}
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {featuredPins.slice(1).map((pin: PinterestCreatedPin) => (
                   <a
                     key={pin.id}
                     href={pin.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="media-hover-parent group mb-4 block break-inside-avoid"
+                    className="group block"
                   >
-                    <figure className="relative overflow-hidden rounded-3xl bg-muted/20">
-                      <img
-                        src={pin.imageUrl}
-                        alt={pin.title}
-                        loading="lazy"
-                        width={pin.imageWidth}
-                        height={pin.imageHeight}
-                        className="media-hover-image media-hover-desaturate media-hover-fade h-auto w-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-linear-to-t from-black/78 via-transparent to-transparent" />
-                      <figcaption className="absolute inset-x-0 bottom-0 p-3 text-[11px] leading-6 text-white/90">
-                        {pin.title}
-                      </figcaption>
-                    </figure>
+                    <div className="project-card-apple overflow-hidden rounded-xl border border-border/10 bg-card/40">
+                      <div className="media-hover-parent relative aspect-square">
+                        <img
+                          src={pin.imageUrl}
+                          alt={pin.title}
+                          loading="lazy"
+                          width={pin.imageWidth}
+                          height={pin.imageHeight}
+                          className="media-hover-image absolute inset-0 h-full w-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-card/50 via-transparent to-transparent" />
+                      </div>
+                      <div className="p-2.5">
+                        <p className="line-clamp-1 text-[11px] font-medium text-foreground/70 transition-colors duration-300 group-hover:text-primary">
+                          {pin.title}
+                        </p>
+                      </div>
+                    </div>
                   </a>
                 ))}
               </div>
-              <p className="text-sm text-muted-foreground/45">
-                The mobile version now keeps these pins in full color by
-                default. Browse more in the{' '}
-                <Link
-                  to="/pinterest"
-                  className="text-primary transition-colors hover:text-primary/80"
-                >
-                  full Pinterest gallery
-                </Link>
-                .
-              </p>
+
+              <Link
+                to="/pinterest"
+                className="inline-flex items-center gap-2 self-end text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
+              >
+                full gallery
+                <span className="transition-transform duration-300 group-hover:translate-x-1">
+                  &rarr;
+                </span>
+              </Link>
             </div>
           ) : (
             <p className="text-sm text-muted-foreground">
@@ -926,43 +959,66 @@ function App() {
         </Section>
 
         <Section title="certificates">
-          <div className="grid gap-1">
-            {featuredCertificates.map((cert: CertificateMeta) => (
+          <div className="grid gap-3">
+            {featuredCertificates.map((cert: CertificateMeta, index: number) => (
               <Link
                 key={cert.id}
                 to="/certificates/$slug"
                 params={{ slug: cert.slug }}
-                className="group grid gap-3 rounded-xl px-1 py-4 text-sm transition-colors duration-300 sm:grid-cols-[minmax(0,1fr)_120px]"
+                className="group block"
               >
-                <div className="space-y-1.5">
-                  <p className="text-[10px] uppercase tracking-[0.2em] text-primary/50">
-                    {cert.issuer}
-                  </p>
-                  <h3 className="text-base font-semibold leading-7 tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
-                    {cert.title}
-                  </h3>
-                  {cert.skills.length > 0 ? (
-                    <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/35">
-                      {cert.skills.slice(0, 3).join(' · ')}
-                    </p>
+                <div
+                  className={`project-card-apple flex items-center gap-4 rounded-xl border border-border/10 bg-card/40 p-4 transition-all duration-300 ${
+                    index === 0
+                      ? 'flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:gap-5'
+                      : ''
+                  }`}
+                >
+                  {index === 0 && cert.image_url ? (
+                    <div className="shrink-0 overflow-hidden rounded-lg bg-foreground/[0.02] sm:w-28">
+                      <img
+                        src={cert.image_url}
+                        alt={cert.title}
+                        referrerPolicy="no-referrer"
+                        crossOrigin="anonymous"
+                        className="h-20 w-full object-contain sm:h-16"
+                        loading="lazy"
+                      />
+                    </div>
                   ) : null}
-                </div>
-                <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40 sm:text-right">
-                  {cert.issued}
+                  <div className="flex flex-1 flex-col gap-1.5">
+                    <div className="flex items-center gap-3">
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-primary/50">
+                        {cert.issuer}
+                      </p>
+                      <span className="h-px flex-1 bg-border/10" />
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/35">
+                        {cert.issued}
+                      </p>
+                    </div>
+                    <h3 className="font-serif text-base leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
+                      {cert.title}
+                    </h3>
+                    {cert.skills.length > 0 ? (
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/30">
+                        {cert.skills.slice(0, 3).join(' \u00b7 ')}
+                      </p>
+                    ) : null}
+                  </div>
+                  <span className="shrink-0 text-xs text-primary/40 transition-transform duration-300 group-hover:translate-x-1">
+                    &rarr;
+                  </span>
                 </div>
               </Link>
             ))}
           </div>
-          <p className="text-sm text-muted-foreground/45">
-            A longer credential ledger lives in{' '}
-            <Link
-              to="/certificates"
-              className="text-primary transition-colors hover:text-primary/80"
-            >
-              the certificates page
-            </Link>
-            .
-          </p>
+          <Link
+            to="/certificates"
+            className="inline-flex items-center gap-2 self-end text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
+          >
+            all credentials
+            <span>&rarr;</span>
+          </Link>
         </Section>
       </motion.div>
 

@@ -2,10 +2,9 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { ImageIcon } from 'lucide-react'
 import { motion } from 'motion/react'
 
+import { siteMeta } from '@/config/site-data'
 import type { PinterestCreatedPin } from '@/lib/pinterest'
 import { getPinterestCreatedPins } from '@/lib/pinterest'
-import { siteMeta } from '@/config/site-data'
-
 
 export const Route = createFileRoute('/pinterest/')({
   loader: async () => {
@@ -49,13 +48,15 @@ export const Route = createFileRoute('/pinterest/')({
             url: canonicalUrl,
             mainEntity: {
               '@type': 'ItemList',
-              itemListElement: (loaderData?.pins ?? []).map((pin, index) => ({
-                '@type': 'ListItem',
-                position: index + 1,
-                url: pin.url,
-                name: pin.title,
-                image: pin.imageUrl,
-              })),
+              itemListElement: (loaderData?.pins ?? []).map(
+                (pin: PinterestCreatedPin, index: number) => ({
+                  '@type': 'ListItem',
+                  position: index + 1,
+                  url: pin.url,
+                  name: pin.title,
+                  image: pin.imageUrl,
+                }),
+              ),
             },
           }),
         },
@@ -68,25 +69,27 @@ export const Route = createFileRoute('/pinterest/')({
 function PinterestIndexPage() {
   const { pins, fetchedAt, profileUrl, createdUrl, createdBoardUrl } =
     Route.useLoaderData()
-  const leadPins = pins.slice(0, 4)
+  const heroPin = pins[0]
+  const previewPins = pins.slice(1, 7)
   const lastSyncLabel = fetchedAt.replace('T', ' ').replace('Z', ' UTC')
 
   const container = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.12,
-      },
+      transition: { staggerChildren: 0.1 },
     },
   }
 
   const item = {
-    hidden: { opacity: 0, y: 32 },
+    hidden: { opacity: 0, y: 28 },
     show: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.85, ease: [0.25, 0.1, 0.25, 1] },
+      transition: {
+        duration: 0.8,
+        ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
+      },
     },
   }
 
@@ -95,146 +98,221 @@ function PinterestIndexPage() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="flex flex-col gap-14"
+      className="flex flex-col gap-16"
     >
-      <motion.header
-        variants={item}
-        className="pb-12"
-      >
-        <div className="flex items-center justify-between gap-4 pb-10">
-          <div className="flex items-center gap-2">
-            <span className="text-muted-foreground/50">
-              <ImageIcon size={14} />
+      {/* Header */}
+      <motion.header variants={item} className="relative overflow-hidden pb-8">
+        <div className="pointer-events-none absolute inset-x-[18%] top-[8%] h-28 rounded-full bg-primary/10 blur-3xl" />
+        <div className="pointer-events-none absolute right-[6%] top-[10%] h-72 w-72 rounded-full bg-primary/6 blur-[120px]" />
+
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2.5">
+            <span className="text-primary/50">
+              <ImageIcon size={18} />
             </span>
-            <span className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/60">
-              Pinterest
+            <span className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+              visual archive
             </span>
           </div>
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground/50 transition-colors duration-300 hover:text-foreground"
+            className="inline-flex items-center gap-2 text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
           >
-            <span>←</span>
-            Home
+            <span>&larr;</span>
+            home
           </Link>
         </div>
 
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:items-start">
-          <div className="flex flex-col gap-6">
-            <h1 className="max-w-xl text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
-              Visual studies and created pins.
+        <div className="flex flex-col gap-8 pt-8 lg:pt-12">
+          <div className="grid gap-5">
+            <h1 className="font-serif text-4xl leading-[1.08] tracking-tight text-foreground sm:text-5xl xl:text-6xl">
+              Visual studies, curated pins.
             </h1>
-            <p className="max-w-lg text-lg leading-relaxed text-muted-foreground/70">
+            <p className="max-w-2xl text-base leading-8 text-foreground/50 sm:text-lg">
               Browse visual previews, download assets, or jump into the full
               masonry gallery.
             </p>
+          </div>
 
-            <div className="flex items-center gap-6 text-sm text-muted-foreground/50">
-              <span>{pins.length} pins</span>
-              <span className="h-3 w-px bg-border/20" />
-              <span className="text-xs">{lastSyncLabel}</span>
+          <div className="flex items-center justify-between gap-4">
+            <div className="space-y-1">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
+                pins synced
+              </p>
+              <p className="font-serif text-2xl text-foreground">
+                {pins.length.toString().padStart(2, '0')}
+              </p>
+            </div>
+            <div className="space-y-1 text-right">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
+                last sync
+              </p>
+              <p className="text-xs text-muted-foreground/50">
+                {lastSyncLabel}
+              </p>
             </div>
           </div>
-
-          <div className="grid gap-4 sm:grid-cols-2">
-            {leadPins.map((pin, index) => (
-              <PinterestPreviewCard
-                key={pin.id}
-                pin={pin}
-                className={index % 2 === 1 ? 'sm:translate-y-6' : ''}
-              />
-            ))}
-          </div>
         </div>
-
-        <div className="mt-8 h-px w-full bg-border/10" />
       </motion.header>
 
+      {/* Hero pin — cinematic full-width */}
+      {heroPin ? (
+        <motion.div variants={item}>
+          <a
+            href={heroPin.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group block"
+          >
+            <motion.div
+              whileHover={{ y: -4 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+              className="project-card-apple relative overflow-hidden rounded-2xl border border-border/10"
+            >
+              <div className="media-hover-parent relative aspect-[21/9] sm:aspect-[21/8]">
+                <img
+                  src={heroPin.imageUrl}
+                  alt={heroPin.title}
+                  width={heroPin.imageWidth}
+                  height={heroPin.imageHeight}
+                  className="media-hover-image absolute inset-0 h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+              </div>
+              <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
+                <div className="flex items-end justify-between gap-4">
+                  <div className="flex flex-col gap-2">
+                    <span className="text-[10px] uppercase tracking-[0.25em] text-white/50">
+                      Featured Pin
+                    </span>
+                    <h2 className="max-w-xl font-serif text-xl leading-tight tracking-tight text-white sm:text-2xl lg:text-3xl">
+                      {heroPin.title}
+                    </h2>
+                  </div>
+                  <span className="text-sm text-white/50 transition-transform duration-300 group-hover:translate-x-1">
+                    &nearr;
+                  </span>
+                </div>
+              </div>
+            </motion.div>
+          </a>
+        </motion.div>
+      ) : null}
+
+      {/* Preview grid */}
+      {previewPins.length > 0 ? (
+        <motion.div
+          variants={item}
+          className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+        >
+          {previewPins.map((pin: PinterestCreatedPin, index: number) => (
+            <motion.div
+              key={pin.id}
+              initial={{ opacity: 0, y: 20, scale: 0.96 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{
+                duration: 0.6,
+                delay: index * 0.08,
+                ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
+              }}
+            >
+              <a
+                href={pin.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group block h-full"
+              >
+                <motion.article
+                  whileHover={{ y: -4 }}
+                  transition={{
+                    type: 'spring',
+                    stiffness: 300,
+                    damping: 20,
+                  }}
+                  className="project-card-apple flex h-full flex-col overflow-hidden rounded-2xl border border-border/10 bg-card/50"
+                >
+                  <div className="media-hover-parent relative aspect-[4/3] overflow-hidden">
+                    <img
+                      src={pin.imageUrl}
+                      alt={pin.title}
+                      loading="lazy"
+                      width={pin.imageWidth}
+                      height={pin.imageHeight}
+                      className="media-hover-image absolute inset-0 h-full w-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-card/50 via-transparent to-transparent" />
+                  </div>
+                  <div className="flex flex-1 items-center justify-between gap-3 p-4">
+                    <h3 className="line-clamp-2 text-sm font-medium tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
+                      {pin.title}
+                    </h3>
+                    <span className="shrink-0 text-xs text-primary/50 transition-transform duration-300 group-hover:translate-x-1">
+                      &rarr;
+                    </span>
+                  </div>
+                </motion.article>
+              </a>
+            </motion.div>
+          ))}
+        </motion.div>
+      ) : null}
+
+      {/* Action cards */}
       <motion.section
         variants={item}
-        className="grid gap-4 lg:grid-cols-[minmax(0,1.05fr)_minmax(300px,0.95fr)]"
+        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
       >
-        <a
-          href={createdUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group overflow-hidden rounded-3xl border border-border/10 bg-foreground/[0.01] p-8 transition-all duration-300 hover:border-border/20 hover:bg-foreground/[0.03]"
-        >
-          <div className="flex h-full flex-col justify-between gap-8">
-            <div className="space-y-4">
-              <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
-                Created Feed
-              </p>
-              <h2 className="max-w-xl text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-                Browse the live Pinterest stream.
-              </h2>
-              <p className="max-w-xl text-sm text-muted-foreground/60">
-                Fresh pins, public source links, and the same visual trail this
-                gallery pulls from.
-              </p>
-            </div>
-            <div className="flex items-center justify-between gap-4 text-sm text-muted-foreground/40 transition-colors duration-300 group-hover:text-foreground">
-              <span>{createdUrl.replace('https://', '')}</span>
-              <span>↗</span>
-            </div>
-          </div>
-        </a>
-
-        <div className="grid gap-4">
-          <ActionCard
-            title="Full Gallery"
-            body="Staggered masonry wall — scan everything at once."
-            to="/pinterest/gallery"
-            meta="masonry view"
-          />
-          <ActionCard
-            title="Created Board"
-            body="Board-level surface directly on Pinterest."
-            href={createdBoardUrl}
-            meta="board view"
-          />
-          <ActionCard
-            title="Profile"
-            body="Public profile and the wider visual archive."
-            href={profileUrl}
-            meta={profileUrl.replace('https://', '')}
-          />
-        </div>
-      </motion.section>
-    </motion.section>
-  )
-}
-
-function PinterestPreviewCard({
-  pin,
-  className = '',
-}: {
-  pin: PinterestCreatedPin
-  className?: string
-}) {
-  return (
-    <a
-      href={pin.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={`group block overflow-hidden rounded-2xl border border-border/10 bg-foreground/[0.01] transition-all duration-300 hover:border-border/20 hover:bg-foreground/[0.03] ${className}`}
-    >
-      <div className="overflow-hidden">
-        <img
-          src={pin.imageUrl}
-          alt={pin.title}
-          loading="lazy"
-          width={pin.imageWidth}
-          height={pin.imageHeight}
-          className="h-64 w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+        <ActionCard
+          title="Full Gallery"
+          body="Staggered masonry wall with every pin, download-ready."
+          to="/pinterest/gallery"
+          meta="masonry view"
         />
-      </div>
-      <div className="p-4">
-        <h2 className="text-sm font-medium tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary line-clamp-2">
-          {pin.title}
-        </h2>
-      </div>
-    </a>
+        <ActionCard
+          title="Created Board"
+          body="Board-level surface directly on Pinterest."
+          href={createdBoardUrl}
+          meta="board view"
+        />
+        <ActionCard
+          title="Live Feed"
+          body="Fresh pins, public source links, and the visual trail this gallery pulls from."
+          href={createdUrl}
+          meta={createdUrl.replace('https://', '')}
+        />
+      </motion.section>
+
+      {/* Footer */}
+      <motion.footer
+        variants={item}
+        className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-end sm:justify-between"
+      >
+        <div className="flex items-end gap-6">
+          <p className="max-w-2xl text-sm leading-7 text-muted-foreground/40">
+            Browse the full masonry gallery or visit the live Pinterest feed for
+            more.
+          </p>
+        </div>
+        <div className="flex items-center gap-4">
+          <a
+            href={profileUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
+          >
+            {profileUrl.replace('https://', '')}
+          </a>
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
+          >
+            <span>&larr;</span>
+            back home
+          </Link>
+        </div>
+      </motion.footer>
+    </motion.section>
   )
 }
 
@@ -258,28 +336,46 @@ type ActionCardProps = ActionCardInternalLinkProps | ActionCardExternalLinkProps
 
 function ActionCard({ body, href, meta, title, to }: ActionCardProps) {
   const content = (
-    <article className="group flex h-full flex-col justify-between gap-5 rounded-2xl border border-border/10 bg-foreground/[0.01] p-5 transition-all duration-300 hover:border-border/20 hover:bg-foreground/[0.03]">
-      <div className="space-y-2">
-        <p className="text-xs text-muted-foreground/40">
+    <motion.article
+      whileHover={{ y: -4 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      className="project-card-apple flex h-full flex-col justify-between gap-6 rounded-2xl border border-border/10 bg-card/40 p-5 sm:p-6"
+    >
+      <div className="flex flex-col gap-3">
+        <span className="text-[10px] uppercase tracking-[0.2em] text-primary/50">
           {meta}
-        </p>
-        <h3 className="text-lg font-semibold tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
+        </span>
+        <h3 className="font-serif text-lg leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
           {title}
         </h3>
-        <p className="text-sm text-muted-foreground/60">{body}</p>
+        <p className="text-sm leading-7 text-foreground/50">{body}</p>
       </div>
-      <div className="text-sm text-muted-foreground/40 transition-colors duration-300 group-hover:text-foreground">
-        Open →
+      <div className="flex items-center justify-between gap-4 border-t border-border/8 pt-3">
+        <span className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/30">
+          {to ? 'Internal' : 'External'}
+        </span>
+        <span className="text-xs text-primary/50 transition-transform duration-300 group-hover:translate-x-1">
+          {to ? '\u2192' : '\u2197'}
+        </span>
       </div>
-    </article>
+    </motion.article>
   )
 
   if (to) {
-    return <Link to={to}>{content}</Link>
+    return (
+      <Link to={to} className="group block h-full">
+        {content}
+      </Link>
+    )
   }
 
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer">
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group block h-full"
+    >
       {content}
     </a>
   )
