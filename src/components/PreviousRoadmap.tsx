@@ -1,24 +1,24 @@
-import { motion } from 'motion/react'
-import { useEffect, useState } from 'react'
+import { motion, useInView } from 'motion/react'
+import { useEffect, useRef, useState } from 'react'
 import { previousRoles } from '@/config/site-data'
 
 const MOBILE_PATH =
-  'M150,580 C150,520 40,490 40,430 C40,370 260,330 260,270 C260,210 40,170 40,110 C40,60 150,30 150,20'
+  'M150,560 C150,500 50,470 50,410 C50,350 250,310 250,250 C250,190 50,150 50,90 C50,45 150,20 150,15'
 const DESKTOP_PATH =
-  'M30,260 C100,260 150,40 280,40 C410,40 440,260 560,260 C680,260 720,40 840,40 C920,40 960,160 980,160'
+  'M40,140 C100,140 140,40 260,40 C380,40 420,140 540,140 C660,140 700,40 820,40 C900,40 950,90 960,140'
 
 const MOBILE_CPS = [
-  { cx: 40, cy: 430 },
-  { cx: 260, cy: 270 },
-  { cx: 40, cy: 110 },
+  { cx: 50, cy: 410 },
+  { cx: 250, cy: 250 },
+  { cx: 50, cy: 90 },
 ]
 const DESKTOP_CPS = [
-  { cx: 280, cy: 40 },
-  { cx: 560, cy: 260 },
-  { cx: 840, cy: 40 },
+  { cx: 260, cy: 40 },
+  { cx: 540, cy: 140 },
+  { cx: 820, cy: 40 },
 ]
 
-function RoleLabel({
+function RoleCard({
   role,
   index,
   active,
@@ -36,44 +36,89 @@ function RoleLabel({
       href={role.url}
       target="_blank"
       rel="noopener noreferrer"
-      initial={{ opacity: 0, x: isRight ? 20 : -20 }}
-      whileInView={{ opacity: 1, x: 0 }}
+      initial={{ opacity: 0, y: 16, scale: 0.96 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true }}
-      transition={{ delay: index * 0.2, duration: 0.5 }}
-      className={`group/role absolute z-20 flex items-center gap-3 ${isRight ? 'flex-row-reverse' : ''}`}
+      transition={{
+        delay: index * 0.15,
+        duration: 0.6,
+        ease: [0.25, 0.1, 0.25, 1],
+      }}
+      whileHover={{
+        y: -3,
+        transition: { type: 'spring', stiffness: 400, damping: 25 },
+      }}
+      className={`group/role absolute z-20 ${isRight ? 'text-right' : ''}`}
       style={style}
     >
-      {role.icon && (
-        <img
-          src={role.icon}
-          alt={role.company}
-          width={40}
-          height={40}
-          loading="lazy"
-          data-backlight='off'
-          className={`w-9 h-9 lg:w-10 lg:h-10 shrink-0 rounded-full border-2 object-cover transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
-            active
-              ? 'border-primary scale-110 drop-shadow-[0_0_12px_var(--primary)]'
-              : 'border-primary/40 group-hover/role:scale-[1.3] group-hover/role:rotate-360 group-hover/role:border-primary group-hover/role:drop-shadow-[0_0_10px_var(--primary)]'
-          }`}
-        />
-      )}
-      <div className={`flex flex-col gap-0.5 ${isRight ? 'items-end' : ''}`}>
-        <span
-          className={`font-black text-sm lg:text-base transition-colors duration-300 ${active ? 'text-primary' : 'text-foreground group-hover/role:text-primary'}`}
+      <motion.div
+        animate={
+          active
+            ? {
+                borderColor: 'var(--primary)',
+                boxShadow:
+                  '0 0 0 1px color-mix(in oklab, var(--primary) 20%, transparent), 0 8px 32px -8px color-mix(in oklab, var(--primary) 15%, transparent)',
+              }
+            : {
+                borderColor:
+                  'color-mix(in oklab, var(--border) 30%, transparent)',
+                boxShadow: '0 1px 3px 0 rgb(0 0 0 / 0.04)',
+              }
+        }
+        transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+        className="relative overflow-hidden rounded-2xl border bg-card/60 backdrop-blur-xl p-4 transition-all duration-500 group-hover/role:border-primary/30 group-hover/role:shadow-lg"
+      >
+        <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-primary/3 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover/role:opacity-100" />
+
+        <div
+          className={`relative flex items-center gap-3 ${isRight ? 'flex-row-reverse' : ''}`}
         >
-          {role.company}
-        </span>
-        <span className="text-[8px] font-mono text-primary/70 tabular-nums tracking-widest">
-          {role.duration}
-        </span>
-        <span className="text-[10px] text-foreground/60 italic">
-          {role.role}
-        </span>
-        <span className="text-[8px] font-mono text-foreground/35 uppercase tracking-wider">
-          {role.location}
-        </span>
-      </div>
+          {role.icon && (
+            <motion.div
+              animate={active ? { scale: 1.08 } : { scale: 1 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+              className="relative shrink-0"
+            >
+              <img
+                src={role.icon}
+                alt={role.company}
+                width={40}
+                height={40}
+                loading="lazy"
+                data-backlight="off"
+                className="w-10 h-10 rounded-xl object-cover transition-all duration-500 group-hover/role:scale-105"
+              />
+              {active && (
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-card/80"
+                />
+              )}
+            </motion.div>
+          )}
+          <div
+            className={`flex flex-col gap-0.5 min-w-0 ${isRight ? 'items-end' : ''}`}
+          >
+            <span className="font-semibold text-sm tracking-tight text-foreground transition-colors duration-300 group-hover/role:text-primary truncate">
+              {role.company}
+            </span>
+            <span className="text-[11px] text-foreground/50 leading-tight">
+              {role.role}
+            </span>
+            <div
+              className={`flex items-center gap-2 mt-0.5 ${isRight ? 'flex-row-reverse' : ''}`}
+            >
+              <span className="text-[10px] font-medium text-primary/60 tabular-nums">
+                {role.duration}
+              </span>
+              <span className="text-[9px] text-foreground/30">
+                {role.location}
+              </span>
+            </div>
+          </div>
+        </div>
+      </motion.div>
     </motion.a>
   )
 }
@@ -83,17 +128,14 @@ function TrackSVG({
   path,
   checkpoints,
   activeCheckpoint,
-  carSize,
   className,
 }: {
   viewBox: string
   path: string
   checkpoints: Array<{ cx: number; cy: number }>
   activeCheckpoint: number
-  carSize: number
   className?: string
 }) {
-  const half = carSize / 2
   return (
     <svg
       viewBox={viewBox}
@@ -101,93 +143,86 @@ function TrackSVG({
       className={className}
       preserveAspectRatio="xMidYMid meet"
     >
-      {/* Ground shadow */}
       <path
         d={path}
         stroke="var(--foreground)"
-        strokeWidth="40"
-        strokeOpacity="0.03"
-        strokeLinecap="square"
+        strokeWidth="36"
+        strokeOpacity="0.02"
+        strokeLinecap="round"
       />
-      {/* Road surface */}
+      <path
+        d={path}
+        stroke="var(--border)"
+        strokeWidth="20"
+        strokeOpacity="0.15"
+        strokeLinecap="round"
+      />
       <path
         d={path}
         stroke="var(--primary)"
-        strokeWidth="26"
-        strokeOpacity="0.07"
-        strokeLinecap="square"
-      />
-      {/* Edge lines */}
-      <path
-        d={path}
-        stroke="var(--primary)"
-        strokeWidth="26"
-        strokeOpacity="0.04"
-        strokeLinecap="square"
-      />
-      {/* Center dashes */}
-      <path
-        d={path}
-        stroke="var(--primary)"
-        strokeWidth="1.5"
-        strokeOpacity="0.2"
-        strokeDasharray="10 7"
-        strokeLinecap="square"
+        strokeWidth="1"
+        strokeOpacity="0.25"
+        strokeDasharray="8 6"
+        strokeLinecap="round"
       />
 
-      {/* Checkpoints */}
       {checkpoints.map((cp, i) => (
         <g key={i}>
-          {/* Outer ring on active */}
           {activeCheckpoint === i && (
             <circle
               cx={cp.cx}
               cy={cp.cy}
-              r="18"
+              r="16"
               fill="none"
               stroke="var(--primary)"
-              strokeWidth="1"
-              opacity="0.25"
-              style={{ transition: 'all 0.3s ease' }}
+              strokeWidth="0.75"
+              opacity="0.2"
+              style={{
+                transition: 'all 0.6s cubic-bezier(0.25, 0.1, 0.25, 1)',
+              }}
             />
           )}
           <circle
             cx={cp.cx}
             cy={cp.cy}
-            r={activeCheckpoint === i ? 10 : 5}
+            r={activeCheckpoint === i ? 5 : 3}
             fill={activeCheckpoint === i ? 'var(--primary)' : 'none'}
             stroke="var(--primary)"
-            strokeWidth="2"
-            opacity={activeCheckpoint === i ? 1 : 0.3}
-            style={{ transition: 'all 0.3s ease' }}
+            strokeWidth="1.5"
+            opacity={activeCheckpoint === i ? 0.9 : 0.2}
+            style={{ transition: 'all 0.6s cubic-bezier(0.25, 0.1, 0.25, 1)' }}
           />
         </g>
       ))}
 
-      <image
-        href="/car.svg"
-        width={carSize}
-        height={carSize}
-        x={-half}
-        y={-half}
-        transform={`rotate(-180, 0, 0)`}
-      >
+      <circle r="4" fill="var(--primary)" opacity="0.8">
         <animateMotion
-          dur="8s"
+          dur="10s"
           repeatCount="indefinite"
           rotate="auto"
           path={path}
         />
-      </image>
+      </circle>
+      <circle r="8" fill="var(--primary)" opacity="0.12">
+        <animateMotion
+          dur="10s"
+          repeatCount="indefinite"
+          rotate="auto"
+          path={path}
+        />
+      </circle>
     </svg>
   )
 }
 
 export function PreviousRoadmap() {
   const [activeCheckpoint, setActiveCheckpoint] = useState(-1)
+  const sectionRef = useRef<HTMLDivElement>(null)
+  const isInView = useInView(sectionRef, { once: false, margin: '-100px' })
 
   useEffect(() => {
-    const LAP = 8000
+    if (!isInView) return
+    const LAP = 10000
     const start = Date.now()
     const id = setInterval(() => {
       const p = ((Date.now() - start) % LAP) / LAP
@@ -197,60 +232,69 @@ export function PreviousRoadmap() {
       else setActiveCheckpoint(-1)
     }, 60)
     return () => clearInterval(id)
-  }, [])
+  }, [isInView])
 
   const roles = [...previousRoles].reverse()
 
   const mobilePositions: Array<React.CSSProperties> = [
-    { top: '67%', left: '28%' },
-    { top: '39%', right: '4%' },
-    { top: '11%', left: '28%' },
+    { top: '64%', left: '30%' },
+    { top: '36%', right: '2%' },
+    { top: '8%', left: '30%' },
   ]
 
   const desktopPositions: Array<React.CSSProperties> = [
-    { top: '4%', left: '20%' },
-    { bottom: '6%', left: '46%' },
-    { top: '4%', right: '8%' },
+    { top: '-2%', left: '18%' },
+    { bottom: '-4%', left: '43%' },
+    { top: '-2%', right: '6%' },
   ]
 
   return (
-    <>
-      {/* ── Mobile: diagonal S-curve (bottom → top), labels alternate sides ── */}
-      <div className="lg:hidden relative w-full" style={{ height: 600 }}>
-        {/* Start label */}
-        <div className="absolute bottom-1 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2">
-          <div className="w-2.5 h-2.5 rounded-full bg-primary/50 animate-pulse" />
-          <span className="text-[7px] font-mono font-black uppercase tracking-[0.4em] text-primary">
+    <div ref={sectionRef}>
+      <div className="lg:hidden relative w-full" style={{ height: 580 }}>
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5 }}
+          className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10"
+        >
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/8 px-3 py-1 text-[9px] font-medium uppercase tracking-[0.3em] text-primary/60 backdrop-blur-sm border border-primary/10">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary/50 animate-pulse" />
             start
           </span>
-        </div>
+        </motion.div>
 
-        {/* Finish label */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2">
-          <div
-            className="w-3 h-3 rounded-xs border border-primary/40"
-            style={{
-              backgroundImage:
-                'repeating-conic-gradient(var(--primary) 0% 25%, transparent 0% 50%)',
-              backgroundSize: '3px 3px',
-            }}
-          />
-          <span className="text-[7px] font-mono font-black uppercase tracking-[0.4em] text-foreground/35">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.6 }}
+          className="absolute top-0 left-1/2 -translate-x-1/2 z-10"
+        >
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-foreground/3 px-3 py-1 text-[9px] font-medium uppercase tracking-[0.3em] text-foreground/30 backdrop-blur-sm border border-border/15">
+            <div
+              className="w-2.5 h-2.5 rounded-sm"
+              style={{
+                backgroundImage:
+                  'repeating-conic-gradient(var(--foreground) 0% 25%, transparent 0% 50%)',
+                backgroundSize: '2.5px 2.5px',
+                opacity: 0.25,
+              }}
+            />
             finish
           </span>
-        </div>
+        </motion.div>
 
         <TrackSVG
-          viewBox="0 0 300 600"
+          viewBox="0 0 300 580"
           path={MOBILE_PATH}
           checkpoints={MOBILE_CPS}
           activeCheckpoint={activeCheckpoint}
-          carSize={22}
           className="absolute inset-0 w-full h-full"
         />
 
         {roles.map((role, i) => (
-          <RoleLabel
+          <RoleCard
             key={role.company}
             role={role}
             index={i}
@@ -261,11 +305,9 @@ export function PreviousRoadmap() {
         ))}
       </div>
 
-      {/* ── Desktop: 3D perspective track (top-right viewing angle) ── */}
-      <div className="hidden lg:block relative" style={{ height: 180 }}>
-        {/* Labels — outside the 3D container for readability */}
+      <div className="hidden lg:block relative" style={{ height: 200 }}>
         {roles.map((role, i) => (
-          <RoleLabel
+          <RoleCard
             key={role.company}
             role={role}
             index={i}
@@ -274,49 +316,46 @@ export function PreviousRoadmap() {
           />
         ))}
 
-        {/* 3D perspective container */}
-        <div className="absolute inset-0" style={{ perspective: '900px' }}>
+        <div className="absolute inset-0" style={{ perspective: '1000px' }}>
           <div
             className="w-full h-full"
             style={{
-              transform: 'rotateX(62deg) rotateY(-2deg)',
+              transform: 'rotateX(58deg) rotateY(-1deg)',
               transformStyle: 'preserve-3d',
-              transformOrigin: '60% 95%',
+              transformOrigin: '55% 90%',
             }}
           >
-            {/* Start flag */}
-            <div className="absolute bottom-[14%] left-[6%] z-10 flex items-center gap-1.5">
-              <div className="w-2.5 h-2.5 rounded-full bg-primary/50 animate-pulse" />
-              <span className="text-[7px] font-mono font-black uppercase tracking-[0.4em] text-primary">
+            <div className="absolute bottom-[12%] left-[4%] z-10">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/8 px-2.5 py-0.5 text-[8px] font-medium uppercase tracking-[0.3em] text-primary/60 border border-primary/10">
+                <span className="h-1 w-1 rounded-full bg-primary/50 animate-pulse" />
                 start
               </span>
             </div>
-            {/* Finish flag */}
-            <div className="absolute top-[48%] right-[2%] z-10 flex items-center gap-1.5">
-              <div
-                className="w-3 h-3 rounded-xs border border-primary/40"
-                style={{
-                  backgroundImage:
-                    'repeating-conic-gradient(var(--primary) 0% 25%, transparent 0% 50%)',
-                  backgroundSize: '3px 3px',
-                }}
-              />
-              <span className="text-[7px] font-mono font-black uppercase tracking-[0.4em] text-foreground/35">
+            <div className="absolute top-[42%] right-[1%] z-10">
+              <span className="inline-flex items-center gap-1 rounded-full bg-foreground/3 px-2.5 py-0.5 text-[8px] font-medium uppercase tracking-[0.3em] text-foreground/25 border border-border/10">
+                <div
+                  className="w-2 h-2 rounded-xs"
+                  style={{
+                    backgroundImage:
+                      'repeating-conic-gradient(var(--foreground) 0% 25%, transparent 0% 50%)',
+                    backgroundSize: '2px 2px',
+                    opacity: 0.2,
+                  }}
+                />
                 finish
               </span>
             </div>
 
             <TrackSVG
-              viewBox="0 0 1000 280"
+              viewBox="0 0 1000 180"
               path={DESKTOP_PATH}
               checkpoints={DESKTOP_CPS}
               activeCheckpoint={activeCheckpoint}
-              carSize={30}
               className="w-full h-full"
             />
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }

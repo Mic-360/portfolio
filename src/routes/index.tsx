@@ -23,6 +23,8 @@ import GravatarAvatar from '@/components/gravatar/GravatarAvatar'
 import GravatarSocialLinks from '@/components/gravatar/GravatarSocialLinks'
 import { PreviousRoadmap } from '@/components/PreviousRoadmap'
 import CalendarIcon from '@/components/ui/calendar-icon'
+import CurrentIcon from '@/components/ui/current-icon'
+import PreviousIcon from '@/components/ui/previous-icon'
 import { gravatarConfig } from '@/config/gravatar'
 import {
   contactLinks,
@@ -362,50 +364,238 @@ function App() {
         </div>
       </motion.section>
 
-      <motion.div
-        variants={item}
-        className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16"
-      >
-        <Section title="current">
-          <motion.p whileHover={{ x: 3 }} className="group/current">
-            {siteInfo.currentRole} at{' '}
-            <motion.a
-              whileHover={{ scale: 1.05, y: -2 }}
-              href={siteInfo.currentCompanyUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center px-2 rounded-sm font-black italic underline decoration-primary underline-offset-1 bg-foreground text-background"
-            >
-              <img
-                src="/khub.svg"
-                alt="KarkhanaHub Logo"
-                width={24}
-                height={24}
-                loading="lazy"
-                data-backlight="off"
-                className="inline-block w-6 h-6 mr-2 rounded-sm object-cover transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover/current:scale-[1.4] group-hover/current:rotate-360 group-hover/current:drop-shadow-[0_0_8px_var(--primary)]"
-              />
-              {siteInfo.currentCompany}
-            </motion.a>
-            . {siteInfo.currentSummary}
-          </motion.p>
-          <motion.p whileHover={{ x: 3 }}>{siteInfo.educationLine}</motion.p>
-          <motion.p whileHover={{ x: 3 }}>{siteInfo.interests}</motion.p>
-          <motion.p whileHover={{ x: 3 }} className="space-x-4">
-            i can build{' '}
-            <span className="font-semibold text-primary">
-              literally anything.
-            </span>
-            <img
-              src="/frieren/party.svg"
-              className="h-7 sm:h-9 inline-block align-bottom ml-1"
-            />
-          </motion.p>
-        </Section>
+      <motion.div variants={item} className="flex flex-col gap-24 md:gap-32">
+        {/* ── Current: Apple-style scattered cards ── */}
+        <section className="relative">
+          <div className="relative min-h-130 sm:min-h-145 lg:min-h-160">
+            {/* ── Floating squircle cards scattered around ── */}
 
-        <Section title="previous">
+            {/* Card 1: Education — top-left, tilted */}
+            <motion.div
+              initial={{ opacity: 0, y: 40, rotate: -8 }}
+              whileInView={{ opacity: 1, y: 0, rotate: -6 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{
+                delay: 0.1,
+                duration: 0.8,
+                ease: [0.25, 0.1, 0.25, 1],
+              }}
+              whileHover={{
+                y: -8,
+                rotate: -2,
+                scale: 1.03,
+                transition: { type: 'spring', stiffness: 300, damping: 20 },
+              }}
+              className="hidden sm:block absolute left-[2%] top-[2%] sm:left-[4%] sm:top-[4%] lg:left-[6%] lg:top-[6%] z-10 w-45 sm:w-50 lg:w-55"
+            >
+              <div className="group relative overflow-hidden rounded-3xl border border-border/20 bg-card/70 shadow-lg backdrop-blur-xl">
+                <div className="aspect-square overflow-hidden rounded-t-3xl">
+                  <img
+                    src="/frieren/frieren-teach.svg"
+                    alt="Education"
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                    data-backlight="off"
+                  />
+                </div>
+                <div className="p-4">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-primary/70 mb-1.5">
+                    Education
+                  </p>
+                  <p className="text-xs leading-5 text-foreground/55">
+                    {siteInfo.educationLine}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Card 2: Interests — top-right, tilted opposite */}
+            <motion.div
+              initial={{ opacity: 0, y: 40, rotate: 8 }}
+              whileInView={{ opacity: 1, y: 0, rotate: 5 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{
+                delay: 0.25,
+                duration: 0.8,
+                ease: [0.25, 0.1, 0.25, 1],
+              }}
+              whileHover={{
+                y: -8,
+                rotate: 1,
+                scale: 1.03,
+                transition: { type: 'spring', stiffness: 300, damping: 20 },
+              }}
+              className="hidden sm:block absolute right-[2%] top-[0%] sm:right-[6%] sm:top-[2%] lg:top-[3%] z-10 w-45 sm:w-52.5 lg:w-60"
+            >
+              <div className="group relative overflow-hidden rounded-3xl border border-border/20 bg-card/70 shadow-lg backdrop-blur-xl">
+                <div className="p-4">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-primary/70 mb-1.5">
+                    Interests
+                  </p>
+                  <p className="text-xs leading-5 text-foreground/55">
+                    {siteInfo.interests}
+                  </p>
+                </div>
+                <div className="aspect-4/3 overflow-hidden rounded-t-3xl">
+                  <img
+                    src="/frieren/frienbook.svg"
+                    alt="Interests"
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                    data-backlight="off"
+                  />
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Card 3: Capabilities — bottom-left */}
+            <motion.div
+              initial={{ opacity: 0, y: 40, rotate: 6 }}
+              whileInView={{ opacity: 1, y: 0, rotate: 4 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{
+                delay: 0.4,
+                duration: 0.8,
+                ease: [0.25, 0.1, 0.25, 1],
+              }}
+              whileHover={{
+                y: -8,
+                rotate: 0,
+                scale: 1.03,
+                transition: { type: 'spring', stiffness: 300, damping: 20 },
+              }}
+              className="hidden md:block absolute left-[4%] bottom-[2%] sm:left-[8%] sm:bottom-[4%] lg:left-[10%] lg:bottom-[3%] z-10 w-40 sm:w-45 lg:w-50"
+            >
+              <div className="group relative overflow-hidden rounded-3xl border border-border/20 bg-card/70 shadow-lg backdrop-blur-xl">
+                <div className="aspect-3/2 overflow-hidden rounded-t-3xl flex items-center justify-center bg-primary/5">
+                  <img
+                    src="/frieren/party.svg"
+                    alt="Capabilities"
+                    className="h-3/4 w-3/4 object-contain transition-transform duration-700 group-hover:scale-110"
+                    loading="lazy"
+                    data-backlight="off"
+                  />
+                </div>
+                <div className="p-4">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-primary/70 mb-1.5">
+                    Capabilities
+                  </p>
+                  <p className="text-xs leading-5 text-foreground/55">
+                    i can build{' '}
+                    <span className="font-semibold text-primary">
+                      literally anything.
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Card 4: tiny accent card — bottom-right */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
+              whileInView={{ opacity: 1, scale: 1, rotate: -5 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{
+                delay: 0.5,
+                duration: 0.7,
+                ease: [0.34, 1.56, 0.64, 1],
+              }}
+              whileHover={{
+                rotate: 2,
+                scale: 1.06,
+                transition: { type: 'spring', stiffness: 400, damping: 20 },
+              }}
+              className="absolute right-[6%] bottom-[8%] sm:right-[10%] sm:bottom-[10%] lg:right-[12%] lg:bottom-[8%] z-10 w-30 sm:w-35"
+            >
+              <div className="group overflow-hidden rounded-[20px] border border-border/15 bg-card/60 shadow-md backdrop-blur-xl">
+                <div className="aspect-square overflow-hidden rounded-[20px] flex items-center justify-center bg-primary/3">
+                  <img
+                    src="/frieren/frieren.svg"
+                    alt="Frieren"
+                    className="h-4/5 w-4/5 object-contain transition-transform duration-700 group-hover:scale-110 group-hover:rotate-3"
+                    loading="lazy"
+                    data-backlight="off"
+                  />
+                </div>
+              </div>
+            </motion.div>
+
+            {/* ── Center content: headline + subtitle ── */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none px-4 z-50">
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
+                className="flex flex-col items-center text-center pointer-events-auto"
+              >
+                <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-primary backdrop-blur-sm mb-6">
+                  <CurrentIcon size={14} className="h-3.5 w-3.5 opacity-70" />
+                  currently
+                </span>
+
+                <h2 className="max-w-2xl font-serif text-4xl leading-[1.1] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+                  Building the machines at{' '}
+                  <motion.a
+                    href={siteInfo.currentCompanyUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group/company relative inline-flex items-baseline gap-2 text-primary transition-colors duration-500 hover:text-primary/80"
+                    whileHover={{ scale: 1.02 }}
+                    transition={{
+                      type: 'spring',
+                      stiffness: 400,
+                      damping: 25,
+                    }}
+                  >
+                    <img
+                      src="/khub.svg"
+                      alt="KarkhanaHub Logo"
+                      width={44}
+                      height={44}
+                      loading="lazy"
+                      data-backlight="off"
+                      className="inline-block w-12 h-12 mr-1 rounded-lg  object-cover transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover/current:scale-[1.4] group-hover/current:rotate-360 group-hover/current:drop-shadow-[0_0_8px_var(--primary)]"
+                    />
+                    {siteInfo.currentCompany}
+                  </motion.a>
+                </h2>
+
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2, duration: 0.8 }}
+                  className="mt-6 max-w-lg text-base leading-8 text-foreground/50 sm:text-lg"
+                >
+                  {siteInfo.currentSummary}
+                </motion.p>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        <section className="relative">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
+            className="flex flex-col items-center text-center mb-12"
+          >
+            <span className="inline-flex items-center gap-2 rounded-full border border-border/20 bg-foreground/3 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground/60 backdrop-blur-sm mb-6">
+              <PreviousIcon size={14} className="h-3.5 w-3.5 opacity-70" />
+              experience
+            </span>
+            <h2 className="max-w-2xl font-serif text-4xl leading-[1.1] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+              Where I've been.
+            </h2>
+            <p className="mt-4 max-w-lg text-base leading-8 text-foreground/40">
+              A track record of shipping products across roles and companies.
+            </p>
+          </motion.div>
           <PreviousRoadmap />
-        </Section>
+        </section>
       </motion.div>
 
       <motion.div variants={item}>
