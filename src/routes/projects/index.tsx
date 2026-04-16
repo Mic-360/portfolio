@@ -113,47 +113,49 @@ function ProjectsIndex() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="flex flex-col gap-14"
+      className="flex flex-col gap-20"
     >
       <motion.header
         variants={item}
-        className="relative overflow-hidden border-b border-border/20 pb-12"
+        className="relative overflow-hidden pb-12"
       >
-        <div className="pointer-events-none absolute inset-x-[18%] top-0 h-28 rounded-full bg-primary/14 blur-3xl" />
-        <div className="pointer-events-none absolute right-[6%] top-[10%] h-72 w-72 rounded-full bg-primary/8 blur-[120px]" />
+        <div className="pointer-events-none absolute inset-x-[18%] top-0 h-28 rounded-full bg-primary/10 blur-3xl" />
+        <div className="pointer-events-none absolute right-[6%] top-[10%] h-72 w-72 rounded-full bg-primary/6 blur-[120px]" />
 
         <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <span className="text-primary">
-              <LayersIcon size={22} />
+          <div className="flex items-center gap-2.5">
+            <span className="text-primary/50">
+              <LayersIcon size={18} />
             </span>
-            <span className="text-lg uppercase tracking-[0.28em] text-primary/75">
+            <span className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
               projects archive
             </span>
           </div>
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
+            className="inline-flex items-center gap-2 text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
           >
             <span>←</span>
             home
           </Link>
         </div>
-        <div className="flex flex-col gap-7 pt-6 lg:pt-10">
-          <div className="grid gap-4">
-            <h1 className="font-serif text-5xl leading-none text-foreground sm:text-6xl xl:text-7xl">
+        <div className="flex flex-col gap-8 pt-8 lg:pt-12">
+          <div className="grid gap-5">
+            <h1 className="font-serif text-5xl leading-[1.06] tracking-tight text-foreground sm:text-6xl xl:text-7xl">
               Software work shown as scenes, not guides.
             </h1>
-            <p className="max-w-4xl text-base leading-8 text-foreground/76 sm:text-lg">
+            <p className="max-w-3xl text-base leading-8 text-foreground/50 sm:text-lg">
               An archive of Android, web, AI, and systems projects. Each build
               has its own atmosphere, technical footprint, and path into the
-              full write-up without the archive hero needing a featured frame.
+              full write-up.
             </p>
           </div>
 
-          <div className="grid gap-5 border-t border-border/25 pt-5 sm:grid-cols-2">
+          <div className="h-px w-full bg-border/10" />
+
+          <div className="grid gap-5 sm:grid-cols-2">
             <div className="space-y-1">
-              <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
                 selected builds
               </p>
               <p className="text-2xl font-serif text-foreground">
@@ -161,10 +163,10 @@ function ProjectsIndex() {
               </p>
             </div>
             <div className="space-y-1">
-              <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
                 lanes
               </p>
-              <p className="text-sm leading-7 text-foreground/76">
+              <p className="text-sm leading-7 text-foreground/50">
                 {featuredCategories.length > 0
                   ? featuredCategories.join(' · ')
                   : 'android · ai · web · systems'}
@@ -174,7 +176,7 @@ function ProjectsIndex() {
         </div>
       </motion.header>
 
-      <div className="divide-y divide-border/20">
+      <div className="grid gap-4">
         {projects.map((project, index) => {
           const projectVisual = project.image || `/og/projects/${project.slug}`
           const reverse = index % 2 === 1
@@ -183,7 +185,7 @@ function ProjectsIndex() {
             <motion.div
               key={project.slug}
               variants={item}
-              className="py-10 first:pt-0 md:py-14"
+              className="py-8 first:pt-0 md:py-10"
             >
               <Link
                 to="/projects/$slug"
@@ -230,14 +232,14 @@ function ProjectsIndex() {
                         <div
                           className={`space-y-3 ${reverse ? 'ml-auto' : ''}`}
                         >
-                          <p className="text-[10px] uppercase tracking-[0.26em] text-primary/75">
+                          <p className="text-[10px] uppercase tracking-[0.2em] text-primary/45">
                             selected build
                           </p>
                           <div className="space-y-2">
-                            <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                            <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
                               {formatDate(project.date)}
                             </p>
-                            <h2 className="font-serif text-3xl leading-tight text-foreground transition-colors group-hover:text-primary sm:text-4xl">
+                            <h2 className="font-serif text-3xl leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary sm:text-4xl">
                               {project.title}
                             </h2>
                           </div>
@@ -249,12 +251,12 @@ function ProjectsIndex() {
                         ) : null}
                       </div>
 
-                      <p className="max-w-2xl text-base leading-8 text-foreground/76">
+                      <p className="max-w-2xl text-base leading-8 text-foreground/50">
                         {project.summary}
                       </p>
 
                       <div
-                        className={`grid gap-4 border-t border-border/20 pt-4 text-sm leading-7 text-foreground/72 sm:grid-cols-2 ${
+                        className={`grid gap-4 border-t border-border/10 pt-4 text-sm leading-7 text-foreground/45 sm:grid-cols-2 ${
                           reverse ? 'lg:text-right' : ''
                         }`}
                       >
@@ -290,21 +292,21 @@ function ProjectsIndex() {
 
       <motion.footer
         variants={item}
-        className="flex flex-col gap-4 border-t border-border/20 pt-6 sm:flex-row sm:items-end sm:justify-between"
+        className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-end sm:justify-between"
       >
         <div className="flex gap-6 items-end">
           <img
             src="/frieren/frieren.svg"
             className="h-16 sm:h-22 inline-block align-bottom"
           />
-          <p className="max-w-2xl text-sm leading-7 text-muted-foreground">
+          <p className="max-w-2xl text-sm leading-7 text-muted-foreground/40">
             Each project opens into a fuller build story with the technical
             breakdown, writing, and outbound links.
           </p>
         </div>
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
+          className="inline-flex items-center gap-2 text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
         >
           <span>←</span>
           back home
