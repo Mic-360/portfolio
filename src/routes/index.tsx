@@ -706,9 +706,9 @@ function App() {
 
       <motion.div variants={item}>
         <Section title="contact">
-          <div className="relative overflow-hidden border-b border-border/20 pb-8">
-            <div className="pointer-events-none absolute inset-x-[14%] top-[8%] h-24 rounded-full bg-primary/14 blur-3xl" />
-            <div className="pointer-events-none absolute right-[8%] top-[18%] h-72 w-full sm:w-72 rounded-full bg-primary/10 blur-[120px]" />
+          <div className="relative overflow-hidden rounded-3xl pb-8">
+            <div className="pointer-events-none absolute inset-x-[14%] top-[8%] h-24 rounded-full bg-primary/10 blur-3xl" />
+            <div className="pointer-events-none absolute right-[8%] top-[18%] h-72 w-full sm:w-72 rounded-full bg-primary/8 blur-[120px]" />
 
             <div className="media-hover-parent absolute inset-y-0 left-[34%] right-[-6%]">
               <img
@@ -721,11 +721,9 @@ function App() {
               <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent opacity-90" />
             </div>
 
-            <div className="hero-grid-overlay absolute inset-y-[10%] right-[2%] hidden w-[46%] md:block" />
-
-            <div className="relative z-10 grid gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,0.78fr)] lg:items-end">
-              <div className="grid gap-6 py-2 lg:pr-12">
-                <div className="flex items-center justify-between gap-4 text-[10px] uppercase tracking-[0.28em] text-foreground/52">
+            <div className="relative z-10 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.72fr)] lg:items-end">
+              <div className="grid gap-8 py-2 lg:pr-12">
+                <div className="flex items-center justify-between gap-4 text-[10px] uppercase tracking-[0.2em] text-foreground/30">
                   <span>{siteInfo.location}</span>
                   <span>
                     {siteMeta.alternateUrls.gravatarDomain.replace(
@@ -734,18 +732,18 @@ function App() {
                     )}
                   </span>
                 </div>
-                <div className="grid gap-4">
-                  <h2 className="max-w-4xl font-serif text-4xl leading-none text-foreground sm:text-5xl lg:text-6xl">
+                <div className="grid gap-5">
+                  <h2 className="max-w-4xl font-serif text-4xl leading-[1.08] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
                     Say hello when the work needs clarity, pace, and someone who
                     can ship the whole thing.
                   </h2>
-                  <p className="max-w-3xl text-base leading-8 text-foreground/78 sm:text-lg">
+                  <p className="max-w-3xl text-base leading-8 text-foreground/50 sm:text-lg">
                     Read my{' '}
                     {contactLinks.map((link, index) => (
                       <span key={link.label}>
                         <Link
                           to={link.url}
-                          className="text-primary underline underline-offset-4"
+                          className="text-primary transition-colors hover:text-primary/80"
                           rel="me"
                         >
                           {link.label}
@@ -758,16 +756,17 @@ function App() {
                       href={siteInfo.calLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-primary underline underline-offset-4"
+                      className="text-primary transition-colors hover:text-primary/80"
                     >
                       cal.com
                     </a>
-                    . The easiest version is still the best one: open a link,
-                    get context quickly, and start building.
+                    . Open a link, get context quickly, and start building.
                   </p>
                 </div>
 
-                <div className="grid gap-4 border-t border-border/25 pt-5 pl-6 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center">
+                <div className="h-px w-full bg-border/10" />
+
+                <div className="grid gap-4 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center">
                   <a
                     href={gravatar.profileUrl}
                     target="_blank"
@@ -776,22 +775,22 @@ function App() {
                   >
                     <GravatarAvatar
                       hash={avatarHash}
-                      size={76}
+                      size={64}
                       alt={`${siteInfo.name} contact avatar`}
-                      className="h-19 w-19 border border-primary/20"
+                      className="h-16 w-16 ring-1 ring-border/15"
                     />
                   </a>
                   <div className="grid gap-2">
-                    <p className="text-[10px] uppercase tracking-[0.24em] text-primary/75">
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
                       public profile
                     </p>
-                    <p className="max-w-2xl text-sm leading-7 text-foreground/72">
+                    <p className="max-w-2xl text-sm leading-7 text-foreground/50">
                       {profile?.description || siteInfo.tagline}
                     </p>
                     {profile?.verified_accounts?.length ? (
                       <GravatarSocialLinks
                         accounts={profile.verified_accounts}
-                        iconSize={22}
+                        iconSize={20}
                         className="gap-4"
                       />
                     ) : null}
@@ -799,36 +798,36 @@ function App() {
                 </div>
               </div>
 
-              <div className="grid gap-2 sm:px-6">
+              <div className="grid gap-0">
                 <Link
                   to="/readme"
-                  className="flex items-center justify-between gap-4 border-b border-border/25 py-3 text-sm leading-7 text-foreground/76 transition-colors hover:text-primary"
+                  className="flex items-center justify-between gap-4 border-b border-border/10 py-4 text-sm leading-7 text-foreground/55 transition-colors duration-300 hover:text-primary"
                 >
-                  <span>README</span>
-                  <span className="text-muted-foreground">reference</span>
+                  <span className="font-medium">README</span>
+                  <span className="text-muted-foreground/35 text-xs">reference</span>
                 </Link>
                 <Link
                   to="/resume"
-                  className="flex items-center justify-between gap-4 border-b border-border/25 py-3 text-sm leading-7 text-foreground/76 transition-colors hover:text-primary"
+                  className="flex items-center justify-between gap-4 border-b border-border/10 py-4 text-sm leading-7 text-foreground/55 transition-colors duration-300 hover:text-primary"
                 >
-                  <span>Resume</span>
-                  <span className="text-muted-foreground">experience</span>
+                  <span className="font-medium">Resume</span>
+                  <span className="text-muted-foreground/35 text-xs">experience</span>
                 </Link>
                 <Link
                   to="/blog"
-                  className="flex items-center justify-between gap-4 border-b border-border/25 py-3 text-sm leading-7 text-foreground/76 transition-colors hover:text-primary"
+                  className="flex items-center justify-between gap-4 border-b border-border/10 py-4 text-sm leading-7 text-foreground/55 transition-colors duration-300 hover:text-primary"
                 >
-                  <span>Writing</span>
-                  <span className="text-muted-foreground">notes</span>
+                  <span className="font-medium">Writing</span>
+                  <span className="text-muted-foreground/35 text-xs">notes</span>
                 </Link>
                 <a
                   href={gravatar.profileUrl}
                   target="_blank"
                   rel="noopener noreferrer me"
-                  className="flex items-center justify-between gap-4 border-b border-border/25 py-3 text-sm leading-7 text-foreground/76 transition-colors hover:text-primary"
+                  className="flex items-center justify-between gap-4 py-4 text-sm leading-7 text-foreground/55 transition-colors duration-300 hover:text-primary"
                 >
-                  <span>Gravatar</span>
-                  <span className="text-muted-foreground">identity</span>
+                  <span className="font-medium">Gravatar</span>
+                  <span className="text-muted-foreground/35 text-xs">identity</span>
                 </a>
               </div>
             </div>
@@ -838,7 +837,7 @@ function App() {
 
       <motion.p
         variants={item}
-        className="flex flex-col items-center justify-between gap-1 text-center font-mono text-[10px] tracking-[0.24em] text-muted-foreground/60 sm:flex-row sm:text-left"
+        className="flex flex-col items-center justify-between gap-1 text-center font-mono text-[10px] tracking-[0.2em] text-muted-foreground/30 sm:flex-row sm:text-left"
       >
         <span>Yes, this portfolio can run DOOM.</span>
         <span>Konami Code: ↑ ↑ ↓ ↓ ← → ← → b a</span>
