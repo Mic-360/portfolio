@@ -1,9 +1,10 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
-import { motion } from 'motion/react'
 import PenIcon from '@/components/ui/pen-icon'
 import { siteMeta } from '@/config/site-data'
 import { getBlogIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
+import { Link, createFileRoute } from '@tanstack/react-router'
+import { AnimatePresence, motion } from 'motion/react'
+import { useState } from 'react'
 
 export const Route = createFileRoute('/blog/')({
   loader: async () => ({
@@ -90,23 +91,36 @@ export const Route = createFileRoute('/blog/')({
 
 function BlogIndex() {
   const { posts } = Route.useLoaderData()
-  const archiveTags = Array.from(
+  const [activeTag, setActiveTag] = useState<string | null>(null)
+
+  const allTags = Array.from(
     new Set(posts.flatMap((post) => [...post.categories, ...post.tags])),
-  ).slice(0, 4)
+  )
+
+  const filteredPosts = activeTag
+    ? posts.filter(
+        (p) => p.categories.includes(activeTag) || p.tags.includes(activeTag),
+      )
+    : posts
 
   const container = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.12,
-      },
+      transition: { staggerChildren: 0.1 },
     },
   }
 
   const item = {
     hidden: { opacity: 0, y: 28 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] } },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
+      },
+    },
   }
 
   return (
@@ -114,12 +128,10 @@ function BlogIndex() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="flex flex-col gap-20"
+      className="flex flex-col gap-16"
     >
-      <motion.header
-        variants={item}
-        className="relative overflow-hidden pb-12"
-      >
+      {/* Header */}
+      <motion.header variants={item} className="relative overflow-hidden pb-8">
         <div className="pointer-events-none absolute inset-x-[18%] top-[8%] h-28 rounded-full bg-primary/10 blur-3xl" />
         <div className="pointer-events-none absolute right-[6%] top-[10%] h-72 w-72 rounded-full bg-primary/6 blur-[120px]" />
 
@@ -136,180 +148,180 @@ function BlogIndex() {
             to="/"
             className="inline-flex items-center gap-2 text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
           >
-            <span>←</span>
+            <span>&larr;</span>
             home
           </Link>
         </div>
+
         <div className="flex flex-col gap-8 pt-8 lg:pt-12">
           <div className="grid gap-5">
-            <h1 className="font-serif text-5xl leading-[1.06] tracking-tight text-foreground sm:text-6xl xl:text-7xl">
-              Build notes that read like the same world as the work.
+            <h1 className="font-serif text-4xl leading-[1.08] tracking-tight text-foreground sm:text-5xl xl:text-6xl">
+              Build notes that read like the work itself.
             </h1>
-            <p className="max-w-3xl text-base leading-8 text-foreground/50 sm:text-lg">
+            <p className="max-w-2xl text-base leading-8 text-foreground/50 sm:text-lg">
               Essays, postmortems, and sharp notes from web, Android, AI, and
-              systems builds that stay clean, readable, and a little more
-              cinematic than a plain list of posts.
+              systems builds.
             </p>
           </div>
 
-          <div className="h-px w-full bg-border/10" />
-
-          <div className="grid gap-5 sm:grid-cols-2">
+          <div className="flex items-center justify-between gap-4">
             <div className="space-y-1">
               <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
                 essays logged
               </p>
-              <p className="text-2xl font-serif text-foreground">
+              <p className="font-serif text-2xl text-foreground">
                 {posts.length.toString().padStart(2, '0')}
-              </p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
-                main threads
-              </p>
-              <p className="text-sm leading-7 text-foreground/50">
-                {archiveTags.length > 0
-                  ? archiveTags.join(' · ')
-                  : 'engineering · design · notes · systems'}
               </p>
             </div>
           </div>
         </div>
       </motion.header>
 
-      <div className="grid gap-4">
-        {posts.map((post, index) => {
-          const postVisual = post.image || `/og/blog/${post.slug}`
-          const reverse = index % 2 === 1
-          const lane = [...post.categories, ...post.tags].slice(0, 4)
-
-          return (
-            <motion.div
-              key={post.slug}
-              variants={item}
-              className="py-8 first:pt-0 md:py-10"
+      {/* Tag filter bar */}
+      {allTags.length > 0 ? (
+        <motion.div
+          variants={item}
+          className="sticky top-0 z-30 -mx-4 px-4 py-3 backdrop-blur-xl bg-background/80 border-b border-border/10"
+        >
+          <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
+            <button
+              type="button"
+              onClick={() => setActiveTag(null)}
+              className={`filter-pill ${
+                activeTag === null
+                  ? 'filter-pill-active'
+                  : 'filter-pill-inactive'
+              }`}
             >
-              <Link
-                to="/blog/$slug"
-                params={{ slug: post.slug }}
-                className="group block"
+              All
+            </button>
+            {allTags.map((tag) => (
+              <button
+                key={tag}
+                type="button"
+                onClick={() => setActiveTag(activeTag === tag ? null : tag)}
+                className={`filter-pill ${
+                  activeTag === tag
+                    ? 'filter-pill-active'
+                    : 'filter-pill-inactive'
+                }`}
               >
-                <article className="relative min-h-[320px]">
-                  <div
-                    className={`media-hover-parent absolute inset-y-0 ${
-                      reverse
-                        ? 'left-0 right-[12%] md:right-[34%]'
-                        : 'left-[12%] right-0 md:left-[34%]'
+                {tag}
+              </button>
+            ))}
+          </div>
+        </motion.div>
+      ) : null}
+
+      {/* Posts grid */}
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <AnimatePresence mode="popLayout">
+          {filteredPosts.map((post, index) => {
+            const isHero = index === 0
+
+            return (
+              <motion.div
+                key={post.slug}
+                layout
+                layoutId={post.slug}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{
+                  duration: 0.5,
+                  ease: [0.25, 0.1, 0.25, 1],
+                  layout: { duration: 0.4 },
+                }}
+                className={isHero ? 'sm:col-span-2 lg:col-span-2' : ''}
+              >
+                <Link
+                  to="/blog/$slug"
+                  params={{ slug: post.slug }}
+                  className="group block h-full"
+                >
+                  <motion.article
+                    whileHover={{ y: -4 }}
+                    transition={{
+                      type: 'spring',
+                      stiffness: 300,
+                      damping: 20,
+                    }}
+                    className={`project-card-apple flex h-full flex-col justify-between gap-4 rounded-2xl border border-border/10 bg-card/40 p-5 sm:p-6 ${
+                      isHero ? 'sm:flex-row sm:items-start sm:gap-8' : ''
                     }`}
                   >
-                    <img
-                      src={postVisual}
-                      alt={post.title}
-                      className="project-ambient-media media-hover-image media-hover-fade media-hover-desaturate absolute inset-0 h-full w-full object-contain"
-                    />
-                    <div
-                      className={`absolute inset-0 ${
-                        reverse
-                          ? 'project-ambient-overlay bg-linear-to-r from-transparent via-background/38 to-background'
-                          : 'project-ambient-overlay bg-linear-to-l from-transparent via-background/38 to-background'
-                      }`}
-                    />
-                    <div className="absolute inset-0 bg-linear-to-t from-background via-background/10 to-transparent" />
-                  </div>
-
-                  <div className="relative z-10 grid gap-8 lg:min-h-[320px] lg:grid-cols-12 lg:items-center">
-                    <div
-                      className={`flex flex-col gap-5 ${
-                        reverse
-                          ? 'lg:col-start-7 lg:col-span-6 lg:text-right'
-                          : 'lg:col-span-6'
-                      }`}
-                    >
-                      <div className="flex items-end gap-4">
-                        {!reverse ? (
-                          <span className="font-serif text-[3.5rem] leading-none text-foreground/9 sm:text-[5rem]">
-                            {(index + 1).toString().padStart(2, '0')}
-                          </span>
-                        ) : null}
-                        <div
-                          className={`space-y-3 ${reverse ? 'ml-auto' : ''}`}
-                        >
-                          <p className="text-[10px] uppercase tracking-[0.2em] text-primary/45">
-                            essay
-                          </p>
-                          <div className="space-y-2">
-                            <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
-                              {formatDate(post.date)}
-                            </p>
-                            <h2 className="font-serif text-3xl leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary sm:text-4xl">
-                              {post.title}
-                            </h2>
-                          </div>
-                        </div>
-                        {reverse ? (
-                          <span className="font-serif text-[3.5rem] leading-none text-foreground/9 sm:text-[5rem]">
-                            {(index + 1).toString().padStart(2, '0')}
-                          </span>
-                        ) : null}
+                    <div className="flex flex-1 flex-col gap-3">
+                      <div className="flex items-center gap-3">
+                        <span className="text-[10px] uppercase tracking-[0.2em] text-primary/50">
+                          {post.categories.length > 0
+                            ? post.categories[0]
+                            : 'essay'}
+                        </span>
+                        <span className="h-px flex-1 bg-border/10" />
+                        <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/35">
+                          {formatDate(post.date)}
+                        </span>
                       </div>
 
-                      <p className="max-w-2xl text-base leading-8 text-foreground/50">
-                        {post.summary}
-                      </p>
-
-                      <div
-                        className={`grid gap-4 border-t border-border/10 pt-4 text-sm leading-7 text-foreground/45 sm:grid-cols-2 ${
-                          reverse ? 'lg:text-right' : ''
+                      <h2
+                        className={`font-serif leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary ${
+                          isHero ? 'text-xl sm:text-2xl lg:text-3xl' : 'text-lg'
                         }`}
                       >
-                        <div className="space-y-1">
-                          <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-                            archive lane
-                          </p>
-                          <p>
-                            {post.categories.length > 0
-                              ? post.categories.join(' · ')
-                              : 'notes'}
-                          </p>
-                        </div>
-                        <div className="space-y-1">
-                          <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-                            topics
-                          </p>
-                          <p>
-                            {lane.length > 0 ? lane.join(' · ') : 'build log'}
-                          </p>
-                        </div>
-                      </div>
+                        {post.title}
+                      </h2>
+
+                      <p
+                        className={`text-sm leading-7 text-foreground/50 ${
+                          isHero ? 'max-w-2xl' : 'line-clamp-3'
+                        }`}
+                      >
+                        {post.summary}
+                      </p>
                     </div>
-                  </div>
-                </article>
-              </Link>
-            </motion.div>
-          )
-        })}
+
+                    <div className="flex items-center justify-between gap-4 border-t border-border/8 pt-3">
+                      <div className="flex items-center gap-3">
+                        {post.tags.length > 0 ? (
+                          <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/30">
+                            {post.tags.slice(0, 3).join(' \u00b7 ')}
+                          </p>
+                        ) : null}
+                      </div>
+                      <span className="text-xs text-primary/50 transition-transform duration-300 group-hover:translate-x-1">
+                        &rarr;
+                      </span>
+                    </div>
+                  </motion.article>
+                </Link>
+              </motion.div>
+            )
+          })}
+        </AnimatePresence>
       </div>
 
+      {/* Footer */}
       <motion.footer
         variants={item}
         className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-end sm:justify-between"
       >
-        <div className="flex gap-6 items-end">
+        <div className="flex items-end gap-6">
           <img
             src="/frieren/frieren-teach.svg"
-            className="h-16 sm:h-22 inline-block align-bottom"
+            className="inline-block h-16 align-bottom sm:h-22"
+            alt=""
+            data-backlight="off"
           />
           <p className="max-w-2xl text-sm leading-7 text-muted-foreground/40">
             Every entry opens into a fuller reading view with the same
-            atmosphere, quieter metadata, and cleaner long-form rhythm as the
-            rest of the site.
+            atmosphere and long-form rhythm.
           </p>
         </div>
         <Link
           to="/"
           className="inline-flex items-center gap-2 text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
         >
-          <span>←</span>
+          <span>&larr;</span>
           back home
         </Link>
       </motion.footer>

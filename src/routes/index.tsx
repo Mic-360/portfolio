@@ -681,120 +681,174 @@ function App() {
         </Section>
       </motion.div>
 
-      <motion.div
-        variants={item}
-        className="grid gap-16 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]"
-      >
+      <motion.div variants={item}>
         <Section title="blogs">
-          <div className="grid gap-1">
-            {featuredPosts.map((post: BlogMeta) => (
-              <Link
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {featuredPosts.map((post: BlogMeta, index: number) => (
+              <motion.div
                 key={post.slug}
-                to="/blog/$slug"
-                params={{ slug: post.slug }}
-                className="group grid gap-3 rounded-xl px-1 py-5 transition-colors duration-300 sm:grid-cols-[100px_minmax(0,1fr)] sm:gap-6"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{
+                  duration: 0.7,
+                  delay: index * 0.08,
+                  ease: [0.25, 0.1, 0.25, 1],
+                }}
+                className={index === 0 ? 'sm:col-span-2 lg:col-span-2' : ''}
               >
-                <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
-                  {formatDate(post.date)}
-                </div>
-                <div className="space-y-2">
-                  <h3 className="text-lg font-semibold leading-tight tracking-tight transition-colors duration-300 group-hover:text-primary">
-                    {post.title}
-                  </h3>
-                  <p className="text-sm leading-7 text-foreground/45">
-                    {post.summary}
-                  </p>
-                  {post.tags.length > 0 ? (
-                    <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/35">
-                      {post.tags.slice(0, 3).join(' · ')}
-                    </p>
-                  ) : null}
-                </div>
-              </Link>
+                <Link
+                  to="/blog/$slug"
+                  params={{ slug: post.slug }}
+                  className="group block h-full"
+                >
+                  <motion.article
+                    whileHover={{ y: -3 }}
+                    transition={{
+                      type: 'spring',
+                      stiffness: 400,
+                      damping: 25,
+                    }}
+                    className={`project-card-apple flex h-full flex-col justify-between gap-4 rounded-2xl border border-border/10 bg-card/40 p-5 sm:p-6 ${
+                      index === 0 ? 'sm:flex-row sm:items-center sm:gap-8' : ''
+                    }`}
+                  >
+                    <div className="flex flex-1 flex-col gap-3">
+                      <div className="flex items-center gap-3">
+                        <span className="text-[10px] uppercase tracking-[0.2em] text-primary/50">
+                          {post.categories.length > 0
+                            ? post.categories[0]
+                            : 'essay'}
+                        </span>
+                        <span className="h-px flex-1 bg-border/10" />
+                        <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/35">
+                          {formatDate(post.date)}
+                        </span>
+                      </div>
+                      <h3
+                        className={`font-serif leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary ${
+                          index === 0
+                            ? 'text-xl sm:text-2xl'
+                            : 'text-lg'
+                        }`}
+                      >
+                        {post.title}
+                      </h3>
+                      <p
+                        className={`text-sm leading-7 text-foreground/45 ${
+                          index === 0 ? '' : 'line-clamp-2'
+                        }`}
+                      >
+                        {post.summary}
+                      </p>
+                    </div>
+                    <div className="flex items-center justify-between gap-4 border-t border-border/8 pt-3">
+                      {post.tags.length > 0 ? (
+                        <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/30">
+                          {post.tags.slice(0, 3).join(' · ')}
+                        </p>
+                      ) : (
+                        <span />
+                      )}
+                      <span className="text-xs text-primary/50 transition-transform duration-300 group-hover:translate-x-1">
+                        &rarr;
+                      </span>
+                    </div>
+                  </motion.article>
+                </Link>
+              </motion.div>
             ))}
           </div>
-          <p className="text-sm text-muted-foreground/45">
-            Short notes and build logs continue in{' '}
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-sm text-muted-foreground/45">
+              Build logs and essays.
+            </p>
             <Link
               to="/blog"
-              className="text-primary transition-colors hover:text-primary/80"
+              className="group/link inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary/80"
             >
-              the writing index
+              All writing
+              <span className="inline-block transition-transform duration-300 group-hover/link:translate-x-1">
+                &rarr;
+              </span>
             </Link>
-            .
-          </p>
+          </div>
         </Section>
+      </motion.div>
 
+      <motion.div variants={item}>
         <Section title="healthstat">
-          <div className="grid gap-8">
-            <div className="flex flex-col divide-y divide-border/20">
-              <MetricRow
-                label="steps"
-                samples={sanitizeSamples(health.steps)}
-                unit="steps"
-                type="sum"
-                chartType="bar"
-                color="#f97316"
-              />
-              <MetricRow
-                label="energy"
-                samples={sanitizeSamples(health.activeEnergy)}
-                unit="kcal"
-                type="sum"
-                chartType="area"
-                color="#ef4444"
-                format={(v: number) => formatMetricValue(v, 0)}
-              />
-              <MetricRow
-                label="heart rate"
-                samples={sanitizeSamples<HealthSample>(health.heartRate).map(
-                  (sample) => {
-                    const value = Number(sample.value)
-                    const start = new Date(sample.startDate).getTime()
-                    const end = new Date(sample.endDate).getTime()
-                    const minutes = (end - start) / 1000
-                    const bpm =
-                      value > 300 && minutes > 0 ? value / minutes : value
+          <div className="grid gap-10">
+            <div className="grid gap-0 rounded-2xl border border-border/10 bg-card/30 p-4 sm:p-6">
+              <div className="flex flex-col divide-y divide-border/15">
+                <MetricRow
+                  label="steps"
+                  samples={sanitizeSamples(health.steps)}
+                  unit="steps"
+                  type="sum"
+                  chartType="bar"
+                  color="#f97316"
+                />
+                <MetricRow
+                  label="energy"
+                  samples={sanitizeSamples(health.activeEnergy)}
+                  unit="kcal"
+                  type="sum"
+                  chartType="area"
+                  color="#ef4444"
+                  format={(v: number) => formatMetricValue(v, 0)}
+                />
+                <MetricRow
+                  label="heart rate"
+                  samples={sanitizeSamples<HealthSample>(health.heartRate).map(
+                    (sample) => {
+                      const value = Number(sample.value)
+                      const start = new Date(sample.startDate).getTime()
+                      const end = new Date(sample.endDate).getTime()
+                      const minutes = (end - start) / 1000
+                      const bpm =
+                        value > 300 && minutes > 0 ? value / minutes : value
 
-                    return {
-                      ...sample,
-                      value: bpm,
-                    } as HealthSample & { value: number }
-                  },
-                )}
-                unit="bpm"
-                type="avg"
-                chartType="scatter"
-                color="#f43f5e"
-                format={(v: number) => formatMetricValue(v, 0)}
-              />
-              <MetricRow
-                label="distance"
-                samples={sanitizeSamples(health.distance)}
-                unit="km"
-                type="sum"
-                chartType="bar"
-                color="#3b82f6"
-                format={(v: number) => formatMetricValue(v, 2)}
-              />
-              <MetricRow
-                label="sleep"
-                samples={sanitizeSamples(health.sleep)}
-                unit="hrs"
-                type="sum"
-                chartType="area"
-                color="#818cf8"
-                format={(v: number) => formatMetricValue(v, 1)}
-              />
-              <MetricRow
-                label="spO2"
-                samples={sanitizeSamples(health.spO2)}
-                unit="%"
-                type="avg"
-                chartType="line"
-                color="#22d3ee"
-                format={(v: number) => formatMetricValue(v, 1)}
-              />
+                      return {
+                        ...sample,
+                        value: bpm,
+                      } as HealthSample & { value: number }
+                    },
+                  )}
+                  unit="bpm"
+                  type="avg"
+                  chartType="scatter"
+                  color="#f43f5e"
+                  format={(v: number) => formatMetricValue(v, 0)}
+                />
+                <MetricRow
+                  label="distance"
+                  samples={sanitizeSamples(health.distance)}
+                  unit="km"
+                  type="sum"
+                  chartType="bar"
+                  color="#3b82f6"
+                  format={(v: number) => formatMetricValue(v, 2)}
+                />
+                <MetricRow
+                  label="sleep"
+                  samples={sanitizeSamples(health.sleep)}
+                  unit="hrs"
+                  type="sum"
+                  chartType="area"
+                  color="#818cf8"
+                  format={(v: number) => formatMetricValue(v, 1)}
+                />
+                <MetricRow
+                  label="spO2"
+                  samples={sanitizeSamples(health.spO2)}
+                  unit="%"
+                  type="avg"
+                  chartType="line"
+                  color="#22d3ee"
+                  format={(v: number) => formatMetricValue(v, 1)}
+                />
+              </div>
             </div>
 
             <Link to="/readme" className="block">

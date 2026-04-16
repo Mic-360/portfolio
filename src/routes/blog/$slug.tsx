@@ -1,14 +1,29 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
-import { motion } from 'motion/react'
-
 import { siteMeta } from '@/config/site-data'
-import { getBlogPostBySlug } from '@/lib/content'
+import type { BlogMeta } from '@/lib/content'
+import { getBlogIndex, getBlogPostBySlug } from '@/lib/content'
 import { formatDate } from '@/lib/format'
+import { Link, createFileRoute } from '@tanstack/react-router'
+import { motion, useScroll, useSpring } from 'motion/react'
+import { useEffect, useState } from 'react'
 
 export const Route = createFileRoute('/blog/$slug')({
-  loader: async ({ params }) => ({
-    post: await getBlogPostBySlug({ data: { slug: params.slug } }),
-  }),
+  loader: async ({ params }) => {
+    const [post, posts] = await Promise.all([
+      getBlogPostBySlug({ data: { slug: params.slug } }),
+      getBlogIndex(),
+    ])
+
+    let prevPost: BlogMeta | null = null
+    let nextPost: BlogMeta | null = null
+
+    if (post) {
+      const idx = posts.findIndex((p) => p.slug === params.slug)
+      if (idx > 0) prevPost = posts[idx - 1]
+      if (idx < posts.length - 1) nextPost = posts[idx + 1]
+    }
+
+    return { post, prevPost, nextPost }
+  },
   head: ({ loaderData }) => {
     if (!loaderData?.post) {
       return {
@@ -115,8 +130,90 @@ export const Route = createFileRoute('/blog/$slug')({
   component: BlogPost,
 })
 
+function ReadingProgress() {
+  const { scrollYProgress } = useScroll()
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  })
+
+  return <motion.div className="reading-progress" style={{ scaleX }} />
+}
+
+type TocHeading = { id: string; text: string; level: number }
+
+function TableOfContents() {
+  const [headings, setHeadings] = useState<TocHeading[]>([])
+  const [activeId, setActiveId] = useState<string>('')
+
+  useEffect(() => {
+    const container = document.querySelector('.mdx-content')
+    if (!container) return
+
+    const elements = container.querySelectorAll('h2[id], h3[id]')
+    const items: TocHeading[] = []
+    elements.forEach((el) => {
+      items.push({
+        id: el.id,
+        text: el.textContent || '',
+        level: el.tagName === 'H2' ? 2 : 3,
+      })
+    })
+    setHeadings(items)
+  }, [])
+
+  useEffect(() => {
+    if (headings.length === 0) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting)
+        if (visible.length > 0) {
+          setActiveId(visible[0].target.id)
+        }
+      },
+      { rootMargin: '-80px 0px -70% 0px' },
+    )
+
+    headings.forEach((h) => {
+      const el = document.getElementById(h.id)
+      if (el) observer.observe(el)
+    })
+
+    return () => observer.disconnect()
+  }, [headings])
+
+  if (headings.length === 0) return null
+
+  return (
+    <nav className="flex flex-col gap-0.5">
+      <p className="mb-3 text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+        On this page
+      </p>
+      {headings.map((h) => (
+        <a
+          key={h.id}
+          href={`#${h.id}`}
+          onClick={(e) => {
+            e.preventDefault()
+            document
+              .getElementById(h.id)
+              ?.scrollIntoView({ behavior: 'smooth' })
+          }}
+          className={`toc-link ${h.level === 3 ? 'toc-h3' : ''} ${
+            activeId === h.id ? 'active' : ''
+          }`}
+        >
+          {h.text}
+        </a>
+      ))}
+    </nav>
+  )
+}
+
 function BlogPost() {
-  const { post } = Route.useLoaderData()
+  const { post, prevPost, nextPost } = Route.useLoaderData()
 
   if (!post) {
     return (
@@ -137,22 +234,18 @@ function BlogPost() {
     Math.ceil(post.html.replace(/<[^>]*>/g, '').split(/\s+/).length / 200),
   )
   const detailRows = [
-    {
-      label: 'published',
-      value: formatDate(post.date),
-    },
-    {
-      label: 'reading time',
-      value: `${readingTime} min read`,
-    },
+    { label: 'published', value: formatDate(post.date) },
+    { label: 'reading time', value: `${readingTime} min read` },
     {
       label: 'section',
       value:
-        post.categories.length > 0 ? post.categories.join(' · ') : 'writing',
+        post.categories.length > 0
+          ? post.categories.join(' \u00b7 ')
+          : 'writing',
     },
     {
       label: 'topics',
-      value: post.tags.length > 0 ? post.tags.join(' · ') : 'build notes',
+      value: post.tags.length > 0 ? post.tags.join(' \u00b7 ') : 'build notes',
     },
   ]
   const taxonomies = [...post.categories, ...post.tags]
@@ -161,33 +254,37 @@ function BlogPost() {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.12,
-      },
+      transition: { staggerChildren: 0.15 },
     },
   }
 
   const item = {
-    hidden: { opacity: 0, y: 32 },
+    hidden: { opacity: 0, y: 40 },
     show: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.85, ease: [0.25, 0.1, 0.25, 1] },
+      transition: {
+        duration: 0.9,
+        ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
+      },
     },
   }
 
   return (
-    <motion.article
-      variants={container}
-      initial="hidden"
-      animate="show"
-      className="mx-auto flex w-full max-w-[1500px] flex-col gap-20 pb-16 md:gap-28"
-    >
-      <motion.section
-        variants={item}
-        className="pb-12"
+    <>
+      <ReadingProgress />
+
+      <motion.article
+        variants={container}
+        initial="hidden"
+        animate="show"
+        className="mx-auto flex w-full max-w-[1500px] flex-col gap-16 pb-16 md:gap-24"
       >
-        <div className="flex items-center justify-between gap-4 pb-10">
+        {/* Back navigation */}
+        <motion.div
+          variants={item}
+          className="flex items-center justify-between gap-4"
+        >
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/60">
             Essay
           </p>
@@ -195,92 +292,157 @@ function BlogPost() {
             to="/blog"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground/50 transition-colors duration-300 hover:text-foreground"
           >
-            <span>←</span>
+            <span>&larr;</span>
             Back to blog
           </Link>
-        </div>
+        </motion.div>
 
-        <div className="flex flex-col gap-6">
-          <p className="text-xs text-muted-foreground/50">
-            {formatDate(post.date)} · {readingTime} min read
-          </p>
-          <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-foreground sm:text-5xl xl:text-6xl">
-            {post.title}
-          </h1>
-          <p className="max-w-2xl text-lg leading-relaxed text-muted-foreground/70">
-            {post.summary}
-          </p>
-        </div>
-
-        <div className="mt-8 h-px w-full bg-border/10" />
-      </motion.section>
-
-      <motion.section
-        variants={item}
-        className="grid gap-16 lg:grid-cols-[minmax(200px,0.28fr)_minmax(0,0.72fr)]"
-      >
-        <aside className="grid content-start gap-8 lg:sticky lg:top-24">
-          <div className="grid gap-4">
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
-              Details
-            </p>
-            <div className="grid gap-0">
-              {detailRows.map((row) => (
-                <div key={row.label} className="border-b border-border/10 py-3 first:pt-0">
-                  <p className="text-xs text-muted-foreground/40">
-                    {row.label}
-                  </p>
-                  <p className="mt-1 text-sm text-foreground/70">
-                    {row.value}
-                  </p>
-                </div>
-              ))}
+        {/* Hero header */}
+        <motion.section variants={item} className="pb-4">
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="text-[10px] uppercase tracking-[0.25em] text-foreground/40">
+                {formatDate(post.date)}
+              </span>
+              <span className="h-1 w-1 rounded-full bg-foreground/20" />
+              <span className="text-[10px] uppercase tracking-[0.25em] text-foreground/40">
+                {readingTime} min read
+              </span>
             </div>
-          </div>
 
-          {taxonomies.length > 0 ? (
-            <div className="grid gap-4">
-              <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
-                Topics
-              </p>
+            <h1 className="max-w-3xl font-serif text-3xl leading-[1.1] tracking-tight text-foreground sm:text-4xl lg:text-5xl xl:text-6xl">
+              {post.title}
+            </h1>
+
+            <p className="max-w-2xl text-base leading-8 text-foreground/50 sm:text-lg">
+              {post.summary}
+            </p>
+
+            {taxonomies.length > 0 ? (
               <div className="flex flex-wrap gap-2">
                 {taxonomies.map((entry, index) => (
                   <span
                     key={`${entry}-${index}`}
-                    className="rounded-full bg-foreground/[0.04] px-3 py-1 text-xs text-muted-foreground/60"
+                    className="rounded-full border border-border/15 bg-foreground/[0.03] px-3 py-1 text-[11px] font-medium text-muted-foreground/55"
                   >
                     {entry}
                   </span>
                 ))}
               </div>
-            </div>
-          ) : null}
-        </aside>
+            ) : null}
+          </div>
 
-        <div className="grid min-w-0 gap-0">
-          <div
-            className="mdx-content min-w-0 flex flex-col gap-6 text-lg leading-relaxed text-foreground/80"
-            dangerouslySetInnerHTML={{ __html: post.html }}
-          />
-        </div>
-      </motion.section>
+          <div className="mt-8 h-px w-full bg-border/10" />
+        </motion.section>
 
-      <motion.footer
-        variants={item}
-        className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-center sm:justify-between"
-      >
-        <div className="h-px w-full bg-border/10 sm:hidden" />
-        <p className="max-w-2xl text-sm text-muted-foreground/40">
-          More writing in the archive.
-        </p>
-        <Link
-          to="/blog"
-          className="inline-flex items-center gap-2 rounded-full bg-foreground/[0.05] px-5 py-2.5 text-sm text-muted-foreground/60 transition-all duration-300 hover:bg-foreground/[0.08] hover:text-foreground"
+        {/* Content area with sidebar + ToC */}
+        <motion.section
+          variants={item}
+          className="grid gap-12 lg:grid-cols-[minmax(180px,0.22fr)_minmax(0,0.78fr)] xl:grid-cols-[minmax(180px,0.20fr)_minmax(0,0.56fr)_minmax(140px,0.20fr)]"
         >
-          <span>←</span>
-          All posts
-        </Link>
-      </motion.footer>
-    </motion.article>
+          {/* Left sidebar: metadata */}
+          <aside className="grid content-start gap-8 lg:sticky lg:top-24 lg:self-start">
+            <div className="grid gap-4">
+              <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+                Details
+              </p>
+              <div className="grid gap-0">
+                {detailRows.map((row) => (
+                  <div
+                    key={row.label}
+                    className="border-b border-border/10 py-3 first:pt-0"
+                  >
+                    <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/40">
+                      {row.label}
+                    </p>
+                    <p className="mt-1 text-sm leading-6 text-foreground/70">
+                      {row.value}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </aside>
+
+          {/* Center: MDX content */}
+          <div className="min-w-0">
+            <div
+              className="mdx-content flex flex-col gap-6 text-base leading-relaxed text-foreground/80 sm:text-lg"
+              dangerouslySetInnerHTML={{ __html: post.html }}
+            />
+          </div>
+
+          {/* Right sidebar: Table of Contents (xl+) */}
+          <div className="hidden xl:block">
+            <div className="sticky top-24 self-start">
+              <TableOfContents />
+            </div>
+          </div>
+        </motion.section>
+
+        {/* Prev/Next navigation */}
+        <motion.section
+          variants={item}
+          className="border-t border-border/10 pt-8"
+        >
+          <div className="grid gap-4 sm:grid-cols-2">
+            {prevPost ? (
+              <Link
+                to="/blog/$slug"
+                params={{ slug: prevPost.slug }}
+                className="group flex flex-col gap-2 rounded-2xl p-5 transition-colors duration-300 hover:bg-foreground/[0.03]"
+              >
+                <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
+                  &larr; Previous
+                </span>
+                <span className="font-serif text-lg leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
+                  {prevPost.title}
+                </span>
+                <span className="text-xs text-muted-foreground/40">
+                  {formatDate(prevPost.date)}
+                </span>
+              </Link>
+            ) : (
+              <div />
+            )}
+
+            {nextPost ? (
+              <Link
+                to="/blog/$slug"
+                params={{ slug: nextPost.slug }}
+                className="group flex flex-col gap-2 rounded-2xl p-5 text-right transition-colors duration-300 hover:bg-foreground/[0.03] sm:items-end"
+              >
+                <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
+                  Next &rarr;
+                </span>
+                <span className="font-serif text-lg leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
+                  {nextPost.title}
+                </span>
+                <span className="text-xs text-muted-foreground/40">
+                  {formatDate(nextPost.date)}
+                </span>
+              </Link>
+            ) : null}
+          </div>
+        </motion.section>
+
+        {/* Footer */}
+        <motion.footer
+          variants={item}
+          className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <p className="max-w-2xl text-sm text-muted-foreground/40">
+            More writing in the archive.
+          </p>
+          <Link
+            to="/blog"
+            className="inline-flex items-center gap-2 rounded-full bg-foreground/[0.05] px-5 py-2.5 text-sm text-muted-foreground/60 transition-all duration-300 hover:bg-foreground/[0.08] hover:text-foreground"
+          >
+            <span>&larr;</span>
+            All posts
+          </Link>
+        </motion.footer>
+      </motion.article>
+    </>
   )
 }
