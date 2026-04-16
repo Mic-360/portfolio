@@ -120,7 +120,7 @@ const FloatingDockDesktop = ({
       onMouseMove={(e) => mouseX.set(e.pageX)}
       onMouseLeave={() => mouseX.set(Infinity)}
       className={cn(
-        'mx-auto hidden h-16 items-end gap-4 px-4 pb-3 md:flex',
+        'mx-auto hidden h-16 items-end gap-2 rounded-2xl border border-border/15 bg-background/55 px-3 pb-2.5 shadow-lg shadow-black/[0.03] backdrop-blur-2xl backdrop-saturate-150 md:flex',
         className,
       )}
     >
@@ -206,7 +206,7 @@ function IconContainer({
             initial={{ opacity: 0, y: 10, x: '-50%' }}
             animate={{ opacity: 1, y: 0, x: '-50%' }}
             exit={{ opacity: 0, y: 2, x: '-50%' }}
-            className="absolute -top-8 left-1/2 w-fit rounded-md border border-border bg-popover px-2 py-0.5 text-xs whitespace-pre text-popover-foreground"
+            className="absolute -top-8 left-1/2 w-fit rounded-lg border border-border/15 bg-background/70 px-2.5 py-1 text-[11px] font-medium whitespace-pre text-foreground/80 shadow-lg shadow-black/[0.04] backdrop-blur-2xl"
           >
             {title}
           </motion.div>
@@ -225,7 +225,7 @@ function IconContainer({
     return (
       <button
         onClick={onClick}
-        className="cursor-pointer rounded-full border border-border bg-background/72 p-1 backdrop-blur-md transition-[transform,background-color,border-color,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:bg-background/88 hover:shadow-[0_12px_30px_-18px_color-mix(in_oklab,var(--primary)_68%,transparent)]"
+        className="cursor-pointer rounded-full p-0.5 transition-[transform,background-color,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:bg-foreground/[0.06]"
       >
         {content}
       </button>
@@ -236,7 +236,7 @@ function IconContainer({
     <a
       href={href}
       rel={rel}
-      className="rounded-full border border-border bg-background/72 p-1 backdrop-blur-md transition-[transform,background-color,border-color,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:bg-background/88 hover:shadow-[0_12px_30px_-18px_color-mix(in_oklab,var(--primary)_68%,transparent)]"
+      className="rounded-full p-0.5 transition-[transform,background-color,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:bg-foreground/[0.06]"
     >
       {content}
     </a>
