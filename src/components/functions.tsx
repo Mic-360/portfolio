@@ -1,5 +1,5 @@
-import { motion } from 'motion/react'
 import { Award, ImagesIcon } from 'lucide-react'
+import { motion } from 'motion/react'
 import { useRef, useState } from 'react'
 import CurrentIcon from '@/components/ui/current-icon'
 import HealthstatIcon from '@/components/ui/healthstat-icon'
@@ -17,37 +17,58 @@ function Section({
   const titleContent =
     title === 'blogs' ? (
       <span>
-        <PenIcon size={16} className="inline-block mr-1.5 h-3.5 w-3.5 opacity-50" />
+        <PenIcon
+          size={16}
+          className="inline-block mr-1.5 h-3.5 w-3.5 opacity-50"
+        />
         {title}
       </span>
     ) : title === 'projects' ? (
       <span>
-        <LayersIcon size={18} className="inline-block mr-1.5 h-3.5 w-3.5 opacity-50" />
+        <LayersIcon
+          size={18}
+          className="inline-block mr-1.5 h-3.5 w-3.5 opacity-50"
+        />
         {title}
       </span>
     ) : title === 'certificates' ? (
       <span>
-        <Award size={16} className="inline-block mr-1.5 h-3.5 w-3.5 opacity-50" />
+        <Award
+          size={16}
+          className="inline-block mr-1.5 h-3.5 w-3.5 opacity-50"
+        />
         {title}
       </span>
     ) : title === 'current' ? (
       <>
-        <CurrentIcon size={18} className="inline-block mr-1.5 h-3.5 w-3.5 opacity-50" />
+        <CurrentIcon
+          size={18}
+          className="inline-block mr-1.5 h-3.5 w-3.5 opacity-50"
+        />
         {title}
       </>
     ) : title === 'previous' ? (
       <>
-        <PreviousIcon size={18} className="inline-block mr-1.5 h-3.5 w-3.5 opacity-50" />
+        <PreviousIcon
+          size={18}
+          className="inline-block mr-1.5 h-3.5 w-3.5 opacity-50"
+        />
         {title}
       </>
     ) : title === 'healthstat' ? (
       <>
-        <HealthstatIcon size={18} className="inline-block mr-1.5 h-3.5 w-3.5 opacity-50" />
+        <HealthstatIcon
+          size={18}
+          className="inline-block mr-1.5 h-3.5 w-3.5 opacity-50"
+        />
         {title}
       </>
     ) : title === 'pinterest' ? (
       <>
-        <ImagesIcon size={18} className="inline-block mr-1.5 h-3.5 w-3.5 opacity-50" />
+        <ImagesIcon
+          size={18}
+          className="inline-block mr-1.5 h-3.5 w-3.5 opacity-50"
+        />
         {title}
       </>
     ) : (
@@ -107,10 +128,18 @@ function InteractiveChart({
   const padY = type === 'bar' ? 0 : 4
   const points =
     data.length === 1
-      ? [{ x: width / 2, y: height / 2, val: values[0], timestamp: data[0].timestamp }]
+      ? [
+          {
+            x: width / 2,
+            y: height / 2,
+            val: values[0],
+            timestamp: data[0].timestamp,
+          },
+        ]
       : data.map((d, i) => {
           const x = (i / (data.length - 1)) * width
-          const y = height - ((d.value - min) / range) * (height - padY * 2) - padY
+          const y =
+            height - ((d.value - min) / range) * (height - padY * 2) - padY
           return { x, y, val: d.value, timestamp: d.timestamp }
         })
 
@@ -216,10 +245,13 @@ function InteractiveChart({
   }
 
   const activePoint = hoverIndex !== null ? points[hoverIndex] : null
+  const activePointOffset = activePoint
+    ? Math.min(88, Math.max(12, (activePoint.x / width) * 100))
+    : 50
 
   return (
     <div
-      className="group relative flex w-full items-center"
+      className="group relative flex min-w-0 w-full items-center"
       style={{ height }}
     >
       <svg
@@ -256,19 +288,19 @@ function InteractiveChart({
           initial={{ opacity: 0, y: 5 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
-          className="pointer-events-none absolute -top-8 right-0 z-10 whitespace-nowrap rounded-md border border-border/40 bg-background/90 px-2.5 py-1 text-[10px] tabular-nums text-foreground shadow-xs backdrop-blur-md"
+          style={{
+            left: `${activePointOffset}%`,
+            transform: 'translate(-50%, calc(-100% - 0.5rem))',
+          }}
+          className="pointer-events-none absolute top-0 z-10 max-w-[min(15rem,calc(100%-0.5rem))] rounded-md border border-border/40 bg-background/90 px-2.5 py-1 text-[10px] leading-4 tabular-nums text-foreground shadow-xs backdrop-blur-md"
         >
-          <span className="mr-2 font-semibold text-primary">
+          <span className="block font-semibold text-primary">
             {formatValue(activePoint.val)}
           </span>
-          <span className="text-muted-foreground opacity-80">
+          <span className="block text-muted-foreground opacity-80">
             {new Date(activePoint.timestamp).toLocaleDateString(undefined, {
               month: 'short',
               day: 'numeric',
-            })}{' '}
-            {new Date(activePoint.timestamp).toLocaleTimeString(undefined, {
-              hour: 'numeric',
-              minute: '2-digit',
             })}
           </span>
         </motion.div>
@@ -325,13 +357,19 @@ function MetricRow({
   else
     mainValue = processedData.length
       ? [...processedData].sort(
-          (a, b) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime()
+          (a, b) =>
+            new Date(b.endDate).getTime() - new Date(a.endDate).getTime(),
         )[0].value
       : 0
 
   const min = values.length ? Math.min(...values) : 0
   const max = values.length ? Math.max(...values) : 0
   const avg = values.length ? mainValue : 0
+  const summaryItems = [
+    { label: 'avg', value: format(avg) },
+    { label: 'min', value: format(min) },
+    { label: 'max', value: format(max) },
+  ]
 
   return (
     <motion.div
@@ -339,13 +377,13 @@ function MetricRow({
       initial={{ opacity: 0, y: 12 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.35, ease: 'easeOut' }}
-      className="group flex flex-col gap-6 py-5 transition-colors sm:flex-row sm:items-center"
+      className="group grid min-w-0 gap-4 py-4 transition-colors sm:flex sm:items-center sm:gap-6 sm:py-5"
     >
-      <div className="flex w-full shrink-0 flex-col gap-1 sm:w-36">
+      <div className="flex min-w-0 w-full shrink-0 flex-col gap-1 sm:w-36">
         <span className="text-[10px] font-mono uppercase tracking-[0.24em] text-primary/70">
           {label}
         </span>
-        <div className="flex items-baseline gap-1.5">
+        <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-1">
           <span className="tabular-nums text-2xl font-semibold tracking-tight text-foreground">
             {format(mainValue)}
           </span>
@@ -365,22 +403,25 @@ function MetricRow({
         />
       </div>
 
+      <div className="grid grid-cols-3 gap-2 rounded-xl border border-border/10 bg-background/35 px-3 py-2 font-mono text-[10px] tabular-nums sm:hidden">
+        {summaryItems.map((item) => (
+          <div key={item.label} className="min-w-0 text-center">
+            <span className="block text-muted-foreground">{item.label}</span>
+            <span className="block truncate text-foreground">{item.value}</span>
+          </div>
+        ))}
+      </div>
+
       <div className="hidden w-24 shrink-0 flex-col gap-1 text-right font-mono text-[10px] tabular-nums opacity-60 transition-opacity group-hover:opacity-100 sm:flex sm:justify-center">
-        <div className="flex w-full justify-between">
-          <span className="text-muted-foreground">avg</span>
-          <span className="text-foreground">{format(avg)}</span>
-        </div>
-        <div className="flex w-full justify-between">
-          <span className="text-muted-foreground">min</span>
-          <span className="text-foreground">{format(min)}</span>
-        </div>
-        <div className="flex w-full justify-between">
-          <span className="text-muted-foreground">max</span>
-          <span className="text-foreground">{format(max)}</span>
-        </div>
+        {summaryItems.map((item) => (
+          <div key={item.label} className="flex w-full justify-between">
+            <span className="text-muted-foreground">{item.label}</span>
+            <span className="text-foreground">{item.value}</span>
+          </div>
+        ))}
       </div>
     </motion.div>
   )
 }
 
-export { Section, MetricRow }
+export { MetricRow, Section }

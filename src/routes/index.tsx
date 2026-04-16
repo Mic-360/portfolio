@@ -6,6 +6,7 @@ import type { CertificateMeta } from '@/lib/certificates'
 import type { BlogMeta, ProjectMeta } from '@/lib/content'
 import type { HealthSample } from '@/lib/health'
 import type { PinterestCreatedPin } from '@/lib/pinterest'
+
 import { getCertificateIndex } from '@/lib/certificates'
 import { getBlogIndex, getProjectIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
@@ -365,7 +366,7 @@ function App() {
       </motion.section>
 
       <motion.div variants={item} className="flex flex-col gap-24 md:gap-32">
-        <section className="relative">
+        <Section title="current">
           <div className="relative min-h-130 sm:min-h-145 lg:min-h-160">
             <motion.div
               initial={{ opacity: 0, y: 40, rotate: -8 }}
@@ -385,15 +386,6 @@ function App() {
               className="hidden sm:block absolute left-[2%] top-[2%] sm:left-[4%] sm:top-[4%] lg:left-[6%] lg:top-[6%] z-10 w-45 sm:w-50 lg:w-55"
             >
               <div className="group relative overflow-hidden rounded-3xl border border-border/20 bg-card/70 shadow-lg backdrop-blur-xl">
-                <div className="aspect-square overflow-hidden rounded-t-3xl">
-                  <img
-                    src="/frieren/frieren-teach.svg"
-                    alt="Education"
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    loading="lazy"
-                    data-backlight="off"
-                  />
-                </div>
                 <div className="p-4">
                   <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-primary/70 mb-1.5">
                     Education
@@ -401,6 +393,14 @@ function App() {
                   <p className="text-xs leading-5 text-foreground/55">
                     {siteInfo.educationLine}
                   </p>
+                </div>
+                <div className="aspect-square overflow-hidden rounded-t-3xl">
+                  <img
+                    src="/frieren/frieren-teach.svg"
+                    alt="Education"
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                  />
                 </div>
               </div>
             </motion.div>
@@ -437,7 +437,6 @@ function App() {
                     alt="Interests"
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy"
-                    data-backlight="off"
                   />
                 </div>
               </div>
@@ -467,7 +466,6 @@ function App() {
                     alt="Capabilities"
                     className="h-3/4 w-3/4 object-contain transition-transform duration-700 group-hover:scale-110"
                     loading="lazy"
-                    data-backlight="off"
                   />
                 </div>
                 <div className="p-4">
@@ -507,38 +505,59 @@ function App() {
                     alt="Frieren"
                     className="h-4/5 w-4/5 object-contain transition-transform duration-700 group-hover:scale-110 group-hover:rotate-3"
                     loading="lazy"
-                    data-backlight="off"
                   />
                 </div>
               </div>
             </motion.div>
 
-            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none px-4 z-50">
+            <div className="absolute inset-0 z-50 flex flex-col items-center justify-center px-4 pointer-events-none">
+              <div
+                aria-hidden="true"
+                className="absolute inset-x-[6%] top-[16%] bottom-[12%] rounded-full bg-background/32 backdrop-blur-xl sm:inset-x-[10%] sm:top-[12%] sm:bottom-[10%]"
+                style={{
+                  maskImage:
+                    'radial-gradient(circle at center, black 2%, black 12%, transparent 100%)',
+                  WebkitMaskImage:
+                    'radial-gradient(circle at center, black 2%, black 12%, transparent 100%)',
+                }}
+              />
+              <div
+                aria-hidden="true"
+                className="absolute inset-0"
+                style={{
+                  background:
+                    'radial-gradient(circle at center, rgb(10 10 10 / 0.58) 0%, rgb(10 10 10 / 0.3) 34%, transparent 72%)',
+                }}
+              />
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
-                className="flex flex-col items-center text-center pointer-events-auto"
+                className="relative z-10 flex max-w-216 flex-col items-center rounded-[2.5rem] px-5 py-6 text-center pointer-events-auto sm:px-8 sm:py-8"
               >
-                <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-primary backdrop-blur-sm mb-6">
+                <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-background/45 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-primary shadow-[0_10px_35px_rgb(0_0_0_/0.16)] backdrop-blur-md">
                   <CurrentIcon size={14} className="h-3.5 w-3.5 opacity-70" />
                   currently
                 </span>
 
-                <h2 className="max-w-2xl font-serif text-4xl leading-[1.1] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-                  Building the machines at{' '}
+                <h2
+                  className="max-w-3xl text-balance font-serif text-4xl leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl"
+                  style={{ textShadow: '0 6px 24px rgb(0 0 0 / 0.38)' }}
+                >
+                  Building the tools at{' '}
                   <motion.a
                     href={siteInfo.currentCompanyUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group/company relative inline-flex items-baseline gap-2 text-primary transition-colors duration-500 hover:text-primary/80"
+                    className="group/current relative inline-flex flex-wrap items-center justify-center gap-2 text-primary transition-colors duration-500 hover:text-primary/80"
                     whileHover={{ scale: 1.02 }}
                     transition={{
                       type: 'spring',
                       stiffness: 400,
                       damping: 25,
                     }}
+                    style={{ textShadow: '0 8px 28px rgb(0 0 0 / 0.32)' }}
                   >
                     <img
                       src="/khub.svg"
@@ -547,9 +566,11 @@ function App() {
                       height={44}
                       loading="lazy"
                       data-backlight="off"
-                      className="inline-block w-12 h-12 mr-1 rounded-lg  object-cover transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover/current:scale-[1.4] group-hover/current:rotate-360 group-hover/current:drop-shadow-[0_0_8px_var(--primary)]"
+                      className="mr-1 inline-block h-10 w-10 rounded-lg object-cover ring-1 ring-black/10 shadow-lg transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover/current:scale-[1.4] group-hover/current:rotate-360 group-hover/current:drop-shadow-[0_0_8px_var(--primary)] sm:h-12 sm:w-12"
                     />
-                    {siteInfo.currentCompany}
+                    <span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
+                      {siteInfo.currentCompany}
+                    </span>
                   </motion.a>
                 </h2>
 
@@ -558,16 +579,17 @@ function App() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.2, duration: 0.8 }}
-                  className="mt-6 max-w-lg text-base leading-8 text-foreground/50 sm:text-lg"
+                  className="mt-5 max-w-2xl text-sm leading-7 text-foreground/80 sm:mt-6 sm:text-lg sm:leading-8"
+                  style={{ textShadow: '0 3px 18px rgb(0 0 0 / 0.22)' }}
                 >
                   {siteInfo.currentSummary}
                 </motion.p>
               </motion.div>
             </div>
           </div>
-        </section>
+        </Section>
 
-        <section className="relative">
+        <Section title="previous">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -587,10 +609,10 @@ function App() {
             </p>
           </motion.div>
           <PreviousRoadmap />
-        </section>
+        </Section>
       </motion.div>
 
-      <motion.div variants={item} className='my-28'>
+      <motion.div variants={item} className="my-28">
         <Section title="projects">
           <div className="grid gap-5 md:columns-2 md:grid-cols-2">
             {featuredProjects.map((project: ProjectMeta, index: number) => {
@@ -727,9 +749,7 @@ function App() {
                       </div>
                       <h3
                         className={`font-serif leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary ${
-                          index === 0
-                            ? 'text-xl sm:text-2xl'
-                            : 'text-lg'
+                          index === 0 ? 'text-xl sm:text-2xl' : 'text-lg'
                         }`}
                       >
                         {post.title}
@@ -778,8 +798,8 @@ function App() {
 
       <motion.div variants={item}>
         <Section title="healthstat">
-          <div className="grid gap-10">
-            <div className="grid gap-0 rounded-2xl border border-border/10 bg-card/30 p-4 sm:p-6">
+          <div className="grid min-w-0 gap-10">
+            <div className="grid min-w-0 gap-0 overflow-hidden rounded-2xl border border-border/10 bg-card/30 p-4 sm:p-6">
               <div className="flex flex-col divide-y divide-border/15">
                 <MetricRow
                   label="steps"
@@ -851,7 +871,7 @@ function App() {
               </div>
             </div>
 
-            <Link to="/readme" className="block">
+            <Link to="/readme" className="block min-w-0 overflow-hidden">
               <GitHubHeatmap username={siteInfo.githubUsername} />
             </Link>
 
@@ -958,57 +978,59 @@ function App() {
 
         <Section title="certificates">
           <div className="grid gap-3">
-            {featuredCertificates.map((cert: CertificateMeta, index: number) => (
-              <Link
-                key={cert.id}
-                to="/certificates/$slug"
-                params={{ slug: cert.slug }}
-                className="group block"
-              >
-                <div
-                  className={`project-card-apple flex items-center gap-4 rounded-xl border border-border/10 bg-card/40 p-4 transition-all duration-300 ${
-                    index === 0
-                      ? 'flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:gap-5'
-                      : ''
-                  }`}
+            {featuredCertificates.map(
+              (cert: CertificateMeta, index: number) => (
+                <Link
+                  key={cert.id}
+                  to="/certificates/$slug"
+                  params={{ slug: cert.slug }}
+                  className="group block"
                 >
-                  {index === 0 && cert.image_url ? (
-                    <div className="shrink-0 overflow-hidden rounded-lg bg-foreground/2 sm:w-28">
-                      <img
-                        src={cert.image_url}
-                        alt={cert.title}
-                        referrerPolicy="no-referrer"
-                        crossOrigin="anonymous"
-                        className="h-20 w-full object-contain sm:h-16"
-                        loading="lazy"
-                      />
-                    </div>
-                  ) : null}
-                  <div className="flex flex-1 flex-col gap-1.5">
-                    <div className="flex items-center gap-3">
-                      <p className="text-[10px] uppercase tracking-[0.2em] text-primary/50">
-                        {cert.issuer}
-                      </p>
-                      <span className="h-px flex-1 bg-border/10" />
-                      <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/35">
-                        {cert.issued}
-                      </p>
-                    </div>
-                    <h3 className="font-serif text-base leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
-                      {cert.title}
-                    </h3>
-                    {cert.skills.length > 0 ? (
-                      <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/30">
-                        {cert.skills.slice(0, 3).join(' \u00b7 ')}
-                      </p>
+                  <div
+                    className={`project-card-apple flex items-center gap-4 rounded-xl border border-border/10 bg-card/40 p-4 transition-all duration-300 ${
+                      index === 0
+                        ? 'flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:gap-5'
+                        : ''
+                    }`}
+                  >
+                    {index === 0 && cert.image_url ? (
+                      <div className="shrink-0 overflow-hidden rounded-lg bg-foreground/2 sm:w-28">
+                        <img
+                          src={cert.image_url}
+                          alt={cert.title}
+                          referrerPolicy="no-referrer"
+                          crossOrigin="anonymous"
+                          className="h-20 w-full object-contain sm:h-16"
+                          loading="lazy"
+                        />
+                      </div>
                     ) : null}
+                    <div className="flex flex-1 flex-col gap-1.5">
+                      <div className="flex items-center gap-3">
+                        <p className="text-[10px] uppercase tracking-[0.2em] text-primary/50">
+                          {cert.issuer}
+                        </p>
+                        <span className="h-px flex-1 bg-border/10" />
+                        <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/35">
+                          {cert.issued}
+                        </p>
+                      </div>
+                      <h3 className="font-serif text-base leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
+                        {cert.title}
+                      </h3>
+                      {cert.skills.length > 0 ? (
+                        <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/30">
+                          {cert.skills.slice(0, 3).join(' \u00b7 ')}
+                        </p>
+                      ) : null}
+                    </div>
+                    <span className="shrink-0 text-xs text-primary/40 transition-transform duration-300 group-hover:translate-x-1">
+                      &rarr;
+                    </span>
                   </div>
-                  <span className="shrink-0 text-xs text-primary/40 transition-transform duration-300 group-hover:translate-x-1">
-                    &rarr;
-                  </span>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              ),
+            )}
           </div>
           <Link
             to="/certificates"

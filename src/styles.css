@@ -1369,6 +1369,29 @@ body::after {
     box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.github-heatmap-shell {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.github-heatmap-shell .ch-container {
+  display: block;
+  width: 100% !important;
+  max-width: 100%;
+  height: auto !important;
+}
+
+.github-heatmap-shell :is(.ch-domain-container, .ch-domain-container-animation-wrapper) {
+  max-width: 100%;
+}
+
+@media (max-width: 640px) {
+  .github-heatmap-shell text {
+    font-size: 0.55rem;
+  }
+}
+
 @media (hover: hover) {
   .project-card-apple:hover {
     box-shadow: 0 20px 60px -12px rgb(0 0 0 / 0.15);

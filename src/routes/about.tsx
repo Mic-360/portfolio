@@ -277,7 +277,7 @@ function AboutPage() {
             <p className="text-[10px] uppercase tracking-[0.26em] text-primary/75">
               external links
             </p>
-            <div className="divide-y divide-border/25">
+            <div className="grid grid-cols-2 gap-4 divide-y divide-border/25">
               {profile.links.map((link: GravatarLink) => (
                 <a
                   key={link.url}
