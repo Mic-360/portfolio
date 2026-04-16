@@ -309,12 +309,12 @@ function AboutPage() {
 
       <motion.footer
         variants={itemVariants}
-        className="flex flex-wrap items-center justify-between gap-4 border-t border-border/25 pt-6 text-sm text-muted-foreground"
+        className="flex flex-wrap items-center justify-between gap-4 pt-6 text-xs text-muted-foreground/40"
       >
         <span>identity powered by gravatar</span>
         <Link
           to="/"
-          className="inline-flex items-center gap-1 transition-colors hover:text-primary"
+          className="inline-flex items-center gap-1 transition-colors duration-300 hover:text-primary"
         >
           ← back
         </Link>
