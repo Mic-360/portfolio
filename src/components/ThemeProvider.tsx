@@ -61,24 +61,9 @@ function applyThemeAttributes(newMode: ThemeMode) {
   }
 }
 
-function resolveTransitionOrigin(origin?: ThemeTransitionOrigin) {
-  if (origin) {
-    return origin
-  }
-
-  if (typeof document === 'undefined' || typeof window === 'undefined') {
+function resolveTransitionOrigin(_origin?: ThemeTransitionOrigin) {
+  if (typeof window === 'undefined') {
     return { x: 0, y: 0 }
-  }
-
-  const activeElement = document.activeElement
-  if (activeElement instanceof HTMLElement) {
-    const rect = activeElement.getBoundingClientRect()
-    if (rect.width > 0 && rect.height > 0) {
-      return {
-        x: rect.left + rect.width / 2,
-        y: rect.top + rect.height / 2,
-      }
-    }
   }
 
   return {
@@ -180,7 +165,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         clearTransitionMetadata()
         setTransitionState(null)
         transitionTimeoutRef.current = null
-      }, 520)
+      }, 700)
     },
     [mode],
   )
@@ -229,17 +214,17 @@ function ThemeTransitionOverlay({
       initial={{
         opacity: 0,
         clipPath: `circle(0px at ${origin.x}px ${origin.y}px)`,
-        filter: 'blur(0px) saturate(1.05)',
+        filter: 'blur(0px) saturate(1)',
       }}
       animate={{
-        opacity: [0, 0.92, 0.22, 0],
+        opacity: [0, 0.78, 0.2, 0],
         clipPath: `circle(${expandedRadius}px at ${origin.x}px ${origin.y}px)`,
-        filter: ['blur(0px) saturate(1.05)', 'blur(0px) saturate(1)', 'blur(2px) saturate(0.98)', 'blur(8px) saturate(0.95)'],
+        filter: ['blur(0px) saturate(1)', 'blur(0px) saturate(1)', 'blur(8px) saturate(0.96)', 'blur(20px) saturate(0.9)'],
       }}
       exit={{ opacity: 0 }}
       transition={{
-        duration: 0.5,
-        ease: [0.22, 1, 0.36, 1],
+        duration: 0.7,
+        ease: [0.25, 0.1, 0.25, 1],
       }}
     />
   )
