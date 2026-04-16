@@ -2,26 +2,26 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 
-import type { BlogMeta, ProjectMeta } from '@/lib/content'
-import { getBlogIndex, getProjectIndex } from '@/lib/content'
 import type { CertificateMeta } from '@/lib/certificates'
+import type { BlogMeta, ProjectMeta } from '@/lib/content'
+import type { HealthSample } from '@/lib/health'
+import type { PinterestCreatedPin } from '@/lib/pinterest'
 import { getCertificateIndex } from '@/lib/certificates'
+import { getBlogIndex, getProjectIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
+import { getGamesData } from '@/lib/games'
 import { hashEmail } from '@/lib/gravatar'
 import { getGravatarProfile } from '@/lib/gravatar-profile'
-import type { HealthSample } from '@/lib/health'
 import { getHealthData } from '@/lib/health'
-import { getGamesData } from '@/lib/games'
-import type { PinterestCreatedPin } from '@/lib/pinterest'
 import { getPinterestCreatedPins } from '@/lib/pinterest'
 
 import { KeyboardHint } from '@/components/CommandMenu'
-import { Section, MetricRow } from '@/components/functions'
+import { MetricRow, Section } from '@/components/functions'
+import { GamesCinematic } from '@/components/GamesCinematic'
 import GitHubHeatmap from '@/components/GitHubHeatmap'
 import GravatarAvatar from '@/components/gravatar/GravatarAvatar'
 import GravatarSocialLinks from '@/components/gravatar/GravatarSocialLinks'
 import { PreviousRoadmap } from '@/components/PreviousRoadmap'
-import { GamesCinematic } from '@/components/GamesCinematic'
 import CalendarIcon from '@/components/ui/calendar-icon'
 import { gravatarConfig } from '@/config/gravatar'
 import {
@@ -189,7 +189,14 @@ function App() {
 
   const item = {
     hidden: { opacity: 0, y: 32 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.85, ease: [0.25, 0.1, 0.25, 1] } },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.85,
+        ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
+      },
+    },
   }
 
   const featuredProjects = projects.slice(0, 4)
@@ -218,15 +225,15 @@ function App() {
             hash={avatarHash}
             size={44}
             alt={`${siteInfo.name} profile photo`}
-            className="h-11 w-11 ring-1 ring-border/20"
+            className="h-22 w-22 ring-1 ring-border/20"
             rel="me"
           />
         </a>
         <div className="flex min-w-0 flex-col">
-          <span className="text-sm font-semibold tracking-tight text-foreground">
+          <span className="text-3xl md:text-5xl lg:text-7xl font-semibold tracking-tight text-foreground font-serif">
             {siteInfo.name}
           </span>
-          <span className="text-xs text-muted-foreground/50">
+          <span className="text-sm text-muted-foreground/50">
             {siteInfo.currentRole}
           </span>
         </div>
@@ -234,8 +241,11 @@ function App() {
           <KeyboardHint />
         </div>
       </motion.div>
-      {/* Hero — centered Apple-style */}
-      <motion.section variants={item} className="flex flex-col items-center text-center">
+
+      <motion.section
+        variants={item}
+        className="flex flex-col items-center text-center"
+      >
         <p className="text-[11px] uppercase tracking-[0.3em] text-primary/55 mb-8">
           android · ai · cloud · web · design · devops
         </p>
@@ -243,10 +253,10 @@ function App() {
           Designing and shipping software that feels a step ahead.
         </h1>
         <p className="mt-7 max-w-2xl text-base leading-8 text-foreground/50 sm:text-lg">
-          {siteInfo.currentRole} based in {siteInfo.location}, building web
-          and android products with AI, cloud systems, and a
-          latest-is-greatest mindset. Fewer widgets, more atmosphere, and work
-          that reads clearly on every screen.
+          {siteInfo.currentRole} based in {siteInfo.location}, building web and
+          android products with AI, cloud systems, and a latest-is-greatest
+          mindset. Fewer widgets, more atmosphere, and work that reads clearly
+          on every screen.
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Link
@@ -274,8 +284,10 @@ function App() {
         </div>
       </motion.section>
 
-      {/* Visual showcase — video + role card */}
-      <motion.section variants={item} className="relative -mt-8 min-h-80 overflow-hidden rounded-3xl lg:min-h-105">
+      <motion.section
+        variants={item}
+        className="hero-seamless-stage relative -mt-8 min-h-80 overflow-hidden lg:min-h-105"
+      >
         <div className="pointer-events-none absolute inset-x-[12%] top-[10%] h-28 rounded-full bg-primary/10 blur-3xl" />
         <div className="pointer-events-none absolute inset-x-[24%] bottom-[18%] h-36 rounded-full bg-primary/8 blur-3xl" />
         <div className="pointer-events-none absolute right-[8%] top-[14%] h-48 w-48 rounded-full bg-primary/6 blur-[120px]" />
@@ -290,13 +302,14 @@ function App() {
         <div className="absolute inset-0">
           <video
             src="/horizon.mp4"
-            className="hero-blend-media media-hover-image media-hover-fade absolute inset-0 h-full w-full object-cover"
+            className="hero-blend-media hero-home-video media-hover-image media-hover-fade absolute inset-0 h-full w-full object-cover"
             autoPlay
             loop
             muted
             playsInline
           />
           <div className="hero-grid-overlay absolute inset-y-[8%] right-[3%] w-[82%]" />
+          <div className="hero-seamless-edge absolute inset-0" />
         </div>
 
         <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-5 p-6 sm:p-8">
@@ -335,7 +348,9 @@ function App() {
           <div className="relative isolate w-full">
             <p className="relative z-10 max-w-xl text-sm leading-7 text-foreground/50">
               Current favorite game -{' '}
-              <em className="italic font-medium text-foreground/70">{siteInfo.currentGame}</em>
+              <em className="italic font-medium text-foreground/70">
+                {siteInfo.currentGame}
+              </em>
               .
             </p>
             <img
@@ -804,21 +819,27 @@ function App() {
                   className="flex items-center justify-between gap-4 border-b border-border/10 py-4 text-sm leading-7 text-foreground/55 transition-colors duration-300 hover:text-primary"
                 >
                   <span className="font-medium">README</span>
-                  <span className="text-muted-foreground/35 text-xs">reference</span>
+                  <span className="text-muted-foreground/35 text-xs">
+                    reference
+                  </span>
                 </Link>
                 <Link
                   to="/resume"
                   className="flex items-center justify-between gap-4 border-b border-border/10 py-4 text-sm leading-7 text-foreground/55 transition-colors duration-300 hover:text-primary"
                 >
                   <span className="font-medium">Resume</span>
-                  <span className="text-muted-foreground/35 text-xs">experience</span>
+                  <span className="text-muted-foreground/35 text-xs">
+                    experience
+                  </span>
                 </Link>
                 <Link
                   to="/blog"
                   className="flex items-center justify-between gap-4 border-b border-border/10 py-4 text-sm leading-7 text-foreground/55 transition-colors duration-300 hover:text-primary"
                 >
                   <span className="font-medium">Writing</span>
-                  <span className="text-muted-foreground/35 text-xs">notes</span>
+                  <span className="text-muted-foreground/35 text-xs">
+                    notes
+                  </span>
                 </Link>
                 <a
                   href={gravatar.profileUrl}
@@ -827,7 +848,9 @@ function App() {
                   className="flex items-center justify-between gap-4 py-4 text-sm leading-7 text-foreground/55 transition-colors duration-300 hover:text-primary"
                 >
                   <span className="font-medium">Gravatar</span>
-                  <span className="text-muted-foreground/35 text-xs">identity</span>
+                  <span className="text-muted-foreground/35 text-xs">
+                    identity
+                  </span>
                 </a>
               </div>
             </div>

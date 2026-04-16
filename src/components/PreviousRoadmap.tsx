@@ -1,6 +1,6 @@
-import { previousRoles } from '@/config/site-data'
 import { motion } from 'motion/react'
 import { useEffect, useState } from 'react'
+import { previousRoles } from '@/config/site-data'
 
 const MOBILE_PATH =
   'M150,580 C150,520 40,490 40,430 C40,370 260,330 260,270 C260,210 40,170 40,110 C40,60 150,30 150,20'
