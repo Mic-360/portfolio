@@ -99,14 +99,14 @@ function BlogIndex() {
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: 0.12,
       },
     },
   }
 
   const item = {
-    hidden: { opacity: 0, y: 14 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.45 } },
+    hidden: { opacity: 0, y: 28 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] } },
   }
 
   return (
@@ -114,47 +114,49 @@ function BlogIndex() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="flex flex-col gap-14"
+      className="flex flex-col gap-20"
     >
       <motion.header
         variants={item}
-        className="relative overflow-hidden border-b border-border/20 pb-12"
+        className="relative overflow-hidden pb-12"
       >
-        <div className="pointer-events-none absolute inset-x-[18%] top-[8%] h-28 rounded-full bg-primary/14 blur-3xl" />
-        <div className="pointer-events-none absolute right-[6%] top-[10%] h-72 w-72 rounded-full bg-primary/8 blur-[120px]" />
+        <div className="pointer-events-none absolute inset-x-[18%] top-[8%] h-28 rounded-full bg-primary/10 blur-3xl" />
+        <div className="pointer-events-none absolute right-[6%] top-[10%] h-72 w-72 rounded-full bg-primary/6 blur-[120px]" />
 
         <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <span className="text-primary">
-              <PenIcon size={22} />
+          <div className="flex items-center gap-2.5">
+            <span className="text-primary/50">
+              <PenIcon size={18} />
             </span>
-            <span className="text-lg uppercase tracking-[0.28em] text-primary/75">
+            <span className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
               writing index
             </span>
           </div>
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
+            className="inline-flex items-center gap-2 text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
           >
             <span>←</span>
             home
           </Link>
         </div>
-        <div className="flex flex-col gap-7 pt-6 lg:pt-10">
-          <div className="grid gap-4">
-            <h1 className="font-serif text-5xl leading-none text-foreground sm:text-6xl xl:text-7xl">
+        <div className="flex flex-col gap-8 pt-8 lg:pt-12">
+          <div className="grid gap-5">
+            <h1 className="font-serif text-5xl leading-[1.06] tracking-tight text-foreground sm:text-6xl xl:text-7xl">
               Build notes that read like the same world as the work.
             </h1>
-            <p className="max-w-4xl text-base leading-8 text-foreground/76 sm:text-lg">
+            <p className="max-w-3xl text-base leading-8 text-foreground/50 sm:text-lg">
               Essays, postmortems, and sharp notes from web, Android, AI, and
               systems builds that stay clean, readable, and a little more
               cinematic than a plain list of posts.
             </p>
           </div>
 
-          <div className="grid gap-5 border-t border-border/25 pt-5 sm:grid-cols-2">
+          <div className="h-px w-full bg-border/10" />
+
+          <div className="grid gap-5 sm:grid-cols-2">
             <div className="space-y-1">
-              <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
                 essays logged
               </p>
               <p className="text-2xl font-serif text-foreground">
@@ -162,10 +164,10 @@ function BlogIndex() {
               </p>
             </div>
             <div className="space-y-1">
-              <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
                 main threads
               </p>
-              <p className="text-sm leading-7 text-foreground/76">
+              <p className="text-sm leading-7 text-foreground/50">
                 {archiveTags.length > 0
                   ? archiveTags.join(' · ')
                   : 'engineering · design · notes · systems'}
@@ -175,7 +177,7 @@ function BlogIndex() {
         </div>
       </motion.header>
 
-      <div className="divide-y divide-border/20">
+      <div className="grid gap-4">
         {posts.map((post, index) => {
           const postVisual = post.image || `/og/blog/${post.slug}`
           const reverse = index % 2 === 1
@@ -185,7 +187,7 @@ function BlogIndex() {
             <motion.div
               key={post.slug}
               variants={item}
-              className="py-10 first:pt-0 md:py-14"
+              className="py-8 first:pt-0 md:py-10"
             >
               <Link
                 to="/blog/$slug"
@@ -232,14 +234,14 @@ function BlogIndex() {
                         <div
                           className={`space-y-3 ${reverse ? 'ml-auto' : ''}`}
                         >
-                          <p className="text-[10px] uppercase tracking-[0.26em] text-primary/75">
+                          <p className="text-[10px] uppercase tracking-[0.2em] text-primary/45">
                             essay
                           </p>
                           <div className="space-y-2">
-                            <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                            <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
                               {formatDate(post.date)}
                             </p>
-                            <h2 className="font-serif text-3xl leading-tight text-foreground transition-colors group-hover:text-primary sm:text-4xl">
+                            <h2 className="font-serif text-3xl leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary sm:text-4xl">
                               {post.title}
                             </h2>
                           </div>
@@ -251,12 +253,12 @@ function BlogIndex() {
                         ) : null}
                       </div>
 
-                      <p className="max-w-2xl text-base leading-8 text-foreground/76">
+                      <p className="max-w-2xl text-base leading-8 text-foreground/50">
                         {post.summary}
                       </p>
 
                       <div
-                        className={`grid gap-4 border-t border-border/20 pt-4 text-sm leading-7 text-foreground/72 sm:grid-cols-2 ${
+                        className={`grid gap-4 border-t border-border/10 pt-4 text-sm leading-7 text-foreground/45 sm:grid-cols-2 ${
                           reverse ? 'lg:text-right' : ''
                         }`}
                       >
@@ -290,14 +292,14 @@ function BlogIndex() {
 
       <motion.footer
         variants={item}
-        className="flex flex-col gap-4 border-t border-border/20 pt-6 sm:flex-row sm:items-end sm:justify-between"
+        className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-end sm:justify-between"
       >
         <div className="flex gap-6 items-end">
           <img
             src="/frieren/frieren-teach.svg"
             className="h-16 sm:h-22 inline-block align-bottom"
           />
-          <p className="max-w-2xl text-sm leading-7 text-muted-foreground">
+          <p className="max-w-2xl text-sm leading-7 text-muted-foreground/40">
             Every entry opens into a fuller reading view with the same
             atmosphere, quieter metadata, and cleaner long-form rhythm as the
             rest of the site.
@@ -305,7 +307,7 @@ function BlogIndex() {
         </div>
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
+          className="inline-flex items-center gap-2 text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
         >
           <span>←</span>
           back home
