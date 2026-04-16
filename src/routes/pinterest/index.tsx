@@ -99,48 +99,40 @@ function PinterestIndexPage() {
     >
       <motion.header
         variants={item}
-        className="relative overflow-hidden border-b border-border/20 pb-12"
+        className="pb-12"
       >
-        <div className="pointer-events-none absolute inset-x-[18%] top-[8%] h-28 rounded-full bg-primary/14 blur-3xl" />
-        <div className="pointer-events-none absolute right-[6%] top-[10%] h-72 w-72 rounded-full bg-primary/8 blur-[120px]" />
-
-        <div className="flex items-center justify-between gap-4 pb-6">
-          <div className="flex items-center gap-3">
-            <span className="text-primary">
-              <ImageIcon size={22} />
+        <div className="flex items-center justify-between gap-4 pb-10">
+          <div className="flex items-center gap-2">
+            <span className="text-muted-foreground/50">
+              <ImageIcon size={14} />
             </span>
-            <span className="text-lg uppercase tracking-[0.28em] text-primary/75">
-              pinterest
+            <span className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/60">
+              Pinterest
             </span>
           </div>
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground/50 transition-colors duration-300 hover:text-foreground"
           >
             <span>←</span>
-            home
+            Home
           </Link>
         </div>
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:items-start">
-          <div className="flex flex-col gap-7 pt-6 lg:pt-10">
-            <div className="grid gap-4">
-              <h1 className="max-w-3xl font-serif text-5xl leading-none text-foreground sm:text-6xl xl:text-7xl">
-                Visual studies, poster-like pins, and a live stream from the
-                created feed.
-              </h1>
-              <p className="max-w-xl text-base leading-8 text-foreground/76 sm:text-lg">
-                This page keeps calmer framing of pins, but it allows download
-                of assets and provides visual previews, route choices, and the
-                jump into the full masonry gallery.
-              </p>
-            </div>
 
-            <div className="grid gap-4 sm:grid-cols-3">
-              <PinterestInfoCard
-                label="created pins"
-                value={`${pins.length}`}
-              />
-              <PinterestInfoCard label="last sync" value={lastSyncLabel} className="sm:col-span-2" />
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:items-start">
+          <div className="flex flex-col gap-6">
+            <h1 className="max-w-xl text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+              Visual studies and created pins.
+            </h1>
+            <p className="max-w-lg text-lg leading-relaxed text-muted-foreground/70">
+              Browse visual previews, download assets, or jump into the full
+              masonry gallery.
+            </p>
+
+            <div className="flex items-center gap-6 text-sm text-muted-foreground/50">
+              <span>{pins.length} pins</span>
+              <span className="h-3 w-px bg-border/20" />
+              <span className="text-xs">{lastSyncLabel}</span>
             </div>
           </div>
 
@@ -149,39 +141,39 @@ function PinterestIndexPage() {
               <PinterestPreviewCard
                 key={pin.id}
                 pin={pin}
-                className={index % 2 === 1 ? 'sm:translate-y-8' : ''}
+                className={index % 2 === 1 ? 'sm:translate-y-6' : ''}
               />
             ))}
           </div>
         </div>
+
+        <div className="mt-8 h-px w-full bg-border/10" />
       </motion.header>
 
       <motion.section
         variants={item}
-        className="grid gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)]"
+        className="grid gap-4 lg:grid-cols-[minmax(0,1.05fr)_minmax(300px,0.95fr)]"
       >
         <a
           href={createdUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="group relative overflow-hidden rounded-[2rem] border border-border/25 bg-card/20 p-6 transition-colors hover:border-primary/35"
+          className="group overflow-hidden rounded-3xl border border-border/10 bg-foreground/[0.01] p-8 transition-all duration-300 hover:border-border/20 hover:bg-foreground/[0.03]"
         >
-          <div className="pointer-events-none absolute inset-x-[20%] top-[16%] h-20 rounded-full bg-primary/12 blur-3xl" />
-          <div className="relative z-10 flex h-full flex-col justify-between gap-8">
-            <div className="space-y-3">
-              <p className="text-[10px] uppercase tracking-[0.28em] text-primary/75">
-                created feed
+          <div className="flex h-full flex-col justify-between gap-8">
+            <div className="space-y-4">
+              <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+                Created Feed
               </p>
-              <h2 className="max-w-xl font-serif text-3xl leading-tight text-foreground sm:text-4xl">
-                Open the public Pinterest stream and browse the live created
-                surface.
+              <h2 className="max-w-xl text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+                Browse the live Pinterest stream.
               </h2>
-              <p className="max-w-xl text-sm leading-7 text-foreground/72">
+              <p className="max-w-xl text-sm text-muted-foreground/60">
                 Fresh pins, public source links, and the same visual trail this
                 gallery pulls from.
               </p>
             </div>
-            <div className="flex items-center justify-between gap-4 text-sm text-muted-foreground transition-colors group-hover:text-primary">
+            <div className="flex items-center justify-between gap-4 text-sm text-muted-foreground/40 transition-colors duration-300 group-hover:text-foreground">
               <span>{createdUrl.replace('https://', '')}</span>
               <span>↗</span>
             </div>
@@ -191,19 +183,19 @@ function PinterestIndexPage() {
         <div className="grid gap-4">
           <ActionCard
             title="Full Gallery"
-            body="Keep the staggered masonry wall and scan everything at once."
+            body="Staggered masonry wall — scan everything at once."
             to="/pinterest/gallery"
             meta="masonry view"
           />
           <ActionCard
             title="Created Board"
-            body="Open the board-level surface directly on Pinterest."
+            body="Board-level surface directly on Pinterest."
             href={createdBoardUrl}
             meta="board view"
           />
           <ActionCard
             title="Profile"
-            body="Jump to the public profile and follow the wider visual archive."
+            body="Public profile and the wider visual archive."
             href={profileUrl}
             meta={profileUrl.replace('https://', '')}
           />
