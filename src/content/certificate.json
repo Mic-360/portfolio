@@ -7,7 +7,7 @@
     "credential_id": "XD3CTL897QCZ",
     "skills": [],
     "verify_url": "https://coursera.org/verify/XD3CTL897QCZ",
-    "image_url": "https://media.licdn.com/dms/image/v2/D562DAQEUXF8pk2VWvw/profile-treasury-image-shrink_800_800/profile-treasury-image-shrink_800_800/0/1719444958859?e=1775152800&v=beta&t=Ua1KLIFuBwvvHQ17ddRI6DgX1vSf3PfkMJwTeSTQeeQ"
+    "image_url": "/certificates/det-resp.jpg"
   },
   {
     "id": 2,
@@ -17,7 +17,7 @@
     "credential_id": "FWDGZ2SQDJCE",
     "skills": ["Operations Management"],
     "verify_url": "https://coursera.org/verify/FWDGZ2SQDJCE",
-    "image_url": "https://media.licdn.com/dms/image/v2/D562DAQEJNPljcoFj3A/profile-treasury-image-shrink_8192_8192/profile-treasury-image-shrink_8192_8192/0/1719444683896?e=1775152800&v=beta&t=WJINbrZZjgWxf6hWpElYpLugWUqKyxVWO9ATOGoW5IE"
+    "image_url": "/certificates/atv.jpg"
   },
   {
     "id": 3,
@@ -27,7 +27,7 @@
     "credential_id": "VGS3YANP5LHB",
     "skills": ["Python (Programming Language)"],
     "verify_url": "https://coursera.org/verify/VGS3YANP5LHB",
-    "image_url": "https://media.licdn.com/dms/image/v2/D562DAQEGhT5yD6zzcQ/profile-treasury-image-shrink_8192_8192/profile-treasury-image-shrink_8192_8192/0/1719444415335?e=1775152800&v=beta&t=wuav66usBr-WBZe38W-zVsXbgP9fLJJBsCCaYG8aOdQ"
+    "image_url": "/certificates/python-auto.jpg"
   },
   {
     "id": 4,
@@ -37,7 +37,7 @@
     "credential_id": "KTSV593N33E9",
     "skills": [],
     "verify_url": "https://www.coursera.org/account/accomplishments/records/KTSV593N33E9",
-    "image_url": "https://media.licdn.com/dms/image/sync/v2/D5627AQGVucfEqzuHfg/articleshare-shrink_1280_800/articleshare-shrink_1280_800/0/1749229563285?e=1775152800&v=beta&t=j3Ty--dSLMH4wK58qyb1HMmLC8RoAJAdbHwzWdY_9-M"
+    "image_url": "/certificates/net-sec.jpg"
   },
   {
     "id": 5,
@@ -47,7 +47,7 @@
     "credential_id": "YBPG3WF9FQBU",
     "skills": ["Web Services"],
     "verify_url": "https://www.coursera.org/account/accomplishments/records/YBPG3WF9FQBU",
-    "image_url": "https://media.licdn.com/dms/image/sync/v2/D5627AQEXiukI6NYgLw/articleshare-shrink_1280_800/articleshare-shrink_1280_800/0/1718560353910?e=1775152800&v=beta&t=N0PJsJ9TsOKnQg3P7lU6s5iilm6U7Oc6VAZQahs6xRI"
+    "image_url": "/certificates/sec-risk.jpg"
   },
   {
     "id": 6,
@@ -57,7 +57,7 @@
     "credential_id": "5UT6C77AVL66",
     "skills": ["Bash"],
     "verify_url": "https://www.coursera.org/account/accomplishments/records/5UT6C77AVL66",
-    "image_url": "https://media.licdn.com/dms/image/sync/v2/D5627AQGfCGp1e7jPCw/articleshare-shrink_1280_800/articleshare-shrink_1280_800/0/1741019964828?e=1775152800&v=beta&t=KZMG4o9nIotd7zxXdw6dDV5tAfhJir26B-Erto_Z9Ag"
+    "image_url": "/certificates/tux-sql.jpg"
   },
   {
     "id": 7,
@@ -67,7 +67,7 @@
     "credential_id": "fcc5b04510c-e954-4429-ab2c-3a885b28212d",
     "skills": ["C#"],
     "verify_url": "https://freecodecamp.org/certification/fcc5b04510c-e954-4429-ab2c-3a885b28212d/foundational-c-sharp-with-microsoft",
-    "image_url": "https://media.licdn.com/dms/image/v2/D562DAQHHfoRy5-JPiQ/profile-treasury-image-shrink_8192_8192/profile-treasury-image-shrink_8192_8192/0/1706481122655?e=1775152800&v=beta&t=bvrTrzVxKd67yOAWtRRKaNJyCDUB-LOzAqQ18ZZ2Ei4"
+    "image_url": "/certificates/c-sharp.jpg"
   },
   {
     "id": 8,
@@ -77,7 +77,7 @@
     "credential_id": "b98de9075bece700da05f32e22901373f7978f1d",
     "skills": ["JavaScript"],
     "verify_url": "https://codedamn.com/certificate/verify/b98de9075bece700da05f32e22901373f7978f1d",
-    "image_url": "https://media.licdn.com/dms/image/sync/v2/D5627AQH_WkAAq_jhjg/articleshare-shrink_1280_800/articleshare-shrink_1280_800/0/1724926427338?e=1775152800&v=beta&t=m0P5uojvPCVib1Dk_5ye2FKyqNARLox91ZDHjq0adBk"
+    "image_url": "/certificates/frontend-cert.jpg"
   },
   {
     "id": 9,
@@ -87,7 +87,7 @@
     "credential_id": "71fb6239d04ef322c1363fc854a70fce84840ee4",
     "skills": ["Web Applications", "Network Security"],
     "verify_url": "https://codedamn.com/certificate/verify/71fb6239d04ef322c1363fc854a70fce84840ee4",
-    "image_url": "https://media.licdn.com/dms/image/v2/D562DAQFy5HyuexzQvw/profile-treasury-image-shrink_1920_1920/profile-treasury-image-shrink_1920_1920/0/1706402103077?e=1775152800&v=beta&t=ykqhAoqQUzTpC6GNUESBUu0B5fngekW5iSeaqLUvKsM"
+    "image_url": "/certificates/web-sec.jpg"
   },
   {
     "id": 10,
@@ -98,7 +98,7 @@
     "credential_id": "93201639",
     "skills": ["Google Ads", "Google Analytics"],
     "verify_url": "https://skillshop.credential.net/37742e92-4f77-47f8-9142-84b99fd5f095",
-    "image_url": "https://media.licdn.com/dms/image/v2/D562DAQG-54PiLcDEVQ/profile-treasury-image-shrink_1920_1920/profile-treasury-image-shrink_1920_1920/0/1706268104033?e=1775152800&v=beta&t=Q8DWuzMdZYTYeoZJLSchoC-rLRPbQtT9H5WetD3no4w"
+    "image_url": "/certificates/g-analytics.jpg"
   },
   {
     "id": 11,
@@ -108,7 +108,7 @@
     "credential_id": null,
     "skills": ["Microsoft Azure"],
     "verify_url": "https://learn.microsoft.com/en-us/users/bhaumic/achievements",
-    "image_url": "https://media.licdn.com/dms/image/sync/v2/D5627AQFK06HhrLFeTw/articleshare-shrink_1280_800/articleshare-shrink_1280_800/0/1711512959094?e=1775152800&v=beta&t=7hV-CmNZ5Z7_UrqI2dbTBsjBZl6Rh8PC_Bfq28KSeFU"
+    "image_url": "/certificates/ms-learn.jpg"
   },
   {
     "id": 12,
@@ -118,7 +118,7 @@
     "credential_id": "6ZWM38HCSXWC",
     "skills": ["Google Cloud Platform (GCP)"],
     "verify_url": "https://www.coursera.org/account/accomplishments/specialization/certificate/6ZWM38HCSXWC",
-    "image_url": "https://media.licdn.com/dms/image/v2/D562DAQE3Ew6pWOnqTg/profile-treasury-image-shrink_8192_8192/profile-treasury-image-shrink_8192_8192/0/1706402246839?e=1775152800&v=beta&t=U1wadACHJ4swxtjk_mF9CCPo-zlfX-Ok0dFkfCLMRKA"
+    "image_url": "/certificates/gce-special.jpg"
   },
   {
     "id": 13,
@@ -128,7 +128,7 @@
     "credential_id": "WF62LBFAYPAA",
     "skills": ["Shell Scripting", "Bash"],
     "verify_url": "https://www.coursera.org/account/accomplishments/certificate/WF62LBFAYPAA",
-    "image_url": "https://www.linkedin.com/in/bhaumic/overlay/Certifications/1635680603/treasury/?profileId=ACoAADqyUiUBt-2WblJBkkxPFWI-KIh33ADQsdQ"
+    "image_url": "/certificates/scale-auto.jpg"
   },
   {
     "id": 14,
@@ -138,7 +138,7 @@
     "credential_id": "UJDCYBLX8NWB",
     "skills": ["Swift (Programming Language)"],
     "verify_url": "https://www.coursera.org/account/accomplishments/certificate/UJDCYBLX8NWB",
-    "image_url": "https://media.licdn.com/dms/image/v2/D562DAQE55f0pl_PNUQ/profile-treasury-image-shrink_8192_8192/profile-treasury-image-shrink_8192_8192/0/1706403051328?e=1775152800&v=beta&t=NuTysKWrktNEVOEhinnhy5ESwrp0WXnISfbSXsWR71A"
+    "image_url": "/certificates/m-ios.jpg"
   },
   {
     "id": 15,
@@ -148,7 +148,7 @@
     "credential_id": "KEY5RH9QRHWX",
     "skills": ["Google Cloud Platform (GCP)", "Cloud Infrastructure"],
     "verify_url": "https://www.coursera.org/account/accomplishments/certificate/KEY5RH9QRHWX",
-    "image_url": "https://media.licdn.com/dms/image/v2/D562DAQEDukpqYrhQ0w/profile-treasury-image-shrink_8192_8192/profile-treasury-image-shrink_8192_8192/0/1706404162116?e=1775152800&v=beta&t=Oi7CmQKZWjSIybThG-5HV97v9EvoMdTPZG7gouL0aHM"
+    "image_url": "/certificates/design-process.jpg"
   },
   {
     "id": 16,
@@ -158,7 +158,7 @@
     "credential_id": "112a0a13-20a7-480d-99f6-27a717d6132a",
     "skills": ["Google Cloud Platform (GCP)"],
     "verify_url": "https://www.cloudskillsboost.google/public_profiles/112a0a13-20a7-480d-99f6-27a717d6132a",
-    "image_url": "https://media.licdn.com/dms/image/sync/v2/D5627AQHdgKP_UVt06w/articleshare-shrink_480/articleshare-shrink_480/0/1750455651137?e=1775152800&v=beta&t=iIHzpRKAshTZvFoEeCDSlI7Ue22Qapt_A8gi_zmwmcU"
+    "image_url": "/certificates/skill-boost.png"
   },
   {
     "id": 17,
@@ -168,7 +168,7 @@
     "credential_id": "SRTTT57HA52T",
     "skills": ["Google Cloud Platform (GCP)", "Site Reliability Engineering"],
     "verify_url": "https://www.coursera.org/account/accomplishments/certificate/SRTTT57HA52T",
-    "image_url": "https://media.licdn.com/dms/image/v2/D562DAQH_WMut-DtJLg/profile-treasury-image-shrink_8192_8192/profile-treasury-image-shrink_8192_8192/0/1706402489886?e=1775152800&v=beta&t=cKff2MfscfqndlSNeDIBwdohBWmSHfWA7d3izTO6txk"
+    "image_url": "/certificates/sre-culture.jpg"
   },
   {
     "id": 18,
@@ -178,7 +178,7 @@
     "credential_id": "EXEQCRFEBHL6",
     "skills": ["Google Cloud Platform (GCP)"],
     "verify_url": "https://www.coursera.org/account/accomplishments/certificate/EXEQCRFEBHL6",
-    "image_url": "https://media.licdn.com/dms/image/v2/D562DAQEd2YvfJUx_Yw/profile-treasury-image-shrink_8192_8192/profile-treasury-image-shrink_8192_8192/0/1706403267078?e=1775152800&v=beta&t=i8lBRZttZ-RsZZpvye3ZrdKmyq7xy4lQzEu-KN1QN0o"
+    "image_url": "/certificates/core-service.jpg"
   },
   {
     "id": 19,
@@ -188,7 +188,7 @@
     "credential_id": "BHUH8YRAWD8A",
     "skills": ["Google Cloud Platform (GCP)"],
     "verify_url": "https://www.coursera.org/account/accomplishments/certificate/BHUH8YRAWD8A",
-    "image_url": "https://media.licdn.com/dms/image/v2/D562DAQG5npkhRtkfmQ/profile-treasury-image-shrink_8192_8192/profile-treasury-image-shrink_8192_8192/0/1706403435127?e=1775152800&v=beta&t=lIWDduIVOEWhn_cmuiM36wsWUBlWPv9hO43ZTZO3nXs"
+    "image_url": "/certificates/infra-foundation.jpg"
   },
   {
     "id": 20,
@@ -198,7 +198,7 @@
     "credential_id": "T6JZM6EXK97G",
     "skills": ["Google Cloud Platform (GCP)", "Cloud Infrastructure"],
     "verify_url": "https://www.coursera.org/account/accomplishments/certificate/T6JZM6EXK97G",
-    "image_url": "https://media.licdn.com/dms/image/v2/D562DAQEewSkJxdzFZw/profile-treasury-image-shrink_8192_8192/profile-treasury-image-shrink_8192_8192/0/1706403811806?e=1775152800&v=beta&t=CVhZIbOspyK5QOo8GzvkiS3dm3Ml1IHZcEqbB7M6fgY"
+    "image_url": "/certificates/core-infra.jpg"
   },
   {
     "id": 21,
@@ -208,7 +208,7 @@
     "credential_id": "UC-d7c3c7e6-5158-450a-8d83-a3663df976fe",
     "skills": ["Digital Marketing", "Facebook Ads"],
     "verify_url": "https://www.udemy.com/certificate/UC-d7c3c7e6-5158-450a-8d83-a3663df976fe/",
-    "image_url": "https://media.licdn.com/dms/image/v2/D562DAQFn0cDw4AokQw/profile-treasury-image-shrink_8192_8192/profile-treasury-image-shrink_8192_8192/0/1706403592820?e=1775152800&v=beta&t=Ks87r69R3EiC4GoY_W3GWx8RCrymAd5_asuQyp71818"
+    "image_url": "/certificates/fb-market.jpg"
   },
   {
     "id": 22,
@@ -218,7 +218,7 @@
     "credential_id": "ae867d1fc769b311d6fc28f7eb53f8ad74e0ba35",
     "skills": ["Shell Scripting", "Bash"],
     "verify_url": "https://codedamn.com/certificate/verify/ae867d1fc769b311d6fc28f7eb53f8ad74e0ba35",
-    "image_url": "https://media.licdn.com/dms/image/v2/D562DAQHYSI8K2DwcDA/profile-treasury-image-shrink_8192_8192/profile-treasury-image-shrink_8192_8192/0/1706404762936?e=1775152800&v=beta&t=1_xq00wBQKsvIiwGEUknVEyeZfZq52NB794CBPzvhv8"
+    "image_url": "/certificates/tux-cli.jpg"
   },
   {
     "id": 23,
@@ -228,7 +228,7 @@
     "credential_id": "844114d1f9a27444b02b860a376540e08eea1318",
     "skills": ["JavaScript", "Continuous Integration and Continuous Delivery (CI/CD)"],
     "verify_url": "https://codedamn.com/certificate/verify/844114d1f9a27444b02b860a376540e08eea1318",
-    "image_url": "https://media.licdn.com/dms/image/v2/D562DAQHvZaQPm0v4ig/profile-treasury-image-shrink_8192_8192/profile-treasury-image-shrink_8192_8192/0/1706404585262?e=1775152800&v=beta&t=gjtZIpHfeAVOlye5mDEG4NM2NRSuRBXxDLeGP2mi4cQ"
+    "image_url": "/certificates/gh-actions.jpg"
   },
   {
     "id": 24,
@@ -238,7 +238,7 @@
     "credential_id": "X7F4PMGM337S",
     "skills": ["Git"],
     "verify_url": "https://www.coursera.org/account/accomplishments/certificate/X7F4PMGM337S",
-    "image_url": "https://media.licdn.com/dms/image/v2/D562DAQFwzOMWP4GQVA/profile-treasury-image-shrink_8192_8192/profile-treasury-image-shrink_8192_8192/0/1706404270009?e=1775152800&v=beta&t=-OZ-CuYq4sKDzahUPlwozSB1C2y5K6OGsU9YjqorJYE"
+    "image_url": "/certificates/m-git.jpg"
   },
   {
     "id": 25,
@@ -248,7 +248,7 @@
     "credential_id": "D9PGUXU9ECNC",
     "skills": ["Swift (Programming Language)"],
     "verify_url": "https://www.coursera.org/account/accomplishments/certificate/D9PGUXU9ECNC",
-    "image_url": "https://media.licdn.com/dms/image/v2/D562DAQERtEtO0MNuIA/profile-treasury-image-shrink_8192_8192/profile-treasury-image-shrink_8192_8192/0/1706404429833?e=1775152800&v=beta&t=HIC-fA9-YC8H1Hk8Zq7Zlx4FuLyKkD1EeMmHM6koKKg"
+    "image_url": "/certificates/m-ios.jpg"
   },
   {
     "id": 26,
@@ -258,6 +258,6 @@
     "credential_id": "FXKCPTHRHFPS",
     "skills": ["Android", "Kotlin"],
     "verify_url": "https://www.coursera.org/account/accomplishments/certificate/FXKCPTHRHFPS",
-    "image_url": "https://media.licdn.com/dms/image/v2/D562DAQE0599k9kEwyQ/profile-treasury-image-shrink_8192_8192/profile-treasury-image-shrink_8192_8192/0/1706398701124?e=1775152800&v=beta&t=tJS7-WKyWVBly99EW14yfwFBslU618IRlqYndRku8V8"
+    "image_url": "/certificates/m-andro.jpg"
   }
 ]
