@@ -53,7 +53,20 @@ export const Route = createFileRoute('/bento')({
 function BentoPage() {
   return (
     <article className="flex flex-col gap-6 min-h-screen">
-      <div className="relative w-full overflow-hidden rounded-xl border border-border bg-card shadow-2xl min-h-screen">
+      <div className="flex items-center justify-between gap-4 pb-2">
+        <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/60">
+          Bento
+        </p>
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground/50 transition-colors duration-300 hover:text-foreground"
+        >
+          <span>←</span>
+          Home
+        </Link>
+      </div>
+
+      <div className="relative w-full overflow-hidden rounded-3xl border border-border/10 min-h-screen">
         <iframe
           src="https://avely.me/bhaumic"
           className="absolute inset-0 w-full h-full border-0 [zoom:1] md:[zoom:1.5]"
@@ -62,10 +75,6 @@ function BentoPage() {
           allowFullScreen
         />
       </div>
-
-      <Link to="/" className="mr-2 inline-flex items-center gap-1 italic">
-        ← back
-      </Link>
     </article>
   )
 }
