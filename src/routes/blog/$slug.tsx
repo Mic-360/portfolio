@@ -181,92 +181,56 @@ function BlogPost() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="mx-auto flex w-full max-w-[1500px] flex-col gap-14 pb-16"
+      className="mx-auto flex w-full max-w-[1500px] flex-col gap-20 pb-16 md:gap-28"
     >
       <motion.section
         variants={item}
-        className="relative overflow-hidden border-b border-border/20 pb-12"
+        className="pb-12"
       >
-        <div className="pointer-events-none absolute inset-x-[16%] top-[10%] h-28 rounded-full bg-primary/14 blur-3xl" />
-        <div className="pointer-events-none absolute right-[8%] top-[12%] h-72 w-72 rounded-full bg-primary/8 blur-[120px]" />
-
-        <div className="flex items-center justify-between gap-4 pb-8">
-          <p className="text-lg uppercase tracking-[0.28em] text-primary/75">
-            essay dossier
+        <div className="flex items-center justify-between gap-4 pb-10">
+          <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/60">
+            Essay
           </p>
           <Link
             to="/blog"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground/50 transition-colors duration-300 hover:text-foreground"
           >
             <span>←</span>
-            archive
+            Back to blog
           </Link>
         </div>
-        <div className="relative min-h-80 lg:min-h-130">
-          <div className="hero-grid-overlay absolute inset-0" />
 
-          <div className="relative z-10 flex flex-col gap-7 pt-6 lg:pt-10">
-            <div className="grid gap-4">
-              <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
-                {formatDate(post.date)} · {readingTime} min read
-              </p>
-              <h1 className="font-serif text-5xl leading-none text-foreground sm:text-6xl xl:text-7xl">
-                {post.title}
-              </h1>
-              <p className="text-base leading-8 text-foreground/76 sm:text-lg">
-                {post.summary}
-              </p>
-            </div>
-
-            <div className="grid gap-5 border-t border-border/25 pt-5 sm:grid-cols-2">
-              <div className="space-y-1">
-                <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
-                  writing lane
-                </p>
-                <p className="text-sm leading-7 text-foreground/76">
-                  {post.categories.length > 0
-                    ? post.categories.join(' · ')
-                    : 'essay'}
-                </p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
-                  quick read
-                </p>
-                <p className="text-sm leading-7 text-foreground/76">
-                  Long-form notes, screenshots, and practical takeaways.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="absolute inset-x-0 top-0 flex items-center justify-between gap-4 text-[10px] uppercase tracking-[0.28em] text-foreground/48 z-20">
-            <span>{post.slug}</span>
-            <span>reading surface</span>
-          </div>
+        <div className="flex flex-col gap-6">
+          <p className="text-xs text-muted-foreground/50">
+            {formatDate(post.date)} · {readingTime} min read
+          </p>
+          <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-foreground sm:text-5xl xl:text-6xl">
+            {post.title}
+          </h1>
+          <p className="max-w-2xl text-lg leading-relaxed text-muted-foreground/70">
+            {post.summary}
+          </p>
         </div>
+
+        <div className="mt-8 h-px w-full bg-border/10" />
       </motion.section>
 
       <motion.section
         variants={item}
-        className="grid gap-12 lg:grid-cols-[minmax(220px,0.34fr)_minmax(0,0.66fr)]"
+        className="grid gap-16 lg:grid-cols-[minmax(200px,0.28fr)_minmax(0,0.72fr)]"
       >
-        <aside className="grid content-start gap-10 lg:sticky lg:top-24">
-          <div className="grid gap-5">
-            <div className="flex items-center gap-4">
-              <p className="shrink-0 text-[10px] uppercase tracking-[0.26em] text-primary/75">
-                reading rail
-              </p>
-              <div className="h-px flex-1 bg-linear-to-r from-primary/30 to-transparent" />
-            </div>
-
-            <div className="divide-y divide-border/20">
+        <aside className="grid content-start gap-8 lg:sticky lg:top-24">
+          <div className="grid gap-4">
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+              Details
+            </p>
+            <div className="grid gap-0">
               {detailRows.map((row) => (
-                <div key={row.label} className="py-3 first:pt-0">
-                  <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+                <div key={row.label} className="border-b border-border/10 py-3 first:pt-0">
+                  <p className="text-xs text-muted-foreground/40">
                     {row.label}
                   </p>
-                  <p className="mt-2 text-sm leading-7 text-foreground/76">
+                  <p className="mt-1 text-sm text-foreground/70">
                     {row.value}
                   </p>
                 </div>
@@ -275,38 +239,27 @@ function BlogPost() {
           </div>
 
           {taxonomies.length > 0 ? (
-            <div className="grid gap-5">
-              <div className="flex items-center gap-4">
-                <p className="shrink-0 text-[10px] uppercase tracking-[0.26em] text-primary/75">
-                  taxonomy
-                </p>
-                <div className="h-px flex-1 bg-linear-to-r from-primary/30 to-transparent" />
-              </div>
-
-              <div className="divide-y divide-border/20">
+            <div className="grid gap-4">
+              <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+                Topics
+              </p>
+              <div className="flex flex-wrap gap-2">
                 {taxonomies.map((entry, index) => (
-                  <div
+                  <span
                     key={`${entry}-${index}`}
-                    className="py-3 text-sm leading-7 text-foreground/76"
+                    className="rounded-full bg-foreground/[0.04] px-3 py-1 text-xs text-muted-foreground/60"
                   >
                     {entry}
-                  </div>
+                  </span>
                 ))}
               </div>
             </div>
           ) : null}
         </aside>
 
-        <div className="grid min-w-0 gap-6">
-          <div className="flex items-center gap-4">
-            <p className="shrink-0 text-[10px] uppercase tracking-[0.26em] text-primary/75">
-              article
-            </p>
-            <div className="h-px flex-1 bg-linear-to-r from-primary/30 to-transparent" />
-          </div>
-
+        <div className="grid min-w-0 gap-0">
           <div
-            className="mdx-content min-w-0 flex flex-col gap-6 text-lg leading-relaxed text-foreground/86"
+            className="mdx-content min-w-0 flex flex-col gap-6 text-lg leading-relaxed text-foreground/80"
             dangerouslySetInnerHTML={{ __html: post.html }}
           />
         </div>
@@ -314,18 +267,18 @@ function BlogPost() {
 
       <motion.footer
         variants={item}
-        className="flex flex-col gap-4 border-t border-border/20 pt-6 sm:flex-row sm:items-center sm:justify-between"
+        className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-center sm:justify-between"
       >
-        <p className="max-w-2xl text-sm leading-7 text-muted-foreground">
-          More essays in the archive follow the same pattern: broader visual
-          planes, restrained metadata, and room for the ideas to carry the page.
+        <div className="h-px w-full bg-border/10 sm:hidden" />
+        <p className="max-w-2xl text-sm text-muted-foreground/40">
+          More writing in the archive.
         </p>
         <Link
           to="/blog"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
+          className="inline-flex items-center gap-2 rounded-full bg-foreground/[0.05] px-5 py-2.5 text-sm text-muted-foreground/60 transition-all duration-300 hover:bg-foreground/[0.08] hover:text-foreground"
         >
           <span>←</span>
-          more writing
+          All posts
         </Link>
       </motion.footer>
     </motion.article>
