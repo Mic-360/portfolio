@@ -1,10 +1,10 @@
-import { siteMeta } from '@/config/site-data'
-import type { ProjectMeta } from '@/lib/content'
-import { getProjectBySlug, getProjectIndex } from '@/lib/content'
-import { formatDate } from '@/lib/format'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { motion, useScroll, useSpring } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
+import type { ProjectMeta } from '@/lib/content'
+import { siteMeta } from '@/config/site-data'
+import { getProjectBySlug, getProjectIndex } from '@/lib/content'
+import { formatDate } from '@/lib/format'
 
 export const Route = createFileRoute('/projects/$slug')({
   loader: async ({ params }) => {
@@ -141,7 +141,7 @@ function ReadingProgress() {
 type TocHeading = { id: string; text: string; level: number }
 
 function TableOfContents() {
-  const [headings, setHeadings] = useState<TocHeading[]>([])
+  const [headings, setHeadings] = useState<Array<TocHeading>>([])
   const [activeId, setActiveId] = useState<string>('')
 
   useEffect(() => {
@@ -149,7 +149,7 @@ function TableOfContents() {
     if (!container) return
 
     const elements = container.querySelectorAll('h2[id], h3[id]')
-    const items: TocHeading[] = []
+    const items: Array<TocHeading> = []
     elements.forEach((el) => {
       items.push({
         id: el.id,
@@ -281,7 +281,7 @@ function ProjectDetail() {
         variants={container}
         initial="hidden"
         animate="show"
-        className="mx-auto flex w-full max-w-[1500px] flex-col gap-16 pb-16 md:gap-24"
+        className="mx-auto flex w-full max-w-375 flex-col gap-16 pb-16 md:gap-24"
       >
         {/* Back navigation */}
         <motion.div
@@ -305,14 +305,14 @@ function ProjectDetail() {
           variants={item}
           className="relative -mx-4 sm:-mx-6 lg:-mx-8 overflow-hidden rounded-2xl sm:rounded-3xl"
         >
-          <div className="relative aspect-[16/9] sm:aspect-[21/9] w-full overflow-hidden bg-card/30">
+          <div className="relative aspect-video sm:aspect-21/9 w-full overflow-hidden bg-card/30">
             <img
               src={projectVisual}
               alt={project.title}
               className="absolute inset-0 h-full w-full object-cover object-center"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t from-background via-background/50 to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-r from-background/60 via-transparent to-transparent" />
           </div>
 
           <div className="absolute inset-x-0 bottom-0 z-10 p-6 sm:p-8 lg:p-12">
@@ -426,7 +426,7 @@ function ProjectDetail() {
               <Link
                 to="/projects/$slug"
                 params={{ slug: prevProject.slug }}
-                className="group flex flex-col gap-2 rounded-2xl p-5 transition-colors duration-300 hover:bg-foreground/[0.03]"
+                className="group flex flex-col gap-2 rounded-2xl p-5 transition-colors duration-300 hover:bg-foreground/3"
               >
                 <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
                   &larr; Previous
@@ -446,7 +446,7 @@ function ProjectDetail() {
               <Link
                 to="/projects/$slug"
                 params={{ slug: nextProject.slug }}
-                className="group flex flex-col gap-2 rounded-2xl p-5 text-right transition-colors duration-300 hover:bg-foreground/[0.03] sm:items-end"
+                className="group flex flex-col gap-2 rounded-2xl p-5 text-right transition-colors duration-300 hover:bg-foreground/3 sm:items-end"
               >
                 <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
                   Next &rarr;
@@ -472,7 +472,7 @@ function ProjectDetail() {
           </p>
           <Link
             to="/projects"
-            className="inline-flex items-center gap-2 rounded-full bg-foreground/[0.05] px-5 py-2.5 text-sm text-muted-foreground/60 transition-all duration-300 hover:bg-foreground/[0.08] hover:text-foreground"
+            className="inline-flex items-center gap-2 rounded-full bg-foreground/5 px-5 py-2.5 text-sm text-muted-foreground/60 transition-all duration-300 hover:bg-foreground/8 hover:text-foreground"
           >
             <span>&larr;</span>
             All projects

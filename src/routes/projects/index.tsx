@@ -1,10 +1,10 @@
+import { Link, createFileRoute } from '@tanstack/react-router'
+import { AnimatePresence, motion } from 'motion/react'
+import { useState } from 'react'
 import LayersIcon from '@/components/ui/layers-icon'
 import { siteMeta } from '@/config/site-data'
 import { getProjectIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
-import { Link, createFileRoute } from '@tanstack/react-router'
-import { AnimatePresence, motion } from 'motion/react'
-import { useState } from 'react'
 
 export const Route = createFileRoute('/projects/')({
   loader: async () => ({
@@ -127,7 +127,6 @@ function ProjectsIndex() {
       animate="show"
       className="flex flex-col gap-16"
     >
-      {/* Header */}
       <motion.header variants={item} className="relative overflow-hidden pb-8">
         <div className="pointer-events-none absolute inset-x-[18%] top-0 h-28 rounded-full bg-primary/10 blur-3xl" />
         <div className="pointer-events-none absolute right-[6%] top-[10%] h-72 w-72 rounded-full bg-primary/6 blur-[120px]" />
@@ -175,7 +174,6 @@ function ProjectsIndex() {
         </div>
       </motion.header>
 
-      {/* Category filter bar */}
       {allCategories.length > 0 ? (
         <motion.div
           variants={item}
@@ -213,7 +211,6 @@ function ProjectsIndex() {
         </motion.div>
       ) : null}
 
-      {/* Project grid */}
       <div className="grid gap-6 sm:grid-cols-2">
         <AnimatePresence mode="popLayout">
           {filteredProjects.map((project, index) => {
@@ -250,10 +247,9 @@ function ProjectsIndex() {
                     }}
                     className="project-card-apple overflow-hidden rounded-2xl border border-border/10 bg-card/50"
                   >
-                    {/* Image area */}
                     <div
                       className={`media-hover-parent relative overflow-hidden ${
-                        isHero ? 'aspect-[16/9]' : 'aspect-[4/3]'
+                        isHero ? 'aspect-video' : 'aspect-4/3'
                       }`}
                     >
                       <img
@@ -262,10 +258,9 @@ function ProjectsIndex() {
                         className="media-hover-image absolute inset-0 h-full w-full object-cover"
                         loading="lazy"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-card/60 via-transparent to-transparent" />
+                      <div className="absolute inset-0 bg-linear-to-t from-card/60 via-transparent to-transparent" />
                     </div>
 
-                    {/* Info section */}
                     <div className="flex flex-col gap-3 p-5 sm:p-6">
                       <div className="flex items-center justify-between gap-4">
                         <p className="text-[10px] uppercase tracking-[0.2em] text-primary/50">
@@ -307,7 +302,6 @@ function ProjectsIndex() {
         </AnimatePresence>
       </div>
 
-      {/* Footer */}
       <motion.footer
         variants={item}
         className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-end sm:justify-between"
