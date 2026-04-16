@@ -520,11 +520,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           <VideoBackground />
           <FeedbackHandler />
           <CommandMenu />
-          <main className="mx-auto w-full max-w-375 px-4 py-6 text-sm sm:px-6 md:py-8 lg:px-10 xl:px-14 2xl:px-20">
+          <main className="mx-auto w-full max-w-375 px-5 py-10 text-sm sm:px-8 md:py-14 lg:px-14 xl:px-20 2xl:px-24">
             {children}
           </main>
           <Footer />
-          <div className="h-20" />
+          <div className="h-24" />
           <FloatingNavDock />
           <DoomErrorBoundary onError={() => setShowDoom(false)}>
             <Suspense fallback={null}>
