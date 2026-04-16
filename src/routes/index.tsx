@@ -202,11 +202,11 @@ function App() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="flex flex-col gap-10 md:gap-14"
+      className="flex flex-col gap-20 md:gap-28"
     >
       <motion.div
         variants={item}
-        className="flex items-center gap-6 w-full -mb-8"
+        className="flex items-center gap-4 w-full -mb-12"
       >
         <a
           href={gravatar.profileUrl}
@@ -216,148 +216,140 @@ function App() {
         >
           <GravatarAvatar
             hash={avatarHash}
-            size={80}
+            size={44}
             alt={`${siteInfo.name} profile photo`}
-            className="h-20 w-20"
+            className="h-11 w-11 ring-1 ring-border/20"
             rel="me"
           />
         </a>
         <div className="flex min-w-0 flex-col">
-          <span className="text-xl font-medium uppercase tracking-[0.32em] text-primary/80">
+          <span className="text-sm font-semibold tracking-tight text-foreground">
             {siteInfo.name}
           </span>
-          <span className="text-base text-muted-foreground">
-            {siteInfo.nativeName}
+          <span className="text-xs text-muted-foreground/50">
+            {siteInfo.currentRole}
           </span>
         </div>
         <div className="ml-auto hidden lg:block">
           <KeyboardHint />
         </div>
       </motion.div>
-      <motion.section
-        variants={item}
-        className="grid gap-8 lg:grid-cols-[minmax(0,1.08fr)_minmax(320px,0.92fr)] lg:items-end"
-      >
-        <div className="flex flex-col gap-7">
-          <div className="flex flex-col gap-4">
-            <p className="text-[11px] uppercase tracking-[0.28em] text-primary/75">
-              android, ai, cloud, web, design, devops
-            </p>
-            <h1 className="max-w-4xl font-serif text-5xl leading-none text-foreground sm:text-6xl xl:text-7xl">
-              Designing and shipping software that feels a step ahead.
-            </h1>
-            <p className="max-w-2xl text-base leading-8 text-foreground/78 sm:text-lg">
-              {siteInfo.currentRole} based in {siteInfo.location}, building web
-              and android products with AI, cloud systems, and a
-              latest-is-greatest mindset. The goal here is simple: fewer
-              widgets, more atmosphere, and work that reads clearly on every
-              screen.
-            </p>
-          </div>
+      {/* Hero — centered Apple-style */}
+      <motion.section variants={item} className="flex flex-col items-center text-center">
+        <p className="text-[11px] uppercase tracking-[0.3em] text-primary/55 mb-8">
+          android · ai · cloud · web · design · devops
+        </p>
+        <h1 className="max-w-5xl font-serif text-5xl leading-[1.06] tracking-tight text-foreground sm:text-6xl lg:text-7xl xl:text-8xl">
+          Designing and shipping software that feels a step ahead.
+        </h1>
+        <p className="mt-7 max-w-2xl text-base leading-8 text-foreground/50 sm:text-lg">
+          {siteInfo.currentRole} based in {siteInfo.location}, building web
+          and android products with AI, cloud systems, and a
+          latest-is-greatest mindset. Fewer widgets, more atmosphere, and work
+          that reads clearly on every screen.
+        </p>
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+          <Link
+            to="/projects"
+            className="inline-flex items-center gap-2 rounded-full bg-foreground px-7 py-3 text-sm font-medium text-background transition-all duration-300 hover:bg-primary"
+          >
+            Selected Work
+          </Link>
+          <Link
+            to="/blog"
+            className="inline-flex items-center gap-2 rounded-full border border-border/30 px-7 py-3 text-sm font-medium text-foreground transition-all duration-300 hover:border-primary/50 hover:text-primary"
+          >
+            Latest Writing
+          </Link>
+          <a
+            data-cal-namespace="connect"
+            data-cal-link={siteInfo.calLink}
+            data-cal-config='{"layout":"week_view","useSlotsViewOnSmallScreen":"true"}'
+            href={siteInfo.calLink}
+            className="inline-flex items-center gap-2 rounded-full border border-border/30 px-7 py-3 text-sm font-medium text-foreground transition-all duration-300 hover:border-primary/50 hover:text-primary"
+          >
+            <CalendarIcon size={14} className="text-primary" />
+            Book a Call
+          </a>
+        </div>
+      </motion.section>
 
-          <div className="flex flex-wrap items-center gap-6">
-            <Link
-              to="/projects"
-              className="inline-flex items-center gap-2 text-md italic font-medium text-foreground underline decoration-border/70 underline-offset-4 transition-colors hover:text-primary hover:decoration-primary sm:text-xl"
-            >
-              selected work
-            </Link>
-            <Link
-              to="/blog"
-              className="inline-flex items-center gap-2 text-md italic font-medium text-foreground underline decoration-border/70 underline-offset-4 transition-colors hover:text-primary hover:decoration-primary sm:text-xl"
-            >
-              latest writing
-            </Link>
-            <a
-              data-cal-namespace="connect"
-              data-cal-link={siteInfo.calLink}
-              data-cal-config='{"layout":"week_view","useSlotsViewOnSmallScreen":"true"}'
-              href={siteInfo.calLink}
-              className="inline-flex items-center gap-2 text-md italic font-medium text-foreground underline decoration-border/70 underline-offset-4 transition-colors hover:text-primary hover:decoration-primary sm:text-xl"
-            >
-              <CalendarIcon size={16} className="text-primary" />
-              book a call
-            </a>
-          </div>
+      {/* Visual showcase — video + role card */}
+      <motion.section variants={item} className="relative -mt-8 min-h-80 overflow-hidden rounded-3xl lg:min-h-105">
+        <div className="pointer-events-none absolute inset-x-[12%] top-[10%] h-28 rounded-full bg-primary/10 blur-3xl" />
+        <div className="pointer-events-none absolute inset-x-[24%] bottom-[18%] h-36 rounded-full bg-primary/8 blur-3xl" />
+        <div className="pointer-events-none absolute right-[8%] top-[14%] h-48 w-48 rounded-full bg-primary/6 blur-[120px]" />
+
+        <div className="absolute inset-x-0 top-4 z-10 flex items-center justify-between gap-4 px-6 text-[10px] uppercase tracking-[0.2em] text-foreground/35">
+          <span>{siteInfo.location}</span>
+          <span>
+            {siteMeta.alternateUrls.gravatarDomain.replace('https://', '')}
+          </span>
         </div>
 
-        <div className="relative min-h-105 lg:min-h-125">
-          <div className="pointer-events-none absolute inset-x-[12%] top-[10%] h-28 rounded-full bg-primary/14 blur-3xl" />
-          <div className="pointer-events-none absolute inset-x-[24%] bottom-[18%] h-36 rounded-full bg-primary/10 blur-3xl" />
-          <div className="pointer-events-none absolute right-[8%] top-[14%] h-48 w-48 rounded-full bg-primary/8 blur-[120px]" />
+        <div className="absolute inset-0">
+          <video
+            src="/horizon.mp4"
+            className="hero-blend-media media-hover-image media-hover-fade absolute inset-0 h-full w-full object-cover"
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
+          <div className="hero-grid-overlay absolute inset-y-[8%] right-[3%] w-[82%]" />
+        </div>
 
-          <div className="absolute inset-x-0 top-0 flex items-center justify-between gap-4 text-[10px] uppercase tracking-[0.28em] text-foreground/48">
-            <span>{siteInfo.location}</span>
-            <span>
-              {siteMeta.alternateUrls.gravatarDomain.replace('https://', '')}
-            </span>
-          </div>
-
-          <div className="absolute inset-0">
-            <video
-              src="/horizon.mp4"
-              className="hero-blend-media media-hover-image media-hover-fade absolute inset-y-[7%] right-0 h-[95%] w-full object-cover"
-              autoPlay
-              loop
-              muted
-              playsInline
-            />
-            <div className="hero-grid-overlay absolute inset-y-[8%] right-[3%] w-[82%]" />
-            <div className="pointer-events-none absolute inset-y-[14%] right-[12%] w-[42%] border-l border-primary/18" />
-          </div>
-
-          <div className="absolute inset-x-0 bottom-0 flex flex-col gap-4">
-            <div className="flex items-center gap-4 sm:max-w-[82%]">
-              <a
-                href={gravatar.profileUrl}
-                target="_blank"
-                rel="noopener noreferrer me"
-                className="shrink-0"
-              >
-                <img
-                  src="/icon.svg"
-                  width={72}
-                  height={72}
-                  className="h-18 w-18"
-                />
-              </a>
-              <div className="min-w-0 text-foreground">
-                <p className="text-[10px] uppercase tracking-[0.28em]">
-                  currently building
-                </p>
-                <a
-                  href={siteInfo.currentCompanyUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-2 block text-xl font-semibold leading-tight transition-colors hover:text-primary sm:text-2xl"
-                >
-                  {siteInfo.currentRole}
-                  <p className="block text-base font-normal sm:inline sm:pl-2">
-                    at {siteInfo.currentCompany}
-                  </p>
-                </a>
-              </div>
-            </div>
-
-            <div className="relative isolate w-full">
-              <p className="relative z-10 max-w-xl text-sm leading-7 text-foreground/74 sm:text-base">
-                Current favorite game -{' '}
-                <em className="italic font-medium">{siteInfo.currentGame}</em>
-                .{' '}
-              </p>
+        <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-5 p-6 sm:p-8">
+          <div className="flex items-center gap-4 sm:max-w-[72%]">
+            <a
+              href={gravatar.profileUrl}
+              target="_blank"
+              rel="noopener noreferrer me"
+              className="shrink-0"
+            >
               <img
-                src="/aloy.png"
-                alt="Aloy from Horizon Zero Dawn"
-                className="absolute right-0 bottom-0 z-0 h-auto w-12 sm:w-16 lg:w-24 xl:w-32"
+                src="/icon.svg"
+                width={56}
+                height={56}
+                className="h-14 w-14"
               />
+            </a>
+            <div className="min-w-0 text-foreground">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-foreground/40">
+                currently building
+              </p>
+              <a
+                href={siteInfo.currentCompanyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-1 block text-lg font-semibold leading-tight transition-colors hover:text-primary sm:text-xl"
+              >
+                {siteInfo.currentRole}
+                <span className="block text-sm font-normal text-foreground/50 sm:inline sm:pl-2">
+                  at {siteInfo.currentCompany}
+                </span>
+              </a>
             </div>
+          </div>
+
+          <div className="relative isolate w-full">
+            <p className="relative z-10 max-w-xl text-sm leading-7 text-foreground/50">
+              Current favorite game -{' '}
+              <em className="italic font-medium text-foreground/70">{siteInfo.currentGame}</em>
+              .
+            </p>
+            <img
+              src="/aloy.png"
+              alt="Aloy from Horizon Zero Dawn"
+              className="absolute right-0 bottom-0 z-0 h-auto w-12 sm:w-16 lg:w-24 xl:w-32"
+            />
           </div>
         </div>
       </motion.section>
 
       <motion.div
         variants={item}
-        className="grid grid-cols-1 lg:grid-cols-2 gap-8"
+        className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16"
       >
         <Section title="current">
           <motion.p whileHover={{ x: 3 }} className="group/current">
