@@ -17,37 +17,37 @@ function Section({
   const titleContent =
     title === 'blogs' ? (
       <span>
-        <PenIcon size={16} className="inline-block mr-2 h-8 w-8" />
+        <PenIcon size={16} className="inline-block mr-1.5 h-3.5 w-3.5 opacity-50" />
         {title}
       </span>
     ) : title === 'projects' ? (
       <span>
-        <LayersIcon size={18} className="inline-block mr-2 h-8 w-8" />
+        <LayersIcon size={18} className="inline-block mr-1.5 h-3.5 w-3.5 opacity-50" />
         {title}
       </span>
     ) : title === 'certificates' ? (
       <span>
-        <Award size={16} className="inline-block mr-2 h-8 w-8" />
+        <Award size={16} className="inline-block mr-1.5 h-3.5 w-3.5 opacity-50" />
         {title}
       </span>
     ) : title === 'current' ? (
       <>
-        <CurrentIcon size={18} className="inline-block mr-2 h-8 w-8" />
+        <CurrentIcon size={18} className="inline-block mr-1.5 h-3.5 w-3.5 opacity-50" />
         {title}
       </>
     ) : title === 'previous' ? (
       <>
-        <PreviousIcon size={18} className="inline-block mr-2 h-8 w-8" />
+        <PreviousIcon size={18} className="inline-block mr-1.5 h-3.5 w-3.5 opacity-50" />
         {title}
       </>
     ) : title === 'healthstat' ? (
       <>
-        <HealthstatIcon size={18} className="inline-block mr-2 h-8 w-8" />
+        <HealthstatIcon size={18} className="inline-block mr-1.5 h-3.5 w-3.5 opacity-50" />
         {title}
       </>
     ) : title === 'pinterest' ? (
       <>
-        <ImagesIcon size={18} className="inline-block mr-2 h-8 w-8" />
+        <ImagesIcon size={18} className="inline-block mr-1.5 h-3.5 w-3.5 opacity-50" />
         {title}
       </>
     ) : (
@@ -56,19 +56,16 @@ function Section({
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
-      className="my-4 flex flex-col gap-6"
+      viewport={{ once: true, margin: '-80px' }}
+      transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+      className="flex flex-col gap-8"
     >
       {title ? (
-        <div className="flex items-center gap-4">
-          <h2 className="shrink-0 text-lg font-semibold uppercase tracking-[0.32em] text-primary/85">
-            {titleContent}
-          </h2>
-          <div className="h-px flex-1 bg-linear-to-r from-primary/30 via-border/40 to-transparent" />
-        </div>
+        <h2 className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/60">
+          {titleContent}
+        </h2>
       ) : null}
       {children}
     </motion.section>
