@@ -140,18 +140,18 @@ function AboutPage() {
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className="mx-auto flex w-full max-w-6xl flex-col gap-12"
+      className="mx-auto flex w-full max-w-6xl flex-col gap-16"
     >
       <motion.section
         variants={itemVariants}
-        className="relative min-h-[560px] overflow-hidden"
+        className="relative min-h-[560px] overflow-hidden rounded-3xl"
       >
         <div
           className="absolute inset-0"
           style={{
             background: profile.header_image || 'var(--primary)',
             backgroundColor: profile.background_color || 'var(--primary)',
-            opacity: 0.92,
+            opacity: 0.88,
           }}
         />
         <div className="absolute inset-0 bg-linear-to-br from-background/88 via-background/42 to-black/72" />
