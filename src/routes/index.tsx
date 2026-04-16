@@ -362,7 +362,7 @@ function App() {
               className="inline-flex items-center px-2 rounded-sm font-black italic underline decoration-primary underline-offset-1 bg-foreground text-background"
             >
               <img
-                src="/khub.jpg"
+                src="/khub.svg"
                 alt="KarkhanaHub Logo"
                 width={24}
                 height={24}
@@ -378,12 +378,12 @@ function App() {
           <motion.p whileHover={{ x: 3 }}>{siteInfo.interests}</motion.p>
           <motion.p whileHover={{ x: 3 }} className="space-x-4">
             i can build{' '}
-            <span className="italic font-black underline underline-offset-2 decoration-primary text-primary">
+            <span className="font-semibold text-primary">
               literally anything.
             </span>
             <img
               src="/frieren/party.svg"
-              className="h-8 sm:h-10 inline-block align-bottom"
+              className="h-7 sm:h-9 inline-block align-bottom ml-1"
             />
           </motion.p>
         </Section>
@@ -395,15 +395,15 @@ function App() {
 
       <motion.div variants={item}>
         <Section title="projects">
-          <div className="divide-y divide-border/25">
+          <div className="grid gap-6">
             {featuredProjects.map((project: ProjectMeta, index: number) => (
               <Link
                 key={project.slug}
                 to="/projects/$slug"
                 params={{ slug: project.slug }}
-                className="group block py-8 first:pt-0 last:pb-0"
+                className="group block"
               >
-                <article className="relative min-h-65 py-2 md:min-h-80">
+                <article className="relative min-h-65 overflow-hidden rounded-2xl py-2 md:min-h-80">
                   <div
                     className={`media-hover-parent absolute inset-y-0 ${index % 2 === 0 ? 'left-[34%] right-0' : 'left-0 right-[34%]'}`}
                   >
@@ -414,7 +414,7 @@ function App() {
                         className="project-ambient-media absolute inset-0 h-full w-full object-contain"
                       />
                     ) : (
-                      <div className="absolute inset-0 bg-linear-to-br from-primary/18 via-muted/12 to-transparent" />
+                      <div className="absolute inset-0 bg-linear-to-br from-primary/12 via-muted/8 to-transparent" />
                     )}
                     <div
                       className={`absolute inset-0 ${
@@ -428,28 +428,25 @@ function App() {
 
                   <div className="relative z-10 grid h-full items-center md:grid-cols-2">
                     <div
-                      className={`flex max-w-xl flex-col gap-4 ${
+                      className={`flex max-w-xl flex-col gap-4 p-6 sm:p-8 ${
                         index % 2 === 0
                           ? 'md:col-start-1'
                           : 'md:col-start-2 md:justify-self-end md:text-right'
                       }`}
                     >
-                      <p className="text-[10px] uppercase tracking-[0.26em] text-primary/75">
-                        Featured build
-                      </p>
                       <div className="space-y-3">
-                        <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                        <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50">
                           {formatDate(project.date)}
                         </p>
-                        <h3 className="font-serif text-3xl leading-tight text-foreground">
+                        <h3 className="font-serif text-3xl leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
                           {project.title}
                         </h3>
                       </div>
-                      <p className="text-base leading-8 text-foreground/78">
+                      <p className="text-base leading-8 text-foreground/55">
                         {project.summary}
                       </p>
                       {project.stack.length > 0 ? (
-                        <p className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
+                        <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
                           {project.stack.slice(0, 5).join(' · ')}
                         </p>
                       ) : null}
@@ -459,11 +456,11 @@ function App() {
               </Link>
             ))}
           </div>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground/50">
             More detail, process notes, and project timelines live in{' '}
             <Link
               to="/projects"
-              className="text-primary underline underline-offset-4"
+              className="text-primary transition-colors hover:text-primary/80"
             >
               the full projects archive
             </Link>
@@ -474,29 +471,29 @@ function App() {
 
       <motion.div
         variants={item}
-        className="grid gap-10 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]"
+        className="grid gap-16 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]"
       >
         <Section title="blogs">
-          <div className="divide-y divide-border/25">
+          <div className="grid gap-1">
             {featuredPosts.map((post: BlogMeta) => (
               <Link
                 key={post.slug}
                 to="/blog/$slug"
                 params={{ slug: post.slug }}
-                className="group grid gap-3 py-4 sm:grid-cols-[110px_minmax(0,1fr)] sm:gap-6"
+                className="group grid gap-3 rounded-xl px-1 py-5 transition-colors duration-300 sm:grid-cols-[100px_minmax(0,1fr)] sm:gap-6"
               >
-                <div className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
                   {formatDate(post.date)}
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-xl font-semibold leading-tight transition-colors group-hover:text-primary">
+                  <h3 className="text-lg font-semibold leading-tight tracking-tight transition-colors duration-300 group-hover:text-primary">
                     {post.title}
                   </h3>
-                  <p className="text-sm leading-7 text-foreground/72">
+                  <p className="text-sm leading-7 text-foreground/45">
                     {post.summary}
                   </p>
                   {post.tags.length > 0 ? (
-                    <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/35">
                       {post.tags.slice(0, 3).join(' · ')}
                     </p>
                   ) : null}
@@ -504,11 +501,11 @@ function App() {
               </Link>
             ))}
           </div>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground/45">
             Short notes and build logs continue in{' '}
             <Link
               to="/blog"
-              className="text-primary underline underline-offset-4"
+              className="text-primary transition-colors hover:text-primary/80"
             >
               the writing index
             </Link>
@@ -593,7 +590,7 @@ function App() {
             </Link>
 
             {health.updatedAt && isMounted ? (
-              <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/35">
                 last updated {new Date(health.updatedAt).toLocaleString()}
               </p>
             ) : null}
@@ -603,7 +600,7 @@ function App() {
 
       <motion.div
         variants={item}
-        className="grid gap-10 xl:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)]"
+        className="grid gap-16 xl:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)]"
       >
         <Section title="pinterest">
           {featuredPins.length > 0 ? (
@@ -634,12 +631,12 @@ function App() {
                   </a>
                 ))}
               </div>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground/45">
                 The mobile version now keeps these pins in full color by
                 default. Browse more in the{' '}
                 <Link
                   to="/pinterest"
-                  className="text-primary underline underline-offset-4"
+                  className="text-primary transition-colors hover:text-primary/80"
                 >
                   full Pinterest gallery
                 </Link>
@@ -663,38 +660,38 @@ function App() {
         </Section>
 
         <Section title="certificates">
-          <div className="divide-y divide-border/25">
+          <div className="grid gap-1">
             {featuredCertificates.map((cert: CertificateMeta) => (
               <Link
                 key={cert.id}
                 to="/certificates/$slug"
                 params={{ slug: cert.slug }}
-                className="grid gap-3 py-4 text-sm transition-colors hover:text-primary sm:grid-cols-[minmax(0,1fr)_120px]"
+                className="group grid gap-3 rounded-xl px-1 py-4 text-sm transition-colors duration-300 sm:grid-cols-[minmax(0,1fr)_120px]"
               >
-                <div className="space-y-1">
-                  <p className="text-[10px] uppercase tracking-[0.24em] text-primary/75">
+                <div className="space-y-1.5">
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-primary/50">
                     {cert.issuer}
                   </p>
-                  <h3 className="text-base font-semibold leading-7 text-foreground">
+                  <h3 className="text-base font-semibold leading-7 tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
                     {cert.title}
                   </h3>
                   {cert.skills.length > 0 ? (
-                    <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/35">
                       {cert.skills.slice(0, 3).join(' · ')}
                     </p>
                   ) : null}
                 </div>
-                <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground sm:text-right">
+                <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40 sm:text-right">
                   {cert.issued}
                 </div>
               </Link>
             ))}
           </div>
-          <p className="text-sm text-muted-foreground -mt-3.5">
+          <p className="text-sm text-muted-foreground/45">
             A longer credential ledger lives in{' '}
             <Link
               to="/certificates"
-              className="text-primary underline underline-offset-4"
+              className="text-primary transition-colors hover:text-primary/80"
             >
               the certificates page
             </Link>
