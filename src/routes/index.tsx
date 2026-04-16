@@ -3,16 +3,16 @@ import { motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 
 import type { CertificateMeta } from '@/lib/certificates'
-import type { BlogMeta, ProjectMeta } from '@/lib/content'
-import type { HealthSample } from '@/lib/health'
-import type { PinterestCreatedPin } from '@/lib/pinterest'
 import { getCertificateIndex } from '@/lib/certificates'
+import type { BlogMeta, ProjectMeta } from '@/lib/content'
 import { getBlogIndex, getProjectIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
 import { getGamesData } from '@/lib/games'
 import { hashEmail } from '@/lib/gravatar'
 import { getGravatarProfile } from '@/lib/gravatar-profile'
+import type { HealthSample } from '@/lib/health'
 import { getHealthData } from '@/lib/health'
+import type { PinterestCreatedPin } from '@/lib/pinterest'
 import { getPinterestCreatedPins } from '@/lib/pinterest'
 
 import { KeyboardHint } from '@/components/CommandMenu'
@@ -201,7 +201,7 @@ function App() {
     },
   }
 
-  const featuredProjects = projects.slice(0, 4)
+  const featuredProjects = projects.slice(0, 5)
   const featuredPosts = posts.slice(0, 5)
   const featuredCertificates = certificates.slice(0, 6)
   const featuredPins = pinterestData.pins.slice(0, 6)
@@ -365,12 +365,8 @@ function App() {
       </motion.section>
 
       <motion.div variants={item} className="flex flex-col gap-24 md:gap-32">
-        {/* ── Current: Apple-style scattered cards ── */}
         <section className="relative">
           <div className="relative min-h-130 sm:min-h-145 lg:min-h-160">
-            {/* ── Floating squircle cards scattered around ── */}
-
-            {/* Card 1: Education — top-left, tilted */}
             <motion.div
               initial={{ opacity: 0, y: 40, rotate: -8 }}
               whileInView={{ opacity: 1, y: 0, rotate: -6 }}
@@ -409,7 +405,6 @@ function App() {
               </div>
             </motion.div>
 
-            {/* Card 2: Interests — top-right, tilted opposite */}
             <motion.div
               initial={{ opacity: 0, y: 40, rotate: 8 }}
               whileInView={{ opacity: 1, y: 0, rotate: 5 }}
@@ -448,7 +443,6 @@ function App() {
               </div>
             </motion.div>
 
-            {/* Card 3: Capabilities — bottom-left */}
             <motion.div
               initial={{ opacity: 0, y: 40, rotate: 6 }}
               whileInView={{ opacity: 1, y: 0, rotate: 4 }}
@@ -490,7 +484,6 @@ function App() {
               </div>
             </motion.div>
 
-            {/* Card 4: tiny accent card — bottom-right */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
               whileInView={{ opacity: 1, scale: 1, rotate: -5 }}
@@ -520,7 +513,6 @@ function App() {
               </div>
             </motion.div>
 
-            {/* ── Center content: headline + subtitle ── */}
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none px-4 z-50">
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
@@ -598,79 +590,94 @@ function App() {
         </section>
       </motion.div>
 
-      <motion.div variants={item}>
+      <motion.div variants={item} className='my-28'>
         <Section title="projects">
-          <div className="grid gap-6">
-            {featuredProjects.map((project: ProjectMeta, index: number) => (
-              <Link
-                key={project.slug}
-                to="/projects/$slug"
-                params={{ slug: project.slug }}
-                className="group block"
-              >
-                <article className="relative min-h-65 overflow-hidden rounded-2xl py-2 md:min-h-80">
-                  <div
-                    className={`media-hover-parent absolute inset-y-0 ${index % 2 === 0 ? 'left-[34%] right-0' : 'left-0 right-[34%]'}`}
-                  >
-                    {project.image ? (
-                      <img
-                        src={project.image}
-                        alt={project.title}
-                        className="project-ambient-media absolute inset-0 h-full w-full object-contain"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 bg-linear-to-br from-primary/12 via-muted/8 to-transparent" />
-                    )}
-                    <div
-                      className={`absolute inset-0 ${
-                        index % 2 === 0
-                          ? 'project-ambient-overlay bg-linear-to-r from-background via-background/55 to-transparent'
-                          : 'project-ambient-overlay bg-linear-to-l from-background via-background/55 to-transparent'
-                      }`}
-                    />
-                    <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent opacity-90" />
-                  </div>
+          <div className="grid gap-5 md:columns-2 md:grid-cols-2">
+            {featuredProjects.map((project: ProjectMeta, index: number) => {
+              const projectVisual =
+                project.image || `/og/projects/${project.slug}`
+              const isTall = index % 3 === 0
 
-                  <div className="relative z-10 grid h-full items-center md:grid-cols-2">
-                    <div
-                      className={`flex max-w-xl flex-col gap-4 p-6 sm:p-8 ${
-                        index % 2 === 0
-                          ? 'md:col-start-1'
-                          : 'md:col-start-2 md:justify-self-end md:text-right'
+              return (
+                <motion.div
+                  key={project.slug}
+                  initial={{ opacity: 0, scale: 0.92, y: 60 }}
+                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{
+                    duration: 0.9,
+                    ease: [0.25, 0.1, 0.25, 1],
+                  }}
+                  className={isTall ? 'md:row-span-2' : ''}
+                >
+                  <Link
+                    to="/projects/$slug"
+                    params={{ slug: project.slug }}
+                    className="group block h-full"
+                  >
+                    <article
+                      className={`project-card-apple relative overflow-hidden rounded-2xl h-full ${
+                        isTall
+                          ? 'min-h-[420px] md:min-h-[640px]'
+                          : 'min-h-[340px] md:min-h-[300px]'
                       }`}
                     >
-                      <div className="space-y-3">
-                        <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50">
-                          {formatDate(project.date)}
-                        </p>
-                        <h3 className="font-serif text-3xl leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
-                          {project.title}
-                        </h3>
+                      <div className="media-hover-parent absolute inset-0">
+                        <img
+                          src={projectVisual}
+                          alt={project.title}
+                          className="media-hover-image absolute inset-0 h-full w-full object-cover"
+                          loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
                       </div>
-                      <p className="text-base leading-8 text-foreground/55">
-                        {project.summary}
-                      </p>
-                      {project.stack.length > 0 ? (
-                        <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
-                          {project.stack.slice(0, 5).join(' · ')}
-                        </p>
-                      ) : null}
-                    </div>
-                  </div>
-                </article>
-              </Link>
-            ))}
+
+                      <div className="absolute inset-x-0 bottom-0 z-10 border-t border-white/[0.06] bg-background/60 p-5 backdrop-blur-xl sm:p-6">
+                        <div className="flex flex-col gap-2.5">
+                          <div className="flex items-center justify-between gap-4">
+                            <p className="text-[10px] uppercase tracking-[0.25em] text-primary/50">
+                              {project.categories.length > 0
+                                ? project.categories[0]
+                                : 'project'}
+                            </p>
+                            <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
+                              {formatDate(project.date)}
+                            </p>
+                          </div>
+                          <h3 className="font-serif text-xl leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary sm:text-2xl lg:text-3xl">
+                            {project.title}
+                          </h3>
+                          <p className="line-clamp-2 text-sm leading-7 text-foreground/55">
+                            {project.summary}
+                          </p>
+                          {project.stack.length > 0 ? (
+                            <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/35">
+                              {project.stack.slice(0, 4).join(' · ')}
+                            </p>
+                          ) : null}
+                        </div>
+                      </div>
+                    </article>
+                  </Link>
+                </motion.div>
+              )
+            })}
           </div>
-          <p className="text-sm text-muted-foreground/50">
-            More detail, process notes, and project timelines live in{' '}
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-sm text-muted-foreground/50">
+              More in the archive.
+            </p>
             <Link
               to="/projects"
-              className="text-primary transition-colors hover:text-primary/80"
+              className="group/link inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary/80"
             >
-              the full projects archive
+              View all projects
+              <span className="inline-block transition-transform duration-300 group-hover/link:translate-x-1">
+                &rarr;
+              </span>
             </Link>
-            .
-          </p>
+          </div>
         </Section>
       </motion.div>
 

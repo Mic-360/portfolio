@@ -1,13 +1,29 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
-import { motion } from 'motion/react'
 import { siteMeta } from '@/config/site-data'
-import { getProjectBySlug } from '@/lib/content'
+import type { ProjectMeta } from '@/lib/content'
+import { getProjectBySlug, getProjectIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
+import { Link, createFileRoute } from '@tanstack/react-router'
+import { motion, useScroll, useSpring } from 'motion/react'
+import { useEffect, useRef, useState } from 'react'
 
 export const Route = createFileRoute('/projects/$slug')({
-  loader: async ({ params }) => ({
-    project: await getProjectBySlug({ data: { slug: params.slug } }),
-  }),
+  loader: async ({ params }) => {
+    const [project, projects] = await Promise.all([
+      getProjectBySlug({ data: { slug: params.slug } }),
+      getProjectIndex(),
+    ])
+
+    let prevProject: ProjectMeta | null = null
+    let nextProject: ProjectMeta | null = null
+
+    if (project) {
+      const idx = projects.findIndex((p) => p.slug === params.slug)
+      if (idx > 0) prevProject = projects[idx - 1]
+      if (idx < projects.length - 1) nextProject = projects[idx + 1]
+    }
+
+    return { project, prevProject, nextProject }
+  },
   head: ({ loaderData }) => {
     if (!loaderData?.project) {
       return {
@@ -111,8 +127,91 @@ export const Route = createFileRoute('/projects/$slug')({
   component: ProjectDetail,
 })
 
+function ReadingProgress() {
+  const { scrollYProgress } = useScroll()
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  })
+
+  return <motion.div className="reading-progress" style={{ scaleX }} />
+}
+
+type TocHeading = { id: string; text: string; level: number }
+
+function TableOfContents() {
+  const [headings, setHeadings] = useState<TocHeading[]>([])
+  const [activeId, setActiveId] = useState<string>('')
+
+  useEffect(() => {
+    const container = document.querySelector('.mdx-content')
+    if (!container) return
+
+    const elements = container.querySelectorAll('h2[id], h3[id]')
+    const items: TocHeading[] = []
+    elements.forEach((el) => {
+      items.push({
+        id: el.id,
+        text: el.textContent || '',
+        level: el.tagName === 'H2' ? 2 : 3,
+      })
+    })
+    setHeadings(items)
+  }, [])
+
+  useEffect(() => {
+    if (headings.length === 0) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting)
+        if (visible.length > 0) {
+          setActiveId(visible[0].target.id)
+        }
+      },
+      { rootMargin: '-80px 0px -70% 0px' },
+    )
+
+    headings.forEach((h) => {
+      const el = document.getElementById(h.id)
+      if (el) observer.observe(el)
+    })
+
+    return () => observer.disconnect()
+  }, [headings])
+
+  if (headings.length === 0) return null
+
+  return (
+    <nav className="flex flex-col gap-0.5">
+      <p className="mb-3 text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+        On this page
+      </p>
+      {headings.map((h) => (
+        <a
+          key={h.id}
+          href={`#${h.id}`}
+          onClick={(e) => {
+            e.preventDefault()
+            document
+              .getElementById(h.id)
+              ?.scrollIntoView({ behavior: 'smooth' })
+          }}
+          className={`toc-link ${h.level === 3 ? 'toc-h3' : ''} ${
+            activeId === h.id ? 'active' : ''
+          }`}
+        >
+          {h.text}
+        </a>
+      ))}
+    </nav>
+  )
+}
+
 function ProjectDetail() {
-  const { project } = Route.useLoaderData()
+  const { project, prevProject, nextProject } = Route.useLoaderData()
+  const contentRef = useRef<HTMLDivElement>(null)
 
   if (!project) {
     return (
@@ -130,28 +229,27 @@ function ProjectDetail() {
 
   const projectVisual = project.image || `/og/projects/${project.slug}`
   const detailRows = [
-    {
-      label: 'published',
-      value: formatDate(project.date),
-    },
+    { label: 'published', value: formatDate(project.date) },
     {
       label: 'stack',
       value:
         project.stack.length > 0
-          ? project.stack.join(' · ')
+          ? project.stack.join(' \u00b7 ')
           : 'full stack build',
     },
     {
       label: 'categories',
       value:
         project.categories.length > 0
-          ? project.categories.join(' · ')
+          ? project.categories.join(' \u00b7 ')
           : 'product engineering',
     },
     {
       label: 'tags',
       value:
-        project.tags.length > 0 ? project.tags.join(' · ') : 'selected work',
+        project.tags.length > 0
+          ? project.tags.join(' \u00b7 ')
+          : 'selected work',
     },
   ]
 
@@ -159,33 +257,37 @@ function ProjectDetail() {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.12,
-      },
+      transition: { staggerChildren: 0.15 },
     },
   }
 
   const item = {
-    hidden: { opacity: 0, y: 32 },
+    hidden: { opacity: 0, y: 40 },
     show: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.85, ease: [0.25, 0.1, 0.25, 1] },
+      transition: {
+        duration: 0.9,
+        ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
+      },
     },
   }
 
   return (
-    <motion.article
-      variants={container}
-      initial="hidden"
-      animate="show"
-      className="mx-auto flex w-full max-w-[1500px] flex-col gap-20 pb-16 md:gap-28"
-    >
-      <motion.section
-        variants={item}
-        className="pb-12"
+    <>
+      <ReadingProgress />
+
+      <motion.article
+        variants={container}
+        initial="hidden"
+        animate="show"
+        className="mx-auto flex w-full max-w-[1500px] flex-col gap-16 pb-16 md:gap-24"
       >
-        <div className="flex items-center justify-between gap-4 pb-10">
+        {/* Back navigation */}
+        <motion.div
+          variants={item}
+          className="flex items-center justify-between gap-4"
+        >
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/60">
             Project
           </p>
@@ -193,118 +295,190 @@ function ProjectDetail() {
             to="/projects"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground/50 transition-colors duration-300 hover:text-foreground"
           >
-            <span>←</span>
+            <span>&larr;</span>
             Back to projects
           </Link>
-        </div>
+        </motion.div>
 
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center">
-          <div className="flex flex-col gap-6">
-            <p className="text-xs text-muted-foreground/50">
-              {formatDate(project.date)}
-            </p>
-            <h1 className="max-w-xl text-4xl font-semibold tracking-tight text-foreground sm:text-5xl xl:text-6xl">
-              {project.title}
-            </h1>
-            <p className="max-w-lg text-lg leading-relaxed text-muted-foreground/70">
-              {project.summary}
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {project.stack.length > 0
-                ? project.stack.map((tech) => (
-                    <span
-                      key={tech}
-                      className="rounded-full bg-foreground/[0.04] px-3 py-1 text-xs text-muted-foreground/60"
-                    >
-                      {tech}
-                    </span>
-                  ))
-                : null}
-            </div>
-          </div>
-
-          <div className="relative overflow-hidden rounded-3xl bg-foreground/[0.02]">
+        {/* Cinematic Hero */}
+        <motion.section
+          variants={item}
+          className="relative -mx-4 sm:-mx-6 lg:-mx-8 overflow-hidden rounded-2xl sm:rounded-3xl"
+        >
+          <div className="relative aspect-[16/9] sm:aspect-[21/9] w-full overflow-hidden bg-card/30">
             <img
               src={projectVisual}
               alt={project.title}
-              className="h-auto w-full object-contain"
+              className="absolute inset-0 h-full w-full object-cover object-center"
             />
-          </div>
-        </div>
-
-        <div className="mt-8 h-px w-full bg-border/10" />
-      </motion.section>
-
-      <motion.section
-        variants={item}
-        className="grid gap-16 lg:grid-cols-[minmax(200px,0.28fr)_minmax(0,0.72fr)]"
-      >
-        <aside className="grid content-start gap-8 lg:sticky lg:top-24">
-          <div className="grid gap-4">
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
-              Details
-            </p>
-            <div className="grid gap-0">
-              {detailRows.map((row) => (
-                <div key={row.label} className="border-b border-border/10 py-3 first:pt-0">
-                  <p className="text-xs text-muted-foreground/40">
-                    {row.label}
-                  </p>
-                  <p className="mt-1 text-sm text-foreground/70">
-                    {row.value}
-                  </p>
-                </div>
-              ))}
-            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-transparent to-transparent" />
           </div>
 
-          {project.links.length > 0 ? (
+          <div className="absolute inset-x-0 bottom-0 z-10 p-6 sm:p-8 lg:p-12">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                delay: 0.3,
+                duration: 0.8,
+                ease: [0.25, 0.1, 0.25, 1],
+              }}
+              className="flex max-w-2xl flex-col gap-4"
+            >
+              <p className="text-[10px] uppercase tracking-[0.25em] text-foreground/40">
+                {formatDate(project.date)}
+              </p>
+              <h1 className="font-serif text-3xl leading-[1.08] tracking-tight text-foreground sm:text-4xl lg:text-5xl xl:text-6xl">
+                {project.title}
+              </h1>
+              <p className="max-w-lg text-sm leading-7 text-foreground/55 sm:text-base sm:leading-8">
+                {project.summary}
+              </p>
+              <div className="flex flex-wrap gap-2 pt-1">
+                {project.stack.map((tech) => (
+                  <span
+                    key={tech}
+                    className="rounded-full border border-border/20 bg-background/40 px-3 py-1 text-[11px] font-medium text-foreground/60 backdrop-blur-sm"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </motion.section>
+
+        {/* Content area */}
+        <motion.section
+          variants={item}
+          className="grid gap-12 lg:grid-cols-[minmax(180px,0.22fr)_minmax(0,0.78fr)] xl:grid-cols-[minmax(180px,0.20fr)_minmax(0,0.56fr)_minmax(140px,0.20fr)]"
+        >
+          {/* Left sidebar: metadata */}
+          <aside className="grid content-start gap-8 lg:sticky lg:top-24 lg:self-start">
             <div className="grid gap-4">
-              <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
-                Links
+              <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+                Details
               </p>
               <div className="grid gap-0">
-                {project.links.map((link, index) => (
-                  <a
-                    key={`${link.label}-${link.url}-${index}`}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-between gap-4 border-b border-border/10 py-3 text-sm text-foreground/70 transition-colors duration-300 hover:text-foreground"
+                {detailRows.map((row) => (
+                  <div
+                    key={row.label}
+                    className="border-b border-border/10 py-3 first:pt-0"
                   >
-                    <span>{link.label}</span>
-                    <span className="text-muted-foreground/40">↗</span>
-                  </a>
+                    <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/40">
+                      {row.label}
+                    </p>
+                    <p className="mt-1 text-sm leading-6 text-foreground/70">
+                      {row.value}
+                    </p>
+                  </div>
                 ))}
               </div>
             </div>
-          ) : null}
-        </aside>
 
-        <div className="grid min-w-0 gap-0">
-          <div
-            className="mdx-content min-w-0 flex flex-col gap-6 text-lg leading-relaxed text-foreground/80"
-            dangerouslySetInnerHTML={{ __html: project.html }}
-          />
-        </div>
-      </motion.section>
+            {project.links.length > 0 ? (
+              <div className="grid gap-4">
+                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+                  Links
+                </p>
+                <div className="grid gap-0">
+                  {project.links.map((link, index) => (
+                    <a
+                      key={`${link.label}-${link.url}-${index}`}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between gap-4 border-b border-border/10 py-3 text-sm text-foreground/70 transition-colors duration-300 hover:text-primary"
+                    >
+                      <span>{link.label}</span>
+                      <span className="text-muted-foreground/40">&nearr;</span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+          </aside>
 
-      <motion.footer
-        variants={item}
-        className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-center sm:justify-between"
-      >
-        <div className="h-px w-full bg-border/10 sm:hidden" />
-        <p className="max-w-2xl text-sm text-muted-foreground/40">
-          More projects in the archive.
-        </p>
-        <Link
-          to="/projects"
-          className="inline-flex items-center gap-2 rounded-full bg-foreground/[0.05] px-5 py-2.5 text-sm text-muted-foreground/60 transition-all duration-300 hover:bg-foreground/[0.08] hover:text-foreground"
+          {/* Center: MDX content */}
+          <div ref={contentRef} className="min-w-0">
+            <div
+              className="mdx-content flex flex-col gap-6 text-base leading-relaxed text-foreground/80 sm:text-lg"
+              dangerouslySetInnerHTML={{ __html: project.html }}
+            />
+          </div>
+
+          {/* Right sidebar: Table of Contents (xl+) */}
+          <div className="hidden xl:block">
+            <div className="sticky top-24 self-start">
+              <TableOfContents />
+            </div>
+          </div>
+        </motion.section>
+
+        {/* Prev/Next navigation */}
+        <motion.section
+          variants={item}
+          className="border-t border-border/10 pt-8"
         >
-          <span>←</span>
-          All projects
-        </Link>
-      </motion.footer>
-    </motion.article>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {prevProject ? (
+              <Link
+                to="/projects/$slug"
+                params={{ slug: prevProject.slug }}
+                className="group flex flex-col gap-2 rounded-2xl p-5 transition-colors duration-300 hover:bg-foreground/[0.03]"
+              >
+                <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
+                  &larr; Previous
+                </span>
+                <span className="font-serif text-lg leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
+                  {prevProject.title}
+                </span>
+                <span className="text-xs text-muted-foreground/40">
+                  {formatDate(prevProject.date)}
+                </span>
+              </Link>
+            ) : (
+              <div />
+            )}
+
+            {nextProject ? (
+              <Link
+                to="/projects/$slug"
+                params={{ slug: nextProject.slug }}
+                className="group flex flex-col gap-2 rounded-2xl p-5 text-right transition-colors duration-300 hover:bg-foreground/[0.03] sm:items-end"
+              >
+                <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
+                  Next &rarr;
+                </span>
+                <span className="font-serif text-lg leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
+                  {nextProject.title}
+                </span>
+                <span className="text-xs text-muted-foreground/40">
+                  {formatDate(nextProject.date)}
+                </span>
+              </Link>
+            ) : null}
+          </div>
+        </motion.section>
+
+        {/* Footer */}
+        <motion.footer
+          variants={item}
+          className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <p className="max-w-2xl text-sm text-muted-foreground/40">
+            More projects in the archive.
+          </p>
+          <Link
+            to="/projects"
+            className="inline-flex items-center gap-2 rounded-full bg-foreground/[0.05] px-5 py-2.5 text-sm text-muted-foreground/60 transition-all duration-300 hover:bg-foreground/[0.08] hover:text-foreground"
+          >
+            <span>&larr;</span>
+            All projects
+          </Link>
+        </motion.footer>
+      </motion.article>
+    </>
   )
 }
