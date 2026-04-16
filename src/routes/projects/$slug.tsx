@@ -179,110 +179,78 @@ function ProjectDetail() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="mx-auto flex w-full max-w-[1500px] flex-col gap-14 pb-16"
+      className="mx-auto flex w-full max-w-[1500px] flex-col gap-20 pb-16 md:gap-28"
     >
       <motion.section
         variants={item}
-        className="relative overflow-hidden border-b border-border/20 pb-12"
+        className="pb-12"
       >
-        <div className="pointer-events-none absolute inset-x-[16%] top-[10%] h-28 rounded-full bg-primary/14 blur-3xl" />
-        <div className="pointer-events-none absolute right-[8%] top-[12%] h-72 w-72 rounded-full bg-primary/8 blur-[120px]" />
-
-        <div className="flex items-center justify-between gap-4 mb-6">
-          <p className="text-lg uppercase tracking-[0.28em] text-primary/75">
-            project dossier
+        <div className="flex items-center justify-between gap-4 pb-10">
+          <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/60">
+            Project
           </p>
           <Link
             to="/projects"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground/50 transition-colors duration-300 hover:text-foreground"
           >
             <span>←</span>
-            archive
+            Back to projects
           </Link>
         </div>
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.76fr)_minmax(0,1.24fr)] lg:items-end">
-          <div className="flex flex-col gap-7 pt-6 lg:pt-10">
-            <div className="grid gap-4">
-              <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
-                {formatDate(project.date)}
-              </p>
-              <h1 className="max-w-3xl font-serif text-5xl leading-none text-foreground sm:text-6xl xl:text-7xl">
-                {project.title}
-              </h1>
-              <p className="max-w-xl text-base leading-8 text-foreground/76 sm:text-lg">
-                {project.summary}
-              </p>
-            </div>
 
-            <div className="grid gap-5 border-t border-border/25 pt-5 sm:grid-cols-2">
-              <div className="space-y-1">
-                <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
-                  build lane
-                </p>
-                <p className="text-sm leading-7 text-foreground/76">
-                  {project.categories.length > 0
-                    ? project.categories.join(' · ')
-                    : 'selected work'}
-                </p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
-                  quick take
-                </p>
-                <p className="text-sm leading-7 text-foreground/76">
-                  Built as a full project story with implementation notes,
-                  supporting visuals, and direct links out.
-                </p>
-              </div>
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center">
+          <div className="flex flex-col gap-6">
+            <p className="text-xs text-muted-foreground/50">
+              {formatDate(project.date)}
+            </p>
+            <h1 className="max-w-xl text-4xl font-semibold tracking-tight text-foreground sm:text-5xl xl:text-6xl">
+              {project.title}
+            </h1>
+            <p className="max-w-lg text-lg leading-relaxed text-muted-foreground/70">
+              {project.summary}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {project.stack.length > 0
+                ? project.stack.map((tech) => (
+                    <span
+                      key={tech}
+                      className="rounded-full bg-foreground/[0.04] px-3 py-1 text-xs text-muted-foreground/60"
+                    >
+                      {tech}
+                    </span>
+                  ))
+                : null}
             </div>
           </div>
 
-          <div className="relative min-h-[320px] lg:min-h-[520px]">
+          <div className="relative overflow-hidden rounded-3xl bg-foreground/[0.02]">
             <img
               src={projectVisual}
               alt={project.title}
-              className="hero-blend-media media-hover-image media-hover-fade absolute inset-y-[7%] right-0 h-[86%] w-[96%] object-contain"
+              className="h-auto w-full object-contain"
             />
-            <div className="hero-grid-overlay absolute inset-y-[10%] right-[4%] w-[82%]" />
-            <div className="pointer-events-none absolute inset-y-[14%] right-[14%] w-[36%] border-l border-primary/18" />
-
-            <div className="absolute inset-x-0 top-0 flex items-center justify-between gap-4 text-[10px] uppercase tracking-[0.28em] text-foreground/48">
-              <span>{project.slug}</span>
-              <span>selected build</span>
-            </div>
-
-            <div className="absolute inset-x-0 bottom-[5%] flex max-w-[80%] flex-col gap-2">
-              <p className="text-[10px] uppercase tracking-[0.28em] text-primary/75">
-                project surface
-              </p>
-              <p className="text-sm leading-7 text-foreground/72">
-                Visual preview on the right, full build notes below.
-              </p>
-            </div>
           </div>
         </div>
+
+        <div className="mt-8 h-px w-full bg-border/10" />
       </motion.section>
 
       <motion.section
         variants={item}
-        className="grid gap-12 lg:grid-cols-[minmax(220px,0.34fr)_minmax(0,0.66fr)]"
+        className="grid gap-16 lg:grid-cols-[minmax(200px,0.28fr)_minmax(0,0.72fr)]"
       >
-        <aside className="grid content-start gap-10 lg:sticky lg:top-24">
-          <div className="grid gap-5">
-            <div className="flex items-center gap-4">
-              <p className="shrink-0 text-[10px] uppercase tracking-[0.26em] text-primary/75">
-                technical rail
-              </p>
-              <div className="h-px flex-1 bg-linear-to-r from-primary/30 to-transparent" />
-            </div>
-
-            <div className="divide-y divide-border/20">
+        <aside className="grid content-start gap-8 lg:sticky lg:top-24">
+          <div className="grid gap-4">
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+              Details
+            </p>
+            <div className="grid gap-0">
               {detailRows.map((row) => (
-                <div key={row.label} className="py-3 first:pt-0">
-                  <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+                <div key={row.label} className="border-b border-border/10 py-3 first:pt-0">
+                  <p className="text-xs text-muted-foreground/40">
                     {row.label}
                   </p>
-                  <p className="mt-2 text-sm leading-7 text-foreground/76">
+                  <p className="mt-1 text-sm text-foreground/70">
                     {row.value}
                   </p>
                 </div>
@@ -291,25 +259,21 @@ function ProjectDetail() {
           </div>
 
           {project.links.length > 0 ? (
-            <div className="grid gap-5">
-              <div className="flex items-center gap-4">
-                <p className="shrink-0 text-[10px] uppercase tracking-[0.26em] text-primary/75">
-                  outbound links
-                </p>
-                <div className="h-px flex-1 bg-linear-to-r from-primary/30 to-transparent" />
-              </div>
-
-              <div className="divide-y divide-border/20">
+            <div className="grid gap-4">
+              <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+                Links
+              </p>
+              <div className="grid gap-0">
                 {project.links.map((link, index) => (
                   <a
                     key={`${link.label}-${link.url}-${index}`}
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between gap-4 py-3 text-sm leading-7 text-foreground/76 transition-colors hover:text-primary"
+                    className="flex items-center justify-between gap-4 border-b border-border/10 py-3 text-sm text-foreground/70 transition-colors duration-300 hover:text-foreground"
                   >
                     <span>{link.label}</span>
-                    <span className="text-muted-foreground">↗</span>
+                    <span className="text-muted-foreground/40">↗</span>
                   </a>
                 ))}
               </div>
@@ -317,16 +281,9 @@ function ProjectDetail() {
           ) : null}
         </aside>
 
-        <div className="grid min-w-0 gap-6">
-          <div className="flex items-center gap-4">
-            <p className="shrink-0 text-[10px] uppercase tracking-[0.26em] text-primary/75">
-              build notes
-            </p>
-            <div className="h-px flex-1 bg-linear-to-r from-primary/30 to-transparent" />
-          </div>
-
+        <div className="grid min-w-0 gap-0">
           <div
-            className="mdx-content min-w-0 flex flex-col gap-6 text-lg leading-relaxed text-foreground/86"
+            className="mdx-content min-w-0 flex flex-col gap-6 text-lg leading-relaxed text-foreground/80"
             dangerouslySetInnerHTML={{ __html: project.html }}
           />
         </div>
@@ -334,17 +291,18 @@ function ProjectDetail() {
 
       <motion.footer
         variants={item}
-        className="flex flex-col gap-4 border-t border-border/20 pt-6 sm:flex-row sm:items-center sm:justify-between"
+        className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-center sm:justify-between"
       >
-        <p className="max-w-2xl text-sm leading-7 text-muted-foreground">
-          More builds in the archive to follow.
+        <div className="h-px w-full bg-border/10 sm:hidden" />
+        <p className="max-w-2xl text-sm text-muted-foreground/40">
+          More projects in the archive.
         </p>
         <Link
           to="/projects"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
+          className="inline-flex items-center gap-2 rounded-full bg-foreground/[0.05] px-5 py-2.5 text-sm text-muted-foreground/60 transition-all duration-300 hover:bg-foreground/[0.08] hover:text-foreground"
         >
           <span>←</span>
-          see more projects
+          All projects
         </Link>
       </motion.footer>
     </motion.article>
