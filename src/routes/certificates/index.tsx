@@ -111,202 +111,126 @@ function CertificatesIndex() {
     >
       <motion.header
         variants={item}
-        className="relative overflow-hidden border-b border-border/20 pb-12"
+        className="pb-12"
       >
-        <div className="pointer-events-none absolute inset-x-[18%] top-[8%] h-28 rounded-full bg-primary/14 blur-3xl" />
-        <div className="pointer-events-none absolute right-[6%] top-[10%] h-72 w-72 rounded-full bg-primary/8 blur-[120px]" />
-
-        <div className="flex items-center justify-between gap-4 pb-8">
-          <div className="flex items-center gap-3">
-            <span className="text-primary">
-              <Award size={22} />
+        <div className="flex items-center justify-between gap-4 pb-10">
+          <div className="flex items-center gap-2">
+            <span className="text-muted-foreground/50">
+              <Award size={14} />
             </span>
-            <span className="text-lg uppercase tracking-[0.28em] text-primary/75">
-              credential archive
+            <span className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/60">
+              Certificates
             </span>
           </div>
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground/50 transition-colors duration-300 hover:text-foreground"
           >
             <span>←</span>
-            home
+            Home
           </Link>
         </div>
-        <div className="flex flex-col gap-7 pt-6 lg:pt-10">
-          <div className="grid gap-4">
-            <h1 className="font-serif text-5xl leading-none text-foreground sm:text-6xl xl:text-7xl">
-              Credentials &amp; badge wall.
-            </h1>
-            <p className="max-w-4xl text-base leading-8 text-foreground/76 sm:text-lg">
-              A quieter archive of certifications across platform,
-              engineering, cloud, and product work. Each credential shows
-              issuer, timing, proof, and core skills without a featured
-              certificate taking over the header.
-            </p>
-          </div>
 
-          <div className="grid gap-5 border-t border-border/25 pt-5 sm:grid-cols-2">
-            <div className="space-y-1">
-              <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
-                credentials logged
-              </p>
-              <p className="text-2xl font-serif text-foreground">
-                {certificates.length.toString().padStart(2, '0')}
-              </p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
-                issuers
-              </p>
-              <p className="text-sm leading-7 text-foreground/76">
-                {issuers.length > 0
-                  ? issuers.join(' · ')
-                  : 'google · coursera · meta · cloud'}
-              </p>
-            </div>
-          </div>
+        <div className="flex flex-col gap-6">
+          <h1 className="max-w-2xl text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+            Credentials &amp; Certificates
+          </h1>
+          <p className="max-w-2xl text-lg leading-relaxed text-muted-foreground/70">
+            Professional certifications across platform engineering, cloud,
+            and product work.
+          </p>
+        </div>
+
+        <div className="mt-8 flex items-center gap-8 text-sm text-muted-foreground/50">
+          <span>{certificates.length} credentials</span>
+          <span className="h-px flex-1 bg-border/10" />
+          <span>
+            {issuers.length > 0
+              ? issuers.join(' · ')
+              : 'Various issuers'}
+          </span>
         </div>
       </motion.header>
 
-      <div className="divide-y divide-border/20">
-        {certificates.map((certificate: CertificateMeta, index: number) => {
-          const reverse = index % 2 === 1
-
-          return (
-            <motion.div
-              key={certificate.id}
-              variants={item}
-              className="py-10 first:pt-0 md:py-14"
+      <div className="grid gap-4">
+        {certificates.map((certificate: CertificateMeta, index: number) => (
+          <motion.div
+            key={certificate.id}
+            variants={item}
+          >
+            <Link
+              to="/certificates/$slug"
+              params={{ slug: certificate.slug }}
+              className="group block"
             >
-              <Link
-                to="/certificates/$slug"
-                params={{ slug: certificate.slug }}
-                className="group block"
-              >
-                <article className="relative min-h-[320px]">
-                  <div
-                    className={`media-hover-parent absolute inset-y-0 ${
-                      reverse
-                        ? 'left-0 right-[12%] md:right-[34%]'
-                        : 'left-[12%] right-0 md:left-[34%]'
-                    }`}
-                  >
-                    {certificate.image_url ? (
-                      <img
-                        src={certificate.image_url}
-                        alt={certificate.title}
-                        referrerPolicy="no-referrer"
-                        crossOrigin="anonymous"
-                        className="project-ambient-media absolute inset-0 h-full w-full object-contain"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 bg-linear-to-br from-primary/18 via-muted/12 to-transparent" />
-                    )}
-                    <div
-                      className={`absolute inset-0 ${
-                        reverse
-                          ? 'project-ambient-overlay bg-linear-to-r from-transparent via-background/38 to-background'
-                          : 'project-ambient-overlay bg-linear-to-l from-transparent via-background/38 to-background'
-                      }`}
+              <article className="grid gap-6 rounded-2xl border border-border/10 bg-foreground/[0.01] p-6 transition-all duration-300 hover:border-border/20 hover:bg-foreground/[0.03] sm:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] sm:items-center">
+                {certificate.image_url ? (
+                  <div className="overflow-hidden rounded-xl bg-foreground/[0.02]">
+                    <img
+                      src={certificate.image_url}
+                      alt={certificate.title}
+                      referrerPolicy="no-referrer"
+                      crossOrigin="anonymous"
+                      className="h-48 w-full object-contain transition-transform duration-500 group-hover:scale-[1.02] sm:h-40"
                     />
-                    <div className="absolute inset-0 bg-linear-to-t from-background via-background/10 to-transparent" />
                   </div>
+                ) : (
+                  <div className="flex h-40 items-center justify-center rounded-xl bg-foreground/[0.03]">
+                    <Award size={24} className="text-muted-foreground/30" />
+                  </div>
+                )}
 
-                  <div className="relative z-10 grid gap-8 lg:min-h-[320px] lg:grid-cols-12 lg:items-center">
-                    <div
-                      className={`flex flex-col gap-5 ${
-                        reverse
-                          ? 'lg:col-start-7 lg:col-span-6 lg:text-right'
-                          : 'lg:col-span-6'
-                      }`}
-                    >
-                      <div className="flex items-end gap-4">
-                        {!reverse ? (
-                          <span className="font-serif text-[3.5rem] leading-none text-foreground/9 sm:text-[5rem]">
-                            {(index + 1).toString().padStart(2, '0')}
-                          </span>
-                        ) : null}
-                        <div
-                          className={`space-y-3 ${reverse ? 'ml-auto' : ''}`}
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-muted-foreground/40">
+                      {certificate.issued}
+                    </span>
+                    <span className="text-xs text-muted-foreground/30">·</span>
+                    <span className="text-xs text-muted-foreground/40">
+                      {certificate.issuer}
+                    </span>
+                  </div>
+                  <h2 className="text-xl font-semibold tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
+                    {certificate.title}
+                  </h2>
+                  {certificate.skills.length > 0 ? (
+                    <div className="flex flex-wrap gap-1.5">
+                      {certificate.skills.slice(0, 4).map((skill: string) => (
+                        <span
+                          key={skill}
+                          className="rounded-full bg-foreground/[0.04] px-2.5 py-0.5 text-[11px] text-muted-foreground/50"
                         >
-                          <p className="text-[10px] uppercase tracking-[0.26em] text-primary/75">
-                            credential
-                          </p>
-                          <div className="space-y-2">
-                            <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
-                              {certificate.issued}
-                            </p>
-                            <h2 className="font-serif text-3xl leading-tight text-foreground transition-colors group-hover:text-primary sm:text-4xl">
-                              {certificate.title}
-                            </h2>
-                          </div>
-                        </div>
-                        {reverse ? (
-                          <span className="font-serif text-[3.5rem] leading-none text-foreground/9 sm:text-[5rem]">
-                            {(index + 1).toString().padStart(2, '0')}
-                          </span>
-                        ) : null}
-                      </div>
-
-                      <p className="max-w-2xl text-base leading-8 text-foreground/76">
-                        Issued by {certificate.issuer}
-                        {certificate.expires
-                          ? ` with validity through ${certificate.expires}.`
-                          : ' with no listed expiry.'}
-                      </p>
-
-                      <div
-                        className={`grid gap-4 border-t border-border/20 pt-4 text-sm leading-7 text-foreground/72 sm:grid-cols-2 ${
-                          reverse ? 'lg:text-right' : ''
-                        }`}
-                      >
-                        <div className="space-y-1">
-                          <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-                            issuer
-                          </p>
-                          <p>{certificate.issuer}</p>
-                        </div>
-                        <div className="space-y-1">
-                          <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-                            skills
-                          </p>
-                          <p>
-                            {certificate.skills.length > 0
-                              ? certificate.skills.slice(0, 4).join(' · ')
-                              : 'credential details'}
-                          </p>
-                        </div>
-                      </div>
+                          {skill}
+                        </span>
+                      ))}
                     </div>
-                  </div>
-                </article>
-              </Link>
-            </motion.div>
-          )
-        })}
+                  ) : null}
+                </div>
+              </article>
+            </Link>
+          </motion.div>
+        ))}
       </div>
 
       <motion.footer
         variants={item}
-        className="flex flex-col gap-4 border-t border-border/20 pt-6 sm:flex-row sm:items-end sm:justify-between"
+        className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-end sm:justify-between"
       >
-        <div className="flex gap-6 items-end">
+        <div className="flex items-end gap-6">
           <img
             src="/frieren/frienbook.svg"
-            className="h-16 sm:h-22 inline-block align-bottom"
+            className="h-16 inline-block align-bottom opacity-30 sm:h-22"
           />
-          <p className="max-w-2xl text-sm leading-7 text-muted-foreground">
-            Each credential opens into a clearer detail view with verification,
-            data, and the underlying skill list.
+          <p className="max-w-2xl text-sm text-muted-foreground/40">
+            Each credential opens into a detail view with verification and skills.
           </p>
         </div>
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
+          className="inline-flex items-center gap-2 rounded-full bg-foreground/[0.05] px-5 py-2.5 text-sm text-muted-foreground/60 transition-all duration-300 hover:bg-foreground/[0.08] hover:text-foreground"
         >
           <span>←</span>
-          back home
+          Home
         </Link>
       </motion.footer>
     </motion.section>
