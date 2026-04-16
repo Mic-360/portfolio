@@ -1,10 +1,10 @@
+import { Link, createFileRoute } from '@tanstack/react-router'
+import { AnimatePresence, motion } from 'motion/react'
+import { useState } from 'react'
 import PenIcon from '@/components/ui/pen-icon'
 import { siteMeta } from '@/config/site-data'
 import { getBlogIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
-import { Link, createFileRoute } from '@tanstack/react-router'
-import { AnimatePresence, motion } from 'motion/react'
-import { useState } from 'react'
 
 export const Route = createFileRoute('/blog/')({
   loader: async () => ({
@@ -130,7 +130,6 @@ function BlogIndex() {
       animate="show"
       className="flex flex-col gap-16"
     >
-      {/* Header */}
       <motion.header variants={item} className="relative overflow-hidden pb-8">
         <div className="pointer-events-none absolute inset-x-[18%] top-[8%] h-28 rounded-full bg-primary/10 blur-3xl" />
         <div className="pointer-events-none absolute right-[6%] top-[10%] h-72 w-72 rounded-full bg-primary/6 blur-[120px]" />
@@ -177,7 +176,6 @@ function BlogIndex() {
         </div>
       </motion.header>
 
-      {/* Tag filter bar */}
       {allTags.length > 0 ? (
         <motion.div
           variants={item}
@@ -213,7 +211,6 @@ function BlogIndex() {
         </motion.div>
       ) : null}
 
-      {/* Posts grid */}
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         <AnimatePresence mode="popLayout">
           {filteredPosts.map((post, index) => {
@@ -300,7 +297,6 @@ function BlogIndex() {
         </AnimatePresence>
       </div>
 
-      {/* Footer */}
       <motion.footer
         variants={item}
         className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-end sm:justify-between"

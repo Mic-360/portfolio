@@ -280,7 +280,6 @@ function BlogPost() {
         animate="show"
         className="mx-auto flex w-full max-w-375 flex-col gap-16 pb-16 md:gap-24"
       >
-        {/* Back navigation */}
         <motion.div
           variants={item}
           className="flex items-center justify-between gap-4"
@@ -297,7 +296,6 @@ function BlogPost() {
           </Link>
         </motion.div>
 
-        {/* Hero header */}
         <motion.section variants={item} className="pb-4">
           <div className="flex flex-col gap-6">
             <div className="flex flex-wrap items-center gap-3">
@@ -335,12 +333,10 @@ function BlogPost() {
           <div className="mt-8 h-px w-full bg-border/10" />
         </motion.section>
 
-        {/* Content area with sidebar + ToC */}
         <motion.section
           variants={item}
           className="grid gap-12 lg:grid-cols-[minmax(180px,0.22fr)_minmax(0,0.78fr)] xl:grid-cols-[minmax(180px,0.20fr)_minmax(0,0.56fr)_minmax(140px,0.20fr)]"
         >
-          {/* Left sidebar: metadata */}
           <aside className="grid content-start gap-8 lg:sticky lg:top-24 lg:self-start">
             <div className="grid gap-4">
               <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
@@ -364,7 +360,6 @@ function BlogPost() {
             </div>
           </aside>
 
-          {/* Center: MDX content */}
           <div className="min-w-0">
             <div
               className="mdx-content flex flex-col gap-6 text-base leading-relaxed text-foreground/80 sm:text-lg"
@@ -372,7 +367,6 @@ function BlogPost() {
             />
           </div>
 
-          {/* Right sidebar: Table of Contents (xl+) */}
           <div className="hidden xl:block">
             <div className="sticky top-24 self-start">
               <TableOfContents />
@@ -380,7 +374,6 @@ function BlogPost() {
           </div>
         </motion.section>
 
-        {/* Prev/Next navigation */}
         <motion.section
           variants={item}
           className="border-t border-border/10 pt-8"
@@ -426,7 +419,6 @@ function BlogPost() {
           </div>
         </motion.section>
 
-        {/* Footer */}
         <motion.footer
           variants={item}
           className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
