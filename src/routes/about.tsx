@@ -297,12 +297,9 @@ function AboutPage() {
 
       {profile.gallery && profile.gallery.length > 0 ? (
         <motion.section variants={itemVariants} className="grid gap-6">
-          <div className="flex items-center gap-4">
-            <p className="shrink-0 text-[10px] uppercase tracking-[0.26em] text-primary/75">
-              gallery
-            </p>
-            <div className="h-px flex-1 bg-linear-to-r from-primary/30 to-transparent" />
-          </div>
+          <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+            gallery
+          </p>
           <GravatarGallery
             images={profile.gallery}
             className="grid-cols-2 gap-3 md:grid-cols-4"
