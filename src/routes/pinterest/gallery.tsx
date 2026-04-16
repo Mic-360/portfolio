@@ -112,28 +112,34 @@ function PinterestGalleryPage() {
     >
       <motion.header
         variants={item}
-        className="relative overflow-hidden border-b border-border/20"
+        className="pb-6"
       >
-
         <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <span className="text-primary">
-              <ImageIcon size={22} />
+          <div className="flex items-center gap-2">
+            <span className="text-muted-foreground/50">
+              <ImageIcon size={14} />
             </span>
-            <span className="text-lg uppercase tracking-[0.28em] text-primary/75">
-              pinterest gallery
+            <span className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/60">
+              Pinterest Gallery
             </span>
           </div>
           <div className="flex items-center gap-4">
             <Link
-              to="/"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
+              to="/pinterest"
+              className="inline-flex items-center gap-2 text-sm text-muted-foreground/50 transition-colors duration-300 hover:text-foreground"
             >
               <span>←</span>
-              home
+              Overview
+            </Link>
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 text-sm text-muted-foreground/50 transition-colors duration-300 hover:text-foreground"
+            >
+              Home
             </Link>
           </div>
         </div>
+        <div className="mt-4 h-px w-full bg-border/10" />
       </motion.header>
 
       {pins.length > 0 ? (
@@ -152,7 +158,7 @@ function PinterestGalleryPage() {
                     : ''
               }`}
             >
-              <article className="overflow-hidden rounded border border-border/25 bg-card/20 transition-all duration-300 hover:border-primary/35">
+              <article className="overflow-hidden rounded-2xl border border-border/10 bg-foreground/[0.01] transition-all duration-300 hover:border-border/20 hover:bg-foreground/[0.03]">
                 <a
                   href={pin.url}
                   target="_blank"
@@ -165,23 +171,23 @@ function PinterestGalleryPage() {
                     loading="lazy"
                     width={pin.imageWidth}
                     height={pin.imageHeight}
-                    className="h-auto w-full object-cover transition-transform duration-500 group-hover:scale-[1.025]"
+                    className="h-auto w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                   />
                 </a>
-                <div className="flex items-center justify-between gap-3 border-t border-border/20 px-3 py-2">
+                <div className="flex items-center justify-between gap-3 border-t border-border/10 px-3 py-2">
                   <a
                     href={pin.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground transition-colors hover:text-primary"
+                    className="text-[10px] text-muted-foreground/40 transition-colors duration-300 hover:text-foreground"
                   >
-                    open pin
+                    Open
                   </a>
                   <a
                     href={buildDownloadUrl(pin)}
-                    className="text-[10px] uppercase tracking-[0.2em] text-primary transition-colors hover:text-primary/80"
+                    className="text-[10px] text-muted-foreground/50 transition-colors duration-300 hover:text-foreground"
                   >
-                    download
+                    Download
                   </a>
                 </div>
               </article>
@@ -191,9 +197,9 @@ function PinterestGalleryPage() {
       ) : (
         <motion.div
           variants={item}
-          className="rounded-[1.6rem] border border-border/25 bg-card/16 p-6"
+          className="rounded-3xl border border-border/10 bg-foreground/[0.02] p-8"
         >
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground/60">
             Couldn&apos;t load created pins right now. You can still check them
             on{' '}
             <a
@@ -211,14 +217,14 @@ function PinterestGalleryPage() {
 
       <motion.footer
         variants={item}
-        className="flex flex-col gap-3 border-t border-border/20 pt-6 text-[10px] uppercase tracking-[0.24em] text-muted-foreground sm:flex-row sm:items-center sm:justify-between"
+        className="flex flex-col gap-3 pt-6 text-xs text-muted-foreground/40 sm:flex-row sm:items-center sm:justify-between"
       >
-        <span>last sync: {lastSyncLabel}</span>
+        <span>Last sync: {lastSyncLabel}</span>
         <a
           href={profileUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="transition-colors hover:text-primary"
+          className="transition-colors duration-300 hover:text-foreground"
         >
           {profileUrl.replace('https://', '')}
         </a>
