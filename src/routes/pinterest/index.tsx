@@ -217,7 +217,7 @@ function PinterestPreviewCard({
       href={pin.url}
       target="_blank"
       rel="noopener noreferrer"
-      className={`group block overflow-hidden rounded-[1.75rem] border border-border/25 bg-card/20 transition-colors hover:border-primary/35 ${className}`}
+      className={`group block overflow-hidden rounded-2xl border border-border/10 bg-foreground/[0.01] transition-all duration-300 hover:border-border/20 hover:bg-foreground/[0.03] ${className}`}
     >
       <div className="overflow-hidden">
         <img
@@ -226,14 +226,11 @@ function PinterestPreviewCard({
           loading="lazy"
           width={pin.imageWidth}
           height={pin.imageHeight}
-          className="h-72 w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+          className="h-64 w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
         />
       </div>
-      <div className="grid gap-1 p-4">
-        <p className="text-[10px] uppercase tracking-[0.22em] text-primary/75">
-          created pin
-        </p>
-        <h2 className="text-sm font-medium leading-6 text-foreground transition-colors group-hover:text-primary line-clamp-2">
+      <div className="p-4">
+        <h2 className="text-sm font-medium tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary line-clamp-2">
           {pin.title}
         </h2>
       </div>
@@ -261,18 +258,18 @@ type ActionCardProps = ActionCardInternalLinkProps | ActionCardExternalLinkProps
 
 function ActionCard({ body, href, meta, title, to }: ActionCardProps) {
   const content = (
-    <article className="group flex h-full flex-col justify-between gap-6 rounded-[1.5rem] border border-border/25 bg-card/20 p-5 transition-colors hover:border-primary/35">
+    <article className="group flex h-full flex-col justify-between gap-5 rounded-2xl border border-border/10 bg-foreground/[0.01] p-5 transition-all duration-300 hover:border-border/20 hover:bg-foreground/[0.03]">
       <div className="space-y-2">
-        <p className="text-[10px] uppercase tracking-[0.22em] text-primary/75">
+        <p className="text-xs text-muted-foreground/40">
           {meta}
         </p>
-        <h3 className="font-serif text-2xl leading-tight text-foreground transition-colors group-hover:text-primary">
+        <h3 className="text-lg font-semibold tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
           {title}
         </h3>
-        <p className="text-sm leading-7 text-foreground/72">{body}</p>
+        <p className="text-sm text-muted-foreground/60">{body}</p>
       </div>
-      <div className="text-sm text-muted-foreground transition-colors group-hover:text-primary">
-        open
+      <div className="text-sm text-muted-foreground/40 transition-colors duration-300 group-hover:text-foreground">
+        Open →
       </div>
     </article>
   )
