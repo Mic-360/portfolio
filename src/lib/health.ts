@@ -1,12 +1,10 @@
-// Re-export server functions and types for use in route components.
-// Route files should import from this module (not health.server.ts)
-// to avoid the Vite import-protection warning in the client bundle.
+// ! Re-export server functions and types for use in route components.
+// ! Route files should import from this module (not health.server.ts)
+// ! to avoid the Vite import-protection warning in the client bundle.
 
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
 import { getHealthDataInternal, writeHealthDataInternal } from './health.server'
-
-// ── Types / Schemas ──────────────────────────────────────────────────
 
 export const healthSampleSchema = z.object({
   value: z.union([z.number(), z.string()]),
@@ -29,25 +27,18 @@ export const healthDataSchema = z.object({
 
 export type HealthData = z.infer<typeof healthDataSchema>
 
-// ── Server functions (RPC bridge) ────────────────────────────────────
-
 export const getHealthData = createServerFn({ method: 'GET' }).handler(
-  async () => {
+  () => {
     return getHealthDataInternal()
   },
 )
 
 export const updateHealthData = createServerFn({ method: 'POST' })
   .inputValidator(healthDataSchema)
-  .handler(async ({ data }) => {
+  .handler(({ data }) => {
     return writeHealthDataInternal(data)
   })
 
-// ── Helpers ──────────────────────────────────────────────────────────
-
-/**
- * Aggregates granular health samples by day for cleaner visualization.
- */
 export function aggregateByDay(
   samples: Array<HealthSample> = [],
   type: 'sum' | 'avg' = 'sum',
@@ -75,9 +66,6 @@ export function aggregateByDay(
     }))
 }
 
-/**
- * Aggregates granular health samples by hour for time-series visualization.
- */
 export function aggregateByHour(
   samples: Array<HealthSample> = [],
   type: 'sum' | 'avg' = 'sum',
@@ -106,9 +94,6 @@ export function aggregateByHour(
     }))
 }
 
-/**
- * Calculates statistics for health samples.
- */
 export interface HealthStats {
   total: number
   average: number
@@ -156,9 +141,6 @@ export function calculateStats(
   }
 }
 
-/**
- * Formats metric values with appropriate precision and units.
- */
 export function formatMetricValue(value: number, decimals = 0): string {
   return Number(value.toFixed(decimals)).toLocaleString()
 }

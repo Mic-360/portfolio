@@ -1,12 +1,10 @@
-// Re-export server functions and types for use in route components.
-// Route files should import from this module (not certificates.server.ts)
-// to avoid the Vite import-protection warning in the client bundle.
+// ! Re-export server functions and types for use in route components.
+// ! Route files should import from this module (not certificates.server.ts)
+// ! to avoid the Vite import-protection warning in the client bundle.
 
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
 import { getCertificateBySlugInternal, getCertificateIndexInternal, updateCertificatesDataInternal } from './certificates.server'
-
-// ── Types / Schemas ──────────────────────────────────────────────────
 
 export const certificateSchema = z.object({
   id: z.number(),
@@ -25,8 +23,6 @@ export const updateCertificatesSchema = z.array(certificateSchema.omit({ slug: t
 
 export type CertificateMeta = z.infer<typeof certificateSchema>
 export type CertificateUpdateInput = z.infer<typeof updateCertificatesSchema>[number]
-
-// ── Server functions (RPC bridge) ────────────────────────────────────
 
 export const getCertificateIndex = createServerFn({ method: 'GET' })
   .handler(() => {

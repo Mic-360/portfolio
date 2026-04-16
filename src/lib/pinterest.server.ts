@@ -1,5 +1,5 @@
-// NOTE: This file should only be imported from server-side code or via
-// dynamic import() inside createServerFn handlers.
+// ! NOTE: This file should only be imported from server-side code or via
+// ! dynamic import() inside createServerFn handlers.
 
 import { pinterest } from '@/config/site-data'
 

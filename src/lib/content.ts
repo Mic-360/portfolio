@@ -1,19 +1,17 @@
-// Re-export server functions and types for use in route components.
-// Route files should import from this module (not content.server.ts)
-// to avoid the Vite import-protection warning in the client bundle.
+// ! Re-export server functions and types for use in route components.
+// ! Route files should import from this module (not content.server.ts)
+// ! to avoid the Vite import-protection warning in the client bundle.
 
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
 import {
   getBlogIndexInternal,
   getBlogPostBySlugInternal,
-  getProjectIndexInternal,
-  getProjectBySlugInternal,
   getBlogPostsWithHtmlInternal,
+  getProjectBySlugInternal,
+  getProjectIndexInternal,
   getResumeInternal,
 } from './content.server'
-
-// ── Types ────────────────────────────────────────────────────────────
 
 export type BlogMeta = {
   slug: string
@@ -44,10 +42,6 @@ export type ProjectMeta = {
 export type ProjectPost = ProjectMeta & {
   html: string
 }
-
-// ── Server functions (RPC bridge) ────────────────────────────────────
-// Each function lazily imports from content.server.ts inside the handler,
-// keeping the .server module out of the client bundle entirely.
 
 export const getBlogIndex = createServerFn({ method: 'GET' })
   .handler(async () => {

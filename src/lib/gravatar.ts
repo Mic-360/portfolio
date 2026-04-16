@@ -1,11 +1,5 @@
-/**
- * Isomorphic Gravatar utilities — safe to import from both client and server.
- */
-
 import type { AvatarOptions } from '@/config/gravatar'
 import { gravatarConfig } from '@/config/gravatar'
-
-// ── Email helpers ────────────────────────────────────────────────────
 
 /** Trim whitespace and lowercase an email address per Gravatar spec. */
 export function normalizeEmail(email: string): string {
@@ -25,8 +19,6 @@ export async function hashEmail(email: string): Promise<string> {
     .join('')
 }
 
-// ── Avatar URL builder ───────────────────────────────────────────────
-
 /** Build a Gravatar avatar URL from a hash and optional overrides. */
 export function generateAvatarUrl(
   hash: string,
@@ -39,8 +31,8 @@ export function generateAvatarUrl(
 
   const params = new URLSearchParams()
   if (size) params.set('s', String(size))
-  if (defaultImage) params.set('d', defaultImage)
-  if (rating) params.set('r', rating)
+  params.set('d', defaultImage)
+  params.set('r', rating)
 
   return `${gravatarConfig.avatarBaseUrl}/${hash}?${params.toString()}`
 }

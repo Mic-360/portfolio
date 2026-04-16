@@ -1,5 +1,6 @@
-// NOTE: This file should only be imported from server-side code or via
-// dynamic import() inside createServerFn handlers (see certificates.ts).
+// ! NOTE: This file should only be imported from server-side code or via
+// ! dynamic import() inside createServerFn handlers (see certificates.ts).
+
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { z } from 'zod'

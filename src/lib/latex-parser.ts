@@ -1,6 +1,6 @@
-// LaTeX-to-HTML parser for Bhaumic CV class resume rendering
-// Converts Bhaumic CV class LaTeX commands into semantic HTML
-// Also supports legacy Russell CV class commands for backwards compatibility
+// ? LaTeX-to-HTML parser for Bhaumic CV class resume rendering
+// ? Converts Bhaumic CV class LaTeX commands into semantic HTML
+// ? Also supports legacy Russell CV class commands for backwards compatibility
 
 export interface LatexResumeData {
   html: string

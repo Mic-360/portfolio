@@ -1,9 +1,11 @@
-// NOTE: This file should only be imported from server-side code or via
-// dynamic import() inside createServerFn handlers (see games.ts).
+// ! NOTE: This file should only be imported from server-side code or via
+// ! dynamic import() inside createServerFn handlers (see games.ts).
+
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { z } from 'zod'
-import { gameSchema, type GameMeta } from './games'
+import {  gameSchema } from './games'
+import type {GameMeta} from './games';
 
 const GAMES_SOURCES: Record<string, string> = import.meta.glob(
   '../content/games.json',
@@ -17,11 +19,11 @@ const GAMES_SOURCES: Record<string, string> = import.meta.glob(
 const DATA_DIR = join(process.cwd(), '.data')
 const DATA_FILE = join(DATA_DIR, 'games.json')
 
-let inMemoryGamesData: GameMeta[] | null = null
+let inMemoryGamesData: Array<GameMeta> | null = null
 
 const gamesDataSchema = z.array(gameSchema)
 
-function getBundledGamesData(): GameMeta[] {
+function getBundledGamesData(): Array<GameMeta> {
   const raw = Object.values(GAMES_SOURCES)[0]
   if (!raw) {
     return []
@@ -35,7 +37,7 @@ function getBundledGamesData(): GameMeta[] {
   }
 }
 
-function readPersistedData(): GameMeta[] | null {
+function readPersistedData(): Array<GameMeta> | null {
   try {
     const raw = readFileSync(DATA_FILE, 'utf-8')
     return gamesDataSchema.parse(JSON.parse(raw))
@@ -44,7 +46,7 @@ function readPersistedData(): GameMeta[] | null {
   }
 }
 
-function persistData(data: GameMeta[]): void {
+function persistData(data: Array<GameMeta>): void {
   try {
     mkdirSync(DATA_DIR, { recursive: true })
     writeFileSync(DATA_FILE, JSON.stringify(data, null, 2))
@@ -53,7 +55,7 @@ function persistData(data: GameMeta[]): void {
   }
 }
 
-function readGamesData(): GameMeta[] {
+function readGamesData(): Array<GameMeta> {
   try {
     if (inMemoryGamesData) {
       return inMemoryGamesData
@@ -72,7 +74,7 @@ function readGamesData(): GameMeta[] {
   }
 }
 
-function updateGamesData(newGames: GameMeta[]) {
+function updateGamesData(newGames: Array<GameMeta>) {
   const existingRecords = readGamesData()
   let hasChanges = false
 

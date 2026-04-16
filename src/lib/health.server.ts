@@ -1,5 +1,5 @@
-// NOTE: This file should only be imported from server-side code or via
-// dynamic import() inside createServerFn handlers (see health.ts).
+// ! NOTE: This file should only be imported from server-side code or via
+// ! dynamic import() inside createServerFn handlers (see health.ts).
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { z } from 'zod'
@@ -93,9 +93,9 @@ function readHealthData(): HealthData {
 }
 
 function writeHealthData(data: HealthData) {
-  const merged: HealthData = { 
+  const merged: HealthData = {
     ...data,
-    updatedAt: new Date().toISOString() 
+    updatedAt: new Date().toISOString()
   }
 
   inMemoryHealthData = healthDataSchema.parse(merged)

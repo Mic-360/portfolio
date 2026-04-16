@@ -1,14 +1,13 @@
+// ! NOTE: This file should only be imported from server-side code or via
+// ! dynamic import() inside createServerFn handlers (see gravatar-profile.ts).
+
 import fs from 'node:fs'
 import path from 'node:path'
 
-// NOTE: This file should only be imported from server-side code or via
-// dynamic import() inside createServerFn handlers (see gravatar-profile.ts).
 
 import type { GravatarProfile } from '@/types/gravatar'
 import { gravatarConfig } from '@/config/gravatar'
 import { gravatarProfileSchema } from '@/types/gravatar'
-
-// ── In-memory cache ──────────────────────────────────────────────────
 
 interface CacheEntry {
   data: GravatarProfile
@@ -34,8 +33,6 @@ function setCache(key: string, data: GravatarProfile): void {
     expiresAt: Date.now() + gravatarConfig.cacheTtlMs,
   })
 }
-
-// ── Build-time file cache (persists across parallel SSR processes) ─────
 const BUILD_CACHE_DIR = path.join(process.cwd(), '.tanstack', 'cache')
 
 function getBuildCached(
@@ -68,8 +65,6 @@ function setBuildCache(key: string, data: GravatarProfile): void {
     // Ignore cache errors
   }
 }
-
-// ── Fetch ────────────────────────────────────────────────────────────
 
 /**
  * Fetch a Gravatar profile from the v3 REST API with retries and caching.

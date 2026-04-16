@@ -1,6 +1,7 @@
-// Content server for MDX processing with syntax highlighting
-// NOTE: This file should only be imported from server-side code or via
-// dynamic import() inside createServerFn handlers (see content.ts).
+// ? Content server for MDX processing with syntax highlighting
+// ! NOTE: This file should only be imported from server-side code or via
+// ! dynamic import() inside createServerFn handlers (see content.ts).
+
 import matter from 'gray-matter'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeRaw from 'rehype-raw'
