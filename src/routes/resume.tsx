@@ -88,7 +88,7 @@ function ResumePage() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="flex flex-col gap-10 max-w-4xl mx-auto w-full"
+      className="flex flex-col gap-16 max-w-4xl mx-auto w-full"
     >
       <motion.div
         variants={item}
@@ -96,38 +96,37 @@ function ResumePage() {
         dangerouslySetInnerHTML={{ __html: resume.html }}
       />
 
-      {/* Connect With Me Section */}
       <motion.section
         variants={item}
-        className="flex flex-col gap-10 text-center bg-primary/5 p-10 border-2 border-primary/10 shadow-inner relative overflow-hidden"
+        className="flex flex-col gap-8 text-center rounded-3xl bg-primary/[0.03] p-10 sm:p-14 relative overflow-hidden"
       >
-        <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-50 pointer-events-none" />
-        <div className="relative z-10 flex flex-col gap-4">
+        <div className="absolute inset-0 bg-linear-to-br from-primary/[0.04] via-transparent to-transparent pointer-events-none" />
+        <div className="relative z-10 flex flex-col gap-5">
           <motion.h2
             variants={item}
-            className="text-3xl font-bold tracking-tight"
+            className="font-serif text-3xl tracking-tight sm:text-4xl"
           >
-            Let's Connect!
+            Let's Connect
           </motion.h2>
           <motion.p
             variants={item}
-            className="text-lg text-muted-foreground max-w-2xl mx-auto"
+            className="text-base text-foreground/50 max-w-2xl mx-auto leading-8"
           >
             I'm always open to discussing new projects, creative ideas, or
             opportunities to be part of your visions.
           </motion.p>
           <motion.div
             variants={item}
-            className="flex justify-center gap-4 mt-6"
+            className="flex flex-wrap justify-center gap-4 mt-4"
           >
             <button
               data-cal-namespace="connect"
               data-cal-link={siteInfo.calLink}
               data-cal-config='{"layout":"week_view","useSlotsViewOnSmallScreen":"true"}'
-              className="group inline-flex items-center gap-2 px-6 py-3 bg-primary/60 text-black text-sm font-bold uppercase tracking-widest hover:scale-105 transition-transform shadow-lg hover:shadow-primary/20 cursor-pointer"
+              className="group inline-flex items-center gap-2 rounded-full bg-foreground px-7 py-3 text-sm font-medium text-background transition-all duration-300 hover:bg-primary cursor-pointer"
             >
               Get in Touch
-              <span className="transform group-hover:translate-x-1 transition-transform">
+              <span className="transform group-hover:translate-x-0.5 transition-transform duration-300">
                 →
               </span>
             </button>
@@ -135,9 +134,9 @@ function ResumePage() {
               href="/Resume-web.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 px-6 py-3 border border-border text-foreground text-sm font-bold uppercase tracking-widest hover:bg-primary/10 hover:border-primary transition-colors shadow-lg hover:shadow-primary/20"
+              className="group inline-flex items-center gap-2 rounded-full border border-border/30 px-7 py-3 text-sm font-medium text-foreground transition-all duration-300 hover:border-primary/50 hover:text-primary"
             >
-              Resume
+              Download PDF
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -148,7 +147,7 @@ function ResumePage() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="w-4 h-4"
+                className="w-3.5 h-3.5"
               >
                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                 <polyline points="15 3 21 3 21 9" />
@@ -162,9 +161,9 @@ function ResumePage() {
       <motion.footer variants={item}>
         <Link
           to="/"
-          className="group inline-flex items-center gap-2 italic text-muted-foreground hover:text-primary transition-colors text-md"
+          className="group inline-flex items-center gap-2 text-xs text-muted-foreground/40 hover:text-primary transition-colors duration-300"
         >
-          <span className="transform group-hover:-translate-x-1 transition-transform">
+          <span className="transform group-hover:-translate-x-0.5 transition-transform duration-300">
             ←
           </span>
           back
