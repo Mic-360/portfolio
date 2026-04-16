@@ -1,5 +1,5 @@
-import { motion } from 'motion/react'
 import { Link, createFileRoute } from '@tanstack/react-router'
+import { motion } from 'motion/react'
 import { siteInfo, siteMeta } from '@/config/site-data'
 import { getResume } from '@/lib/content'
 
@@ -42,8 +42,18 @@ export const Route = createFileRoute('/resume')({
             '@context': 'https://schema.org',
             '@type': 'BreadcrumbList',
             itemListElement: [
-              { '@type': 'ListItem', position: 1, name: 'Home', item: siteMeta.baseUrl },
-              { '@type': 'ListItem', position: 2, name: 'Resume', item: canonicalUrl },
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: siteMeta.baseUrl,
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Resume',
+                item: canonicalUrl,
+              },
             ],
           }),
         },
@@ -80,7 +90,11 @@ function ResumePage() {
 
   const item = {
     hidden: { opacity: 0, y: 28 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] } },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] as const },
+    },
   }
 
   return (
@@ -98,9 +112,9 @@ function ResumePage() {
 
       <motion.section
         variants={item}
-        className="flex flex-col gap-8 text-center rounded-3xl bg-primary/[0.03] p-10 sm:p-14 relative overflow-hidden"
+        className="flex flex-col gap-8 text-center rounded-3xl bg-primary/3 p-10 sm:p-14 relative overflow-hidden"
       >
-        <div className="absolute inset-0 bg-linear-to-br from-primary/[0.04] via-transparent to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-br from-primary/4 via-transparent to-transparent pointer-events-none" />
         <div className="relative z-10 flex flex-col gap-5">
           <motion.h2
             variants={item}

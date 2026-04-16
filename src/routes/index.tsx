@@ -3,16 +3,16 @@ import { motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 
 import type { CertificateMeta } from '@/lib/certificates'
-import { getCertificateIndex } from '@/lib/certificates'
 import type { BlogMeta, ProjectMeta } from '@/lib/content'
+import type { HealthSample } from '@/lib/health'
+import type { PinterestCreatedPin } from '@/lib/pinterest'
+import { getCertificateIndex } from '@/lib/certificates'
 import { getBlogIndex, getProjectIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
 import { getGamesData } from '@/lib/games'
 import { hashEmail } from '@/lib/gravatar'
 import { getGravatarProfile } from '@/lib/gravatar-profile'
-import type { HealthSample } from '@/lib/health'
 import { getHealthData } from '@/lib/health'
-import type { PinterestCreatedPin } from '@/lib/pinterest'
 import { getPinterestCreatedPins } from '@/lib/pinterest'
 
 import { KeyboardHint } from '@/components/CommandMenu'
@@ -618,8 +618,8 @@ function App() {
                     <article
                       className={`project-card-apple relative overflow-hidden rounded-2xl h-full ${
                         isTall
-                          ? 'min-h-[420px] md:min-h-[640px]'
-                          : 'min-h-[340px] md:min-h-[300px]'
+                          ? 'min-h-105 md:min-h-160'
+                          : 'min-h-85 md:min-h-75'
                       }`}
                     >
                       <div className="media-hover-parent absolute inset-0">
@@ -629,11 +629,11 @@ function App() {
                           className="media-hover-image absolute inset-0 h-full w-full object-cover"
                           loading="lazy"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
+                        <div className="absolute inset-0 bg-linear-to-t from-background via-background/50 to-transparent" />
+                        <div className="absolute inset-0 bg-linear-to-t from-background/80 via-transparent to-transparent" />
                       </div>
 
-                      <div className="absolute inset-x-0 bottom-0 z-10 border-t border-white/[0.06] bg-background/60 p-5 backdrop-blur-xl sm:p-6">
+                      <div className="absolute inset-x-0 bottom-0 z-10 border-t border-white/6 bg-background/60 p-5 backdrop-blur-xl sm:p-6">
                         <div className="flex flex-col gap-2.5">
                           <div className="flex items-center justify-between gap-4">
                             <p className="text-[10px] uppercase tracking-[0.25em] text-primary/50">
@@ -871,7 +871,6 @@ function App() {
         <Section title="pinterest">
           {featuredPins.length > 0 ? (
             <div className="flex flex-col gap-6">
-              {/* Hero pin */}
               {featuredPins[0] ? (
                 <a
                   href={featuredPins[0].url}
@@ -880,7 +879,7 @@ function App() {
                   className="group block"
                 >
                   <div className="project-card-apple relative overflow-hidden rounded-2xl border border-border/10">
-                    <div className="media-hover-parent relative aspect-[16/9]">
+                    <div className="media-hover-parent relative aspect-video">
                       <img
                         src={featuredPins[0].imageUrl}
                         alt={featuredPins[0].title}
@@ -889,7 +888,7 @@ function App() {
                         height={featuredPins[0].imageHeight}
                         className="media-hover-image absolute inset-0 h-full w-full object-cover"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                      <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
                     </div>
                     <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
                       <p className="line-clamp-2 font-serif text-sm leading-tight tracking-tight text-white sm:text-base">
@@ -900,7 +899,6 @@ function App() {
                 </a>
               ) : null}
 
-              {/* Remaining pins grid */}
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {featuredPins.slice(1).map((pin: PinterestCreatedPin) => (
                   <a
@@ -920,7 +918,7 @@ function App() {
                           height={pin.imageHeight}
                           className="media-hover-image absolute inset-0 h-full w-full object-cover"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-card/50 via-transparent to-transparent" />
+                        <div className="absolute inset-0 bg-linear-to-t from-card/50 via-transparent to-transparent" />
                       </div>
                       <div className="p-2.5">
                         <p className="line-clamp-1 text-[11px] font-medium text-foreground/70 transition-colors duration-300 group-hover:text-primary">
@@ -975,7 +973,7 @@ function App() {
                   }`}
                 >
                   {index === 0 && cert.image_url ? (
-                    <div className="shrink-0 overflow-hidden rounded-lg bg-foreground/[0.02] sm:w-28">
+                    <div className="shrink-0 overflow-hidden rounded-lg bg-foreground/2 sm:w-28">
                       <img
                         src={cert.image_url}
                         alt={cert.title}

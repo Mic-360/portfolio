@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
+import type { CertificateMeta } from '@/lib/certificates'
 import { gravatar, siteImages, siteInfo, siteMeta } from '@/config/site-data'
 import { getBlogIndex, getProjectIndex } from '@/lib/content'
-import type { CertificateMeta } from '@/lib/certificates'
 import { getCertificateIndex } from '@/lib/certificates'
 
 function toBulletList(

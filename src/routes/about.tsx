@@ -140,11 +140,11 @@ function AboutPage() {
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className="mx-auto flex w-full max-w-6xl flex-col gap-16"
+      className="mx-auto flex w-full max-w-7xl flex-col gap-16"
     >
       <motion.section
         variants={itemVariants}
-        className="relative min-h-[560px] overflow-hidden rounded-3xl"
+        className="relative min-h-140 overflow-hidden rounded-3xl"
       >
         <div
           className="absolute inset-0"
@@ -156,10 +156,10 @@ function AboutPage() {
         />
         <div className="absolute inset-0 bg-linear-to-br from-background/88 via-background/42 to-black/72" />
         <div className="pointer-events-none absolute inset-x-[18%] top-[10%] h-28 rounded-full bg-primary/12 blur-3xl" />
-        <div className="pointer-events-none absolute left-[8%] top-[20%] h-[1px] w-[34%] bg-white/14" />
-        <div className="pointer-events-none absolute right-[10%] top-[22%] h-[1px] w-[22%] bg-white/10" />
+        <div className="pointer-events-none absolute left-[8%] top-[20%] h-px w-[34%] bg-white/14" />
+        <div className="pointer-events-none absolute right-[10%] top-[22%] h-px w-[22%] bg-white/10" />
 
-        <div className="relative z-10 flex min-h-[560px] flex-col justify-between gap-10 p-6 sm:p-8 lg:p-10">
+        <div className="relative z-10 flex min-h-140 flex-col justify-between gap-10 p-6 sm:p-8 lg:p-10">
           <div className="flex items-start justify-between gap-6 text-[10px] uppercase tracking-[0.2em] text-white/45">
             <span>about</span>
             <span>subject_{profile.hash.substring(0, 6)}</span>

@@ -98,7 +98,7 @@ function ReadmePage() {
     show: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.85, ease: [0.25, 0.1, 0.25, 1] },
+      transition: { duration: 0.85, ease: [0.25, 0.1, 0.25, 1] as const },
     },
   }
 
@@ -169,7 +169,7 @@ function ReadmePage() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="mx-auto flex w-full max-w-[1500px] flex-col gap-20 md:gap-28"
+      className="mx-auto flex w-full max-w-375 flex-col gap-20 md:gap-28"
     >
       <motion.section
         variants={item}
@@ -224,7 +224,7 @@ function ReadmePage() {
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-3xl bg-foreground/[0.02] p-4">
+          <div className="overflow-hidden rounded-3xl bg-foreground/2 p-4">
             <ReadmeImage
               src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=mic-360&theme=transparent"
               alt="GitHub profile summary"
@@ -247,7 +247,7 @@ function ReadmePage() {
           {summaryCards.map((card) => (
             <div
               key={card.key}
-              className="overflow-hidden rounded-2xl border border-border/10 bg-foreground/[0.01] p-5 transition-all duration-300 hover:border-border/20 hover:bg-foreground/[0.03]"
+              className="overflow-hidden rounded-2xl border border-border/10 bg-foreground/1 p-5 transition-all duration-300 hover:border-border/20 hover:bg-foreground/3"
             >
               <p className="mb-3 text-xs text-muted-foreground/40 capitalize">
                 {card.label}
@@ -269,7 +269,7 @@ function ReadmePage() {
           Contribution Map
         </p>
 
-        <div className="overflow-hidden rounded-2xl border border-border/10 bg-foreground/[0.01] p-5">
+        <div className="overflow-hidden rounded-2xl border border-border/10 bg-foreground/1 p-5">
           <ReadmeImage
             src="https://raw.githubusercontent.com/Mic-360/Mic-360/main/github-metrics.svg"
             alt="Contributions Metrics"
@@ -293,7 +293,7 @@ function ReadmePage() {
             {toolIcons.map((icon) => (
               <div
                 key={icon.alt}
-                className="flex flex-col items-center gap-2.5 rounded-xl p-3 text-center transition-colors duration-300 hover:bg-foreground/[0.03]"
+                className="flex flex-col items-center gap-2.5 rounded-xl p-3 text-center transition-colors duration-300 hover:bg-foreground/3"
               >
                 <ReadmeImage
                   src={`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${icon.src}`}
@@ -373,7 +373,7 @@ function ReadmePage() {
       <motion.footer variants={item} className="pt-6">
         <Link
           to="/"
-          className="inline-flex items-center gap-2 rounded-full bg-foreground/[0.05] px-5 py-2.5 text-sm text-muted-foreground/60 transition-all duration-300 hover:bg-foreground/[0.08] hover:text-foreground"
+          className="inline-flex items-center gap-2 rounded-full bg-foreground/5 px-5 py-2.5 text-sm text-muted-foreground/60 transition-all duration-300 hover:bg-foreground/8 hover:text-foreground"
         >
           ← Home
         </Link>

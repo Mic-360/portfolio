@@ -1,8 +1,8 @@
+import { createFileRoute } from '@tanstack/react-router'
+import type { CertificateMeta } from '@/lib/certificates'
 import { siteMeta } from '@/config/site-data'
 import { getBlogIndex, getProjectIndex } from '@/lib/content'
-import type { CertificateMeta } from '@/lib/certificates'
 import { getCertificateIndex } from '@/lib/certificates'
-import { createFileRoute } from '@tanstack/react-router'
 
 type SitemapImage = {
   loc: string
