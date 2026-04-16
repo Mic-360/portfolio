@@ -160,7 +160,7 @@ function AboutPage() {
         <div className="pointer-events-none absolute right-[10%] top-[22%] h-[1px] w-[22%] bg-white/10" />
 
         <div className="relative z-10 flex min-h-[560px] flex-col justify-between gap-10 p-6 sm:p-8 lg:p-10">
-          <div className="flex items-start justify-between gap-6 text-[10px] uppercase tracking-[0.28em] text-white/68">
+          <div className="flex items-start justify-between gap-6 text-[10px] uppercase tracking-[0.2em] text-white/45">
             <span>about</span>
             <span>subject_{profile.hash.substring(0, 6)}</span>
           </div>
@@ -182,10 +182,10 @@ function AboutPage() {
                   />
                 </a>
                 <div className="min-w-0">
-                  <p className="text-[10px] uppercase tracking-[0.28em] text-white/60">
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-white/40">
                     identity
                   </p>
-                  <h1 className="mt-3 font-serif text-4xl leading-none text-white sm:text-5xl lg:text-6xl">
+                  <h1 className="mt-3 font-serif text-4xl leading-[1.06] tracking-tight text-white sm:text-5xl lg:text-6xl">
                     {profile.display_name}
                   </h1>
                 </div>
