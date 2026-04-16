@@ -5,7 +5,7 @@ import { motion } from 'motion/react'
 import type { PinterestCreatedPin } from '@/lib/pinterest'
 import { getPinterestCreatedPins } from '@/lib/pinterest'
 import { siteMeta } from '@/config/site-data'
-import { cn } from '@/lib/utils'
+
 
 export const Route = createFileRoute('/pinterest/')({
   loader: async () => {
