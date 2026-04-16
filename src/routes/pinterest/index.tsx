@@ -205,32 +205,6 @@ function PinterestIndexPage() {
   )
 }
 
-function PinterestInfoCard({
-  label,
-  value,
-  className,
-}: {
-  label: string
-  value: string
-  className?: string
-}) {
-  return (
-    <div
-      className={cn(
-        className,
-        'rounded-[1.4rem] border border-border/25 bg-card/18 p-4',
-      )}
-    >
-      <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
-        {label}
-      </p>
-      <p className="mt-3 font-serif text-2xl leading-none text-foreground">
-        {value}
-      </p>
-    </div>
-  )
-}
-
 function PinterestPreviewCard({
   pin,
   className = '',
