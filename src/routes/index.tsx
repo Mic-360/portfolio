@@ -236,7 +236,7 @@ function App() {
           <span className="text-3xl md:text-5xl lg:text-7xl font-semibold tracking-tight text-foreground font-serif">
             {siteInfo.name}
           </span>
-          <span className="text-sm text-muted-foreground/50">
+          <span className="text-sm text-muted-foreground/70">
             {siteInfo.currentRole}
           </span>
         </div>
@@ -249,13 +249,13 @@ function App() {
         variants={item}
         className="flex flex-col items-center text-center"
       >
-        <p className="text-[11px] uppercase tracking-[0.3em] text-primary/55 mb-8">
+        <p className="text-[11px] uppercase tracking-[0.3em] text-primary/80 mb-8">
           android · ai · cloud · web · design · devops
         </p>
         <h1 className="max-w-5xl font-serif text-5xl leading-[1.06] tracking-tight text-foreground sm:text-6xl lg:text-7xl xl:text-8xl">
           Designing and shipping software that feels a step ahead.
         </h1>
-        <p className="mt-7 max-w-2xl text-base leading-8 text-foreground/50 sm:text-lg">
+        <p className="mt-7 max-w-2xl text-base leading-8 text-foreground/70 sm:text-lg">
           {siteInfo.currentRole} based in {siteInfo.location}, building web and
           android products with AI, cloud systems, and a latest-is-greatest
           mindset. Fewer widgets, more atmosphere, and work that reads clearly
@@ -341,7 +341,7 @@ function App() {
                 className="mt-1 block text-lg font-semibold leading-tight transition-colors hover:text-primary sm:text-xl"
               >
                 {siteInfo.currentRole}
-                <span className="block text-sm font-normal text-foreground/50 sm:inline sm:pl-2">
+                <span className="block text-sm font-normal text-foreground/70 sm:inline sm:pl-2">
                   at {siteInfo.currentCompany}
                 </span>
               </a>
@@ -349,7 +349,7 @@ function App() {
           </div>
 
           <div className="relative isolate w-full">
-            <p className="relative z-10 max-w-xl text-sm leading-7 text-foreground/50">
+            <p className="relative z-10 max-w-xl text-sm leading-7 text-foreground/70">
               Current favorite game -{' '}
               <em className="italic font-medium text-foreground/70">
                 {siteInfo.currentGame}
@@ -390,7 +390,7 @@ function App() {
                   <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-primary/70 mb-1.5">
                     Education
                   </p>
-                  <p className="text-xs leading-5 text-foreground/55">
+                  <p className="text-xs leading-5 text-foreground/70">
                     {siteInfo.educationLine}
                   </p>
                 </div>
@@ -427,7 +427,7 @@ function App() {
                   <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-primary/70 mb-1.5">
                     Interests
                   </p>
-                  <p className="text-xs leading-5 text-foreground/55">
+                  <p className="text-xs leading-5 text-foreground/70">
                     {siteInfo.interests}
                   </p>
                 </div>
@@ -472,7 +472,7 @@ function App() {
                   <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-primary/70 mb-1.5">
                     Capabilities
                   </p>
-                  <p className="text-xs leading-5 text-foreground/55">
+                  <p className="text-xs leading-5 text-foreground/70">
                     i can build{' '}
                     <span className="font-semibold text-primary">
                       literally anything.
@@ -663,14 +663,14 @@ function App() {
                                 ? project.categories[0]
                                 : 'project'}
                             </p>
-                            <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
+                            <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
                               {formatDate(project.date)}
                             </p>
                           </div>
                           <h3 className="font-serif text-xl leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary sm:text-2xl lg:text-3xl">
                             {project.title}
                           </h3>
-                          <p className="line-clamp-2 text-sm leading-7 text-foreground/55">
+                          <p className="line-clamp-2 text-sm leading-7 text-foreground/70">
                             {project.summary}
                           </p>
                           {project.stack.length > 0 ? (
@@ -687,7 +687,7 @@ function App() {
             })}
           </div>
           <div className="flex items-center justify-between gap-4">
-            <p className="text-sm text-muted-foreground/50">
+            <p className="text-sm text-muted-foreground/70">
               More in the archive.
             </p>
             <Link
@@ -952,7 +952,7 @@ function App() {
 
               <Link
                 to="/pinterest"
-                className="inline-flex items-center gap-2 self-end text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
+                className="inline-flex items-center gap-2 self-end text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
               >
                 full gallery
                 <span className="transition-transform duration-300 group-hover:translate-x-1">
@@ -1034,7 +1034,7 @@ function App() {
           </div>
           <Link
             to="/certificates"
-            className="inline-flex items-center gap-2 self-end text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
+            className="inline-flex items-center gap-2 self-end text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
           >
             all credentials
             <span>&rarr;</span>
@@ -1079,7 +1079,7 @@ function App() {
                     Say hello when the work needs clarity, pace, and someone who
                     can ship the whole thing.
                   </h2>
-                  <p className="max-w-3xl text-base leading-8 text-foreground/50 sm:text-lg">
+                  <p className="max-w-3xl text-base leading-8 text-foreground/70 sm:text-lg">
                     Read my{' '}
                     {contactLinks.map((link, index) => (
                       <span key={link.label}>
@@ -1123,10 +1123,10 @@ function App() {
                     />
                   </a>
                   <div className="grid gap-2">
-                    <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
                       public profile
                     </p>
-                    <p className="max-w-2xl text-sm leading-7 text-foreground/50">
+                    <p className="max-w-2xl text-sm leading-7 text-foreground/70">
                       {profile?.description || siteInfo.tagline}
                     </p>
                     {profile?.verified_accounts?.length ? (
@@ -1143,7 +1143,7 @@ function App() {
               <div className="grid gap-0">
                 <Link
                   to="/readme"
-                  className="flex items-center justify-between gap-4 border-b border-border/10 py-4 text-sm leading-7 text-foreground/55 transition-colors duration-300 hover:text-primary"
+                  className="flex items-center justify-between gap-4 border-b border-border/10 py-4 text-sm leading-7 text-foreground/70 transition-colors duration-300 hover:text-primary"
                 >
                   <span className="font-medium">README</span>
                   <span className="text-muted-foreground/35 text-xs">
@@ -1152,7 +1152,7 @@ function App() {
                 </Link>
                 <Link
                   to="/resume"
-                  className="flex items-center justify-between gap-4 border-b border-border/10 py-4 text-sm leading-7 text-foreground/55 transition-colors duration-300 hover:text-primary"
+                  className="flex items-center justify-between gap-4 border-b border-border/10 py-4 text-sm leading-7 text-foreground/70 transition-colors duration-300 hover:text-primary"
                 >
                   <span className="font-medium">Resume</span>
                   <span className="text-muted-foreground/35 text-xs">
@@ -1161,7 +1161,7 @@ function App() {
                 </Link>
                 <Link
                   to="/blog"
-                  className="flex items-center justify-between gap-4 border-b border-border/10 py-4 text-sm leading-7 text-foreground/55 transition-colors duration-300 hover:text-primary"
+                  className="flex items-center justify-between gap-4 border-b border-border/10 py-4 text-sm leading-7 text-foreground/70 transition-colors duration-300 hover:text-primary"
                 >
                   <span className="font-medium">Writing</span>
                   <span className="text-muted-foreground/35 text-xs">
@@ -1172,7 +1172,7 @@ function App() {
                   href={gravatar.profileUrl}
                   target="_blank"
                   rel="noopener noreferrer me"
-                  className="flex items-center justify-between gap-4 py-4 text-sm leading-7 text-foreground/55 transition-colors duration-300 hover:text-primary"
+                  className="flex items-center justify-between gap-4 py-4 text-sm leading-7 text-foreground/70 transition-colors duration-300 hover:text-primary"
                 >
                   <span className="font-medium">Gravatar</span>
                   <span className="text-muted-foreground/35 text-xs">

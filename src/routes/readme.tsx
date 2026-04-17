@@ -181,7 +181,7 @@ function ReadmePage() {
           </p>
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground/50 transition-colors duration-300 hover:text-foreground"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground/70 transition-colors duration-300 hover:text-foreground"
           >
             <span>←</span>
             Home
@@ -204,7 +204,7 @@ function ReadmePage() {
                   href="https://github.com/Mic-360"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-muted-foreground/50 transition-colors duration-300 hover:text-foreground"
+                  className="text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-foreground"
                 >
                   github.com/Mic-360
                 </a>
@@ -219,7 +219,7 @@ function ReadmePage() {
               stronger editorial rhythm around code, tools, and output.
             </p>
 
-            <div className="flex items-center gap-6 text-sm text-muted-foreground/50">
+            <div className="flex items-center gap-6 text-sm text-muted-foreground/70">
               <span>Web · Android · AI · Cloud</span>
             </div>
           </div>
@@ -239,7 +239,7 @@ function ReadmePage() {
       </motion.section>
 
       <motion.section variants={item} className="grid gap-6">
-        <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+        <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/70">
           Profile Summary
         </p>
 
@@ -249,7 +249,7 @@ function ReadmePage() {
               key={card.key}
               className="overflow-hidden rounded-2xl border border-border/10 bg-foreground/1 p-5 transition-all duration-300 hover:border-border/20 hover:bg-foreground/3"
             >
-              <p className="mb-3 text-xs text-muted-foreground/40 capitalize">
+              <p className="mb-3 text-xs text-muted-foreground/70 capitalize">
                 {card.label}
               </p>
               <ReadmeImage
@@ -265,7 +265,7 @@ function ReadmePage() {
       </motion.section>
 
       <motion.section variants={item} className="grid gap-6">
-        <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+        <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/70">
           Contribution Map
         </p>
 
@@ -285,7 +285,7 @@ function ReadmePage() {
         className="grid gap-16 lg:grid-cols-[minmax(0,1.1fr)_minmax(240px,0.9fr)]"
       >
         <div className="grid gap-6">
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+          <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/70">
             Languages &amp; Tools
           </p>
 
@@ -302,7 +302,7 @@ function ReadmePage() {
                   height={36}
                   className="h-9 w-9 object-contain"
                 />
-                <span className="text-[10px] text-muted-foreground/50">
+                <span className="text-[10px] text-muted-foreground/70">
                   {icon.alt}
                 </span>
               </div>
@@ -311,7 +311,7 @@ function ReadmePage() {
         </div>
 
         <div className="grid gap-6">
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+          <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/70">
             Workspace
           </p>
 
@@ -333,7 +333,7 @@ function ReadmePage() {
         className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center"
       >
         <div className="flex flex-col gap-6">
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+          <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/70">
             Connect
           </p>
           <h2 className="max-w-lg text-3xl font-semibold tracking-tight text-foreground">
@@ -353,7 +353,7 @@ function ReadmePage() {
                 className="flex items-center justify-between gap-4 border-b border-border/10 py-3 text-sm text-foreground/70 transition-colors duration-300 hover:text-foreground"
               >
                 <span>{social.label}</span>
-                <span className="text-muted-foreground/40">↗</span>
+                <span className="text-muted-foreground/70">↗</span>
               </a>
             ))}
           </div>

@@ -123,21 +123,21 @@ function PinterestGalleryPage() {
             <span className="text-primary/50">
               <ImageIcon size={18} />
             </span>
-            <span className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+            <span className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/70">
               masonry gallery
             </span>
           </div>
           <div className="flex items-center gap-4">
             <Link
               to="/pinterest"
-              className="inline-flex items-center gap-2 text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
+              className="inline-flex items-center gap-2 text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
             >
               <span>&larr;</span>
               overview
             </Link>
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
+              className="inline-flex items-center gap-2 text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
             >
               home
             </Link>
@@ -146,7 +146,7 @@ function PinterestGalleryPage() {
 
         <div className="flex items-center justify-between gap-4 pt-6">
           <div className="space-y-1">
-            <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
+            <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
               total pins
             </p>
             <p className="font-serif text-2xl text-foreground">
@@ -201,13 +201,13 @@ function PinterestGalleryPage() {
                     href={pin.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
+                    className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
                   >
                     Open
                   </a>
                   <a
                     href={buildDownloadUrl(pin)}
-                    className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
+                    className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
                   >
                     Download
                   </a>
@@ -222,7 +222,7 @@ function PinterestGalleryPage() {
           className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-border/10 bg-card/30 p-12"
         >
           <ImageIcon size={32} className="text-muted-foreground/20" />
-          <p className="text-sm text-foreground/50">
+          <p className="text-sm text-foreground/70">
             Couldn&apos;t load created pins right now. You can still check them
             on{' '}
             <a
@@ -243,7 +243,7 @@ function PinterestGalleryPage() {
         variants={item}
         className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-end sm:justify-between"
       >
-        <p className="max-w-2xl text-sm leading-7 text-muted-foreground/40">
+        <p className="max-w-2xl text-sm leading-7 text-muted-foreground/70">
           Every pin is download-ready. Browse the overview for curated
           highlights.
         </p>
@@ -252,13 +252,13 @@ function PinterestGalleryPage() {
             href={profileUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
+            className="text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
           >
             {profileUrl.replace('https://', '')}
           </a>
           <Link
             to="/pinterest"
-            className="inline-flex items-center gap-2 text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
+            className="inline-flex items-center gap-2 text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
           >
             <span>&larr;</span>
             overview

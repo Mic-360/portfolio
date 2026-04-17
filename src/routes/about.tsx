@@ -297,7 +297,7 @@ function AboutPage() {
 
       {profile.gallery && profile.gallery.length > 0 ? (
         <motion.section variants={itemVariants} className="grid gap-6">
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+          <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/70">
             gallery
           </p>
           <GravatarGallery
@@ -309,7 +309,7 @@ function AboutPage() {
 
       <motion.footer
         variants={itemVariants}
-        className="flex flex-wrap items-center justify-between gap-4 pt-6 text-xs text-muted-foreground/40"
+        className="flex flex-wrap items-center justify-between gap-4 pt-6 text-xs text-muted-foreground/70"
       >
         <span>identity powered by gravatar</span>
         <Link

@@ -58,7 +58,7 @@ export default function Footer() {
                 The work can end here, or this can be the point where we start
                 building together.
               </h2>
-              <p className="max-w-2xl text-base leading-8 text-foreground/55 sm:text-lg">
+              <p className="max-w-2xl text-base leading-8 text-foreground/70 sm:text-lg">
                 Open the public profile, scan the QR, or jump into the build
                 trail.
               </p>
@@ -66,7 +66,7 @@ export default function Footer() {
 
             <div className="h-px w-full bg-border/15" />
 
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
               <span>MIT licensed</span>
               <span>built with TanStack Start</span>
               <Link to="/rss" className="transition-colors hover:text-primary">
@@ -85,10 +85,10 @@ export default function Footer() {
               className="group flex items-end justify-between gap-5 lg:justify-end"
             >
               <div className="grid gap-1.5 text-left lg:text-right">
-                <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
                   scan profile
                 </p>
-                <p className="text-sm leading-7 text-foreground/55">
+                <p className="text-sm leading-7 text-foreground/70">
                   Open the public identity card and verified links.
                 </p>
               </div>
@@ -134,7 +134,7 @@ export default function Footer() {
                 })}
             </ul>
 
-            <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40 lg:justify-self-end">
+            <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70 lg:justify-self-end">
               {siteInfo.name} · {siteInfo.currentRole}
             </p>
           </div>

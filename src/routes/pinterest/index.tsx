@@ -109,13 +109,13 @@ function PinterestIndexPage() {
             <span className="text-primary/50">
               <ImageIcon size={18} />
             </span>
-            <span className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+            <span className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/70">
               visual archive
             </span>
           </div>
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
+            className="inline-flex items-center gap-2 text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
           >
             <span>&larr;</span>
             home
@@ -127,7 +127,7 @@ function PinterestIndexPage() {
             <h1 className="font-serif text-4xl leading-[1.08] tracking-tight text-foreground sm:text-5xl xl:text-6xl">
               Visual studies, curated pins.
             </h1>
-            <p className="max-w-2xl text-base leading-8 text-foreground/50 sm:text-lg">
+            <p className="max-w-2xl text-base leading-8 text-foreground/70 sm:text-lg">
               Browse visual previews, download assets, or jump into the full
               masonry gallery.
             </p>
@@ -135,7 +135,7 @@ function PinterestIndexPage() {
 
           <div className="flex items-center justify-between gap-4">
             <div className="space-y-1">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
                 pins synced
               </p>
               <p className="font-serif text-2xl text-foreground">
@@ -143,10 +143,10 @@ function PinterestIndexPage() {
               </p>
             </div>
             <div className="space-y-1 text-right">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
                 last sync
               </p>
-              <p className="text-xs text-muted-foreground/50">
+              <p className="text-xs text-muted-foreground/70">
                 {lastSyncLabel}
               </p>
             </div>
@@ -282,7 +282,7 @@ function PinterestIndexPage() {
         className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-end sm:justify-between"
       >
         <div className="flex items-end gap-6">
-          <p className="max-w-2xl text-sm leading-7 text-muted-foreground/40">
+          <p className="max-w-2xl text-sm leading-7 text-muted-foreground/70">
             Browse the full masonry gallery or visit the live Pinterest feed for
             more.
           </p>
@@ -292,13 +292,13 @@ function PinterestIndexPage() {
             href={profileUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
+            className="text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
           >
             {profileUrl.replace('https://', '')}
           </a>
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
+            className="inline-flex items-center gap-2 text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
           >
             <span>&larr;</span>
             back home
@@ -341,7 +341,7 @@ function ActionCard({ body, href, meta, title, to }: ActionCardProps) {
         <h3 className="font-serif text-lg leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
           {title}
         </h3>
-        <p className="text-sm leading-7 text-foreground/50">{body}</p>
+        <p className="text-sm leading-7 text-foreground/70">{body}</p>
       </div>
       <div className="flex items-center justify-between gap-4 border-t border-border/8 pt-3">
         <span className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/30">

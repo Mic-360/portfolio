@@ -136,13 +136,13 @@ function ProjectsIndex() {
             <span className="text-primary/50">
               <LayersIcon size={18} />
             </span>
-            <span className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+            <span className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/70">
               projects archive
             </span>
           </div>
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
+            className="inline-flex items-center gap-2 text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
           >
             <span>&larr;</span>
             home
@@ -154,7 +154,7 @@ function ProjectsIndex() {
             <h1 className="font-serif text-4xl leading-[1.08] tracking-tight text-foreground sm:text-5xl xl:text-6xl">
               Every project, one archive.
             </h1>
-            <p className="max-w-2xl text-base leading-8 text-foreground/50 sm:text-lg">
+            <p className="max-w-2xl text-base leading-8 text-foreground/70 sm:text-lg">
               An archive of Android, web, AI, and systems projects. Each build
               has its own atmosphere, technical footprint, and path into the
               full write-up.
@@ -163,7 +163,7 @@ function ProjectsIndex() {
 
           <div className="flex items-center justify-between gap-4">
             <div className="space-y-1">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
                 selected builds
               </p>
               <p className="font-serif text-2xl text-foreground">
@@ -268,7 +268,7 @@ function ProjectsIndex() {
                             ? project.categories[0]
                             : 'project'}
                         </p>
-                        <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
+                        <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
                           {formatDate(project.date)}
                         </p>
                       </div>
@@ -278,7 +278,7 @@ function ProjectsIndex() {
                       </h2>
 
                       <p
-                        className={`text-sm leading-7 text-foreground/50 ${
+                        className={`text-sm leading-7 text-foreground/70 ${
                           isHero ? 'max-w-2xl' : 'line-clamp-2'
                         }`}
                       >
@@ -313,14 +313,14 @@ function ProjectsIndex() {
             alt=""
             data-backlight="off"
           />
-          <p className="max-w-2xl text-sm leading-7 text-muted-foreground/40">
+          <p className="max-w-2xl text-sm leading-7 text-muted-foreground/70">
             Each project opens into a fuller build story with the technical
             breakdown, writing, and outbound links.
           </p>
         </div>
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
+          className="inline-flex items-center gap-2 text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
         >
           <span>&larr;</span>
           back home

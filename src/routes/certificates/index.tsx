@@ -128,13 +128,13 @@ function CertificatesIndex() {
             <span className="text-primary/50">
               <Award size={18} />
             </span>
-            <span className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+            <span className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/70">
               credentials
             </span>
           </div>
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
+            className="inline-flex items-center gap-2 text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
           >
             <span>&larr;</span>
             home
@@ -146,7 +146,7 @@ function CertificatesIndex() {
             <h1 className="font-serif text-4xl leading-[1.08] tracking-tight text-foreground sm:text-5xl xl:text-6xl">
               Every credential, verified.
             </h1>
-            <p className="max-w-2xl text-base leading-8 text-foreground/50 sm:text-lg">
+            <p className="max-w-2xl text-base leading-8 text-foreground/70 sm:text-lg">
               Professional certifications across platform engineering, cloud
               infrastructure, and product development.
             </p>
@@ -154,7 +154,7 @@ function CertificatesIndex() {
 
           <div className="flex items-center justify-between gap-4">
             <div className="space-y-1">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
                 credentials earned
               </p>
               <p className="font-serif text-2xl text-foreground">
@@ -162,7 +162,7 @@ function CertificatesIndex() {
               </p>
             </div>
             <div className="space-y-1 text-right">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
                 issuers
               </p>
               <p className="font-serif text-2xl text-foreground">
@@ -307,7 +307,7 @@ function CertificatesIndex() {
                                 .map((skill: string) => (
                                   <span
                                     key={skill}
-                                    className="rounded-full border border-border/15 bg-foreground/3 px-2.5 py-0.5 text-[10px] font-medium text-muted-foreground/55"
+                                    className="rounded-full border border-border/15 bg-foreground/3 px-2.5 py-0.5 text-[10px] font-medium text-muted-foreground/70"
                                   >
                                     {skill}
                                   </span>
@@ -347,14 +347,14 @@ function CertificatesIndex() {
             alt=""
             data-backlight="off"
           />
-          <p className="max-w-2xl text-sm leading-7 text-muted-foreground/40">
+          <p className="max-w-2xl text-sm leading-7 text-muted-foreground/70">
             Each credential opens into a verification view with skills breakdown
             and issuer details.
           </p>
         </div>
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
+          className="inline-flex items-center gap-2 text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
         >
           <span>&larr;</span>
           back home

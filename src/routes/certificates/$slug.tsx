@@ -183,7 +183,7 @@ function CertificateDetail() {
         </p>
         <Link
           to="/certificates"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground/50 transition-colors duration-300 hover:text-foreground"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground/70 transition-colors duration-300 hover:text-foreground"
         >
           <span>&larr;</span>
           All certificates
@@ -214,7 +214,7 @@ function CertificateDetail() {
             {certificate.title}
           </h1>
 
-          <p className="max-w-2xl text-base leading-8 text-foreground/50 sm:text-lg">
+          <p className="max-w-2xl text-base leading-8 text-foreground/70 sm:text-lg">
             Issued by {certificate.issuer}
             {certificate.expires
               ? `, valid through ${certificate.expires}.`
@@ -231,7 +231,7 @@ function CertificateDetail() {
       >
         <aside className="grid content-start gap-8 lg:sticky lg:top-24 lg:self-start">
           <div className="grid gap-4">
-            <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+            <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/70">
               Details
             </p>
             <div className="grid gap-0">
@@ -240,7 +240,7 @@ function CertificateDetail() {
                   key={row.label}
                   className="border-b border-border/10 py-3 first:pt-0"
                 >
-                  <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/40">
+                  <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/70">
                     {row.label}
                   </p>
                   <p className="mt-1 wrap-break-word text-sm leading-6 text-foreground/70">
@@ -290,10 +290,10 @@ function CertificateDetail() {
 
           <div className="grid gap-6">
             <div className="grid gap-2">
-              <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+              <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/70">
                 Core Competencies
               </p>
-              <p className="max-w-2xl text-sm leading-7 text-foreground/50">
+              <p className="max-w-2xl text-sm leading-7 text-foreground/70">
                 Skills and domains covered by this credential.
               </p>
             </div>
@@ -322,7 +322,7 @@ function CertificateDetail() {
                   </motion.span>
                 ))
               ) : (
-                <span className="text-sm text-muted-foreground/40">
+                <span className="text-sm text-muted-foreground/70">
                   No skills listed for this credential.
                 </span>
               )}
@@ -342,13 +342,13 @@ function CertificateDetail() {
               params={{ slug: prevCert.slug }}
               className="group flex flex-col gap-2 rounded-2xl p-5 transition-colors duration-300 hover:bg-foreground/3"
             >
-              <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
+              <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
                 &larr; Previous
               </span>
               <span className="font-serif text-lg leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
                 {prevCert.title}
               </span>
-              <span className="text-xs text-muted-foreground/40">
+              <span className="text-xs text-muted-foreground/70">
                 {prevCert.issuer}
               </span>
             </Link>
@@ -362,13 +362,13 @@ function CertificateDetail() {
               params={{ slug: nextCert.slug }}
               className="group flex flex-col gap-2 rounded-2xl p-5 text-right transition-colors duration-300 hover:bg-foreground/3 sm:items-end"
             >
-              <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
+              <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
                 Next &rarr;
               </span>
               <span className="font-serif text-lg leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
                 {nextCert.title}
               </span>
-              <span className="text-xs text-muted-foreground/40">
+              <span className="text-xs text-muted-foreground/70">
                 {nextCert.issuer}
               </span>
             </Link>
@@ -380,7 +380,7 @@ function CertificateDetail() {
         variants={item}
         className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
       >
-        <p className="max-w-2xl text-sm text-muted-foreground/40">
+        <p className="max-w-2xl text-sm text-muted-foreground/70">
           Browse more credentials in the archive.
         </p>
         <Link

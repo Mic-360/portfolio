@@ -281,7 +281,7 @@ export default function GitHubHeatmap({ username }: GitHubHeatmapProps) {
           </button>
         </div>
 
-        <div className="flex items-center gap-2 text-[10px] font-medium text-muted-foreground/50">
+        <div className="flex items-center gap-2 text-[10px] font-medium text-muted-foreground/70">
           <span>Less</span>
           <div id="cal-heatmap-legend" className="flex items-center" />
           <span>More</span>

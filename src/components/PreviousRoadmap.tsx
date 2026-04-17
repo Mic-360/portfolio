@@ -103,7 +103,7 @@ function RoleCard({
             <span className="font-semibold text-sm tracking-tight text-foreground transition-colors duration-300 group-hover/role:text-primary truncate">
               {role.company}
             </span>
-            <span className="text-[11px] text-foreground/50 leading-tight">
+            <span className="text-[11px] text-foreground/70 leading-tight">
               {role.role}
             </span>
             <div

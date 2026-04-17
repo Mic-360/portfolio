@@ -124,7 +124,7 @@ function ResumePage() {
           </motion.h2>
           <motion.p
             variants={item}
-            className="text-base text-foreground/50 max-w-2xl mx-auto leading-8"
+            className="text-base text-foreground/70 max-w-2xl mx-auto leading-8"
           >
             I'm always open to discussing new projects, creative ideas, or
             opportunities to be part of your visions.
@@ -175,7 +175,7 @@ function ResumePage() {
       <motion.footer variants={item}>
         <Link
           to="/"
-          className="group inline-flex items-center gap-2 text-xs text-muted-foreground/40 hover:text-primary transition-colors duration-300"
+          className="group inline-flex items-center gap-2 text-xs text-muted-foreground/70 hover:text-primary transition-colors duration-300"
         >
           <span className="transform group-hover:-translate-x-0.5 transition-transform duration-300">
             ←

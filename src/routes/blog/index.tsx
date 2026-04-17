@@ -139,13 +139,13 @@ function BlogIndex() {
             <span className="text-primary/50">
               <PenIcon size={18} />
             </span>
-            <span className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+            <span className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/70">
               writing index
             </span>
           </div>
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
+            className="inline-flex items-center gap-2 text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
           >
             <span>&larr;</span>
             home
@@ -157,7 +157,7 @@ function BlogIndex() {
             <h1 className="font-serif text-4xl leading-[1.08] tracking-tight text-foreground sm:text-5xl xl:text-6xl">
               Build notes that read like the work itself.
             </h1>
-            <p className="max-w-2xl text-base leading-8 text-foreground/50 sm:text-lg">
+            <p className="max-w-2xl text-base leading-8 text-foreground/70 sm:text-lg">
               Essays, postmortems, and sharp notes from web, Android, AI, and
               systems builds.
             </p>
@@ -165,7 +165,7 @@ function BlogIndex() {
 
           <div className="flex items-center justify-between gap-4">
             <div className="space-y-1">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
                 essays logged
               </p>
               <p className="font-serif text-2xl text-foreground">
@@ -269,7 +269,7 @@ function BlogIndex() {
                       </h2>
 
                       <p
-                        className={`text-sm leading-7 text-foreground/50 ${
+                        className={`text-sm leading-7 text-foreground/70 ${
                           isHero ? 'max-w-2xl' : 'line-clamp-3'
                         }`}
                       >
@@ -308,14 +308,14 @@ function BlogIndex() {
             alt=""
             data-backlight="off"
           />
-          <p className="max-w-2xl text-sm leading-7 text-muted-foreground/40">
+          <p className="max-w-2xl text-sm leading-7 text-muted-foreground/70">
             Every entry opens into a fuller reading view with the same
             atmosphere and long-form rhythm.
           </p>
         </div>
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-xs text-muted-foreground/40 transition-colors duration-300 hover:text-primary"
+          className="inline-flex items-center gap-2 text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
         >
           <span>&larr;</span>
           back home

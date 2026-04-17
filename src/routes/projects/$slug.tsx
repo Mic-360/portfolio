@@ -185,7 +185,7 @@ function TableOfContents() {
 
   return (
     <nav className="flex flex-col gap-0.5">
-      <p className="mb-3 text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+      <p className="mb-3 text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/70">
         On this page
       </p>
       {headings.map((h) => (
@@ -293,7 +293,7 @@ function ProjectDetail() {
           </p>
           <Link
             to="/projects"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground/50 transition-colors duration-300 hover:text-foreground"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground/70 transition-colors duration-300 hover:text-foreground"
           >
             <span>&larr;</span>
             Back to projects
@@ -332,7 +332,7 @@ function ProjectDetail() {
               <h1 className="font-serif text-3xl leading-[1.08] tracking-tight text-foreground sm:text-4xl lg:text-5xl xl:text-6xl">
                 {project.title}
               </h1>
-              <p className="max-w-lg text-sm leading-7 text-foreground/55 sm:text-base sm:leading-8">
+              <p className="max-w-lg text-sm leading-7 text-foreground/70 sm:text-base sm:leading-8">
                 {project.summary}
               </p>
               <div className="flex flex-wrap gap-2 pt-1">
@@ -357,7 +357,7 @@ function ProjectDetail() {
           {/* Left sidebar: metadata */}
           <aside className="grid content-start gap-8 lg:sticky lg:top-24 lg:self-start">
             <div className="grid gap-4">
-              <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+              <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/70">
                 Details
               </p>
               <div className="grid gap-0">
@@ -366,7 +366,7 @@ function ProjectDetail() {
                     key={row.label}
                     className="border-b border-border/10 py-3 first:pt-0"
                   >
-                    <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/40">
+                    <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/70">
                       {row.label}
                     </p>
                     <p className="mt-1 text-sm leading-6 text-foreground/70">
@@ -379,7 +379,7 @@ function ProjectDetail() {
 
             {project.links.length > 0 ? (
               <div className="grid gap-4">
-                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/70">
                   Links
                 </p>
                 <div className="grid gap-0">
@@ -392,7 +392,7 @@ function ProjectDetail() {
                       className="flex items-center justify-between gap-4 border-b border-border/10 py-3 text-sm text-foreground/70 transition-colors duration-300 hover:text-primary"
                     >
                       <span>{link.label}</span>
-                      <span className="text-muted-foreground/40">&nearr;</span>
+                      <span className="text-muted-foreground/70">&nearr;</span>
                     </a>
                   ))}
                 </div>
@@ -428,13 +428,13 @@ function ProjectDetail() {
                 params={{ slug: prevProject.slug }}
                 className="group flex flex-col gap-2 rounded-2xl p-5 transition-colors duration-300 hover:bg-foreground/3"
               >
-                <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
                   &larr; Previous
                 </span>
                 <span className="font-serif text-lg leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
                   {prevProject.title}
                 </span>
-                <span className="text-xs text-muted-foreground/40">
+                <span className="text-xs text-muted-foreground/70">
                   {formatDate(prevProject.date)}
                 </span>
               </Link>
@@ -448,13 +448,13 @@ function ProjectDetail() {
                 params={{ slug: nextProject.slug }}
                 className="group flex flex-col gap-2 rounded-2xl p-5 text-right transition-colors duration-300 hover:bg-foreground/3 sm:items-end"
               >
-                <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
                   Next &rarr;
                 </span>
                 <span className="font-serif text-lg leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
                   {nextProject.title}
                 </span>
-                <span className="text-xs text-muted-foreground/40">
+                <span className="text-xs text-muted-foreground/70">
                   {formatDate(nextProject.date)}
                 </span>
               </Link>
@@ -467,7 +467,7 @@ function ProjectDetail() {
           variants={item}
           className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
         >
-          <p className="max-w-2xl text-sm text-muted-foreground/40">
+          <p className="max-w-2xl text-sm text-muted-foreground/70">
             More projects in the archive.
           </p>
           <Link

@@ -188,7 +188,7 @@ function TableOfContents() {
 
   return (
     <nav className="flex flex-col gap-0.5">
-      <p className="mb-3 text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+      <p className="mb-3 text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/70">
         On this page
       </p>
       {headings.map((h) => (
@@ -289,7 +289,7 @@ function BlogPost() {
           </p>
           <Link
             to="/blog"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground/50 transition-colors duration-300 hover:text-foreground"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground/70 transition-colors duration-300 hover:text-foreground"
           >
             <span>&larr;</span>
             Back to blog
@@ -312,7 +312,7 @@ function BlogPost() {
               {post.title}
             </h1>
 
-            <p className="max-w-2xl text-base leading-8 text-foreground/50 sm:text-lg">
+            <p className="max-w-2xl text-base leading-8 text-foreground/70 sm:text-lg">
               {post.summary}
             </p>
 
@@ -321,7 +321,7 @@ function BlogPost() {
                 {taxonomies.map((entry, index) => (
                   <span
                     key={`${entry}-${index}`}
-                    className="rounded-full border border-border/15 bg-foreground/3 px-3 py-1 text-[11px] font-medium text-muted-foreground/55"
+                    className="rounded-full border border-border/15 bg-foreground/3 px-3 py-1 text-[11px] font-medium text-muted-foreground/70"
                   >
                     {entry}
                   </span>
@@ -339,7 +339,7 @@ function BlogPost() {
         >
           <aside className="grid content-start gap-8 lg:sticky lg:top-24 lg:self-start">
             <div className="grid gap-4">
-              <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/50">
+              <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/70">
                 Details
               </p>
               <div className="grid gap-0">
@@ -348,7 +348,7 @@ function BlogPost() {
                     key={row.label}
                     className="border-b border-border/10 py-3 first:pt-0"
                   >
-                    <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/40">
+                    <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/70">
                       {row.label}
                     </p>
                     <p className="mt-1 text-sm leading-6 text-foreground/70">
@@ -385,13 +385,13 @@ function BlogPost() {
                 params={{ slug: prevPost.slug }}
                 className="group flex flex-col gap-2 rounded-2xl p-5 transition-colors duration-300 hover:bg-foreground/3"
               >
-                <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
                   &larr; Previous
                 </span>
                 <span className="font-serif text-lg leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
                   {prevPost.title}
                 </span>
-                <span className="text-xs text-muted-foreground/40">
+                <span className="text-xs text-muted-foreground/70">
                   {formatDate(prevPost.date)}
                 </span>
               </Link>
@@ -405,13 +405,13 @@ function BlogPost() {
                 params={{ slug: nextPost.slug }}
                 className="group flex flex-col gap-2 rounded-2xl p-5 text-right transition-colors duration-300 hover:bg-foreground/3 sm:items-end"
               >
-                <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
                   Next &rarr;
                 </span>
                 <span className="font-serif text-lg leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
                   {nextPost.title}
                 </span>
-                <span className="text-xs text-muted-foreground/40">
+                <span className="text-xs text-muted-foreground/70">
                   {formatDate(nextPost.date)}
                 </span>
               </Link>
@@ -423,7 +423,7 @@ function BlogPost() {
           variants={item}
           className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
         >
-          <p className="max-w-2xl text-sm text-muted-foreground/40">
+          <p className="max-w-2xl text-sm text-muted-foreground/70">
             More writing in the archive.
           </p>
           <Link

@@ -59,7 +59,7 @@ function BentoPage() {
         </p>
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground/50 transition-colors duration-300 hover:text-foreground"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground/70 transition-colors duration-300 hover:text-foreground"
         >
           <span>←</span>
           Home
