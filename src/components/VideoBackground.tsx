@@ -1,16 +1,25 @@
 import { AnimatePresence, motion } from 'motion/react'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTheme } from './ThemeProvider'
+import { SETTINGS_EVENT, getMuteAudio } from '@/lib/settings'
+
+const AUDIO_VOLUME = 0.45
 
 export function VideoBackground() {
   const { mode } = useTheme()
   const showVideo =
-    mode === 'sunny' ||
-    mode === 'midnight' ||
-    mode === 'frieren'
+    mode === 'sunny' || mode === 'midnight' || mode === 'frieren'
   const sunnyAudioRef = useRef<HTMLAudioElement>(null)
   const midnightAudioRef = useRef<HTMLAudioElement>(null)
   const frierenAudioRef = useRef<HTMLAudioElement>(null)
+  const [muted, setMuted] = useState(false)
+
+  useEffect(() => {
+    setMuted(getMuteAudio())
+    const onChange = () => setMuted(getMuteAudio())
+    window.addEventListener(SETTINGS_EVENT, onChange)
+    return () => window.removeEventListener(SETTINGS_EVENT, onChange)
+  }, [])
 
   useEffect(() => {
     const sunnyAudio = sunnyAudioRef.current
@@ -35,20 +44,20 @@ export function VideoBackground() {
         : mode === 'midnight'
           ? midnightAudio
           : mode === 'frieren'
-              ? frierenAudio
-              : null
+            ? frierenAudio
+            : null
 
     if (!activeAudio) {
       return
     }
 
-    activeAudio.volume = 0.45
+    activeAudio.volume = muted ? 0 : AUDIO_VOLUME
     activeAudio.play().catch(() => {})
 
     return () => {
       activeAudio.pause()
     }
-  }, [mode])
+  }, [mode, muted])
 
   const videoSource =
     mode === 'midnight'
