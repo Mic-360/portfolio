@@ -8,31 +8,44 @@ import {
   Bot,
   Briefcase,
   Calendar,
+  ChevronRight,
+  Copy,
+  Download,
   FileText,
   FolderOpen,
+  Gamepad2,
   Github,
   Home,
   Image,
   Instagram,
+  Link2,
   Linkedin,
-  Map,
+  Map as MapIcon,
   Moon,
   MoonStar,
+  Palette,
   Pen,
+  Printer,
+  QrCode,
   Rss,
+  Share2,
+  Shuffle,
+  Sparkles,
   Sun,
+  Tag,
   Twitter,
   User,
+  Vibrate,
+  VibrateOff,
+  Volume2,
+  VolumeX,
 } from 'lucide-react'
 import * as React from 'react'
 
-import type { BlogMeta, ProjectMeta } from '@/lib/content'
 import type { CertificateMeta } from '@/lib/certificates'
-import {
-  getBlogIndex,
-  getProjectIndex,
-} from '@/lib/content'
-import { getCertificateIndex } from '@/lib/certificates'
+import type { BlogMeta, ProjectMeta } from '@/lib/content'
+import type { GameMeta } from '@/lib/games'
+import { useTheme } from '@/components/ThemeProvider'
 import {
   CommandDialog,
   CommandEmpty,
@@ -43,8 +56,23 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from '@/components/ui/command'
-import { siteInfo, socialLinks } from '@/config/site-data'
-import { useTheme } from '@/components/ThemeProvider'
+import { gravatar, siteInfo, socialLinks } from '@/config/site-data'
+import { getCertificateIndex } from '@/lib/certificates'
+import { getBlogIndex, getProjectIndex } from '@/lib/content'
+import { getGamesData } from '@/lib/games'
+import {
+  SETTINGS_EVENT,
+  getFeedbackEnabled,
+  getMuteAudio,
+  toggleFeedbackEnabled,
+  toggleMuteAudio,
+  triggerDoom,
+} from '@/lib/settings'
+
+const EMAIL = 'bhaumic@bhaumicsingh.dev'
+const RSS_URL = 'https://bhaumicsingh.dev/rss'
+
+type PageId = 'root' | 'share' | 'games' | 'tag-blog' | 'tag-projects' | 'theme'
 
 function getStableShortcutLabel(shortcut: string) {
   return shortcut.replace(/Mod/g, 'Ctrl')
@@ -70,31 +98,83 @@ function ShortcutText({
   return mounted ? formatForDisplay(shortcut) : getStableShortcutLabel(shortcut)
 }
 
+function uniqueSorted(values: Array<string>) {
+  return Array.from(new Set(values.filter(Boolean))).sort((a, b) =>
+    a.localeCompare(b),
+  )
+}
+
 export function CommandMenu() {
   const mounted = useMounted()
   const [open, setOpen] = React.useState(false)
+  const [pages, setPages] = React.useState<Array<PageId>>(['root'])
+  const [search, setSearch] = React.useState('')
+  const [toast, setToast] = React.useState<string | null>(null)
+  const toastTimerRef = React.useRef<number | null>(null)
   const navigate = useNavigate()
-  const { setMode } = useTheme()
+  const { mode, setMode, cycleTheme } = useTheme()
   const [blogs, setBlogs] = React.useState<Array<BlogMeta>>([])
   const [projects, setProjects] = React.useState<Array<ProjectMeta>>([])
   const [certificates, setCertificates] = React.useState<
     Array<CertificateMeta>
   >([])
+  const [games, setGames] = React.useState<Array<GameMeta>>([])
   const [loaded, setLoaded] = React.useState(false)
+  const [muted, setMuted] = React.useState(false)
+  const [feedbackOn, setFeedbackOn] = React.useState(true)
 
-  // Toggle command menu
+  const page = pages[pages.length - 1]
+
+  React.useEffect(() => {
+    setMuted(getMuteAudio())
+    setFeedbackOn(getFeedbackEnabled())
+    const onChange = () => {
+      setMuted(getMuteAudio())
+      setFeedbackOn(getFeedbackEnabled())
+    }
+    window.addEventListener(SETTINGS_EVENT, onChange)
+    return () => window.removeEventListener(SETTINGS_EVENT, onChange)
+  }, [])
+
+  const showToast = React.useCallback((message: string) => {
+    setToast(message)
+    if (toastTimerRef.current) window.clearTimeout(toastTimerRef.current)
+    toastTimerRef.current = window.setTimeout(() => setToast(null), 1800)
+  }, [])
+
+  const copy = React.useCallback(
+    async (text: string, label: string) => {
+      try {
+        await navigator.clipboard.writeText(text)
+        showToast(`${label} copied`)
+      } catch {
+        showToast('copy failed')
+      }
+    },
+    [showToast],
+  )
+
+  const closeMenu = React.useCallback(() => {
+    setOpen(false)
+    setPages(['root'])
+    setSearch('')
+  }, [])
+
+  // Open/close
   useHotkey('Mod+K', () => setOpen((o) => !o))
-
-  // Go back
+  useHotkey('Mod+/', () => {
+    setOpen(true)
+    setPages(['root'])
+    setSearch('')
+  })
   useHotkey('Mod+Backspace', () => window.history.back())
 
-  // Page navigation shortcuts
   const navTo = React.useCallback(
     (to: string) => {
-      setOpen(false)
+      closeMenu()
       navigate({ to })
     },
-    [navigate],
+    [navigate, closeMenu],
   )
 
   useHotkey('Mod+H', () => navTo('/'))
