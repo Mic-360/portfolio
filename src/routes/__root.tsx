@@ -399,6 +399,15 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
           rel: 'dns-prefetch',
           href: 'https://gravatar.com',
         },
+        {
+          rel: 'preconnect',
+          href: 'https://app.cal.com',
+        },
+        {
+          rel: 'preconnect',
+          href: 'https://github-contributions-api.deno.dev',
+          crossOrigin: 'anonymous',
+        },
       ],
     }
   },
