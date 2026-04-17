@@ -607,7 +607,7 @@ function App() {
                   className="max-w-3xl text-balance font-serif text-4xl leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl"
                   style={{ textShadow: '0 6px 24px rgb(0 0 0 / 0.38)' }}
                 >
-                  Building the tools at{' '}
+                  Building tools at{' '}
                   <motion.a
                     href={siteInfo.currentCompanyUrl}
                     target="_blank"
