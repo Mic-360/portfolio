@@ -79,6 +79,8 @@ const FloatingDockMobile = ({
                 {item.onClick ? (
                   <button
                     onClick={item.onClick}
+                    aria-label={item.title}
+                    title={item.title}
                     className="flex h-10 w-10 items-center justify-center rounded-full border border-border/15 bg-background/55 backdrop-blur-2xl backdrop-saturate-150 shadow-sm shadow-black/[0.03] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-background/70"
                   >
                     <div className="h-4 w-4">{item.icon}</div>
@@ -87,6 +89,8 @@ const FloatingDockMobile = ({
                   <a
                     href={item.href}
                     rel={item.rel}
+                    aria-label={item.title}
+                    title={item.title}
                     className="flex h-10 w-10 items-center justify-center rounded-full border border-border/15 bg-background/55 backdrop-blur-2xl backdrop-saturate-150 shadow-sm shadow-black/[0.03] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-background/70"
                   >
                     <div className="h-4 w-4">{item.icon}</div>
@@ -99,6 +103,8 @@ const FloatingDockMobile = ({
       </AnimatePresence>
       <button
         onClick={() => setOpen(!open)}
+        aria-label={open ? 'Close navigation' : 'Open navigation'}
+        aria-expanded={open}
         className="flex h-10 w-10 items-center justify-center rounded-full border border-border/15 bg-background/55 shadow-lg shadow-black/[0.03] backdrop-blur-2xl backdrop-saturate-150 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-background/70"
       >
         <IconLayoutNavbarCollapse className="h-5 w-5 text-muted-foreground" />
@@ -225,6 +231,8 @@ function IconContainer({
     return (
       <button
         onClick={onClick}
+        aria-label={title}
+        title={title}
         className="cursor-pointer rounded-full p-0.5 transition-[transform,background-color,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:bg-foreground/[0.06]"
       >
         {content}
@@ -236,6 +244,8 @@ function IconContainer({
     <a
       href={href}
       rel={rel}
+      aria-label={title}
+      title={title}
       className="rounded-full p-0.5 transition-[transform,background-color,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:bg-foreground/[0.06]"
     >
       {content}
