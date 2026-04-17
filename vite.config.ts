@@ -9,6 +9,12 @@ import tailwindcss from '@tailwindcss/vite'
 import { nitro } from 'nitro/vite'
 
 const config = defineConfig({
+  build: {
+    // Targets modern browsers to drop legacy core-js polyfills (PSI ~16KB savings).
+    target: 'es2022',
+    // Generates source maps for debugging without referencing them in HTML.
+    sourcemap: 'hidden',
+  },
   server: {
     allowedHosts: ['.trycloudflare.com'],
   },
