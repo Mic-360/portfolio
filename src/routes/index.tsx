@@ -323,12 +323,14 @@ function App() {
               target="_blank"
               rel="noopener noreferrer me"
               className="shrink-0"
+              aria-label="Gravatar profile"
             >
               <img
                 src="/icon.svg"
                 width={56}
                 height={56}
                 className="h-14 w-14"
+                alt="Bhaumic Singh logo"
               />
             </a>
             <div className="min-w-0 text-foreground">
@@ -895,7 +897,7 @@ function App() {
                     <div className="media-hover-parent relative aspect-video">
                       <img
                         src={featuredPins[0].imageUrl}
-                        alt={featuredPins[0].title}
+                        alt=""
                         loading="lazy"
                         width={featuredPins[0].imageWidth}
                         height={featuredPins[0].imageHeight}
@@ -925,7 +927,7 @@ function App() {
                       <div className="media-hover-parent relative aspect-square">
                         <img
                           src={pin.imageUrl}
-                          alt={pin.title}
+                          alt=""
                           loading="lazy"
                           width={pin.imageWidth}
                           height={pin.imageHeight}

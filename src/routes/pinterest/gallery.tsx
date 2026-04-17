@@ -189,7 +189,7 @@ function PinterestGalleryPage() {
                 >
                   <img
                     src={pin.imageUrl}
-                    alt={pin.title}
+                    alt=""
                     loading="lazy"
                     width={pin.imageWidth}
                     height={pin.imageHeight}

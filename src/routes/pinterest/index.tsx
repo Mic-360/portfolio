@@ -169,7 +169,7 @@ function PinterestIndexPage() {
             <div className="media-hover-parent relative aspect-21/9 sm:aspect-21/8">
               <img
                 src={heroPin.imageUrl}
-                alt={heroPin.title}
+                alt=""
                 width={heroPin.imageWidth}
                 height={heroPin.imageHeight}
                 className="media-hover-image absolute inset-0 h-full w-full object-cover"
@@ -230,7 +230,7 @@ function PinterestIndexPage() {
                   <div className="media-hover-parent relative aspect-4/3 overflow-hidden">
                     <img
                       src={pin.imageUrl}
-                      alt={pin.title}
+                      alt=""
                       loading="lazy"
                       width={pin.imageWidth}
                       height={pin.imageHeight}
