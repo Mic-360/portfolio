@@ -495,30 +495,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   }, [])
 
   return (
-    <html data-theme="dark" suppressHydrationWarning>
+    <html lang="en" data-theme="dark" suppressHydrationWarning>
       <head>
         <HeadContent />
-        {gaMeasurementId ? (
-          <>
-            <script
-              async
-              src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
-            />
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  window.gtag = window.gtag || function(){window.dataLayer.push(arguments);};
-                  window.gtag('js', new Date());
-                  window.gtag('config', ${JSON.stringify(gaMeasurementId)}, {
-                    send_page_view: false,
-                    anonymize_ip: true,
-                  });
-                `,
-              }}
-            />
-          </>
-        ) : null}
       </head>
       <body className="bg-background text-foreground antialiased">
         <BacklightFilterDefs />
