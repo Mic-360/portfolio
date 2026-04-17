@@ -1,6 +1,6 @@
-import { previousRoles } from '@/config/site-data'
 import { motion, useInView } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
+import { previousRoles } from '@/config/site-data'
 
 const MOBILE_PATH =
   'M150,560 C150,500 50,470 50,410 C50,350 250,310 250,250 C250,190 50,150 50,90 C50,45 150,20 150,15'
@@ -249,8 +249,11 @@ export function PreviousRoadmap() {
   ]
 
   return (
-    <div ref={sectionRef}>
-      <div className="lg:hidden relative w-full" style={{ height: 580 }}>
+    <div ref={sectionRef} className='overflow-hidden max-w-325 mx-auto w-full py-6'>
+      <div
+        className="lg:hidden relative w-full"
+        style={{ height: 580 }}
+      >
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}

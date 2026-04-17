@@ -71,6 +71,10 @@ function Section({
         />
         {title}
       </>
+    ) : title === 'contact' ? (
+      <p className='hidden'>
+        {title}
+      </p>
     ) : (
       title
     )

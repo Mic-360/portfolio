@@ -284,7 +284,7 @@ function App() {
     >
       <motion.div
         variants={item}
-        className="flex items-center gap-4 w-full -mb-12"
+        className="flex items-center gap-4 w-full -mb-12 px-4 sm:px-8"
       >
         <a
           href={gravatar.profileUrl}
@@ -315,7 +315,7 @@ function App() {
 
       <motion.section
         variants={item}
-        className="flex flex-col items-center text-center"
+        className="flex flex-col items-center text-center px-2"
       >
         <p className="text-[11px] uppercase tracking-[0.3em] text-primary/80 mb-8">
           android · ai · cloud · web · design · devops
@@ -432,7 +432,10 @@ function App() {
         </div>
       </motion.section>
 
-      <motion.div variants={item} className="flex flex-col gap-24 md:gap-32">
+      <motion.div
+        variants={item}
+        className="flex flex-col gap-24 md:gap-32 px-4 sm:px-8"
+      >
         <Section title="current">
           <div className="relative min-h-130 sm:min-h-145 lg:min-h-160">
             <motion.div
@@ -671,7 +674,7 @@ function App() {
         </Section>
       </motion.div>
 
-      <motion.div variants={item} className="my-28">
+      <motion.div variants={item} className="my-22 px-4 sm:px-8">
         <Section title="projects">
           <div className="grid gap-5 md:columns-2 md:grid-cols-2">
             {featuredProjects.map((project: ProjectMeta, index: number) => {
@@ -762,7 +765,7 @@ function App() {
         </Section>
       </motion.div>
 
-      <motion.div variants={item}>
+      <motion.div variants={item} className="px-4 sm:px-8">
         <Section title="blogs">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {featuredPosts.map((post: BlogMeta, index: number) => (
@@ -855,9 +858,9 @@ function App() {
         </Section>
       </motion.div>
 
-      <motion.div variants={item}>
+      <motion.div variants={item} className="px-4 sm:px-8">
         <Section title="healthstat">
-          <div className="grid min-w-0 gap-10">
+          <div className="grid min-w-0 gap-8">
             <div className="grid min-w-0 gap-0 overflow-hidden rounded-2xl border border-border/10 bg-card/30 p-4 sm:p-6">
               <div className="flex flex-col divide-y divide-border/15">
                 <MetricRow
@@ -945,94 +948,96 @@ function App() {
 
       <motion.div
         variants={item}
-        className="grid gap-16 xl:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)]"
+        className="grid gap-1 xl:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] px-4 sm:px-8"
       >
         <Section title="pinterest">
-          {featuredPins.length > 0 ? (
-            <div className="flex flex-col gap-6">
-              {featuredPins[0] ? (
-                <a
-                  href={featuredPins[0].url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group block"
-                >
-                  <div className="project-card-apple relative overflow-hidden rounded-2xl border border-border/10">
-                    <div className="media-hover-parent relative aspect-video">
-                      <img
-                        src={featuredPins[0].imageUrl}
-                        alt=""
-                        loading="lazy"
-                        width={featuredPins[0].imageWidth}
-                        height={featuredPins[0].imageHeight}
-                        className="media-hover-image absolute inset-0 h-full w-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
-                    </div>
-                    <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
-                      <p className="line-clamp-2 font-serif text-sm leading-tight tracking-tight text-white sm:text-base">
-                        {featuredPins[0].title}
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              ) : null}
-
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                {featuredPins.slice(1).map((pin: PinterestCreatedPin) => (
+          <div>
+            {featuredPins.length > 0 ? (
+              <div className="flex flex-col gap-6">
+                {featuredPins[0] ? (
                   <a
-                    key={pin.id}
-                    href={pin.url}
+                    href={featuredPins[0].url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="group block"
                   >
-                    <div className="project-card-apple overflow-hidden rounded-xl border border-border/10 bg-card/40">
-                      <div className="media-hover-parent relative aspect-square">
+                    <div className="project-card-apple relative overflow-hidden rounded-2xl border border-border/10">
+                      <div className="media-hover-parent relative aspect-video">
                         <img
-                          src={pin.imageUrl}
+                          src={featuredPins[0].imageUrl}
                           alt=""
                           loading="lazy"
-                          width={pin.imageWidth}
-                          height={pin.imageHeight}
+                          width={featuredPins[0].imageWidth}
+                          height={featuredPins[0].imageHeight}
                           className="media-hover-image absolute inset-0 h-full w-full object-cover"
                         />
-                        <div className="absolute inset-0 bg-linear-to-t from-card/50 via-transparent to-transparent" />
+                        <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
                       </div>
-                      <div className="p-2.5">
-                        <p className="line-clamp-1 text-[11px] font-medium text-foreground/70 transition-colors duration-300 group-hover:text-primary">
-                          {pin.title}
+                      <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
+                        <p className="line-clamp-2 font-serif text-sm leading-tight tracking-tight text-white sm:text-base">
+                          {featuredPins[0].title}
                         </p>
                       </div>
                     </div>
                   </a>
-                ))}
-              </div>
+                ) : null}
 
-              <Link
-                to="/pinterest"
-                className="inline-flex items-center gap-2 self-end text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
-              >
-                full gallery
-                <span className="transition-transform duration-300 group-hover:translate-x-1">
-                  &rarr;
-                </span>
-              </Link>
-            </div>
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              Couldn&apos;t load pins right now. You can still open the{' '}
-              <a
-                href={pinterest.createdUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary underline underline-offset-4"
-              >
-                Pinterest created feed
-              </a>
-              .
-            </p>
-          )}
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                  {featuredPins.slice(1).map((pin: PinterestCreatedPin) => (
+                    <a
+                      key={pin.id}
+                      href={pin.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group block"
+                    >
+                      <div className="project-card-apple overflow-hidden rounded-xl border border-border/10 bg-card/40">
+                        <div className="media-hover-parent relative aspect-square">
+                          <img
+                            src={pin.imageUrl}
+                            alt=""
+                            loading="lazy"
+                            width={pin.imageWidth}
+                            height={pin.imageHeight}
+                            className="media-hover-image absolute inset-0 h-full w-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-linear-to-t from-card/50 via-transparent to-transparent" />
+                        </div>
+                        <div className="p-2.5">
+                          <p className="line-clamp-1 text-[11px] font-medium text-foreground/70 transition-colors duration-300 group-hover:text-primary">
+                            {pin.title}
+                          </p>
+                        </div>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+
+                <Link
+                  to="/pinterest"
+                  className="inline-flex items-center gap-2 self-end text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
+                >
+                  full gallery
+                  <span className="transition-transform duration-300 group-hover:translate-x-1">
+                    &rarr;
+                  </span>
+                </Link>
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                Couldn&apos;t load pins right now. You can still open the{' '}
+                <a
+                  href={pinterest.createdUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary underline underline-offset-4"
+                >
+                  Pinterest created feed
+                </a>
+                .
+              </p>
+            )}
+          </div>
         </Section>
 
         <Section title="certificates">
@@ -1107,7 +1112,7 @@ function App() {
 
       <motion.div variants={item}>
         <Section title="contact">
-          <div className="relative overflow-hidden rounded-3xl pb-8">
+          <div className="relative overflow-hidden pb-8">
             <div className="pointer-events-none absolute inset-x-[14%] top-[8%] h-24 rounded-full bg-primary/10 blur-3xl" />
             <div className="pointer-events-none absolute right-[8%] top-[18%] h-72 w-full sm:w-72 rounded-full bg-primary/8 blur-[120px]" />
 
@@ -1122,7 +1127,7 @@ function App() {
               <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent opacity-90" />
             </div>
 
-            <div className="relative z-10 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.72fr)] lg:items-end">
+            <div className="relative z-10 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.72fr)] lg:items-end px-4 sm:px-8">
               <div className="grid gap-8 py-2 lg:pr-12">
                 <div className="flex items-center justify-between gap-4 text-[10px] uppercase tracking-[0.2em] text-foreground/30">
                   <span>{siteInfo.location}</span>
@@ -1167,7 +1172,7 @@ function App() {
 
                 <div className="h-px w-full bg-border/10" />
 
-                <div className="grid gap-4 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center">
+                <div className="grid gap-4 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center pl-6">
                   <a
                     href={gravatar.profileUrl}
                     target="_blank"
@@ -1199,13 +1204,13 @@ function App() {
                 </div>
               </div>
 
-              <div className="grid gap-0">
+              <div className="grid gap-0 pr-6">
                 <Link
                   to="/readme"
                   className="flex items-center justify-between gap-4 border-b border-border/10 py-4 text-sm leading-7 text-foreground/70 transition-colors duration-300 hover:text-primary"
                 >
                   <span className="font-medium">README</span>
-                  <span className="text-muted-foreground/35 text-xs">
+                  <span className="text-muted-foreground text-xs">
                     reference
                   </span>
                 </Link>
@@ -1214,7 +1219,7 @@ function App() {
                   className="flex items-center justify-between gap-4 border-b border-border/10 py-4 text-sm leading-7 text-foreground/70 transition-colors duration-300 hover:text-primary"
                 >
                   <span className="font-medium">Resume</span>
-                  <span className="text-muted-foreground/35 text-xs">
+                  <span className="text-muted-foreground text-xs">
                     experience
                   </span>
                 </Link>
@@ -1223,9 +1228,7 @@ function App() {
                   className="flex items-center justify-between gap-4 border-b border-border/10 py-4 text-sm leading-7 text-foreground/70 transition-colors duration-300 hover:text-primary"
                 >
                   <span className="font-medium">Writing</span>
-                  <span className="text-muted-foreground/35 text-xs">
-                    notes
-                  </span>
+                  <span className="text-muted-foreground text-xs">notes</span>
                 </Link>
                 <a
                   href={gravatar.profileUrl}
@@ -1234,7 +1237,7 @@ function App() {
                   className="flex items-center justify-between gap-4 py-4 text-sm leading-7 text-foreground/70 transition-colors duration-300 hover:text-primary"
                 >
                   <span className="font-medium">Gravatar</span>
-                  <span className="text-muted-foreground/35 text-xs">
+                  <span className="text-muted-foreground text-xs">
                     identity
                   </span>
                 </a>
@@ -1246,7 +1249,7 @@ function App() {
 
       <motion.p
         variants={item}
-        className="flex flex-col items-center justify-between gap-1 text-center font-mono text-[10px] tracking-[0.2em] text-muted-foreground/30 sm:flex-row sm:text-left"
+        className="flex flex-col items-center justify-between gap-1 text-center font-mono text-[10px] tracking-[0.2em] text-muted-foreground/30 sm:flex-row sm:text-left px-8"
       >
         <span>Yes, this portfolio can run DOOM.</span>
         <span>Konami Code: ↑ ↑ ↓ ↓ ← → ← → b a</span>

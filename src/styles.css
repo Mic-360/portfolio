@@ -288,6 +288,10 @@
   --animate-scanline: scanline 4s linear infinite;
 }
 
+/* * {
+  border: 1px solid #fff000;
+} */
+
 @keyframes scanline {
   0% {
     transform: translateY(-100%);
@@ -375,7 +379,7 @@ body::-webkit-scrollbar-thumb {
 
 /* Firefox */
 * {
-  scrollbar-width: thin;
+  scrollbar-width: none; /* enable disable scrollbar */
   scrollbar-color: transparent transparent;
 }
 

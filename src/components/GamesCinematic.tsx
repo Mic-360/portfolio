@@ -165,7 +165,7 @@ export function GamesCinematic({ gamesData }: { gamesData: Array<GameMeta> }) {
       <div className="pointer-events-none absolute right-[8%] top-[12%] h-72 w-72 rounded-full bg-primary/5 blur-[120px]" />
       <div className="hero-grid-overlay absolute inset-0" />
 
-      <div className="relative z-10 mb-10 flex w-full flex-col sm:mb-16">
+      <div className="relative z-10 mb-10 flex w-full flex-col sm:mb-16 px-8">
         <div className="flex items-center gap-4">
           <p className="shrink-0 text-[10px] uppercase tracking-[0.26em] text-primary/75">
             Interactive Worlds
