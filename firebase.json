@@ -12,13 +12,36 @@
   },
   "hosting": {
     "public": "public",
+    "//": "Headers placed here under hosting.headers — Firebase Hosting reliably applies these. App Hosting (SSR) traffic should mirror via custom server config if needed, but static asset & top-level header rules belong here.",
     "headers": [
       {
-        "source": "**/*.@(jpg|jpeg|gif|png|svg|webp)",
+        "source": "**/*.@(png|jpg|jpeg|webp|avif|svg|mp4|mp3|woff2|ico)",
         "headers": [
           {
             "key": "Cache-Control",
-            "value": "max-age=31536000"
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      },
+      {
+        "source": "/assets/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      },
+      {
+        "source": "**",
+        "headers": [
+          { "key": "X-Content-Type-Options", "value": "nosniff" },
+          { "key": "X-Frame-Options", "value": "DENY" },
+          { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+          { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
+          {
+            "key": "Content-Security-Policy",
+            "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://app.cal.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: ; media-src 'self'; connect-src 'self' https://github-contributions-api.deno.dev https://www.google-analytics.com https://app.cal.com; frame-src https://app.cal.com; object-src 'none'; base-uri 'self'; form-action 'self'"
           }
         ]
       }
