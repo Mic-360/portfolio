@@ -432,6 +432,12 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   useKonamiCode(useCallback(() => setShowDoom(true), []))
 
   useEffect(() => {
+    const onTrigger = () => setShowDoom(true)
+    window.addEventListener('portfolio:trigger-doom', onTrigger)
+    return () => window.removeEventListener('portfolio:trigger-doom', onTrigger)
+  }, [])
+
+  useEffect(() => {
     const activateAsyncFontStyles = () => {
       document
         .querySelectorAll<HTMLLinkElement>('link[data-font-async]')
