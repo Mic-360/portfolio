@@ -32,6 +32,41 @@ const config = defineConfig({
       prerender: {
         concurrency: 1, // Avoid hitting rate limits during build
       },
+      routeRules: {
+        '/assets/**': {
+          headers: { 'Cache-Control': 'public, max-age=31536000, immutable' },
+        },
+        '/**/*.woff2': {
+          headers: { 'Cache-Control': 'public, max-age=31536000, immutable' },
+        },
+        '/**/*.mp4': {
+          headers: { 'Cache-Control': 'public, max-age=31536000, immutable' },
+        },
+        '/**/*.mp3': {
+          headers: { 'Cache-Control': 'public, max-age=31536000, immutable' },
+        },
+        '/**/*.png': {
+          headers: { 'Cache-Control': 'public, max-age=31536000, immutable' },
+        },
+        '/**/*.jpg': {
+          headers: { 'Cache-Control': 'public, max-age=31536000, immutable' },
+        },
+        '/**/*.jpeg': {
+          headers: { 'Cache-Control': 'public, max-age=31536000, immutable' },
+        },
+        '/**/*.webp': {
+          headers: { 'Cache-Control': 'public, max-age=31536000, immutable' },
+        },
+        '/**/*.avif': {
+          headers: { 'Cache-Control': 'public, max-age=31536000, immutable' },
+        },
+        '/**/*.svg': {
+          headers: { 'Cache-Control': 'public, max-age=31536000, immutable' },
+        },
+        '/**/*.ico': {
+          headers: { 'Cache-Control': 'public, max-age=31536000, immutable' },
+        },
+      },
     }),
     // this is the plugin that enables path aliases
     viteTsConfigPaths({

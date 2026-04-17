@@ -1,6 +1,6 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { motion } from 'motion/react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import type { CertificateMeta } from '@/lib/certificates'
 import type { BlogMeta, ProjectMeta } from '@/lib/content'
@@ -139,6 +139,74 @@ function sanitizeSamples<T extends { value: number | string }>(
   samples?: Array<T>,
 ): Array<T & { value: number | string }> {
   return samples || []
+}
+
+function LazyHeroVideo({ src }: { src: string }) {
+  const [shouldRender, setShouldRender] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduce) return
+
+    const el = containerRef.current
+    if (!el) return
+
+    const mount = () => setShouldRender(true)
+    const schedule = () => {
+      const ric = (
+        window as Window & {
+          requestIdleCallback?: (
+            cb: () => void,
+            opts?: { timeout: number },
+          ) => number
+        }
+      ).requestIdleCallback
+      if (typeof ric === 'function') {
+        ric(mount, { timeout: 2500 })
+        return
+      }
+      window.setTimeout(mount, 800)
+    }
+
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            io.disconnect()
+            schedule()
+          }
+        },
+        { rootMargin: '200px' },
+      )
+      io.observe(el)
+      return () => io.disconnect()
+    }
+
+    schedule()
+  }, [])
+
+  return (
+    <div
+      ref={containerRef}
+      className="hero-blend-media hero-home-video media-hover-image media-hover-fade absolute inset-0 h-full w-full"
+      aria-hidden="true"
+    >
+      {shouldRender ? (
+        <video
+          src={src}
+          className="h-full w-full object-cover"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="none"
+          aria-hidden="true"
+        />
+      ) : null}
+    </div>
+  )
 }
 
 function App() {
@@ -303,15 +371,7 @@ function App() {
         </div>
 
         <div className="absolute inset-0">
-          <video
-            src="/horizon.mp4"
-            className="hero-blend-media hero-home-video media-hover-image media-hover-fade absolute inset-0 h-full w-full object-cover"
-            autoPlay
-            loop
-            muted
-            playsInline
-            aria-hidden="true"
-          />
+          <LazyHeroVideo src="/horizon.mp4" />
           <div className="hero-grid-overlay absolute inset-y-[8%] right-[3%] w-[82%]" />
           <div className="hero-seamless-edge absolute inset-0" />
         </div>
@@ -362,6 +422,10 @@ function App() {
             <img
               src="/aloy.png"
               alt="Aloy from Horizon Zero Dawn"
+              width={128}
+              height={192}
+              loading="lazy"
+              decoding="async"
               className="absolute right-0 bottom-0 z-0 h-auto w-12 sm:w-16 lg:w-24 xl:w-32"
             />
           </div>

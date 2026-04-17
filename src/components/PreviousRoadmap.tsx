@@ -1,6 +1,6 @@
+import { previousRoles } from '@/config/site-data'
 import { motion, useInView } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { previousRoles } from '@/config/site-data'
 
 const MOBILE_PATH =
   'M150,560 C150,500 50,470 50,410 C50,350 250,310 250,250 C250,190 50,150 50,90 C50,45 150,20 150,15'
@@ -66,7 +66,7 @@ function RoleCard({
               }
         }
         transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-        className="relative overflow-hidden rounded-2xl border bg-card/60 backdrop-blur-xl p-4 transition-all duration-500 group-hover/role:border-primary/30 group-hover/role:shadow-lg"
+        className="relative overflow-hidden rounded-2xl border bg-card/60 backdrop-blur-xl p-4 transition-[border-color,transform] duration-500 group-hover/role:border-primary/30 will-change-transform"
       >
         <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-primary/3 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover/role:opacity-100" />
 

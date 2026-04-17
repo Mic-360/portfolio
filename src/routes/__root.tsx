@@ -388,25 +388,19 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
           crossOrigin: 'anonymous',
         },
         {
-          rel: 'stylesheet',
+          rel: 'preload',
+          as: 'style',
           href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&family=Fira+Code:wght@400;500&display=swap',
         },
         {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&family=Fira+Code:wght@400;500&display=swap',
+          media: 'print',
+          'data-font-async': 'true',
+        } as { rel: string; href: string; media: string },
+        {
           rel: 'preconnect',
           href: 'https://gravatar.com',
-        },
-        {
-          rel: 'dns-prefetch',
-          href: 'https://gravatar.com',
-        },
-        {
-          rel: 'preconnect',
-          href: 'https://app.cal.com',
-        },
-        {
-          rel: 'preconnect',
-          href: 'https://github-contributions-api.deno.dev',
-          crossOrigin: 'anonymous',
         },
       ],
     }
@@ -436,6 +430,24 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   const [showDoom, setShowDoom] = useState(false)
   const gaMeasurementId = env.VITE_GA_MEASUREMENT_ID
   useKonamiCode(useCallback(() => setShowDoom(true), []))
+
+  useEffect(() => {
+    const activateAsyncFontStyles = () => {
+      document
+        .querySelectorAll<HTMLLinkElement>('link[data-font-async]')
+        .forEach((el) => {
+          if (el.media !== 'all') el.media = 'all'
+        })
+    }
+
+    if (document.readyState === 'complete') {
+      activateAsyncFontStyles()
+      return
+    }
+
+    window.addEventListener('load', activateAsyncFontStyles, { once: true })
+    return () => window.removeEventListener('load', activateAsyncFontStyles)
+  }, [])
 
   useEffect(() => {
     const initializeCal = async () => {
