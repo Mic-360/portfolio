@@ -310,6 +310,7 @@ function App() {
             loop
             muted
             playsInline
+            aria-hidden="true"
           />
           <div className="hero-grid-overlay absolute inset-y-[8%] right-[3%] w-[82%]" />
           <div className="hero-seamless-edge absolute inset-0" />
@@ -519,14 +520,6 @@ function App() {
                     'radial-gradient(circle at center, black 2%, black 12%, transparent 100%)',
                   WebkitMaskImage:
                     'radial-gradient(circle at center, black 2%, black 12%, transparent 100%)',
-                }}
-              />
-              <div
-                aria-hidden="true"
-                className="absolute inset-0"
-                style={{
-                  background:
-                    'radial-gradient(circle at center, rgb(10 10 10 / 0.58) 0%, rgb(10 10 10 / 0.3) 34%, transparent 72%)',
                 }}
               />
               <motion.div
