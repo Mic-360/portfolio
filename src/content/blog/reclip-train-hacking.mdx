@@ -1,0 +1,218 @@
+---
+title: 'I Forked a Repo on a Train and Google Jules Did the Rest'
+date: '2026-04-17'
+summary: 'Found an open-source media downloader, sicced Google Jules on it from a moving train, shipped 9 PRs, patched a security hole, and deployed it to my phone. All before my stop.'
+tags:
+  - 'google-jules'
+  - 'open-source'
+  - 'android'
+  - 'termux'
+  - 'ai-agents'
+categories:
+  - 'development'
+image: '/reclip.png'
+---
+
+# I Forked a Repo on a Train and Google Jules Did the Rest
+
+> "Some people read books on trains. Some stare out the window. I fork repos and send AI agents into battle."
+
+Picture this: you're on a train, the WiFi is barely legal, the person next to you is watching a cooking reel at full volume without headphones, and you — you absolute menace — decide this is the perfect time to contribute to open source.
+
+Not just one commit. Nine pull requests. Security patches. Performance optimizations. A full Termux deployment pipeline. Deployed to your own Android phone. From. A. Train.
+
+Welcome to what happens when you combine a GitHub repo, Google Jules, spotty 4G, and a complete disregard for the concept of "downtime."
+
+## The Discovery
+
+I was doom-scrolling through GitHub — because apparently I can't even scroll through feeds like a normal person, I have to do it on a developer platform — when I stumbled across [ReClip](https://github.com/averygan/reclip). A self-hosted media downloader. Python + Flask. ~150 lines of backend code. Clean vanilla HTML/CSS/JS frontend. Supports YouTube, TikTok, Instagram, Twitter/X, and about 1,000 other sites via yt-dlp.
+
+The project was clean, minimal, functional. Naturally, my first thought was: _"I can make this run on my phone."_
+
+My second thought was: _"I should not be doing this right now."_
+
+Guess which thought won.
+
+## Enter Google Jules
+
+For the uninitiated, [Google Jules](https://jules.google.com) is an AI coding agent that lives inside your GitHub workflow. You describe a task, point it at a repo, and it opens a PR with the changes. It reads code. It writes code. It responds to review comments. It's basically that one coworker who actually reads the PR description before approving.
+
+The workflow went something like this:
+
+1. Fork the repo
+2. Open Jules on my phone
+3. Describe what I want
+4. Jules opens a PR
+5. GitHub Copilot auto-reviews the PR
+6. I tell Jules to fix the review comments
+7. Jules fixes them
+8. Merge
+9. Repeat from step 3 until the train reaches my stop
+
+I was essentially orchestrating an AI code fight club from my pocket. Jules writes the code. Copilot reviews it. Jules fixes the feedback. I sit there watching two AIs argue about port numbers while the countryside blurs past my window.
+
+This is peak 2026 developer experience.
+
+## The Nine PRs
+
+Here's every improvement that shipped, in order. Every single one was authored by Google Jules, reviewed by either Copilot or myself, and merged before I finished my commute.
+
+### PR #1 — Termux Deployment & Android Optimization
+
+The original repo ran great on macOS and Linux. On Android? Not so much. Jules added:
+
+- **Waitress WSGI server** replacing Flask's dev server — because running a development server in production is a choice, but not a good one
+- **aria2c integration** as an external downloader for yt-dlp, enabling multi-threaded downloads
+- **Suppressed yt-dlp console spam** to reduce CPU and memory pressure on mobile
+- **DEPLOYMENT.md** with full Termux + Cloudflare Tunnel documentation
+- **reclip.sh enhancements** — Termux detection via `$PREFIX`, `pkg install` hints, automatic `termux-wake-lock`
+
+Copilot flagged that `--quiet` would suppress the JSON output from yt-dlp's `-j` flag. Jules fixed it. Copilot noted the hardcoded `threads=8` in Waitress. Jules made it configurable via `WAITRESS_THREADS` env var. The `TERMUX_VERSION` detection was unreliable — Jules switched to `$PREFIX` only.
+
+**145 additions, 10 deletions.** The app could now run on a phone.
+
+### PR #2 — One-Click Termux Installer
+
+Because apparently running four commands is too many:
+
+- **`install.sh`** — automated Termux dependency installation (Python, FFmpeg, Git, Aria2, Cloudflared)
+- **`start-background.sh`** — persistent background execution via `nohup` with log output and PID tracking
+- **Cloudflare Tunnel** made explicit opt-in via `ENABLE_CLOUDFLARED_TUNNEL=1` (Copilot correctly flagged the security risk of auto-exposing to the internet)
+- Dynamic `${PORT:-8899}` everywhere instead of hardcoded values
+- Removed unused `wget` from the install list
+
+One curl command. That's it. `curl -O ... && bash install.sh` and you're running a media downloader on your phone.
+
+**166 additions, 35 deletions.**
+
+### PR #3 — Filename Sanitization Performance
+
+Jules replaced a Python generator expression with `re.sub()` for stripping unsafe characters from filenames.
+
+- Short titles: **32% faster**
+- Long titles: **90% faster** (over 100K operations)
+
+Two lines changed. An entire performance class unlocked.
+
+### PR #4 — PEP 8 Import Cleanup
+
+Moved inline imports (`shutil`, `waitress`) to the top of `app.py` like civilized people. Added a `HAS_WAITRESS` flag for graceful optional dependency handling.
+
+This is the PR equivalent of making your bed in the morning. Small. Satisfying. Suspiciously impactful on your mental state.
+
+### PR #5 — Security Fix: Argument Injection
+
+This one actually mattered.
+
+The `yt-dlp` command was being constructed by appending user-supplied URLs directly to the argument list. A malicious URL starting with a hyphen (e.g., `--version`, `--exec`) would be interpreted as a command-line flag. That's a textbook argument injection vulnerability.
+
+Jules added `--` before the URL in both `get_info` and `run_download`, forcing everything after it to be treated as a positional argument.
+
+**2 lines.** The kind of 2-line change that prevents your self-hosted app from becoming someone else's self-hosted app.
+
+### PR #6 — Test Suite for `/api/download`
+
+Added a `pytest` test suite covering:
+
+- Missing URL → 400
+- Empty/whitespace URL → 400
+- Missing JSON body → 400 (previously crashed with a 500)
+- Valid request → returns `job_id`, starts download thread
+
+Jules also hardened the `start_download` function with `request.json or {}` to handle the missing body case. The kind of fix you write after the first time your phone crashes at 1 AM because someone sent an empty POST.
+
+### PR #7 — Reduced Cyclomatic Complexity
+
+`run_download` was doing too many things. Jules extracted `_build_download_command` and `_finalize_download` as helpers. The function went from "monolithic wall of logic" to "three readable units."
+
+More modules. Less cognitive load. More maintainable by future-me who will have forgotten everything about this codebase by next week.
+
+### PR #8 — Pre-Compiled Regex Sanitization
+
+Doubled down on PR #3's approach. Replaced character-by-character string filtering with a pre-compiled `RE_UNSAFE` regex pattern.
+
+- Baseline: 6.71s for 1M iterations
+- Optimized: 3.53s for 1M iterations
+- **~47% faster**
+
+Jules even wrote a verification script to confirm bit-for-bit output compatibility. On a phone, this kind of micro-optimization is the difference between "responsive" and "is this thing frozen?"
+
+### PR #9 — Apple-Style UI Redesign (Closed)
+
+Jules went full designer mode. Complete visual redesign with:
+
+- Custom CSS variable design system
+- Automatic light/dark mode via system preference
+- Zero-dependency inline SVGs
+- Sage green accent color
+- Skeleton loaders and smooth transitions
+
+**588 additions, 292 deletions.** I closed this one without merging — it was too opinionated for a fork — but the output was genuinely impressive. Jules can ship frontend.
+
+## Deploying to My Phone
+
+The whole point of PRs #1 and #2 was to make this stupid-easy:
+
+```bash
+pkg update && pkg upgrade
+curl -O https://raw.githubusercontent.com/Mic-360/reclip/main/install.sh && bash install.sh
+```
+
+That's it. The script installs Python, FFmpeg, Git, Aria2, Termux-API, and Cloudflared. It clones the repo, sets up a virtual environment, installs requirements, and starts the server.
+
+Open `http://localhost:8899` in your phone's browser and you're downloading media from 1,000+ platforms. On your phone. Running a Python Flask server. In Termux. Like a completely normal person.
+
+Want to access it from another device? `ENABLE_CLOUDFLARED_TUNNEL=1 ./start-background.sh` gives you a public `.trycloudflare.com` URL. Your phone is now a server. Congratulations, you've peaked.
+
+## The Jules Workflow — What Actually Worked
+
+Here's the honest assessment:
+
+**What went well:**
+
+- Jules understood the codebase fast. The context window handled the entire `app.py` (~150 lines) without breaking a sweat
+- The Copilot → Jules feedback loop was surprisingly effective. Copilot flagged real issues (security, port consistency, output suppression), and Jules fixed them correctly
+- Every PR description was detailed, well-structured, and included verification steps. Better than most humans write
+- The security fix (PR #5) was a legitimate catch that Jules identified and patched proactively
+
+**What was weird:**
+
+- Jules tried to use `--quiet` with `-j` in yt-dlp, which would have broken JSON output. Copilot caught it
+- The UI redesign PR was ambitious but I didn't ask for sage green. Jules just... chose sage green
+- The commit messages had emoji. Every. Single. One
+
+**What I learned:**
+
+- AI agents are absurdly effective for "improve this codebase" style tasks on small-to-medium repos
+- The fork → Jules → Copilot review → Jules fix → merge pipeline is a real workflow now
+- You can do meaningful open source contribution from a train with a phone and zero IDE access
+- The bar for "I don't have time to contribute" just got obliterated
+
+## The Scoreboard
+
+| Metric                   | Value                     |
+| ------------------------ | ------------------------- |
+| PRs opened               | 9                         |
+| PRs merged               | 8                         |
+| PRs closed               | 1                         |
+| Lines added              | ~990                      |
+| Lines deleted            | ~340                      |
+| Security vulns patched   | 1                         |
+| Test suites added        | 1                         |
+| Performance improvements | 2 (32-90% and 47% faster) |
+| Device deployed to       | Android (Termux)          |
+| IDE used                 | None                      |
+| Location                 | A moving train            |
+| Regrets                  | Zero                      |
+
+## Final Thoughts
+
+I found a repo, forked it, shipped 9 PRs across security, performance, testing, deployment, code quality, and UI — and deployed the result to my own Android phone. All using Google Jules from a train.
+
+The future of open source isn't sitting at a desk with three monitors. It's an AI agent in your pocket, a review bot on GitHub, and whatever signal strength the universe decides to grant you between stations.
+
+Now if you'll excuse me, my stop is coming up and I need to merge one more thing.
+
+---
+
+[ReClip on GitHub](https://github.com/Mic-360/reclip) · [Live Demo](https://reclip.bhaumicsingh.tech/)

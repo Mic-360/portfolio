@@ -1,0 +1,107 @@
+---
+title: 'ReClip'
+date: '2026-04-17'
+summary: 'Forked and hardened a self-hosted media downloader — added Termux deployment, security patches, performance optimizations, and a full test suite using Google Jules from a phone.'
+stack:
+  - 'Python'
+  - 'Flask'
+  - 'yt-dlp'
+  - 'FFmpeg'
+  - 'Termux'
+  - 'Cloudflare Tunnel'
+  - 'Waitress'
+  - 'Google Jules'
+links:
+  - label: 'Live'
+    url: 'https://reclip.bhaumicsingh.tech/'
+  - label: 'GitHub'
+    url: 'https://github.com/Mic-360/reclip'
+tags:
+  - 'python'
+  - 'open-source'
+  - 'android'
+  - 'security'
+  - 'ai-agents'
+categories:
+  - 'tooling'
+image: '/reclip.png'
+---
+
+# ReClip
+
+A self-hosted, open-source media downloader supporting 1,000+ platforms via yt-dlp. Forked from [averygan/reclip](https://github.com/averygan/reclip) and improved with Android deployment, security hardening, performance optimization, and automated testing — all authored by Google Jules and reviewed through GitHub Copilot.
+
+## The Problem
+
+The original ReClip was a clean, minimal media downloader — Python + Flask backend, vanilla HTML/CSS/JS frontend, roughly 150 lines of backend code. It worked well on macOS and Linux desktop environments, but had several gaps:
+
+- No mobile/Android deployment story
+- No production-grade WSGI server (ran Flask's dev server)
+- A command injection vulnerability in yt-dlp argument construction
+- No test coverage for the download API
+- Performance bottlenecks in string sanitization routines
+- High cyclomatic complexity in the core download function
+
+## The Solution
+
+Forked the repository and used [Google Jules](https://jules.google.com) as an AI coding agent to systematically address each gap across 9 pull requests. GitHub Copilot provided automated code review, and Jules iterated on feedback before merge.
+
+### Android / Termux Deployment
+
+- Replaced Flask's development server with **Waitress** (WSGI) for production-grade concurrency with configurable thread count via `WAITRESS_THREADS`
+- Integrated **aria2c** as an external multi-threaded downloader for yt-dlp
+- Created **`install.sh`** for one-click Termux setup — installs Python, FFmpeg, Git, Aria2, Termux-API, and Cloudflared automatically
+- Created **`start-background.sh`** for persistent background execution via `nohup` with PID tracking and log output
+- Optional **Cloudflare Quick Tunnel** exposure via `ENABLE_CLOUDFLARED_TUNNEL=1` with explicit security warnings
+- Automatic **`termux-wake-lock`** acquisition to prevent Android from suspending background processes
+- Full deployment documentation in `DEPLOYMENT.md`
+
+### Security Hardening
+
+- Fixed **argument injection vulnerability** in yt-dlp command construction — user-supplied URLs starting with hyphens were interpreted as CLI flags
+- Added `--` separator before URL arguments in both `get_info` and `run_download` to force positional argument parsing
+- Cloudflare Tunnel exposure changed from automatic to opt-in with security guidance documentation
+
+### Performance Optimization
+
+- Replaced character-by-character generator expression with **pre-compiled `re.sub()`** for filename sanitization
+- Short titles: **32% faster**, long titles: **90% faster** (100K operations)
+- Pre-compiled `RE_UNSAFE` regex pattern: **47% reduction** in execution time (6.71s → 3.53s over 1M iterations)
+
+### Code Quality
+
+- Moved inline imports to top-level per **PEP 8** with `HAS_WAITRESS` flag for optional dependency handling
+- Extracted `_build_download_command` and `_finalize_download` helpers to **reduce cyclomatic complexity** in `run_download`
+- Added **pytest test suite** for `/api/download` covering missing URL, empty URL, missing JSON body, and valid request paths
+- Fixed crash on POST requests with missing JSON body (`request.json or {}`)
+
+## Highlights
+
+| Area          | Impact                                              |
+| ------------- | --------------------------------------------------- |
+| PRs shipped   | 8 merged, 1 closed                                  |
+| Security      | Argument injection vulnerability patched            |
+| Performance   | 32–90% faster filename sanitization                 |
+| Testing       | Full pytest suite for download API                  |
+| Deployment    | One-command Android/Termux install                  |
+| Server        | Production Waitress WSGI replacing Flask dev server |
+| Accessibility | Public tunnel via Cloudflare with opt-in security   |
+
+## Results
+
+- Fully functional self-hosted media downloader running on Android via Termux
+- Accessible at `localhost:8899` or via public Cloudflare Tunnel URL from any device
+- Supports YouTube, TikTok, Instagram, Twitter/X, Reddit, Facebook, Vimeo, Twitch, SoundCloud, and 1,000+ other platforms
+- MP4 video and MP3 audio extraction with quality/resolution selection
+- Bulk downloads with automatic URL deduplication
+- ~990 lines added, ~340 lines deleted across the fork
+
+## What I Learned
+
+Google Jules paired with GitHub Copilot code review creates a surprisingly effective contribution pipeline. Jules handled everything from deployment scripting to security patching to performance profiling — all from task descriptions sent via phone. The AI-to-AI feedback loop (Jules writes, Copilot reviews, Jules fixes) caught real issues: suppressed JSON output, hardcoded port values, unreliable environment detection, and public tunnel exposure risks.
+
+The entire contribution — 9 PRs, 8 merged — was done from a phone on a train with no IDE. AI coding agents have fundamentally changed what "I don't have time to contribute" means.
+
+---
+
+[Live Demo](https://reclip.bhaumicsingh.tech/) · [GitHub](https://github.com/Mic-360/reclip) · [Upstream](https://github.com/averygan/reclip)
