@@ -1,12 +1,15 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
-import { AnimatePresence, motion } from 'motion/react'
-import { useState } from 'react'
 import PenIcon from '@/components/ui/pen-icon'
 import { siteMeta } from '@/config/site-data'
 import { getBlogIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
+import { Link, createFileRoute } from '@tanstack/react-router'
+import { AnimatePresence, motion } from 'motion/react'
+import { useEffect, useState } from 'react'
 
 export const Route = createFileRoute('/blog/')({
+  validateSearch: (search: Record<string, unknown>) => ({
+    tag: typeof search.tag === 'string' ? search.tag : undefined,
+  }),
   loader: async () => ({
     posts: await getBlogIndex(),
   }),
@@ -91,7 +94,12 @@ export const Route = createFileRoute('/blog/')({
 
 function BlogIndex() {
   const { posts } = Route.useLoaderData()
-  const [activeTag, setActiveTag] = useState<string | null>(null)
+  const { tag: urlTag } = Route.useSearch()
+  const [activeTag, setActiveTag] = useState<string | null>(urlTag ?? null)
+
+  useEffect(() => {
+    setActiveTag(urlTag ?? null)
+  }, [urlTag])
 
   const allTags = Array.from(
     new Set(posts.flatMap((post) => [...post.categories, ...post.tags])),
