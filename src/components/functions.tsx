@@ -199,7 +199,7 @@ function InteractiveChart({
         cy={p.y}
         r={2.5}
         fill={color}
-        className="transition-all duration-200"
+        className="transition-opacity duration-200"
       />
     ))
   } else if (type === 'area') {
