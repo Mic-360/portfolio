@@ -1,13 +1,25 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useFeedback } from '../hooks/use-feedback'
+import { SETTINGS_EVENT, getFeedbackEnabled } from '@/lib/settings'
 
 export function FeedbackHandler() {
   const { triggerFeedback } = useFeedback()
+  const enabledRef = useRef(true)
+
+  useEffect(() => {
+    enabledRef.current = getFeedbackEnabled()
+    const onChange = () => {
+      enabledRef.current = getFeedbackEnabled()
+    }
+    window.addEventListener(SETTINGS_EVENT, onChange)
+    return () => window.removeEventListener(SETTINGS_EVENT, onChange)
+  }, [])
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
+      if (!enabledRef.current) return
       const target = e.target as HTMLElement
       const interactiveElement = target.closest(
         'button, a, [role="button"], input[type="submit"], input[type="button"]',
