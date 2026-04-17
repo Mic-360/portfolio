@@ -72,9 +72,9 @@ export function VideoBackground() {
 
   return (
     <>
-      <audio ref={sunnyAudioRef} src="/forest.mp3" loop preload="auto" />
-      <audio ref={midnightAudioRef} src="/night.mp3" loop preload="auto" />
-      <audio ref={frierenAudioRef} src="/mozart.mp3" loop preload="auto" />
+      <audio ref={sunnyAudioRef} src="/forest.mp3" loop preload="none" />
+      <audio ref={midnightAudioRef} src="/night.mp3" loop preload="none" />
+      <audio ref={frierenAudioRef} src="/mozart.mp3" loop preload="none" />
 
       <AnimatePresence mode="wait">
         {showVideo && (
