@@ -1,15 +1,14 @@
+import { Link, createFileRoute } from '@tanstack/react-router'
+import { AnimatePresence, motion } from 'motion/react'
+import { useEffect, useState } from 'react'
 import PenIcon from '@/components/ui/pen-icon'
 import { siteMeta } from '@/config/site-data'
 import { getBlogIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
-import { Link, createFileRoute } from '@tanstack/react-router'
-import { AnimatePresence, motion } from 'motion/react'
-import { useEffect, useState } from 'react'
 
 export const Route = createFileRoute('/blog/')({
-  validateSearch: (search: Record<string, unknown>) => ({
-    tag: typeof search.tag === 'string' ? search.tag : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): { tag?: string } =>
+    typeof search.tag === 'string' ? { tag: search.tag } : {},
   loader: async () => ({
     posts: await getBlogIndex(),
   }),

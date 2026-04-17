@@ -1,15 +1,14 @@
+import { Link, createFileRoute } from '@tanstack/react-router'
+import { AnimatePresence, motion } from 'motion/react'
+import { useEffect, useState } from 'react'
 import LayersIcon from '@/components/ui/layers-icon'
 import { siteMeta } from '@/config/site-data'
 import { getProjectIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
-import { Link, createFileRoute } from '@tanstack/react-router'
-import { AnimatePresence, motion } from 'motion/react'
-import { useEffect, useState } from 'react'
 
 export const Route = createFileRoute('/projects/')({
-  validateSearch: (search: Record<string, unknown>) => ({
-    tag: typeof search.tag === 'string' ? search.tag : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): { tag?: string } =>
+    typeof search.tag === 'string' ? { tag: search.tag } : {},
   loader: async () => ({
     projects: await getProjectIndex(),
   }),
