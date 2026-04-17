@@ -1,12 +1,15 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
-import { AnimatePresence, motion } from 'motion/react'
-import { useState } from 'react'
 import LayersIcon from '@/components/ui/layers-icon'
 import { siteMeta } from '@/config/site-data'
 import { getProjectIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
+import { Link, createFileRoute } from '@tanstack/react-router'
+import { AnimatePresence, motion } from 'motion/react'
+import { useEffect, useState } from 'react'
 
 export const Route = createFileRoute('/projects/')({
+  validateSearch: (search: Record<string, unknown>) => ({
+    tag: typeof search.tag === 'string' ? search.tag : undefined,
+  }),
   loader: async () => ({
     projects: await getProjectIndex(),
   }),
@@ -90,14 +93,26 @@ export const Route = createFileRoute('/projects/')({
 
 function ProjectsIndex() {
   const { projects } = Route.useLoaderData()
-  const [activeCategory, setActiveCategory] = useState<string | null>(null)
+  const { tag: urlTag } = Route.useSearch()
+  const [activeCategory, setActiveCategory] = useState<string | null>(
+    urlTag ?? null,
+  )
+
+  useEffect(() => {
+    setActiveCategory(urlTag ?? null)
+  }, [urlTag])
 
   const allCategories = Array.from(
     new Set(projects.flatMap((project) => project.categories)),
   )
 
   const filteredProjects = activeCategory
-    ? projects.filter((p) => p.categories.includes(activeCategory))
+    ? projects.filter(
+        (p) =>
+          p.categories.includes(activeCategory) ||
+          p.tags.includes(activeCategory) ||
+          p.stack.includes(activeCategory),
+      )
     : projects
 
   const container = {
