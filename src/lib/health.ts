@@ -142,5 +142,5 @@ export function calculateStats(
 }
 
 export function formatMetricValue(value: number, decimals = 0): string {
-  return Number(value.toFixed(decimals)).toLocaleString()
+  return Number(value.toFixed(decimals)).toLocaleString('en-US')
 }

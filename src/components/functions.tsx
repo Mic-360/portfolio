@@ -298,7 +298,7 @@ function InteractiveChart({
             {formatValue(activePoint.val)}
           </span>
           <span className="block text-muted-foreground opacity-80">
-            {new Date(activePoint.timestamp).toLocaleDateString(undefined, {
+            {new Date(activePoint.timestamp).toLocaleDateString('en-US', {
               month: 'short',
               day: 'numeric',
             })}
@@ -316,7 +316,7 @@ function MetricRow({
   type = 'sum',
   chartType = 'line',
   color,
-  format = (v: number) => v.toLocaleString(),
+  format = (v: number) => v.toLocaleString('en-US'),
 }: {
   label: string
   samples?: Array<{

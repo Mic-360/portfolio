@@ -240,9 +240,9 @@ export default function GitHubHeatmap({ username }: GitHubHeatmapProps) {
           <h3 className="text-[10px] font-semibold uppercase tracking-[0.24em] text-primary/80">
             GitHub Activity
           </h3>
-          <p className="text-[10px] text-muted-foreground/50 uppercase tracking-wider">
+          <p className="text-[10px] text-muted-foreground/70 uppercase tracking-wider">
             {total
-              ? `${total.toLocaleString()} total commits`
+              ? `${total.toLocaleString('en-US')} total commits`
               : loading
                 ? 'Syncing activity...'
                 : 'No activity found'}
