@@ -19,8 +19,8 @@ import { BacklightFilterDefs } from '../components/ui/backlight'
 import { VideoBackground } from '../components/VideoBackground'
 import { gravatar, siteImages, siteInfo, siteMeta } from '../config/site-data'
 
-import type { QueryClient } from '@tanstack/react-query'
 import appCss from '../styles.css?url'
+import type { QueryClient } from '@tanstack/react-query'
 
 import { env } from '@/env'
 
@@ -526,7 +526,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           <VideoBackground />
           <FeedbackHandler />
           <CommandMenu />
-          <main className="mx-auto w-full py-10 text-sm">{children}</main>
+          <main className="mx-auto w-full max-w-395 py-10 text-sm">{children}</main>
           <Footer />
           <FloatingNavDock />
           <DoomErrorBoundary onError={() => setShowDoom(false)}>

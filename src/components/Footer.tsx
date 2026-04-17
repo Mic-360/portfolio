@@ -35,7 +35,7 @@ function RssIcon() {
 
 export default function Footer() {
   return (
-    <footer className="relative mx-auto w-full py-8">
+    <footer className="relative mx-auto w-full max-w-395 py-8">
       <div className="relative overflow-hidden pt-12 px-8">
         <div className="pointer-events-none absolute inset-x-[14%] top-[8%] h-24 rounded-full bg-primary/10 blur-3xl" />
         <div className="pointer-events-none absolute right-[8%] top-[18%] h-72 w-72 rounded-full bg-primary/8 blur-[120px]" />

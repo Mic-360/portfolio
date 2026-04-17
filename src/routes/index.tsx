@@ -272,7 +272,7 @@ function App() {
 
   const featuredProjects = projects.slice(0, 5)
   const featuredPosts = posts.slice(0, 5)
-  const featuredCertificates = certificates.slice(0, 6)
+  const featuredCertificates = certificates.slice(0, 7)
   const featuredPins = pinterestData.pins.slice(0, 4)
 
   return (
@@ -948,10 +948,39 @@ function App() {
 
       <motion.div
         variants={item}
-        className="grid gap-1 xl:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] px-4 sm:px-8"
+        className="grid gap-4 xl:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] px-4 sm:px-8"
       >
         <Section title="pinterest">
-          <div>
+          <div className="relative">
+            <motion.div
+              initial={{ opacity: 0, y: -20, scale: 0.92 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.6 }}
+              transition={{
+                duration: 0.8,
+                ease: [0.25, 0.1, 0.25, 1],
+              }}
+              className="pointer-events-none absolute left-1/2 top-1/2 z-20 w-45 -translate-x-1/2 -translate-y-1/2 sm:w-55"
+            >
+              <motion.div
+                animate={{ y: [0, -5, 0] }}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+                className="relative"
+              >
+                <div className="absolute inset-x-7 top-1/2 h-10 -translate-y-1/2 rounded-full bg-[#e60023]/18 blur-2xl" />
+                <img
+                  src="/pin.svg"
+                  alt="pinterest"
+                  aria-hidden="true"
+                  className="h-auto w-full"
+                />
+              </motion.div>
+            </motion.div>
+
             {featuredPins.length > 0 ? (
               <div className="flex flex-col gap-6">
                 {featuredPins[0] ? (
@@ -961,7 +990,7 @@ function App() {
                     rel="noopener noreferrer"
                     className="group block"
                   >
-                    <div className="project-card-apple relative overflow-hidden rounded-2xl border border-border/10">
+                    <div className="project-card-apple relative overflow-hidden rounded-3xl border border-border/10">
                       <div className="media-hover-parent relative aspect-video">
                         <img
                           src={featuredPins[0].imageUrl}
