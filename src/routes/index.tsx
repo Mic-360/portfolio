@@ -1233,9 +1233,6 @@ function App() {
               />
             </div>
 
-            {/* <div className="pointer-events-none absolute inset-x-[14%] top-[8%] h-24 rounded-full bg-primary/10 blur-3xl" />
-            <div className="pointer-events-none absolute right-[8%] top-[18%] h-72 w-full sm:w-72 rounded-full bg-primary/8 blur-[120px]" /> */}
-
             <div className="relative z-10 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.72fr)] lg:items-end px-4 sm:px-8">
               <div className="grid gap-8 py-2 lg:pr-12">
                 <div className="flex items-center justify-between gap-4 text-[10px] uppercase tracking-[0.2em] text-foreground/30">
@@ -1252,7 +1249,7 @@ function App() {
                     Say hello when the work needs clarity, pace, and someone who
                     can ship the whole thing.
                   </h2>
-                  <p className="max-w-3xl text-base leading-8 text-foreground/70 sm:text-lg">
+                  <div className="max-w-3xl text-base leading-8 text-foreground/70 sm:text-lg">
                     Read my{' '}
                     {contactLinks.map((link, index) => (
                       <span key={link.label}>
@@ -1276,7 +1273,7 @@ function App() {
                       cal.com
                     </LinkPreview>
                     . Open a link, get context quickly, and start building.
-                  </p>
+                  </div>
                 </div>
 
                 <div className="h-px w-full bg-border/10" />
