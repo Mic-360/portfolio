@@ -3,6 +3,7 @@ import { ImageIcon } from 'lucide-react'
 import { motion } from 'motion/react'
 
 import type { PinterestCreatedPin } from '@/lib/pinterest'
+import { FocusCards } from '@/components/ui/focus-cards'
 import { LinkPreview } from '@/components/ui/link-preview'
 import { siteMeta } from '@/config/site-data'
 import { getPinterestCreatedPins } from '@/lib/pinterest'
@@ -197,60 +198,32 @@ function PinterestIndexPage() {
       </motion.div>
 
       {previewPins.length > 0 ? (
-        <motion.div
-          variants={item}
-          className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 px-4 sm:px-6"
-        >
-          {previewPins.map((pin: PinterestCreatedPin, index: number) => (
-            <motion.div
-              key={pin.id}
-              initial={{ opacity: 0, y: 20, scale: 0.96 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{
-                duration: 0.6,
-                delay: index * 0.08,
-                ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
-              }}
-            >
-              <a
-                href={pin.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group block h-full"
-              >
-                <motion.article
-                  whileHover={{ y: -4 }}
-                  transition={{
-                    type: 'spring',
-                    stiffness: 300,
-                    damping: 20,
-                  }}
-                  className="project-card-apple flex h-full flex-col overflow-hidden rounded-2xl border border-border/10 bg-card/50"
-                >
-                  <div className="media-hover-parent relative aspect-4/3 overflow-hidden">
-                    <img
-                      src={pin.imageUrl}
-                      alt=""
-                      loading="lazy"
-                      width={pin.imageWidth}
-                      height={pin.imageHeight}
-                      className="media-hover-image absolute inset-0 h-full w-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-linear-to-t from-card/50 via-transparent to-transparent" />
-                  </div>
-                  <div className="flex flex-1 items-center justify-between gap-3 p-4">
-                    <h3 className="line-clamp-2 text-sm font-medium tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
-                      {pin.title}
-                    </h3>
-                    <span className="shrink-0 text-xs text-primary/50 transition-transform duration-300 group-hover:translate-x-1">
-                      &rarr;
-                    </span>
-                  </div>
-                </motion.article>
-              </a>
-            </motion.div>
-          ))}
+        <motion.div variants={item} className="px-4 sm:px-6">
+          <FocusCards
+            cards={previewPins.map((pin: PinterestCreatedPin) => ({
+              title: pin.title,
+              src: pin.imageUrl,
+            }))}
+            renderOverlay={(card, index) => {
+              const pin = previewPins[index]
+              return (
+                <div className="flex h-full flex-col justify-end gap-2">
+                  <p className="line-clamp-2 text-lg font-medium tracking-tight text-white md:text-xl">
+                    {card.title}
+                  </p>
+                  <a
+                    href={pin.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs text-white/60 transition-colors hover:text-white"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    Open on Pinterest ↗
+                  </a>
+                </div>
+              )
+            }}
+          />
         </motion.div>
       ) : null}
 

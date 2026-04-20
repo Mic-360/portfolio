@@ -3,6 +3,7 @@ import { ImageIcon } from 'lucide-react'
 import { motion } from 'motion/react'
 
 import type { PinterestCreatedPin } from '@/lib/pinterest'
+import { FocusCards } from '@/components/ui/focus-cards'
 import { LinkPreview } from '@/components/ui/link-preview'
 import { pinterest, siteMeta } from '@/config/site-data'
 import { getPinterestCreatedPins } from '@/lib/pinterest'
@@ -164,58 +165,42 @@ function PinterestGalleryPage() {
 
       {/* Masonry gallery */}
       {pins.length > 0 ? (
-        <motion.div
-          variants={item}
-          className="columns-2 gap-4 sm:columns-3 lg:columns-4 xl:columns-5 px-4 sm:px-6"
-        >
-          {pins.map((pin: PinterestCreatedPin, index: number) => (
-            <motion.div
-              key={pin.id}
-              initial={{ opacity: 0, y: 20, scale: 0.96 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{
-                duration: 0.6,
-                delay: (index % 5) * 0.06,
-                ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
-              }}
-              className="group mb-4 break-inside-avoid"
-            >
-              <article className="project-card-apple overflow-hidden rounded-2xl border border-border/10 bg-card/40">
-                <a
-                  href={pin.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="media-hover-parent block"
-                >
-                  <img
-                    src={pin.imageUrl}
-                    alt={pin.title}
-                    loading="lazy"
-                    width={pin.imageWidth}
-                    height={pin.imageHeight}
-                    className="media-hover-image h-auto w-full object-cover"
-                  />
-                </a>
-                <div className="flex items-center justify-between gap-2 border-t border-border/8 px-3 py-2.5">
-                  <a
-                    href={pin.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
-                  >
-                    Open
-                  </a>
-                  <a
-                    href={buildDownloadUrl(pin)}
-                    className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
-                  >
-                    Download
-                  </a>
+        <motion.div variants={item} className="px-4 sm:px-6">
+          <FocusCards
+            className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+            cards={pins.map((pin: PinterestCreatedPin) => ({
+              title: pin.title,
+              src: pin.imageUrl,
+            }))}
+            renderOverlay={(_, index) => {
+              const pin = pins[index]
+              return (
+                <div className="flex h-full flex-col justify-between">
+                  <p className="line-clamp-2 text-sm font-medium tracking-tight text-white/90">
+                    {pin.title}
+                  </p>
+                  <div className="flex items-center justify-between gap-2 border-t border-white/10 pt-3">
+                    <a
+                      href={pin.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[10px] uppercase tracking-[0.15em] text-white/70 transition-colors duration-300 hover:text-white"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Open ↗
+                    </a>
+                    <a
+                      href={buildDownloadUrl(pin)}
+                      className="text-[10px] uppercase tracking-[0.15em] text-white/70 transition-colors duration-300 hover:text-white"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Download ↓
+                    </a>
+                  </div>
                 </div>
-              </article>
-            </motion.div>
-          ))}
+              )
+            }}
+          />
         </motion.div>
       ) : (
         <motion.div
