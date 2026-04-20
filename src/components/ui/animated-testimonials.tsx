@@ -41,8 +41,8 @@ export const AnimatedTestimonials = ({
     }
   }, [autoplay])
 
-  const randomRotateY = () => {
-    return Math.floor(Math.random() * 21) - 10
+  const getStableRotate = (index: number) => {
+    return ((index * 7 + 3) % 21) - 10
   }
   return (
     <div
@@ -61,13 +61,13 @@ export const AnimatedTestimonials = ({
                   opacity: 0,
                   scale: 0.9,
                   z: -100,
-                  rotate: randomRotateY(),
+                  rotate: getStableRotate(index),
                 }}
                 animate={{
                   opacity: isActive(index) ? 1 : 0.7,
                   scale: isActive(index) ? 1 : 0.95,
                   z: isActive(index) ? 0 : -100,
-                  rotate: isActive(index) ? 0 : randomRotateY(),
+                  rotate: isActive(index) ? 0 : getStableRotate(index),
                   zIndex: isActive(index)
                     ? 40
                     : testimonials.length + 2 - index,
@@ -77,7 +77,7 @@ export const AnimatedTestimonials = ({
                   opacity: 0,
                   scale: 0.9,
                   z: 100,
-                  rotate: randomRotateY(),
+                  rotate: getStableRotate(index),
                 }}
                 transition={{
                   duration: 0.4,
@@ -171,8 +171,7 @@ export const AnimatedTestimonials = ({
               url={siteMeta.baseUrl + '/certificates'}
               className="text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
             >
-              all credentials {' '}
-              <span>&rarr;</span>
+              all credentials <span>&rarr;</span>
             </LinkPreview>
           </div>
         </div>
