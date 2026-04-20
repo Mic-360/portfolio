@@ -1235,20 +1235,20 @@ function App() {
                   className="group block"
                 >
                   <div
-                    className={`project-card-apple flex items-center gap-4 rounded-xl border border-border/10 bg-card/40 p-4 transition-all duration-300 ${
+                    className={`project-card-apple flex items-center gap-5 rounded-[1.8rem] border border-white/10 bg-background/40 shadow-xl backdrop-blur-2xl p-5 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-1.5 group-hover:bg-background/60 group-hover:shadow-[0_24px_48px_rgba(0,0,0,0.12)] ${
                       index === 0
-                        ? 'flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:gap-5'
+                        ? 'flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:gap-6'
                         : ''
                     }`}
                   >
                     {index === 0 && cert.image_url ? (
-                      <div className="shrink-0 overflow-hidden rounded-lg bg-foreground/2 sm:w-28">
+                      <div className="shrink-0 overflow-hidden rounded-2xl bg-foreground/5 sm:w-32 shadow-inner">
                         <img
                           src={cert.image_url}
                           alt={cert.title}
                           referrerPolicy="no-referrer"
                           crossOrigin="anonymous"
-                          className="h-20 w-full object-contain sm:h-16"
+                          className="h-24 w-full object-contain sm:h-20 p-2 mix-blend-multiply dark:mix-blend-screen"
                           loading="lazy"
                         />
                       </div>
