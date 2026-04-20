@@ -436,50 +436,50 @@ function MetricRow({
 
   return (
     <motion.div
-      whileInView={{ opacity: 1, y: 0 }}
-      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+      initial={{ opacity: 0, y: 12, scale: 0.98, filter: 'blur(4px)' }}
       viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.35, ease: 'easeOut' }}
-      className="group grid min-w-0 gap-4 py-4 transition-colors sm:flex sm:items-center sm:gap-6 sm:py-5"
+      transition={{ duration: 0.9, ease: APPLE_EASE }}
+      className="group grid min-w-0 gap-4 py-5 transition-colors sm:flex sm:items-center sm:gap-6 sm:py-6"
     >
-      <div className="flex min-w-0 w-full shrink-0 flex-col gap-1 sm:w-36">
-        <span className="text-[10px] font-mono uppercase tracking-[0.24em] text-primary/70">
+      <div className="flex min-w-0 w-full shrink-0 flex-col gap-1.5 sm:w-40">
+        <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/60 transition-colors duration-300 group-hover:text-primary/80">
           {label}
         </span>
         <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-1">
-          <span className="tabular-nums text-2xl font-semibold tracking-tight text-foreground">
+          <span className="tabular-nums font-serif text-3xl font-semibold tracking-tight text-foreground/90 transition-colors duration-300 group-hover:text-foreground">
             {format(mainValue)}
           </span>
-          <span className="text-[10px] font-mono uppercase tracking-tight text-muted-foreground">
+          <span className="text-[11px] font-mono uppercase tracking-tight text-muted-foreground transition-colors duration-300 group-hover:text-foreground/70">
             {unit}
           </span>
         </div>
       </div>
 
-      <div className="min-w-0 flex-1 h-12">
+      <div className="min-w-0 flex-1 h-16 group-hover:scale-[1.02] transition-transform duration-500 ease-out">
         <InteractiveChart
           data={graphData}
           color={color || 'var(--primary)'}
           type={chartType}
-          height={48}
+          height={64}
           formatValue={(v) => format(v) + ' ' + unit}
         />
       </div>
 
-      <div className="grid grid-cols-3 gap-2 rounded-xl border border-border/10 bg-background/35 px-3 py-2 font-mono text-[10px] tabular-nums sm:hidden">
+      <div className="grid grid-cols-3 gap-2 rounded-2xl border border-white/5 bg-black/5 dark:bg-white/5 px-4 py-2.5 font-mono text-[10px] tabular-nums backdrop-blur-md sm:hidden">
         {summaryItems.map((item) => (
           <div key={item.label} className="min-w-0 text-center">
-            <span className="block text-muted-foreground">{item.label}</span>
-            <span className="block truncate text-foreground">{item.value}</span>
+            <span className="block text-muted-foreground/60">{item.label}</span>
+            <span className="block truncate font-medium text-foreground/80 mt-0.5">{item.value}</span>
           </div>
         ))}
       </div>
 
-      <div className="hidden w-24 shrink-0 flex-col gap-1 text-right font-mono text-[10px] tabular-nums opacity-60 transition-opacity group-hover:opacity-100 sm:flex sm:justify-center">
+      <div className="hidden w-28 shrink-0 flex-col gap-1.5 text-right font-mono text-[11px] tabular-nums sm:flex sm:justify-center">
         {summaryItems.map((item) => (
-          <div key={item.label} className="flex w-full justify-between">
-            <span className="text-muted-foreground">{item.label}</span>
-            <span className="text-foreground">{item.value}</span>
+          <div key={item.label} className="flex w-full justify-between items-center group/stat">
+            <span className="text-muted-foreground/45 transition-colors duration-300 group-hover/stat:text-muted-foreground">{item.label}</span>
+            <span className="font-medium text-foreground/50 transition-colors duration-300 group-hover/stat:text-foreground">{item.value}</span>
           </div>
         ))}
       </div>
