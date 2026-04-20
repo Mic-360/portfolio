@@ -626,27 +626,23 @@ function App() {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
-              whileInView={{ opacity: 1, scale: 1, rotate: -5 }}
+              initial={{ opacity: 0, scale: 0.9, rotate: -8 }}
+              whileInView={{ opacity: 1, scale: 1, rotate: -4 }}
               viewport={{ once: true, margin: '-40px' }}
-              transition={{
-                delay: 0.5,
-                duration: 0.7,
-                ease: [0.34, 1.56, 0.64, 1],
-              }}
+              transition={{ delay: 0.5, duration: 1, ease: APPLE_EASE }}
               whileHover={{
-                rotate: 2,
-                scale: 1.06,
+                rotate: -2,
+                scale: 1.05,
                 transition: { type: 'spring', stiffness: 400, damping: 20 },
               }}
               className="absolute right-[6%] bottom-[8%] sm:right-[10%] sm:bottom-[10%] lg:right-[12%] lg:bottom-[8%] z-10 w-30 sm:w-35"
             >
-              <div className="group overflow-hidden rounded-[20px] border border-border/15 bg-card/60 shadow-md backdrop-blur-xl">
-                <div className="aspect-square overflow-hidden rounded-[20px] flex items-center justify-center bg-primary/3">
+              <div className="group overflow-hidden rounded-[20px] border border-white/10 bg-background/40 shadow-2xl backdrop-blur-3xl">
+                <div className="aspect-square overflow-hidden rounded-[20px] flex items-center justify-center bg-primary/10">
                   <img
                     src="/frieren/frieren.svg"
                     alt="Frieren"
-                    className="h-4/5 w-4/5 object-contain transition-transform duration-700 group-hover:scale-110 group-hover:rotate-3"
+                    className="h-4/5 w-4/5 object-contain transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110 group-hover:rotate-6"
                     loading="lazy"
                   />
                 </div>
