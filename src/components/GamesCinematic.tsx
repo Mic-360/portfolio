@@ -86,15 +86,11 @@ function GameCard({ game, index }: { game: GameMeta; index: number }) {
 
       <div className="absolute inset-0 bg-black/10 transition-opacity duration-700 group-hover:opacity-30 dark:group-hover:opacity-50 pointer-events-none" />
 
-      {game.videoUrl && (
-        <div
-          className={`pointer-events-none absolute inset-0 overflow-hidden mix-blend-screen dark:mix-blend-normal transition-opacity duration-1000 ${
-            isHovered ? 'opacity-100' : 'opacity-0'
-          }`}
-        >
+      {game.videoUrl && isHovered && (
+        <div className="pointer-events-none absolute inset-0 overflow-hidden mix-blend-screen dark:mix-blend-normal opacity-100 transition-opacity duration-1000">
           {youtubeId ? (
             <iframe
-              src={`https://www.youtube.com/embed/${youtubeId}?autoplay=${isHovered ? 1 : 0}&mute=1&controls=0&loop=1&playlist=${youtubeId}&modestbranding=1&rel=0`}
+              src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${youtubeId}&modestbranding=1&rel=0`}
               className="absolute inset-0 h-[150%] w-[150%] -translate-x-[16%] -translate-y-[16%] scale-[1.15] object-cover"
               allow="autoplay; encrypted-media"
               tabIndex={-1}
@@ -102,7 +98,7 @@ function GameCard({ game, index }: { game: GameMeta; index: number }) {
           ) : (
             <video
               src={game.videoUrl}
-              autoPlay={isHovered}
+              autoPlay
               loop
               muted
               playsInline
