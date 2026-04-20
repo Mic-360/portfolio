@@ -353,7 +353,7 @@ function App() {
       <ScrollProgress />
       <motion.div
         variants={item}
-        className="flex items-center gap-4 w-full -mb-12 px-4 sm:px-8"
+        className="flex items-center gap-4 w-full -mb-12 px-4 sm:px-8 overflow-hidden"
       >
         <a
           href={gravatar.profileUrl}
@@ -858,7 +858,7 @@ function App() {
         </Section>
       </motion.div>
 
-      <motion.div variants={item} className="my-24 px-4 sm:px-8">
+      <motion.div variants={item} className="px-4 sm:px-8">
         <Section title="projects">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
