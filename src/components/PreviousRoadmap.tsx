@@ -105,14 +105,9 @@ function RoleCard({
           <div
             className={`flex flex-col min-w-0 ${isRight ? 'items-end' : ''}`}
           >
-            <a
-              href={role.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-serif text-lg tracking-tight text-foreground transition-colors duration-300 group-hover/role:text-primary truncate font-semibold"
-            >
+            <span className="font-serif text-lg tracking-tight text-foreground transition-colors duration-300 group-hover/role:text-primary truncate font-semibold">
               {role.company}
-            </a>
+            </span>
             <span className="text-xs text-foreground/60 font-medium">
               {role.role}
             </span>
