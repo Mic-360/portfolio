@@ -1,4 +1,5 @@
 import type { VerifiedAccount } from '@/types/gravatar'
+import { LinkPreview } from '@/components/ui/link-preview'
 import { cn } from '@/lib/utils'
 
 interface GravatarSocialLinksProps {
@@ -24,9 +25,9 @@ export default function GravatarSocialLinks({
   return (
     <div className={cn('flex items-center gap-3', className)}>
       {visible.map((account) => (
-        <a
+        <LinkPreview
           key={`${account.service_type}-${account.url}`}
-          href={account.url}
+          url={account.url}
           target="_blank"
           rel="noopener noreferrer"
           title={account.service_label}
@@ -39,7 +40,7 @@ export default function GravatarSocialLinks({
             loading="lazy"
             className="opacity-70 hover:opacity-100 transition-opacity social-icon"
           />
-        </a>
+        </LinkPreview>
       ))}
     </div>
   )

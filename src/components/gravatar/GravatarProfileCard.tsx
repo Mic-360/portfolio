@@ -1,6 +1,7 @@
 import GravatarAvatar from './GravatarAvatar'
 import GravatarSocialLinks from './GravatarSocialLinks'
 import type { GravatarProfile } from '@/types/gravatar'
+import { LinkPreview } from '@/components/ui/link-preview'
 import { cn } from '@/lib/utils'
 
 interface GravatarProfileCardProps {
@@ -49,9 +50,9 @@ export default function GravatarProfileCard({
       {/* Card body */}
       <div className="relative bg-card px-5 pb-5 pt-0">
         {/* Avatar overlapping banner */}
-        <div className='flex items-center justify-between mb-16 gap-4'>
-          <a
-            href={profileLink}
+        <div className="flex items-center justify-between mb-16 gap-4">
+          <LinkPreview
+            url={profileLink}
             target="_blank"
             rel="noopener noreferrer me"
             className="-mt-12 mb-3 block w-fit"
@@ -62,11 +63,11 @@ export default function GravatarProfileCard({
               alt={profile.display_name}
               className="h-24 w-24 border-4 border-card shadow-lg"
             />
-          </a>
+          </LinkPreview>
 
           <div className="flex flex-col gap-1">
-            <a
-              href={profileLink}
+            <LinkPreview
+              url={profileLink}
               target="_blank"
               rel="noopener noreferrer me"
               className="group"
@@ -85,7 +86,7 @@ export default function GravatarProfileCard({
                   {profile.location}
                 </p>
               )}
-            </a>
+            </LinkPreview>
           </div>
         </div>
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
@@ -105,22 +106,22 @@ export default function GravatarProfileCard({
 
         {/* Footer row */}
         <div className="mt-4 flex items-center justify-between border-t border-border pt-3 text-xs text-muted-foreground">
-          <a
-            href={profileLink}
+          <LinkPreview
+            url={profileLink}
             target="_blank"
             rel="noopener noreferrer me"
             className="hover:text-primary transition-colors"
           >
             {new URL(profileLink).hostname}
-          </a>
-          <a
-            href={profileLink}
+          </LinkPreview>
+          <LinkPreview
+            url={profileLink}
             target="_blank"
             rel="noopener noreferrer me"
             className="hover:text-primary transition-colors"
           >
             View profile →
-          </a>
+          </LinkPreview>
         </div>
       </div>
     </div>

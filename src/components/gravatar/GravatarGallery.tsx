@@ -1,4 +1,5 @@
 import type { GalleryImage } from '@/types/gravatar'
+import { LinkPreview } from '@/components/ui/link-preview'
 import { cn } from '@/lib/utils'
 
 interface GravatarGalleryProps {
@@ -18,12 +19,14 @@ export default function GravatarGallery({
   return (
     <div className={cn('grid grid-cols-2 sm:grid-cols-3 gap-3', className)}>
       {images.map((img, i) => (
-        <a
+        <LinkPreview
           key={img.url}
-          href={img.url}
+          url={img.url}
           target="_blank"
           rel="noopener noreferrer"
           className="group media-hover-parent overflow-hidden rounded-[1.25rem] bg-muted/15"
+          isStatic
+          imageSrc={img.url}
         >
           <img
             src={img.url}
@@ -32,7 +35,7 @@ export default function GravatarGallery({
             decoding="async"
             className="media-hover-image media-hover-fade h-auto aspect-square w-full object-cover"
           />
-        </a>
+        </LinkPreview>
       ))}
     </div>
   )
