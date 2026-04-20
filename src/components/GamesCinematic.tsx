@@ -1,7 +1,8 @@
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
-import { animate, motion, useMotionValue } from 'motion/react'
+import { memo, useRef, useState, useEffect } from 'react'
+import { motion } from 'motion/react'
+import type { GameMeta } from '@/lib/games'
 
-import type {GameMeta} from '@/lib/games';
+const APPLE_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1]
 
 function getYoutubeId(url: string) {
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
@@ -9,123 +10,62 @@ function getYoutubeId(url: string) {
   return match && match[2].length === 11 ? match[2] : null
 }
 
-function MarqueeRow({
-  items,
-  direction = 1,
-  speed = 40,
-  offset = 0,
-}: {
-  items: Array<GameMeta>
-  direction?: 1 | -1
-  speed?: number
-  offset?: number
-}) {
-  const x = useMotionValue(0)
-  const trackRef = useRef<HTMLDivElement>(null)
-  const controlsRef = useRef<ReturnType<typeof animate> | null>(null)
-  const [paused, setPaused] = useState(false)
-
-  useEffect(() => {
-    const el = trackRef.current
-    if (!el) return
-
-    // Measure width of one full set of items (total / 3)
-    const oneSetWidth = el.scrollWidth / 3
-    if (oneSetWidth === 0) return
-
-    const from = direction === 1 ? 0 : -oneSetWidth
-    const to = direction === 1 ? -oneSetWidth : 0
-
-    // Duration based on distance / speed (px per second)
-    const duration = oneSetWidth / speed
-
-    x.set(from)
-
-    controlsRef.current = animate(x, [from, to], {
-      duration,
-      ease: 'linear',
-      repeat: Infinity,
-      repeatType: 'loop',
-    })
-
-    return () => {
-      controlsRef.current?.stop()
-    }
-  }, [items, direction, speed, x])
-
-  // Pause / resume without re-mounting the animation
-  useEffect(() => {
-    if (!controlsRef.current) return
-    if (paused) {
-      controlsRef.current.pause()
-    } else {
-      controlsRef.current.play()
-    }
-  }, [paused])
-
-  const onEnter = useCallback(() => setPaused(true), [])
-  const onLeave = useCallback(() => setPaused(false), [])
-
-  return (
-    <div
-      className="flex w-fit select-none overflow-visible py-2"
-      style={{ marginLeft: offset }}
-      onMouseEnter={onEnter}
-      onMouseLeave={onLeave}
-    >
-      <motion.div
-        ref={trackRef}
-        className="flex will-change-transform"
-        style={{ x }}
-      >
-        {/* Render 3 copies for seamless wrapping on wide screens */}
-        {[0, 1, 2].map((copy) => (
-          <div key={copy} className="flex gap-4 pr-4 sm:gap-6 sm:pr-6">
-            {items.map((game) => (
-              <GamePosterMemo key={`${game.id}-${copy}`} game={game} />
-            ))}
-          </div>
-        ))}
-      </motion.div>
-    </div>
-  )
-}
-
-function GamePoster({ game }: { game: GameMeta }) {
+function GameCard({ game, index }: { game: GameMeta; index: number }) {
   const [isHovered, setIsHovered] = useState(false)
   const youtubeId = game.videoUrl ? getYoutubeId(game.videoUrl) : null
+  const cardRef = useRef<HTMLDivElement>(null)
 
   return (
-    <div
+    <motion.div
+      ref={cardRef}
+      initial={{ opacity: 0, x: 60, scale: 0.95 }}
+      whileInView={{ opacity: 1, x: 0, scale: 1 }}
+      viewport={{ once: true, margin: '0px 100px 0px 0px' }}
+      transition={{
+        duration: 0.9,
+        ease: [0.16, 1, 0.3, 1],
+        delay: index * 0.05,
+      }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onFocus={() => setIsHovered(true)}
       onBlur={() => setIsHovered(false)}
-      className="media-hover-parent group relative h-72 w-52 shrink-0 cursor-pointer overflow-hidden bg-card shadow-lg sm:h-96 sm:w-64"
+      className="group relative h-[60vh] min-h-[400px] w-[75vw] sm:w-[45vw] lg:w-[28vw] shrink-0 snap-center cursor-pointer overflow-hidden rounded-4xl bg-card/20 border border-white/5 shadow-2xl transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:z-10 sm:hover:w-[50vw] lg:hover:w-[36vw]"
     >
-      <img
-        src={game.posterUrl}
-        alt={game.title}
-        loading="lazy"
-        className="media-hover-image media-hover-desaturate h-full w-full object-cover"
-        onError={(e) => {
-          // Fallback if the wiki image source breaks or changes
-          e.currentTarget.src = `https://placehold.co/400x600/222420/8fb374?text=${encodeURIComponent(game.title)}`
-        }}
-      />
+      <div className="absolute inset-0">
+        <img
+          src={game.posterUrl}
+          alt={game.title}
+          loading="lazy"
+          className="h-full w-full object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105 group-hover:opacity-60"
+          onError={(e) => {
+            e.currentTarget.src = `https://placehold.co/800x1200/111/444?text=${encodeURIComponent(game.title)}`
+          }}
+        />
 
-      {game.videoUrl && isHovered && (
-        <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-0 transition-opacity duration-700 group-hover:opacity-100 group-active:opacity-100">
+        {/* Subtle inner shadow top */}
+        <div className="absolute inset-x-0 top-0 h-32 bg-linear-to-b from-black/60 to-transparent pointer-events-none opacity-40 transition-opacity duration-700 group-hover:opacity-0" />
+      </div>
+
+      <div className="absolute inset-0 bg-black/10 transition-opacity duration-700 group-hover:opacity-30 dark:group-hover:opacity-50 pointer-events-none" />
+
+      {game.videoUrl && (
+        <div
+          className={`pointer-events-none absolute inset-0 overflow-hidden mix-blend-screen dark:mix-blend-normal transition-opacity duration-1000 ${
+            isHovered ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
           {youtubeId ? (
             <iframe
-              src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${youtubeId}&modestbranding=1&rel=0&iv_load_policy=3&showinfo=0`}
-              className="absolute inset-0 h-[150%] w-[150%] -translate-x-[16%] -translate-y-[16%] scale-110 object-fill"
+              src={`https://www.youtube.com/embed/${youtubeId}?autoplay=${isHovered ? 1 : 0}&mute=1&controls=0&loop=1&playlist=${youtubeId}&modestbranding=1&rel=0`}
+              className="absolute inset-0 h-[150%] w-[150%] -translate-x-[16%] -translate-y-[16%] scale-[1.15] object-cover"
               allow="autoplay; encrypted-media"
+              tabIndex={-1}
             />
           ) : (
             <video
               src={game.videoUrl}
-              autoPlay
+              autoPlay={isHovered}
               loop
               muted
               playsInline
@@ -135,62 +75,205 @@ function GamePoster({ game }: { game: GameMeta }) {
         </div>
       )}
 
-      <div className="absolute inset-0 bg-linear-to-t from-background/95 via-background/40 to-transparent opacity-80 transition-opacity duration-500 group-hover:opacity-100 group-active:opacity-100" />
+      {/* Decorative gradients */}
+      <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent opacity-80" />
 
-      <div className="absolute inset-x-0 bottom-0 translate-y-3 p-5 opacity-0 transition-all duration-500 ease-out group-hover:translate-y-0 group-hover:opacity-100 group-active:translate-y-0 group-active:opacity-100">
-        <p className="text-[10px] uppercase tracking-[0.24em] text-primary/90">
-          {game.series}
-        </p>
-        <p className="mt-1 font-serif text-lg font-semibold leading-tight text-foreground shadow-sm">
-          {game.title}
-        </p>
+      <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 flex flex-col justify-end">
+        <div className="translate-y-4 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0">
+          <p className="text-[10px] uppercase tracking-[0.3em] text-white/50 mb-2 drop-shadow-md">
+            {game.series}
+          </p>
+          <h3 className="font-serif text-3xl font-medium tracking-tight text-white drop-shadow-lg sm:text-4xl lg:text-5xl transition-all duration-700">
+            {game.title}
+          </h3>
+        </div>
       </div>
+    </motion.div>
+  )
+}
+
+const GameCardMemo = memo(GameCard)
+
+function CinematicHeader() {
+  return (
+    <div className="relative z-10 w-full mb-12 sm:mb-20">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 1, ease: APPLE_EASE }}
+        className="flex items-center gap-4"
+      >
+        <span className="text-[10px] uppercase tracking-[0.32em] text-primary/70 font-semibold">
+          Interactive Scapes
+        </span>
+        <motion.div
+          className="h-px bg-primary/20 flex-1 max-w-[120px] sm:max-w-[240px] origin-left"
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.4, ease: APPLE_EASE, delay: 0.2 }}
+        />
+      </motion.div>
+
+      <motion.h2
+        initial={{ opacity: 0, y: 32, filter: 'blur(8px)' }}
+        whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 1.2, ease: APPLE_EASE, delay: 0.1 }}
+        className="mt-8 max-w-4xl text-balance font-serif text-5xl leading-[1.04] tracking-tight text-foreground sm:text-7xl lg:text-8xl"
+      >
+        Games I Find worth{' '}
+        <span className="relative inline-block text-primary">
+          discussing
+          <motion.svg
+            viewBox="0 0 200 12"
+            preserveAspectRatio="none"
+            className="absolute -bottom-2 left-0 h-3 w-full overflow-visible text-primary/40"
+            aria-hidden="true"
+          >
+            <motion.path
+              d="M2,8 Q50,2 100,7 T198,6"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              initial={{ pathLength: 0, opacity: 0 }}
+              whileInView={{ pathLength: 1, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.6, ease: APPLE_EASE, delay: 0.8 }}
+            />
+          </motion.svg>
+        </span>
+        .
+      </motion.h2>
     </div>
   )
 }
 
-// Memoize poster to prevent re-renders when the row-level pause state changes
-const GamePosterMemo = memo(GamePoster)
-
 export function GamesCinematic({ gamesData }: { gamesData: Array<GameMeta> }) {
-  // Split games into 2 rows for the cinematic density
-  const half = Math.ceil(gamesData.length / 2)
-  const row1 = gamesData.slice(0, half)
-  const row2 = gamesData.slice(half)
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const [scrollProgress, setScrollProgress] = useState(0)
+
+  useEffect(() => {
+    let interval: number
+    let isPaused = false
+
+    const setupAutoScroll = () => {
+      // 2.5 seconds matches Apple TV pacing perfectly
+      interval = window.setInterval(() => {
+        if (!scrollRef.current || isPaused) return
+        const container = scrollRef.current
+        const { scrollLeft, scrollWidth, clientWidth } = container
+
+        // Scroll forward by approximately half the screen width
+        // CSS scroll-snap handles the perfect card alignment
+        const scrollAmount = clientWidth * 0.45
+
+        let newScrollLeft = scrollLeft + scrollAmount
+
+        // Reset to beginning if we hit the end
+        if (newScrollLeft >= scrollWidth - clientWidth - 20) {
+          newScrollLeft = 0
+        }
+
+        container.scrollTo({
+          left: newScrollLeft,
+          behavior: 'smooth',
+        })
+      }, 2500)
+    }
+
+    setupAutoScroll()
+
+    const pause = () => {
+      isPaused = true
+    }
+    const resume = () => {
+      isPaused = false
+    }
+
+    const el = scrollRef.current
+    if (el) {
+      el.addEventListener('mouseenter', pause)
+      el.addEventListener('mouseleave', resume)
+      el.addEventListener('touchstart', pause, { passive: true })
+      el.addEventListener('touchend', resume, { passive: true })
+    }
+
+    return () => {
+      clearInterval(interval)
+      if (el) {
+        el.removeEventListener('mouseenter', pause)
+        el.removeEventListener('mouseleave', resume)
+        el.removeEventListener('touchstart', pause)
+        el.removeEventListener('touchend', resume)
+      }
+    }
+  }, [])
+
+  const handleScroll = () => {
+    if (!scrollRef.current) return
+    const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current
+    if (scrollWidth > clientWidth) {
+      setScrollProgress(scrollLeft / (scrollWidth - clientWidth))
+    }
+  }
 
   return (
-    <div className="relative overflow-hidden bg-background/30 py-16 sm:py-24">
-      {/* Background ambient lighting */}
-      <div className="pointer-events-none absolute inset-x-[16%] top-[10%] h-32 rounded-full bg-primary/8 blur-3xl" />
-      <div className="pointer-events-none absolute right-[8%] top-[12%] h-72 w-72 rounded-full bg-primary/5 blur-[120px]" />
-      <div className="hero-grid-overlay absolute inset-0" />
+    <section className="relative overflow-hidden py-24 sm:py-32">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-border/20 to-transparent" />
 
-      <div className="relative z-10 mb-10 flex w-full flex-col sm:mb-16 px-8">
-        <div className="flex items-center gap-4">
-          <p className="shrink-0 text-[10px] uppercase tracking-[0.26em] text-primary/75">
-            Interactive Worlds
-          </p>
-          <div className="h-px w-24 bg-linear-to-r from-primary/30 to-transparent sm:w-48" />
+      {/* Background ambient light */}
+      <div
+        className="pointer-events-none absolute right-[10%] top-[20%] h-96 w-96 rounded-full bg-primary/5 blur-[120px] transition-all duration-1000"
+        style={{ transform: `translateX(${scrollProgress * -100}px)` }}
+      />
+      <div
+        className="pointer-events-none absolute left-[5%] bottom-[10%] h-64 w-64 rounded-full bg-primary/5 blur-[100px] transition-all duration-1000"
+        style={{ transform: `translateX(${scrollProgress * 100}px)` }}
+      />
+
+      <div className="mx-auto w-full max-w-[1920px]">
+        <div className="px-4 sm:px-8 max-w-7xl">
+          <CinematicHeader />
         </div>
-        <h2 className="mt-4 max-w-2xl font-serif text-4xl leading-tight text-foreground sm:text-5xl">
-          Games we can discuss on.
-        </h2>
-        <p className="mt-4 max-w-xl text-base leading-8 text-foreground/78 sm:text-lg">
-          A continuous feed of worlds explored, from stealth in historical
-          shades to high speed across Vice City. Hover or tap to reveal the
-          atmosphere.
-        </p>
-      </div>
 
-      {/* Edge to edge marquee container */}
-      <div className="relative z-10 flex w-full flex-col gap-4 overflow-hidden sm:gap-6">
-        {/* Gradients to fade edges smoothly */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-20 w-12 bg-linear-to-r from-background to-transparent sm:w-24" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-20 w-12 bg-linear-to-l from-background to-transparent sm:w-24" />
+        <div className="relative mt-16 w-full group/gallery">
+          {/* Scroll hints */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 z-20 w-8 sm:w-24 bg-linear-to-r from-background to-transparent" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 z-20 w-8 sm:w-24 bg-linear-to-l from-background to-transparent" />
 
-        <MarqueeRow items={row1} direction={1} speed={40} offset={-50} />
-        <MarqueeRow items={row2} direction={-1} speed={35} offset={-250} />
+          <div
+            ref={scrollRef}
+            onScroll={handleScroll}
+            className="flex w-full snap-x snap-mandatory gap-6 overflow-x-auto px-4 pb-12 pt-6 sm:px-8 sm:gap-8 scrollbar-none"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {/* Adding leading space */}
+            <div className="shrink-0 w-0 sm:w-[5vw] lg:w-[10vw]" />
+            {gamesData.map((game, i) => (
+              <GameCardMemo key={game.id} game={game} index={i} />
+            ))}
+            {/* Trailing space */}
+            <div className="shrink-0 w-[10vw]" />
+          </div>
+
+          {/* Scroll Indicator line */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 1, duration: 1 }}
+            className="mx-auto mt-4 h-px w-64 bg-border/20 relative"
+          >
+            <motion.div
+              className="absolute top-0 left-0 h-full bg-primary/40"
+              style={{ width: `${Math.max(5, scrollProgress * 100)}%` }}
+            />
+          </motion.div>
+        </div>
       </div>
-    </div>
+    </section>
   )
 }
