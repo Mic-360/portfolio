@@ -35,7 +35,7 @@ function RssIcon() {
 
 export default function Footer() {
   return (
-    <footer className="relative mx-auto w-full max-w-395 py-8">
+    <footer className="relative mx-auto w-full max-w-395 py-8 lowercase">
       <div className="relative overflow-hidden pt-12 px-8">
         <div className="pointer-events-none absolute inset-x-[14%] top-[8%] h-24 rounded-full bg-primary/10 blur-3xl" />
         <div className="pointer-events-none absolute right-[8%] top-[18%] h-72 w-72 rounded-full bg-primary/8 blur-[120px]" />
@@ -66,7 +66,7 @@ export default function Footer() {
 
             <div className="h-px w-full bg-border/15" />
 
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-[10px] tracking-[0.2em] text-muted-foreground/70">
               <span>MIT licensed</span>
               <span>built with TanStack Start</span>
               <Link to="/rss" className="transition-colors hover:text-primary">
@@ -134,7 +134,7 @@ export default function Footer() {
                 })}
             </ul>
 
-            <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70 lg:justify-self-end">
+            <p className="text-[10px] tracking-[0.2em] text-muted-foreground/70 lg:justify-self-end">
               {siteInfo.name} · {siteInfo.currentRole}
             </p>
           </div>
