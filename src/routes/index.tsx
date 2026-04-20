@@ -722,30 +722,81 @@ function App() {
 
         <Section title="previous">
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 32 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
-            className="flex flex-col items-center text-center mb-12"
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 1.2, ease: APPLE_EASE }}
+            className="flex flex-col items-center text-center mb-16"
           >
-            <span className="inline-flex items-center gap-2 rounded-full border border-border/20 bg-foreground/3 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground/60 backdrop-blur-sm mb-6">
+            <motion.span
+              initial={{ opacity: 0, y: 8 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.9, ease: APPLE_EASE, delay: 0.1 }}
+              className="inline-flex items-center gap-2 rounded-full border border-border/20 bg-foreground/3 px-4 py-1.5 text-[10px] font-medium uppercase tracking-[0.32em] text-muted-foreground/60 backdrop-blur-sm mb-8"
+            >
               <PreviousIcon size={14} className="h-3.5 w-3.5 opacity-70" />
               experience
-            </span>
-            <h2 className="max-w-2xl font-serif text-4xl leading-[1.1] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-              Where I've been.
-            </h2>
-            <p className="mt-4 max-w-lg text-base leading-8 text-foreground/40">
+            </motion.span>
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.2, ease: APPLE_EASE, delay: 0.15 }}
+              className="max-w-3xl font-serif text-5xl leading-[1.04] tracking-tight text-foreground sm:text-6xl lg:text-7xl"
+            >
+              Where{' '}
+              <span className="italic font-light text-foreground/80">I've</span>{' '}
+              been.
+            </motion.h2>
+            <motion.svg
+              viewBox="0 0 80 8"
+              preserveAspectRatio="none"
+              className="mt-6 h-2 w-20 overflow-visible text-primary/60"
+              aria-hidden="true"
+            >
+              <motion.path
+                d="M2,4 Q20,1 40,4 T78,4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.2"
+                strokeLinecap="round"
+                initial={{ pathLength: 0 }}
+                whileInView={{ pathLength: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.2, ease: APPLE_EASE, delay: 0.6 }}
+              />
+            </motion.svg>
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, ease: APPLE_EASE, delay: 0.4 }}
+              className="mt-6 max-w-lg text-base leading-8 text-foreground/45"
+            >
               A track record of shipping products across roles and companies.
-            </p>
+            </motion.p>
           </motion.div>
           <PreviousRoadmap />
         </Section>
       </motion.div>
 
-      <motion.div variants={item} className="my-22 px-4 sm:px-8">
+      <motion.div variants={item} className="my-24 px-4 sm:px-8">
         <Section title="projects">
-          <div className="grid gap-5 md:columns-2 md:grid-cols-2">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 1.2, ease: APPLE_EASE }}
+            className="mb-10 max-w-3xl"
+          >
+            <h3 className="font-serif text-4xl leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+              Selected work,
+              <br />
+              shipped to people.
+            </h3>
+          </motion.div>
+          <div className="columns-1 md:columns-2 gap-6 w-full">
             {featuredProjects.map((project: ProjectMeta, index: number) => {
               const projectVisual =
                 project.image || `/og/projects/${project.slug}`
