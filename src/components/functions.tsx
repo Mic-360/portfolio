@@ -44,7 +44,7 @@ function SectionHairline() {
       </motion.svg>
       {/* Moving flare */}
       <motion.div
-        className="absolute bottom-1/2 left-0 h-[2px] w-24 -translate-y-1/2 bg-primary blur-[2px]"
+        className="absolute bottom-1/2 left-0 h-0.5 w-24 -translate-y-1/2 bg-primary blur-[2px]"
         initial={{ left: '-10%', opacity: 0 }}
         whileInView={{ left: '110%', opacity: [0, 1, 1, 0] }}
         viewport={{ once: true, margin: '-80px' }}
@@ -466,7 +466,7 @@ function MetricRow({
         />
       </div>
 
-      <div className="grid grid-cols-3 gap-2 rounded-2xl border border-white/5 bg-black/5 dark:bg-white/5 px-4 py-2.5 font-mono text-[10px] tabular-nums backdrop-blur-md sm:hidden">
+      <div className="grid grid-cols-3 gap-2 rounded-2xl bg-black/5 dark:bg-white/5 px-4 py-2.5 font-mono text-[10px] tabular-nums backdrop-blur-md sm:hidden">
         {summaryItems.map((item) => (
           <div key={item.label} className="min-w-0 text-center">
             <span className="block text-muted-foreground/60">{item.label}</span>
@@ -475,7 +475,7 @@ function MetricRow({
         ))}
       </div>
 
-      <div className="hidden w-28 shrink-0 flex-col gap-1.5 text-right font-mono text-[11px] tabular-nums sm:flex sm:justify-center">
+      <div className="hidden w-22 px-2 shrink-0 flex-col gap-1.5 text-right font-mono text-[11px] tabular-nums sm:flex sm:justify-center">
         {summaryItems.map((item) => (
           <div key={item.label} className="flex w-full justify-between items-center group/stat">
             <span className="text-muted-foreground/45 transition-colors duration-300 group-hover/stat:text-muted-foreground">{item.label}</span>

@@ -144,7 +144,7 @@ function CinematicHeader() {
           Interactive Scapes
         </span>
         <motion.div
-          className="h-px bg-primary/20 flex-1 max-w-[120px] sm:max-w-[240px] origin-left"
+          className="h-px bg-primary/20 flex-1 max-w-30 sm:max-w-60 origin-left"
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}
@@ -300,7 +300,7 @@ export function GamesCinematic({ gamesData }: { gamesData: Array<GameMeta> }) {
         style={{ transform: `translateX(${scrollProgress * 100}px)` }}
       />
 
-      <div className="mx-auto w-full max-w-[1920px]">
+      <div className="mx-auto w-full max-w-480">
         <div className="px-4 sm:px-8 max-w-7xl">
           <CinematicHeader />
         </div>

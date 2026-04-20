@@ -681,7 +681,7 @@ function App() {
                   scale: 1.03,
                   transition: { type: 'spring', stiffness: 300, damping: 20 },
                 }}
-                className="relative sm:absolute sm:left-[4%] sm:top-[4%] lg:left-[6%] lg:top-[6%] z-10 w-full max-w-[280px] sm:max-w-none sm:w-50 lg:w-55"
+                className="relative sm:absolute sm:left-[4%] sm:top-[4%] lg:left-[6%] lg:top-[6%] z-10 w-full max-w-70 sm:max-w-none sm:w-50 lg:w-55"
               >
                 <div className="group relative overflow-hidden rounded-3xl border border-white/10 bg-background/40 shadow-2xl backdrop-blur-3xl sm:backdrop-blur-3xl">
                   <div className="p-5">
@@ -713,7 +713,7 @@ function App() {
                   scale: 1.02,
                   transition: { type: 'spring', stiffness: 300, damping: 20 },
                 }}
-                className="relative sm:absolute sm:right-[6%] sm:top-[2%] lg:top-[3%] z-10 w-full max-w-[280px] sm:max-w-none sm:w-52.5 lg:w-60"
+                className="relative sm:absolute sm:right-[6%] sm:top-[2%] lg:top-[3%] z-10 w-full max-w-70 sm:max-w-none sm:w-52.5 lg:w-60"
               >
                 <div className="group relative overflow-hidden rounded-3xl border border-white/10 bg-background/40 shadow-2xl backdrop-blur-3xl">
                   <div className="p-5">
@@ -745,7 +745,7 @@ function App() {
                   scale: 1.02,
                   transition: { type: 'spring', stiffness: 300, damping: 20 },
                 }}
-                className="relative sm:absolute sm:left-[8%] sm:bottom-[4%] lg:left-[10%] lg:bottom-[3%] z-10 w-full max-w-[280px] sm:max-w-none sm:w-45 lg:w-50"
+                className="relative sm:absolute sm:left-[8%] sm:bottom-[4%] lg:left-[10%] lg:bottom-[3%] z-10 w-full max-w-70 sm:max-w-none sm:w-45 lg:w-50"
               >
                 <div className="group relative overflow-hidden rounded-3xl border border-white/10 bg-background/40 shadow-2xl backdrop-blur-3xl">
                   <div className="aspect-3/2 overflow-hidden rounded-t-3xl flex items-center justify-center bg-primary/5">
@@ -780,7 +780,7 @@ function App() {
                   scale: 1.05,
                   transition: { type: 'spring', stiffness: 400, damping: 20 },
                 }}
-                className="relative sm:absolute sm:right-[10%] sm:bottom-[10%] lg:right-[12%] lg:bottom-[8%] z-10 w-3/5 max-w-[180px] sm:max-w-none sm:w-35"
+                className="relative sm:absolute sm:right-[10%] sm:bottom-[10%] lg:right-[12%] lg:bottom-[8%] z-10 w-3/5 max-w-45 sm:max-w-none sm:w-35"
               >
                 <div className="group overflow-hidden rounded-[20px] border border-white/10 bg-background/40 shadow-2xl backdrop-blur-3xl">
                   <div className="aspect-square overflow-hidden rounded-[20px] flex items-center justify-center bg-primary/10">
@@ -1180,7 +1180,7 @@ function App() {
 
       <motion.div
         variants={item}
-        className="grid gap-6 lg:gap-8 max-w-[1920px] mx-auto xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] px-4 sm:px-8 w-full"
+        className="grid gap-6 lg:gap-8 max-w-480 mx-auto xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] px-4 sm:px-8 w-full"
       >
         <Section title="pinterest">
           <div className="relative">
