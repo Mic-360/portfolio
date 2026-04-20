@@ -28,6 +28,7 @@ import { AnimatedTestimonials } from '@/components/ui/animated-testimonials'
 import CalendarIcon from '@/components/ui/calendar-icon'
 import CurrentIcon from '@/components/ui/current-icon'
 import { ExpandableCard } from '@/components/ui/expandable-card'
+import { FlippingCard } from '@/components/ui/flipping-card'
 import { LayoutGrid } from '@/components/ui/layout-grid'
 import { LinkPreview } from '@/components/ui/link-preview'
 import PreviousIcon from '@/components/ui/previous-icon'
@@ -792,7 +793,7 @@ function App() {
               shipped to people.
             </h3>
           </motion.div>
-          <div className="columns-1 md:columns-2 gap-6 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
             {featuredProjects.map((project: ProjectMeta, index: number) => {
               const projectVisual =
                 project.image || `/og/projects/${project.slug}`
@@ -819,57 +820,70 @@ function App() {
                     ease: APPLE_EASE,
                     delay: index * 0.08,
                   }}
-                  className="break-inside-avoid block w-full mb-6"
+                  className="w-full"
                 >
                   <Link
                     to="/projects/$slug"
                     params={{ slug: project.slug }}
-                    className="group block w-full"
+                    className="block w-full"
                   >
-                    <article
-                      className={`project-card-apple relative overflow-hidden rounded-[2.5rem] border border-white/10 shadow-2xl transition-all duration-[0.8s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-2 group-hover:shadow-[0_32px_64px_rgba(0,0,0,0.15)] w-full ${
-                        isTall
-                          ? 'min-h-88 md:min-h-144'
-                          : 'min-h-64 md:min-h-80'
-                      }`}
-                    >
-                      <div className="media-hover-parent absolute inset-0">
-                        <img
-                          src={projectVisual}
-                          alt={project.title}
-                          className="media-hover-image absolute inset-0 h-full w-full object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
-                          loading="lazy"
-                        />
-                        <div className="absolute inset-0 bg-linear-to-t from-background via-background/30 to-transparent opacity-80" />
-                        <div className="absolute inset-0 bg-linear-to-t from-background/90 via-transparent to-transparent opacity-90" />
-                      </div>
-
-                      <div className="absolute inset-x-0 bottom-0 z-10 border-t border-white/10 bg-background/60 p-6 sm:p-8 backdrop-blur-3xl">
-                        <div className="flex flex-col gap-2.5 translate-y-2 transition-transform duration-[0.8s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0">
-                          <div className="flex items-center justify-between gap-4">
-                            <p className="text-[10px] uppercase tracking-[0.25em] text-primary/50">
+                    <FlippingCard
+                      height={isTall ? 480 : 340}
+                      width={350}
+                      className="w-full! rounded-[2.5rem]"
+                      frontContent={
+                        <div className="relative h-full w-full overflow-hidden rounded-[inherit]">
+                          <img
+                            src={projectVisual}
+                            alt={project.title}
+                            className="absolute inset-0 h-full w-full object-cover"
+                            loading="lazy"
+                          />
+                          <div className="absolute inset-0 bg-linear-to-t from-black/40 via-black/20 to-transparent" />
+                          <div className="absolute inset-x-0 bottom-0 p-6">
+                            <p className="mb-2 text-[10px] uppercase tracking-[0.25em] text-white/50">
                               {project.categories.length > 0
                                 ? project.categories[0]
                                 : 'project'}
                             </p>
-                            <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
-                              {formatDate(project.date)}
-                            </p>
+                            <h3 className="font-serif text-xl leading-tight tracking-tight text-white sm:text-2xl">
+                              {project.title}
+                            </h3>
                           </div>
-                          <h3 className="font-serif text-xl leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary sm:text-2xl lg:text-3xl">
-                            {project.title}
-                          </h3>
-                          <p className="line-clamp-2 text-sm leading-7 text-foreground/70">
-                            {project.summary}
-                          </p>
-                          {project.stack.length > 0 ? (
-                            <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/35">
-                              {project.stack.slice(0, 4).join(' · ')}
-                            </p>
-                          ) : null}
                         </div>
-                      </div>
-                    </article>
+                      }
+                      backContent={
+                        <div className="flex h-full flex-col justify-between p-6 sm:p-8 bg-foreground dark:bg-background">
+                          <div className="flex flex-col gap-3">
+                            <div className="flex items-center justify-between gap-4">
+                              <p className="text-[10px] uppercase tracking-[0.25em] text-primary/60">
+                                {project.categories.length > 0
+                                  ? project.categories[0]
+                                  : 'project'}
+                              </p>
+                              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60">
+                                {formatDate(project.date)}
+                              </p>
+                            </div>
+                            <h3 className="font-serif text-xl leading-tight tracking-tight text-background dark:text-foreground sm:text-2xl">
+                              {project.title}
+                            </h3>
+                            <p className="text-sm leading-7 text-background dark:text-foreground/70">
+                              {project.summary}
+                            </p>
+                            {project.stack.length > 0 ? (
+                              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
+                                {project.stack.slice(0, 4).join(' · ')}
+                              </p>
+                            ) : null}
+                          </div>
+                          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+                            View project
+                            <span aria-hidden="true">&rarr;</span>
+                          </span>
+                        </div>
+                      }
+                    />
                   </Link>
                 </motion.div>
               )
