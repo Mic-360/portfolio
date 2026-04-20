@@ -538,12 +538,12 @@ function App() {
               }}
               className="hidden sm:block absolute left-[2%] top-[2%] sm:left-[4%] sm:top-[4%] lg:left-[6%] lg:top-[6%] z-10 w-45 sm:w-50 lg:w-55"
             >
-              <div className="group relative overflow-hidden rounded-3xl border border-border/20 bg-card/70 shadow-lg backdrop-blur-xl">
-                <div className="p-4">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-primary/70 mb-1.5">
+              <div className="group relative overflow-hidden rounded-3xl border border-white/10 bg-background/40 shadow-2xl backdrop-blur-3xl sm:backdrop-blur-3xl">
+                <div className="p-5">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary/80 mb-2 drop-shadow-sm">
                     Education
                   </p>
-                  <p className="text-xs leading-5 text-foreground/70">
+                  <p className="text-xs leading-relaxed text-foreground/80 font-medium">
                     {siteInfo.educationLine}
                   </p>
                 </div>
@@ -551,7 +551,7 @@ function App() {
                   <img
                     src="/frieren/frieren-teach.svg"
                     alt="Education"
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="h-full w-full object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110"
                     loading="lazy"
                   />
                 </div>
@@ -559,28 +559,23 @@ function App() {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 40, rotate: 8 }}
-              whileInView={{ opacity: 1, y: 0, rotate: 5 }}
+              initial={{ opacity: 0, y: 40, rotate: 6 }}
+              whileInView={{ opacity: 1, y: 0, rotate: 4 }}
               viewport={{ once: true, margin: '-40px' }}
-              transition={{
-                delay: 0.25,
-                duration: 0.8,
-                ease: [0.25, 0.1, 0.25, 1],
-              }}
+              transition={{ delay: 0.25, duration: 1, ease: APPLE_EASE }}
               whileHover={{
-                y: -8,
                 rotate: 1,
-                scale: 1.03,
+                scale: 1.02,
                 transition: { type: 'spring', stiffness: 300, damping: 20 },
               }}
               className="hidden sm:block absolute right-[2%] top-[0%] sm:right-[6%] sm:top-[2%] lg:top-[3%] z-10 w-45 sm:w-52.5 lg:w-60"
             >
-              <div className="group relative overflow-hidden rounded-3xl border border-border/20 bg-card/70 shadow-lg backdrop-blur-xl">
-                <div className="p-4">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-primary/70 mb-1.5">
+              <div className="group relative overflow-hidden rounded-3xl border border-white/10 bg-background/40 shadow-2xl backdrop-blur-3xl">
+                <div className="p-5">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary/80 mb-2 drop-shadow-sm">
                     Interests
                   </p>
-                  <p className="text-xs leading-5 text-foreground/70">
+                  <p className="text-xs leading-relaxed text-foreground/80 font-medium">
                     {siteInfo.interests}
                   </p>
                 </div>
@@ -588,7 +583,7 @@ function App() {
                   <img
                     src="/frieren/frienbook.svg"
                     alt="Interests"
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="h-full w-full object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110"
                     loading="lazy"
                   />
                 </div>
