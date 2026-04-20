@@ -164,6 +164,35 @@ export default {
       })
     }
 
+    if (pathname === '/.well-known/mcp/server-card.json') {
+      const base = 'https://bhaumicsingh.dev'
+      const card = {
+        serverInfo: {
+          name: 'bhaumicsingh-portfolio',
+          version: '1.0.0',
+          description:
+            'Portfolio and blog by Bhaumic Singh — full stack software engineer',
+        },
+        endpoint: `${base}/mcp`,
+        capabilities: {
+          resources: true,
+          tools: true,
+          prompts: false,
+        },
+      }
+      return new Response(JSON.stringify(card), {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control':
+            'public, max-age=86400, s-maxage=86400, stale-while-revalidate=86400',
+          'Strict-Transport-Security':
+            'max-age=31536000; includeSubDomains; preload',
+          'Access-Control-Allow-Origin': '*',
+        },
+      })
+    }
+
     const acceptsMarkdown = wantsMarkdown(req)
 
     const response = await handler.fetch(req)
