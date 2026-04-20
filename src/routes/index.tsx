@@ -4,7 +4,6 @@ import {
   useMotionValue,
   useScroll,
   useSpring,
-  useTransform,
 } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 
@@ -31,6 +30,7 @@ import GravatarSocialLinks from '@/components/gravatar/GravatarSocialLinks'
 import { PreviousRoadmap } from '@/components/PreviousRoadmap'
 import CalendarIcon from '@/components/ui/calendar-icon'
 import CurrentIcon from '@/components/ui/current-icon'
+import { LinkPreview } from '@/components/ui/link-preview'
 import PreviousIcon from '@/components/ui/previous-icon'
 import { gravatarConfig } from '@/config/gravatar'
 import {
@@ -146,82 +146,6 @@ function sanitizeSamples<T extends { value: number | string }>(
   samples?: Array<T>,
 ): Array<T & { value: number | string }> {
   return samples || []
-}
-
-function LazyHeroVideo({ src }: { src: string }) {
-  const [shouldRender, setShouldRender] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start end', 'end start'],
-  })
-  const y = useTransform(scrollYProgress, [0, 1], ['-8%', '14%'])
-  const scale = useTransform(scrollYProgress, [0, 1], [1.06, 1.18])
-  const opacity = useTransform(scrollYProgress, [0, 0.55, 1], [1, 0.95, 0.5])
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reduce) return
-
-    const el = containerRef.current
-    if (!el) return
-
-    const mount = () => setShouldRender(true)
-    const schedule = () => {
-      const ric = (
-        window as Window & {
-          requestIdleCallback?: (
-            cb: () => void,
-            opts?: { timeout: number },
-          ) => number
-        }
-      ).requestIdleCallback
-      if (typeof ric === 'function') {
-        ric(mount, { timeout: 2500 })
-        return
-      }
-      window.setTimeout(mount, 800)
-    }
-
-    if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver(
-        (entries) => {
-          if (entries.some((e) => e.isIntersecting)) {
-            io.disconnect()
-            schedule()
-          }
-        },
-        { rootMargin: '200px' },
-      )
-      io.observe(el)
-      return () => io.disconnect()
-    }
-
-    schedule()
-  }, [])
-
-  return (
-    <div
-      ref={containerRef}
-      className="hero-blend-media hero-home-video media-hover-image media-hover-fade absolute inset-0 h-full w-full"
-      aria-hidden="true"
-    >
-      {shouldRender ? (
-        <motion.video
-          src={src}
-          style={{ y, scale, opacity }}
-          className="h-full w-full object-cover will-change-transform"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="none"
-          aria-hidden="true"
-        />
-      ) : null}
-    </div>
-  )
 }
 
 function ScrollProgress() {
@@ -354,22 +278,15 @@ function App() {
       <ScrollProgress />
       <motion.div
         variants={item}
-        className="flex items-center gap-4 w-full -mb-12 px-4 sm:px-8 overflow-hidden"
+        className="flex items-center gap-4 w-full -mb-12 py-4 sm:py-6 px-4 sm:px-8 overflow-hidden"
       >
-        <a
-          href={gravatar.profileUrl}
-          target="_blank"
-          rel="noopener noreferrer me"
-          className="shrink-0"
-        >
-          <GravatarAvatar
-            hash={avatarHash}
-            size={44}
-            alt={`${siteInfo.name} profile photo`}
-            className="h-22 w-22 ring-1 ring-border/20"
-            rel="me"
-          />
-        </a>
+        <GravatarAvatar
+          hash={avatarHash}
+          size={44}
+          alt={`${siteInfo.name} profile photo`}
+          className="h-22 w-22 ring-1 ring-border/20 shrink-0"
+          rel="me"
+        />
         <div className="flex min-w-0 flex-col">
           <span className="text-3xl md:text-5xl font-semibold tracking-tight text-foreground font-serif capitalize">
             {siteInfo.name}
@@ -536,36 +453,23 @@ function App() {
 
         <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-5 p-6 sm:p-8">
           <div className="flex items-center gap-4 sm:max-w-[72%]">
-            <a
-              href={gravatar.profileUrl}
-              target="_blank"
-              rel="noopener noreferrer me"
-              className="shrink-0"
-              aria-label="Gravatar profile"
-            >
-              <img
-                src="/icon.svg"
-                width={56}
-                height={56}
-                className="h-14 w-14"
-                alt="Bhaumic Singh logo"
-              />
-            </a>
+            <img
+              src="/icon.svg"
+              width={56}
+              height={56}
+              className="h-14 w-14 shrink-0"
+              alt="Bhaumic Singh logo"
+            />
             <div className="min-w-0 text-foreground">
               <p className="text-[10px] uppercase tracking-[0.2em] text-foreground/40">
                 currently building
               </p>
-              <a
-                href={siteInfo.currentCompanyUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-1 block text-lg font-semibold leading-tight transition-colors hover:text-primary sm:text-xl"
-              >
+              <p className="mt-1 block text-lg font-semibold leading-tight transition-colors hover:text-primary sm:text-xl">
                 {siteInfo.currentRole}
-                <span className="block text-sm font-normal text-foreground/70 sm:inline sm:pl-2">
+                <span className="block text-sm font-normal text-foreground/70">
                   at {siteInfo.currentCompany}
                 </span>
-              </a>
+              </p>
             </div>
           </div>
 
@@ -624,11 +528,8 @@ function App() {
                   style={{ textShadow: '0 6px 24px rgb(0 0 0 / 0.38)' }}
                 >
                   Building tools at{' '}
-                  <motion.a
-                    href={siteInfo.currentCompanyUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group/current relative font-serif inline-flex flex-wrap items-center justify-center gap-2 text-primary transition-colors duration-500 hover:text-primary/80"
+                  <motion.div
+                    className="group/current relative"
                     whileHover={{ scale: 1.02 }}
                     transition={{
                       type: 'spring',
@@ -637,19 +538,26 @@ function App() {
                     }}
                     style={{ textShadow: '0 8px 28px rgb(0 0 0 / 0.32)' }}
                   >
-                    <img
-                      src="/khub.svg"
-                      alt="KarkhanaHub Logo"
-                      width={44}
-                      height={44}
-                      loading="lazy"
-                      data-backlight="off"
-                      className="mr-1 inline-block h-10 w-10 rounded-lg object-cover ring-1 ring-black/10 shadow-lg transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover/current:scale-[1.4] group-hover/current:rotate-360 group-hover/current:drop-shadow-[0_0_8px_var(--primary)] sm:h-12 sm:w-12"
-                    />
-                    <span className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
-                      {siteInfo.currentCompany}
-                    </span>
-                  </motion.a>
+                    <LinkPreview
+                      url={siteInfo.currentCompanyUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-serif inline-flex flex-wrap items-center justify-center gap-2 text-primary transition-colors duration-500 hover:text-primary/80"
+                    >
+                      <img
+                        src="/khub.svg"
+                        alt="KarkhanaHub Logo"
+                        width={44}
+                        height={44}
+                        loading="lazy"
+                        data-backlight="off"
+                        className="mr-1 inline-block h-10 w-10 rounded-lg object-cover ring-1 ring-black/10 shadow-lg transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover/current:scale-[1.4] group-hover/current:rotate-360 group-hover/current:drop-shadow-[0_0_8px_var(--primary)] sm:h-12 sm:w-12"
+                      />
+                      <span className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+                        {siteInfo.currentCompany}
+                      </span>
+                    </LinkPreview>
+                  </motion.div>
                 </h2>
 
                 <motion.p
@@ -961,15 +869,15 @@ function App() {
             <p className="text-sm text-muted-foreground/70">
               More in the archive.
             </p>
-            <Link
-              to="/projects"
+            <LinkPreview
+              url={siteMeta.baseUrl + '/projects'}
               className="group/link inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary/80"
             >
               View all projects
               <span className="inline-block transition-transform duration-300 group-hover/link:translate-x-1">
                 &rarr;
               </span>
-            </Link>
+            </LinkPreview>
           </div>
         </Section>
       </motion.div>
@@ -1067,15 +975,15 @@ function App() {
             <p className="text-sm text-muted-foreground/45">
               Build logs and essays.
             </p>
-            <Link
-              to="/blog"
+            <LinkPreview
+              url={siteMeta.baseUrl + '/blog'}
               className="group/link inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary/80"
             >
               All writing
               <span className="inline-block transition-transform duration-300 group-hover/link:translate-x-1">
                 &rarr;
               </span>
-            </Link>
+            </LinkPreview>
           </div>
         </Section>
       </motion.div>
@@ -1275,27 +1183,27 @@ function App() {
                   ))}
                 </div>
 
-                <Link
-                  to="/pinterest"
+                <LinkPreview
+                  url={siteMeta.baseUrl + '/pinterest'}
                   className="inline-flex items-center gap-2 self-end text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
                 >
                   full gallery
                   <span className="transition-transform duration-300 group-hover:translate-x-1">
                     &rarr;
                   </span>
-                </Link>
+                </LinkPreview>
               </div>
             ) : (
               <p className="text-sm text-muted-foreground">
                 Couldn&apos;t load pins right now. You can still open the{' '}
-                <a
-                  href={pinterest.createdUrl}
+                <LinkPreview
+                  url={pinterest.createdUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-primary underline underline-offset-4"
                 >
                   Pinterest created feed
-                </a>
+                </LinkPreview>
                 .
               </p>
             )}
@@ -1358,13 +1266,13 @@ function App() {
               ),
             )}
           </div>
-          <Link
-            to="/certificates"
+          <LinkPreview
+            url={siteMeta.baseUrl + '/certificates'}
             className="inline-flex items-center gap-2 self-end text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
           >
             all credentials
             <span>&rarr;</span>
-          </Link>
+          </LinkPreview>
         </Section>
       </motion.div>
 
@@ -1420,14 +1328,14 @@ function App() {
                       </span>
                     ))}
                     or book a call on{' '}
-                    <a
-                      href={siteInfo.calLink}
+                    <LinkPreview
+                      url={siteInfo.calLink}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-primary transition-colors hover:text-primary/80"
                     >
                       cal.com
-                    </a>
+                    </LinkPreview>
                     . Open a link, get context quickly, and start building.
                   </p>
                 </div>
@@ -1435,8 +1343,8 @@ function App() {
                 <div className="h-px w-full bg-border/10" />
 
                 <div className="grid gap-4 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center pl-6">
-                  <a
-                    href={gravatar.profileUrl}
+                  <LinkPreview
+                    url={gravatar.profileUrl}
                     target="_blank"
                     rel="noopener noreferrer me"
                     className="shrink-0"
@@ -1447,7 +1355,7 @@ function App() {
                       alt={`${siteInfo.name} contact avatar`}
                       className="h-16 w-16 ring-1 ring-border/15"
                     />
-                  </a>
+                  </LinkPreview>
                   <div className="grid gap-2">
                     <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
                       public profile
@@ -1492,8 +1400,8 @@ function App() {
                   <span className="font-medium">Writing</span>
                   <span className="text-muted-foreground text-xs">notes</span>
                 </Link>
-                <a
-                  href={gravatar.profileUrl}
+                <LinkPreview
+                  url={gravatar.profileUrl}
                   target="_blank"
                   rel="noopener noreferrer me"
                   className="flex items-center justify-between gap-4 py-4 text-sm leading-7 text-foreground/70 transition-colors duration-300 hover:text-primary"
@@ -1502,7 +1410,7 @@ function App() {
                   <span className="text-muted-foreground text-xs">
                     identity
                   </span>
-                </a>
+                </LinkPreview>
               </div>
             </div>
           </div>
