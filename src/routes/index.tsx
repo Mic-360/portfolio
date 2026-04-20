@@ -1,5 +1,11 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { motion } from 'motion/react'
+import {
+  motion,
+  useMotionValue,
+  useScroll,
+  useSpring,
+  useTransform,
+} from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 
 import type { CertificateMeta } from '@/lib/certificates'
@@ -144,6 +150,13 @@ function sanitizeSamples<T extends { value: number | string }>(
 function LazyHeroVideo({ src }: { src: string }) {
   const [shouldRender, setShouldRender] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start end', 'end start'],
+  })
+  const y = useTransform(scrollYProgress, [0, 1], ['-8%', '14%'])
+  const scale = useTransform(scrollYProgress, [0, 1], [1.06, 1.18])
+  const opacity = useTransform(scrollYProgress, [0, 0.55, 1], [1, 0.95, 0.5])
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -194,9 +207,10 @@ function LazyHeroVideo({ src }: { src: string }) {
       aria-hidden="true"
     >
       {shouldRender ? (
-        <video
+        <motion.video
           src={src}
-          className="h-full w-full object-cover"
+          style={{ y, scale, opacity }}
+          className="h-full w-full object-cover will-change-transform"
           autoPlay
           loop
           muted
@@ -206,6 +220,57 @@ function LazyHeroVideo({ src }: { src: string }) {
         />
       ) : null}
     </div>
+  )
+}
+
+function ScrollProgress() {
+  const { scrollYProgress } = useScroll()
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 28,
+    restDelta: 0.001,
+  })
+  return (
+    <motion.div
+      className="pointer-events-none fixed inset-x-0 top-0 z-60 h-px origin-left bg-linear-to-r from-primary/40 via-primary to-primary/40"
+      style={{ scaleX }}
+    />
+  )
+}
+
+function Magnetic({
+  children,
+  strength = 0.28,
+  className,
+}: {
+  children: React.ReactNode
+  strength?: number
+  className?: string
+}) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+  const sx = useSpring(x, { stiffness: 220, damping: 22, mass: 0.4 })
+  const sy = useSpring(y, { stiffness: 220, damping: 22, mass: 0.4 })
+
+  return (
+    <motion.span
+      ref={ref}
+      className={className}
+      style={{ x: sx, y: sy, display: 'inline-block' }}
+      onPointerMove={(e) => {
+        const r = ref.current?.getBoundingClientRect()
+        if (!r) return
+        x.set((e.clientX - (r.left + r.width / 2)) * strength)
+        y.set((e.clientY - (r.top + r.height / 2)) * strength)
+      }}
+      onPointerLeave={() => {
+        x.set(0)
+        y.set(0)
+      }}
+    >
+      {children}
+    </motion.span>
   )
 }
 
@@ -285,6 +350,7 @@ function App() {
       animate="show"
       className="flex flex-col gap-20 md:gap-28"
     >
+      <ScrollProgress />
       <motion.div
         variants={item}
         className="flex items-center gap-4 w-full -mb-12 px-4 sm:px-8"
@@ -370,11 +436,13 @@ function App() {
           initial={{ opacity: 0, y: 32, filter: 'blur(10px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           transition={{ duration: 1.6, ease: APPLE_EASE, delay: 0.1 }}
-          className="max-w-5xl font-sans text-5xl leading-[1.02] tracking-tight text-foreground sm:text-7xl lg:text-8xl"
+          className="max-w-5xl font-serif text-5xl leading-[1.02] tracking-tight text-foreground sm:text-7xl lg:text-8xl"
         >
           Designing and shipping software that feels{' '}
           <span className="relative inline-block whitespace-nowrap">
-            <span className="text-primary italic pr-2">a step ahead</span>
+            <span className="text-primary italic pr-2 font-sans">
+              a step ahead
+            </span>
             <motion.svg
               viewBox="0 0 200 8"
               preserveAspectRatio="none"
@@ -412,29 +480,35 @@ function App() {
           transition={{ duration: 1.2, ease: APPLE_EASE, delay: 0.5 }}
           className="mt-12 flex flex-wrap items-center justify-center gap-4"
         >
-          <Link
-            to="/projects"
-            className="group relative inline-flex items-center gap-2 rounded-full bg-foreground px-8 py-3.5 text-sm font-semibold text-background overflow-hidden transition-transform duration-300 hover:scale-105 active:scale-95"
-          >
-            <span className="relative z-10">Selected Work</span>
-            <div className="absolute inset-0 bg-primary opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-          </Link>
-          <Link
-            to="/blog"
-            className="inline-flex items-center gap-2 rounded-full border border-border/20 bg-background/50 backdrop-blur-md px-8 py-3.5 text-sm font-medium text-foreground transition-all duration-300 hover:border-primary/40 hover:bg-primary/5 active:scale-95"
-          >
-            Latest Writing
-          </Link>
-          <a
-            data-cal-namespace="connect"
-            data-cal-link={siteInfo.calLink}
-            data-cal-config='{"layout":"week_view","useSlotsViewOnSmallScreen":"true"}'
-            href={siteInfo.calLink}
-            className="inline-flex items-center gap-2 rounded-full border border-border/20 bg-background/50 backdrop-blur-md px-8 py-3.5 text-sm font-medium text-foreground transition-all duration-300 hover:border-primary/40 hover:bg-primary/5 active:scale-95"
-          >
-            <CalendarIcon size={14} className="text-primary" />
-            Book a Call
-          </a>
+          <Magnetic>
+            <Link
+              to="/projects"
+              className="group relative inline-flex items-center gap-2 rounded-full bg-foreground px-8 py-3.5 text-sm font-semibold text-background overflow-hidden transition-transform duration-300 hover:scale-105 active:scale-95"
+            >
+              <span className="relative z-10">Selected Work</span>
+              <div className="absolute inset-0 bg-primary opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            </Link>
+          </Magnetic>
+          <Magnetic>
+            <Link
+              to="/blog"
+              className="inline-flex items-center gap-2 rounded-full border border-border/20 bg-background/50 backdrop-blur-md px-8 py-3.5 text-sm font-medium text-foreground transition-all duration-300 hover:border-primary/40 hover:bg-primary/5 active:scale-95"
+            >
+              Latest Writing
+            </Link>
+          </Magnetic>
+          <Magnetic>
+            <a
+              data-cal-namespace="connect"
+              data-cal-link={siteInfo.calLink}
+              data-cal-config='{"layout":"week_view","useSlotsViewOnSmallScreen":"true"}'
+              href={siteInfo.calLink}
+              className="inline-flex items-center gap-2 rounded-full border border-border/20 bg-background/50 backdrop-blur-md px-8 py-3.5 text-sm font-medium text-foreground transition-all duration-300 hover:border-primary/40 hover:bg-primary/5 active:scale-95"
+            >
+              <CalendarIcon size={14} className="text-primary" />
+              Book a Call
+            </a>
+          </Magnetic>
         </motion.div>
       </motion.section>
 

@@ -1,5 +1,6 @@
-import { memo, useRef, useState, useEffect } from 'react'
-import { motion } from 'motion/react'
+import { motion, useMotionValue, useSpring, useTransform } from 'motion/react'
+import { memo, useEffect, useRef, useState } from 'react'
+
 import type { GameMeta } from '@/lib/games'
 
 const APPLE_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1]
@@ -15,6 +16,29 @@ function GameCard({ game, index }: { game: GameMeta; index: number }) {
   const youtubeId = game.videoUrl ? getYoutubeId(game.videoUrl) : null
   const cardRef = useRef<HTMLDivElement>(null)
 
+  const rx = useMotionValue(0)
+  const ry = useMotionValue(0)
+  const tilt = { stiffness: 220, damping: 22, mass: 0.5 }
+  const rotateX = useSpring(rx, tilt)
+  const rotateY = useSpring(ry, tilt)
+  const glareX = useTransform(ry, [-8, 8], ['25%', '75%'])
+  const glareY = useTransform(rx, [-8, 8], ['75%', '25%'])
+
+  function handlePointerMove(e: React.PointerEvent<HTMLDivElement>) {
+    const r = cardRef.current?.getBoundingClientRect()
+    if (!r) return
+    const px = (e.clientX - r.left) / r.width - 0.5
+    const py = (e.clientY - r.top) / r.height - 0.5
+    ry.set(px * 12)
+    rx.set(-py * 10)
+  }
+
+  function handlePointerLeave() {
+    setIsHovered(false)
+    rx.set(0)
+    ry.set(0)
+  }
+
   return (
     <motion.div
       ref={cardRef}
@@ -26,13 +50,15 @@ function GameCard({ game, index }: { game: GameMeta; index: number }) {
         ease: [0.16, 1, 0.3, 1],
         delay: index * 0.05,
       }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      style={{ rotateX, rotateY, transformPerspective: 1200 }}
+      onPointerMove={handlePointerMove}
+      onPointerEnter={() => setIsHovered(true)}
+      onPointerLeave={handlePointerLeave}
       onFocus={() => setIsHovered(true)}
       onBlur={() => setIsHovered(false)}
-      className="group relative h-[60vh] min-h-[400px] w-[75vw] sm:w-[45vw] lg:w-[28vw] shrink-0 snap-center cursor-pointer overflow-hidden rounded-4xl bg-card/20 border border-white/5 shadow-2xl transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:z-10 sm:hover:w-[50vw] lg:hover:w-[36vw]"
+      className="group relative h-[60vh] min-h-100 w-[75vw] sm:w-[45vw] lg:w-[28vw] shrink-0 snap-center cursor-pointer overflow-hidden rounded-4xl bg-card/20 border border-white/5 shadow-2xl transition-[width,box-shadow] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:z-10 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.55)] sm:hover:w-[50vw] lg:hover:w-[36vw] transform-3d"
     >
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 transform-[translateZ(0)]">
         <img
           src={game.posterUrl}
           alt={game.title}
@@ -43,9 +69,20 @@ function GameCard({ game, index }: { game: GameMeta; index: number }) {
           }}
         />
 
-        {/* Subtle inner shadow top */}
         <div className="absolute inset-x-0 top-0 h-32 bg-linear-to-b from-black/60 to-transparent pointer-events-none opacity-40 transition-opacity duration-700 group-hover:opacity-0" />
       </div>
+
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 mix-blend-overlay"
+        style={{
+          background: useTransform(
+            [glareX, glareY],
+            ([x, y]) =>
+              `radial-gradient(circle at ${x} ${y}, rgba(255,255,255,0.55), transparent 45%)`,
+          ),
+        }}
+      />
 
       <div className="absolute inset-0 bg-black/10 transition-opacity duration-700 group-hover:opacity-30 dark:group-hover:opacity-50 pointer-events-none" />
 
@@ -75,10 +112,9 @@ function GameCard({ game, index }: { game: GameMeta; index: number }) {
         </div>
       )}
 
-      {/* Decorative gradients */}
       <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent opacity-80" />
 
-      <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 flex flex-col justify-end">
+      <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 flex flex-col justify-end transform-[translateZ(40px)]">
         <div className="translate-y-4 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0">
           <p className="text-[10px] uppercase tracking-[0.3em] text-white/50 mb-2 drop-shadow-md">
             {game.series}
@@ -220,6 +256,36 @@ export function GamesCinematic({ gamesData }: { gamesData: Array<GameMeta> }) {
     }
   }
 
+  const nudge = (dir: 1 | -1) => {
+    const el = scrollRef.current
+    if (!el) return
+    el.scrollTo({
+      left: el.scrollLeft + dir * el.clientWidth * 0.6,
+      behavior: 'smooth',
+    })
+  }
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      const el = scrollRef.current
+      if (!el) return
+      const r = el.getBoundingClientRect()
+      const inView =
+        r.top < window.innerHeight * 0.75 &&
+        r.bottom > window.innerHeight * 0.25
+      if (!inView) return
+      if (e.key === 'ArrowRight') {
+        e.preventDefault()
+        nudge(1)
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault()
+        nudge(-1)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
   return (
     <section className="relative overflow-hidden py-24 sm:py-32">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-border/20 to-transparent" />
@@ -265,12 +331,40 @@ export function GamesCinematic({ gamesData }: { gamesData: Array<GameMeta> }) {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 1, duration: 1 }}
-            className="mx-auto mt-4 h-px w-64 bg-border/20 relative"
+            className="mx-auto mt-4 flex w-full max-w-md items-center gap-4 px-6"
           >
-            <motion.div
-              className="absolute top-0 left-0 h-full bg-primary/40"
-              style={{ width: `${Math.max(5, scrollProgress * 100)}%` }}
-            />
+            <button
+              type="button"
+              aria-label="Previous"
+              onClick={() => nudge(-1)}
+              className="group/nav flex h-9 w-9 items-center justify-center rounded-full border border-border/15 bg-background/40 text-foreground/60 backdrop-blur-md transition-all duration-300 hover:border-primary/40 hover:text-primary active:scale-95"
+            >
+              <span className="transition-transform duration-300 group-hover/nav:-translate-x-0.5">
+                &larr;
+              </span>
+            </button>
+            <div className="relative h-px flex-1 overflow-hidden bg-border/20">
+              <motion.div
+                className="absolute inset-y-0 left-0 bg-primary/60"
+                animate={{ width: `${Math.max(5, scrollProgress * 100)}%` }}
+                transition={{
+                  type: 'spring',
+                  stiffness: 120,
+                  damping: 24,
+                  mass: 0.4,
+                }}
+              />
+            </div>
+            <button
+              type="button"
+              aria-label="Next"
+              onClick={() => nudge(1)}
+              className="group/nav flex h-9 w-9 items-center justify-center rounded-full border border-border/15 bg-background/40 text-foreground/60 backdrop-blur-md transition-all duration-300 hover:border-primary/40 hover:text-primary active:scale-95"
+            >
+              <span className="transition-transform duration-300 group-hover/nav:translate-x-0.5">
+                &rarr;
+              </span>
+            </button>
           </motion.div>
         </div>
       </div>

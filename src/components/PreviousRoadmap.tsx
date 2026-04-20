@@ -1,5 +1,8 @@
-import { motion, useInView } from 'motion/react'
+import { motion, useInView, useScroll, useSpring } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
+
+import type { MotionValue } from 'motion/react'
+
 import { previousRoles } from '@/config/site-data'
 
 const APPLE_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1]
@@ -59,12 +62,14 @@ function RoleCard({
         animate={
           active
             ? {
-                borderColor: 'color-mix(in oklab, var(--primary) 80%, transparent)',
+                borderColor:
+                  'color-mix(in oklab, var(--primary) 80%, transparent)',
                 boxShadow:
                   '0 0 0 1px color-mix(in oklab, var(--primary) 30%, transparent), 0 20px 40px -10px color-mix(in oklab, var(--primary) 25%, transparent)',
               }
             : {
-                borderColor: 'color-mix(in oklab, var(--border) 10%, transparent)',
+                borderColor:
+                  'color-mix(in oklab, var(--border) 10%, transparent)',
                 boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
               }
         }
@@ -74,15 +79,21 @@ function RoleCard({
         <div className="absolute top-0 right-0 p-2 opacity-10 font-mono text-5xl font-bold italic tracking-tighter mix-blend-overlay pointer-events-none">
           S{index + 1}
         </div>
-        
-        {/* Curbs accent */}
-        <div className="absolute top-0 left-0 w-full h-1" style={{
-          backgroundImage: 'repeating-linear-gradient(45deg, var(--primary) 0, var(--primary) 10px, transparent 10px, transparent 20px)',
-          opacity: active ? 0.8 : 0.1,
-          transition: 'opacity 0.5s ease'
-        }} />
 
-        <div className={`relative mt-2 flex items-start gap-4 ${isRight ? 'flex-row-reverse' : ''}`}>
+        {/* Curbs accent */}
+        <div
+          className="absolute top-0 left-0 w-full h-1"
+          style={{
+            backgroundImage:
+              'repeating-linear-gradient(45deg, var(--primary) 0, var(--primary) 10px, transparent 10px, transparent 20px)',
+            opacity: active ? 0.8 : 0.1,
+            transition: 'opacity 0.5s ease',
+          }}
+        />
+
+        <div
+          className={`relative mt-2 flex items-start gap-4 ${isRight ? 'flex-row-reverse' : ''}`}
+        >
           {role.icon && (
             <div className="relative shrink-0 overflow-hidden rounded-[14px] bg-white ring-1 ring-black/5 dark:ring-white/10">
               <img
@@ -93,22 +104,32 @@ function RoleCard({
               />
             </div>
           )}
-          <div className={`flex flex-col min-w-0 ${isRight ? 'items-end' : ''}`}>
+          <div
+            className={`flex flex-col min-w-0 ${isRight ? 'items-end' : ''}`}
+          >
             <span className="font-serif text-lg tracking-tight text-foreground transition-colors duration-300 group-hover/role:text-primary truncate font-semibold">
               {role.company}
             </span>
             <span className="text-xs text-foreground/60 font-medium">
               {role.role}
             </span>
-            <div className={`mt-3 grid grid-cols-2 gap-2 text-[10px] w-full ${isRight ? '' : ''}`}>
-              <div className={`flex flex-col border-border/10 ${isRight ? 'text-right border-l pl-2' : 'border-r pr-2'}`}>
-                <span className="text-muted-foreground/50 uppercase tracking-[0.2em] mb-0.5">Time</span>
+            <div
+              className={`mt-3 grid grid-cols-2 gap-2 text-[10px] w-full ${isRight ? '' : ''}`}
+            >
+              <div
+                className={`flex flex-col border-border/10 ${isRight ? 'text-right border-l pl-2' : 'border-r pr-2'}`}
+              >
+                <span className="text-muted-foreground/50 uppercase tracking-[0.2em] mb-0.5">
+                  Time
+                </span>
                 <span className="font-mono font-bold text-primary/80 tabular-nums">
                   {role.duration}
                 </span>
               </div>
               <div className={`flex flex-col ${isRight ? 'text-right' : ''}`}>
-                <span className="text-muted-foreground/50 uppercase tracking-[0.2em] mb-0.5">Loc</span>
+                <span className="text-muted-foreground/50 uppercase tracking-[0.2em] mb-0.5">
+                  Loc
+                </span>
                 <span className="font-medium text-foreground/70 uppercase tracking-widest truncate">
                   {role.location}
                 </span>
@@ -127,12 +148,14 @@ function TrackSVG({
   checkpoints,
   activeCheckpoint,
   className,
+  pathProgress,
 }: {
   viewBox: string
   path: string
   checkpoints: Array<{ cx: number; cy: number }>
   activeCheckpoint: number
   className?: string
+  pathProgress: MotionValue<number>
 }) {
   return (
     <svg
@@ -173,10 +196,7 @@ function TrackSVG({
         strokeWidth="2"
         strokeLinecap="square"
         strokeLinejoin="bevel"
-        initial={{ pathLength: 0, opacity: 0 }}
-        whileInView={{ pathLength: 1, opacity: 1 }}
-        viewport={{ once: true, margin: '-100px' }}
-        transition={{ duration: 1.5, ease: APPLE_EASE }}
+        style={{ pathLength: pathProgress }}
       />
 
       {/* Apex points */}
@@ -187,7 +207,9 @@ function TrackSVG({
             y={cp.cy - 4}
             width="8"
             height="8"
-            fill={activeCheckpoint === i ? 'var(--primary)' : 'var(--background)'}
+            fill={
+              activeCheckpoint === i ? 'var(--primary)' : 'var(--background)'
+            }
             stroke="var(--primary)"
             strokeWidth="1.5"
             transform={`rotate(45 ${cp.cx} ${cp.cy})`}
@@ -201,25 +223,33 @@ function TrackSVG({
             }}
           />
           {activeCheckpoint === i && (
-             <motion.rect
-               x={cp.cx - 12}
-               y={cp.cy - 12}
-               width="24"
-               height="24"
-               fill="none"
-               stroke="var(--primary)"
-               strokeWidth="0.5"
-               transform={`rotate(45 ${cp.cx} ${cp.cy})`}
-               animate={{ scale: [1, 1.6], opacity: [0.8, 0] }}
-               transition={{ duration: 1, repeat: Infinity, ease: 'easeOut' }}
-             />
+            <motion.rect
+              x={cp.cx - 12}
+              y={cp.cy - 12}
+              width="24"
+              height="24"
+              fill="none"
+              stroke="var(--primary)"
+              strokeWidth="0.5"
+              transform={`rotate(45 ${cp.cx} ${cp.cy})`}
+              animate={{ scale: [1, 1.6], opacity: [0.8, 0] }}
+              transition={{ duration: 1, repeat: Infinity, ease: 'easeOut' }}
+            />
           )}
         </g>
       ))}
-      
+
       {/* Pace car blip */}
       <circle r="3" fill="var(--primary)">
-        <animateMotion dur="8s" repeatCount="indefinite" rotate="auto" path={path} keyPoints="0;1" keyTimes="0;1" calcMode="linear" />
+        <animateMotion
+          dur="8s"
+          repeatCount="indefinite"
+          rotate="auto"
+          path={path}
+          keyPoints="0;1"
+          keyTimes="0;1"
+          calcMode="linear"
+        />
       </circle>
     </svg>
   )
@@ -229,6 +259,16 @@ export function PreviousRoadmap() {
   const [activeCheckpoint, setActiveCheckpoint] = useState(-1)
   const sectionRef = useRef<HTMLDivElement>(null)
   const isInView = useInView(sectionRef, { once: false, margin: '-100px' })
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start 85%', 'end 35%'],
+  })
+  const pathProgress = useSpring(scrollYProgress, {
+    stiffness: 80,
+    damping: 24,
+    restDelta: 0.001,
+  })
 
   useEffect(() => {
     if (!isInView) return
@@ -259,13 +299,25 @@ export function PreviousRoadmap() {
   ]
 
   return (
-    <div ref={sectionRef} className="overflow-hidden max-w-325 mx-auto w-full py-16 px-4">
+    <div
+      ref={sectionRef}
+      className="overflow-hidden max-w-325 mx-auto w-full py-16 px-4"
+    >
       <div className="lg:hidden relative w-full" style={{ height: 620 }}>
         <div className="absolute bottom-2 left-[50%] -translate-x-[50%] z-10 font-mono text-[9px] uppercase tracking-widest text-primary/50 flex flex-col items-center gap-2">
           <div className="flex gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" style={{ animationDelay: '0ms' }} />
-            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" style={{ animationDelay: '150ms' }} />
-            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" style={{ animationDelay: '300ms' }} />
+            <span
+              className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"
+              style={{ animationDelay: '0ms' }}
+            />
+            <span
+              className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"
+              style={{ animationDelay: '150ms' }}
+            />
+            <span
+              className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"
+              style={{ animationDelay: '300ms' }}
+            />
           </div>
           LIGHTS OUT
         </div>
@@ -273,8 +325,10 @@ export function PreviousRoadmap() {
         <div className="absolute top-0 left-[50%] -translate-x-[50%] z-10 font-mono text-[9px] uppercase tracking-widest text-foreground/40 flex items-center gap-2">
           FINISH
           <div className="w-4 h-4 grid grid-cols-2 bg-foreground/20">
-            <div className="bg-foreground" /><div className="bg-transparent" />
-            <div className="bg-transparent" /><div className="bg-foreground" />
+            <div className="bg-foreground" />
+            <div className="bg-transparent" />
+            <div className="bg-transparent" />
+            <div className="bg-foreground" />
           </div>
         </div>
 
@@ -283,6 +337,7 @@ export function PreviousRoadmap() {
           path={MOBILE_PATH}
           checkpoints={MOBILE_CPS}
           activeCheckpoint={activeCheckpoint}
+          pathProgress={pathProgress}
           className="absolute inset-0 w-full h-full"
         />
 
@@ -319,19 +374,30 @@ export function PreviousRoadmap() {
             }}
           >
             <div className="absolute bottom-[2%] left-[4%] z-10 font-mono text-[10px] uppercase tracking-widest text-primary/60 flex items-center gap-3">
-               <div className="flex gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-primary animate-pulse" style={{ animationDelay: '0ms' }} />
-                <span className="w-2 h-2 rounded-full bg-primary animate-pulse" style={{ animationDelay: '200ms' }} />
-                <span className="w-2 h-2 rounded-full bg-primary animate-pulse" style={{ animationDelay: '400ms' }} />
+              <div className="flex gap-1.5">
+                <span
+                  className="w-2 h-2 rounded-full bg-primary animate-pulse"
+                  style={{ animationDelay: '0ms' }}
+                />
+                <span
+                  className="w-2 h-2 rounded-full bg-primary animate-pulse"
+                  style={{ animationDelay: '200ms' }}
+                />
+                <span
+                  className="w-2 h-2 rounded-full bg-primary animate-pulse"
+                  style={{ animationDelay: '400ms' }}
+                />
               </div>
               START
             </div>
-            
+
             <div className="absolute top-[35%] right-[2%] z-10 font-mono text-[10px] uppercase tracking-widest text-foreground/40 flex items-center gap-3">
               CHECKERED
               <div className="w-5 h-5 grid grid-cols-2 bg-foreground/20">
-                <div className="bg-foreground/60" /><div className="bg-transparent" />
-                <div className="bg-transparent" /><div className="bg-foreground/60" />
+                <div className="bg-foreground/60" />
+                <div className="bg-transparent" />
+                <div className="bg-transparent" />
+                <div className="bg-foreground/60" />
               </div>
             </div>
 
@@ -340,6 +406,7 @@ export function PreviousRoadmap() {
               path={DESKTOP_PATH}
               checkpoints={DESKTOP_CPS}
               activeCheckpoint={activeCheckpoint}
+              pathProgress={pathProgress}
               className="w-full h-full"
             />
           </div>
