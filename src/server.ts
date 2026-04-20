@@ -3,6 +3,7 @@ import {
   convertHtmlToMarkdown,
   wantsMarkdown,
 } from './lib/markdown-negotiation.server'
+import { handleWebBotAuthDirectory } from './lib/web-bot-auth.server'
 
 export default {
   async fetch(req: Request): Promise<Response> {
@@ -53,6 +54,9 @@ export default {
         },
       })
     }
+
+    const webBotAuthResponse = handleWebBotAuthDirectory(req)
+    if (webBotAuthResponse) return webBotAuthResponse
 
     const acceptsMarkdown = wantsMarkdown(req)
 
