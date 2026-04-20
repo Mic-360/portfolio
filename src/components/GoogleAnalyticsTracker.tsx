@@ -32,7 +32,8 @@ export function GoogleAnalyticsTracker({
         return
       }
 
-      window.dataLayer = window.dataLayer || []
+      // eslint-disable-next-line no-self-assign
+      window.dataLayer = window.dataLayer
       window.gtag =
         window.gtag ||
         function gtag(...args: Array<unknown>) {

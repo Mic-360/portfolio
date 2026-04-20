@@ -1,8 +1,8 @@
+import { Link, createFileRoute } from '@tanstack/react-router'
+import { motion } from 'motion/react'
 import { CometCard } from '@/components/ui/comet-card'
 import { siteInfo, siteMeta } from '@/config/site-data'
 import { getResume } from '@/lib/content'
-import { Link, createFileRoute } from '@tanstack/react-router'
-import { motion } from 'motion/react'
 
 export const Route = createFileRoute('/resume')({
   loader: async () => ({

@@ -304,20 +304,13 @@ export function CommandMenu() {
   }
 
   const blogTags = React.useMemo(
-    () =>
-      uniqueSorted(
-        blogs.flatMap((b) => [...(b.tags || []), ...(b.categories || [])]),
-      ),
+    () => uniqueSorted(blogs.flatMap((b) => [...b.tags, ...b.categories])),
     [blogs],
   )
   const projectTags = React.useMemo(
     () =>
       uniqueSorted(
-        projects.flatMap((p) => [
-          ...(p.tags || []),
-          ...(p.categories || []),
-          ...(p.stack || []),
-        ]),
+        projects.flatMap((p) => [...p.tags, ...p.categories, ...p.stack]),
       ),
     [projects],
   )

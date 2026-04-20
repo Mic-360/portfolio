@@ -1,6 +1,6 @@
 declare module 'cal-heatmap' {
 	export default class CalHeatmap {
-		paint(options: any, plugins?: any[]): Promise<void> | void
+		paint(options: any, plugins?: Array<any>): Promise<void> | void
 		destroy(): Promise<void> | void
 		previous(): void
 		next(): void

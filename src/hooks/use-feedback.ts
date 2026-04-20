@@ -12,7 +12,10 @@ export function useFeedback() {
     try {
       if (!sharedAudioContext) {
         const AudioContextClass =
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
           window.AudioContext || (window as any).webkitAudioContext
+        
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (AudioContextClass) {
           sharedAudioContext = new AudioContextClass()
         }
