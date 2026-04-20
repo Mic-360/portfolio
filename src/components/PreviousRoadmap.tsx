@@ -2,20 +2,24 @@ import { motion, useInView } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { previousRoles } from '@/config/site-data'
 
+const APPLE_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1]
+
+// F1 Track inspired sharper paths
 const MOBILE_PATH =
-  'M150,560 C150,500 50,470 50,410 C50,350 250,310 250,250 C250,190 50,150 50,90 C50,45 150,20 150,15'
+  'M50,560 L50,470 C50,440 250,440 250,410 L250,280 C250,250 50,250 50,220 L50,90 C50,60 150,60 150,20'
 const DESKTOP_PATH =
-  'M40,140 C100,140 140,40 260,40 C380,40 420,140 540,140 C660,140 700,40 820,40 C900,40 950,90 960,140'
+  'M40,160 L140,160 C180,160 200,40 240,40 L380,40 C420,40 440,160 480,160 L620,160 C660,160 680,40 720,40 L860,40 C900,40 920,160 960,160'
 
 const MOBILE_CPS = [
-  { cx: 50, cy: 410 },
+  { cx: 50, cy: 440 },
   { cx: 250, cy: 250 },
   { cx: 50, cy: 90 },
 ]
+
 const DESKTOP_CPS = [
-  { cx: 260, cy: 40 },
-  { cx: 540, cy: 140 },
-  { cx: 820, cy: 40 },
+  { cx: 240, cy: 40 },
+  { cx: 480, cy: 160 },
+  { cx: 720, cy: 40 },
 ]
 
 function RoleCard({
@@ -36,16 +40,16 @@ function RoleCard({
       href={role.url}
       target="_blank"
       rel="noopener noreferrer"
-      initial={{ opacity: 0, y: 16, scale: 0.96 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true }}
+      initial={{ opacity: 0, y: 16, filter: 'blur(10px)', scale: 0.95 }}
+      whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)', scale: 1 }}
+      viewport={{ once: true, margin: '-40px' }}
       transition={{
-        delay: index * 0.15,
-        duration: 0.6,
-        ease: [0.25, 0.1, 0.25, 1],
+        delay: 0.1 + index * 0.1,
+        duration: 0.8,
+        ease: APPLE_EASE,
       }}
       whileHover={{
-        y: -3,
+        scale: 1.02,
         transition: { type: 'spring', stiffness: 400, damping: 25 },
       }}
       className={`group/role absolute z-20 ${isRight ? 'text-right' : ''}`}
@@ -55,66 +59,60 @@ function RoleCard({
         animate={
           active
             ? {
-                borderColor: 'var(--primary)',
+                borderColor: 'color-mix(in oklab, var(--primary) 80%, transparent)',
                 boxShadow:
-                  '0 0 0 1px color-mix(in oklab, var(--primary) 20%, transparent), 0 8px 32px -8px color-mix(in oklab, var(--primary) 15%, transparent)',
+                  '0 0 0 1px color-mix(in oklab, var(--primary) 30%, transparent), 0 20px 40px -10px color-mix(in oklab, var(--primary) 25%, transparent)',
               }
             : {
-                borderColor:
-                  'color-mix(in oklab, var(--border) 30%, transparent)',
-                boxShadow: '0 1px 3px 0 rgb(0 0 0 / 0.04)',
+                borderColor: 'color-mix(in oklab, var(--border) 10%, transparent)',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
               }
         }
-        transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-        className="relative overflow-hidden rounded-2xl border bg-card/60 backdrop-blur-xl p-4 transition-[border-color,transform] duration-500 group-hover/role:border-primary/30 will-change-transform"
+        transition={{ duration: 0.5, ease: APPLE_EASE }}
+        className="relative overflow-hidden rounded-[20px] border bg-background/50 p-4 backdrop-blur-3xl will-change-transform sm:w-64"
       >
-        <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-primary/3 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover/role:opacity-100" />
+        <div className="absolute top-0 right-0 p-2 opacity-10 font-mono text-5xl font-bold italic tracking-tighter mix-blend-overlay pointer-events-none">
+          S{index + 1}
+        </div>
+        
+        {/* Curbs accent */}
+        <div className="absolute top-0 left-0 w-full h-1" style={{
+          backgroundImage: 'repeating-linear-gradient(45deg, var(--primary) 0, var(--primary) 10px, transparent 10px, transparent 20px)',
+          opacity: active ? 0.8 : 0.1,
+          transition: 'opacity 0.5s ease'
+        }} />
 
-        <div
-          className={`relative flex items-center gap-3 ${isRight ? 'flex-row-reverse' : ''}`}
-        >
+        <div className={`relative mt-2 flex items-start gap-4 ${isRight ? 'flex-row-reverse' : ''}`}>
           {role.icon && (
-            <motion.div
-              animate={active ? { scale: 1.08 } : { scale: 1 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-              className="relative shrink-0"
-            >
+            <div className="relative shrink-0 overflow-hidden rounded-[14px] bg-white ring-1 ring-black/5 dark:ring-white/10">
               <img
                 src={role.icon}
                 alt={role.company}
-                width={40}
-                height={40}
                 loading="lazy"
-                data-backlight="off"
-                className="w-10 h-10 rounded-xl object-cover transition-all duration-500 group-hover/role:scale-105"
+                className="h-10 w-10 object-contain p-1 mix-blend-luminosity opacity-80 transition-all duration-500 group-hover/role:mix-blend-normal group-hover/role:opacity-100"
               />
-              {active && (
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-card/80"
-                />
-              )}
-            </motion.div>
+            </div>
           )}
-          <div
-            className={`flex flex-col gap-0.5 min-w-0 ${isRight ? 'items-end' : ''}`}
-          >
-            <span className="font-semibold text-sm tracking-tight text-foreground transition-colors duration-300 group-hover/role:text-primary truncate">
+          <div className={`flex flex-col min-w-0 ${isRight ? 'items-end' : ''}`}>
+            <span className="font-serif text-lg tracking-tight text-foreground transition-colors duration-300 group-hover/role:text-primary truncate font-semibold">
               {role.company}
             </span>
-            <span className="text-[11px] text-foreground/70 leading-tight">
+            <span className="text-xs text-foreground/60 font-medium">
               {role.role}
             </span>
-            <div
-              className={`flex items-center gap-2 mt-0.5 ${isRight ? 'flex-row-reverse' : ''}`}
-            >
-              <span className="text-[10px] font-medium text-primary/60 tabular-nums">
-                {role.duration}
-              </span>
-              <span className="text-[9px] text-foreground/30">
-                {role.location}
-              </span>
+            <div className={`mt-3 grid grid-cols-2 gap-2 text-[10px] w-full ${isRight ? '' : ''}`}>
+              <div className={`flex flex-col border-border/10 ${isRight ? 'text-right border-l pl-2' : 'border-r pr-2'}`}>
+                <span className="text-muted-foreground/50 uppercase tracking-[0.2em] mb-0.5">Time</span>
+                <span className="font-mono font-bold text-primary/80 tabular-nums">
+                  {role.duration}
+                </span>
+              </div>
+              <div className={`flex flex-col ${isRight ? 'text-right' : ''}`}>
+                <span className="text-muted-foreground/50 uppercase tracking-[0.2em] mb-0.5">Loc</span>
+                <span className="font-medium text-foreground/70 uppercase tracking-widest truncate">
+                  {role.location}
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -143,73 +141,85 @@ function TrackSVG({
       className={className}
       preserveAspectRatio="xMidYMid meet"
     >
+      <defs>
+        <linearGradient id="track-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="var(--primary)" stopOpacity="0" />
+          <stop offset="50%" stopColor="var(--primary)" stopOpacity="1" />
+          <stop offset="100%" stopColor="var(--primary)" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+
+      {/* Main Track Silhouette */}
       <path
         d={path}
         stroke="var(--foreground)"
-        strokeWidth="36"
-        strokeOpacity="0.02"
-        strokeLinecap="round"
+        strokeWidth="12"
+        strokeOpacity="0.03"
+        strokeLinejoin="bevel"
       />
       <path
         d={path}
-        stroke="var(--border)"
-        strokeWidth="20"
-        strokeOpacity="0.15"
-        strokeLinecap="round"
-      />
-      <path
-        d={path}
-        stroke="var(--primary)"
+        stroke="var(--foreground)"
         strokeWidth="1"
-        strokeOpacity="0.25"
-        strokeDasharray="8 6"
-        strokeLinecap="round"
+        strokeOpacity="0.1"
+        strokeDasharray="4 8"
+        strokeLinejoin="bevel"
       />
 
+      {/* Animated Racing Line */}
+      <motion.path
+        d={path}
+        stroke="url(#track-grad)"
+        strokeWidth="2"
+        strokeLinecap="square"
+        strokeLinejoin="bevel"
+        initial={{ pathLength: 0, opacity: 0 }}
+        whileInView={{ pathLength: 1, opacity: 1 }}
+        viewport={{ once: true, margin: '-100px' }}
+        transition={{ duration: 1.5, ease: APPLE_EASE }}
+      />
+
+      {/* Apex points */}
       {checkpoints.map((cp, i) => (
         <g key={i}>
-          {activeCheckpoint === i && (
-            <circle
-              cx={cp.cx}
-              cy={cp.cy}
-              r="16"
-              fill="none"
-              stroke="var(--primary)"
-              strokeWidth="0.75"
-              opacity="0.2"
-              style={{
-                transition: 'all 0.6s cubic-bezier(0.25, 0.1, 0.25, 1)',
-              }}
-            />
-          )}
-          <circle
-            cx={cp.cx}
-            cy={cp.cy}
-            r={activeCheckpoint === i ? 5 : 3}
-            fill={activeCheckpoint === i ? 'var(--primary)' : 'none'}
+          <motion.rect
+            x={cp.cx - 4}
+            y={cp.cy - 4}
+            width="8"
+            height="8"
+            fill={activeCheckpoint === i ? 'var(--primary)' : 'var(--background)'}
             stroke="var(--primary)"
             strokeWidth="1.5"
-            opacity={activeCheckpoint === i ? 0.9 : 0.2}
-            style={{ transition: 'all 0.6s cubic-bezier(0.25, 0.1, 0.25, 1)' }}
+            transform={`rotate(45 ${cp.cx} ${cp.cy})`}
+            initial={{ scale: 0 }}
+            whileInView={{ scale: 1 }}
+            viewport={{ once: true }}
+            transition={{
+              duration: 0.5,
+              ease: [0.34, 1.56, 0.64, 1],
+              delay: 0.5 + i * 0.1,
+            }}
           />
+          {activeCheckpoint === i && (
+             <motion.rect
+               x={cp.cx - 12}
+               y={cp.cy - 12}
+               width="24"
+               height="24"
+               fill="none"
+               stroke="var(--primary)"
+               strokeWidth="0.5"
+               transform={`rotate(45 ${cp.cx} ${cp.cy})`}
+               animate={{ scale: [1, 1.6], opacity: [0.8, 0] }}
+               transition={{ duration: 1, repeat: Infinity, ease: 'easeOut' }}
+             />
+          )}
         </g>
       ))}
-
-      <circle r="4" fill="var(--primary)" opacity="0.8">
-        <animateMotion
-          dur="10s"
-          repeatCount="indefinite"
-          rotate="auto"
-          path={path}
-        />
-      </circle>
-      <circle r="8" fill="var(--primary)" opacity="0.12">
-        <animateMotion
-          dur="10s"
-          repeatCount="indefinite"
-          rotate="auto"
-          path={path}
-        />
+      
+      {/* Pace car blip */}
+      <circle r="3" fill="var(--primary)">
+        <animateMotion dur="8s" repeatCount="indefinite" rotate="auto" path={path} keyPoints="0;1" keyTimes="0;1" calcMode="linear" />
       </circle>
     </svg>
   )
@@ -222,74 +232,54 @@ export function PreviousRoadmap() {
 
   useEffect(() => {
     if (!isInView) return
-    const LAP = 10000
+    const LAP = 8000
     const start = Date.now()
     const id = setInterval(() => {
       const p = ((Date.now() - start) % LAP) / LAP
-      if (p > 0.18 && p < 0.28) setActiveCheckpoint(0)
-      else if (p > 0.43 && p < 0.55) setActiveCheckpoint(1)
-      else if (p > 0.68 && p < 0.8) setActiveCheckpoint(2)
+      if (p > 0.15 && p < 0.25) setActiveCheckpoint(0)
+      else if (p > 0.45 && p < 0.55) setActiveCheckpoint(1)
+      else if (p > 0.75 && p < 0.85) setActiveCheckpoint(2)
       else setActiveCheckpoint(-1)
-    }, 60)
+    }, 50)
     return () => clearInterval(id)
   }, [isInView])
 
   const roles = [...previousRoles].reverse()
 
   const mobilePositions: Array<React.CSSProperties> = [
-    { top: '64%', left: '30%' },
-    { top: '36%', right: '2%' },
-    { top: '8%', left: '30%' },
+    { top: '68%', left: '16%' },
+    { top: '34%', right: '4%' },
+    { top: '8%', left: '16%' },
   ]
 
   const desktopPositions: Array<React.CSSProperties> = [
-    { top: '-2%', left: '18%' },
-    { bottom: '-4%', left: '43%' },
-    { top: '-2%', right: '6%' },
+    { top: '-4%', left: '8%' },
+    { bottom: '-12%', left: '42%' },
+    { top: '-4%', right: '0%' },
   ]
 
   return (
-    <div ref={sectionRef} className='overflow-hidden max-w-325 mx-auto w-full py-6'>
-      <div
-        className="lg:hidden relative w-full"
-        style={{ height: 580 }}
-      >
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5 }}
-          className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10"
-        >
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/8 px-3 py-1 text-[9px] font-medium uppercase tracking-[0.3em] text-primary/60 backdrop-blur-sm border border-primary/10">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary/50 animate-pulse" />
-            start
-          </span>
-        </motion.div>
+    <div ref={sectionRef} className="overflow-hidden max-w-325 mx-auto w-full py-16 px-4">
+      <div className="lg:hidden relative w-full" style={{ height: 620 }}>
+        <div className="absolute bottom-2 left-[50%] -translate-x-[50%] z-10 font-mono text-[9px] uppercase tracking-widest text-primary/50 flex flex-col items-center gap-2">
+          <div className="flex gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" style={{ animationDelay: '0ms' }} />
+            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" style={{ animationDelay: '150ms' }} />
+            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" style={{ animationDelay: '300ms' }} />
+          </div>
+          LIGHTS OUT
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.6 }}
-          className="absolute top-0 left-1/2 -translate-x-1/2 z-10"
-        >
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-foreground/3 px-3 py-1 text-[9px] font-medium uppercase tracking-[0.3em] text-foreground/30 backdrop-blur-sm border border-border/15">
-            <div
-              className="w-2.5 h-2.5 rounded-sm"
-              style={{
-                backgroundImage:
-                  'repeating-conic-gradient(var(--foreground) 0% 25%, transparent 0% 50%)',
-                backgroundSize: '2.5px 2.5px',
-                opacity: 0.25,
-              }}
-            />
-            finish
-          </span>
-        </motion.div>
+        <div className="absolute top-0 left-[50%] -translate-x-[50%] z-10 font-mono text-[9px] uppercase tracking-widest text-foreground/40 flex items-center gap-2">
+          FINISH
+          <div className="w-4 h-4 grid grid-cols-2 bg-foreground/20">
+            <div className="bg-foreground" /><div className="bg-transparent" />
+            <div className="bg-transparent" /><div className="bg-foreground" />
+          </div>
+        </div>
 
         <TrackSVG
-          viewBox="0 0 300 580"
+          viewBox="0 0 300 620"
           path={MOBILE_PATH}
           checkpoints={MOBILE_CPS}
           activeCheckpoint={activeCheckpoint}
@@ -308,7 +298,7 @@ export function PreviousRoadmap() {
         ))}
       </div>
 
-      <div className="hidden lg:block relative" style={{ height: 200 }}>
+      <div className="hidden lg:block relative" style={{ height: 260 }}>
         {roles.map((role, i) => (
           <RoleCard
             key={role.company}
@@ -319,38 +309,34 @@ export function PreviousRoadmap() {
           />
         ))}
 
-        <div className="absolute inset-0" style={{ perspective: '1000px' }}>
+        <div className="absolute inset-0" style={{ perspective: '1200px' }}>
           <div
             className="w-full h-full"
             style={{
-              transform: 'rotateX(58deg) rotateY(-1deg)',
+              transform: 'rotateX(45deg)',
               transformStyle: 'preserve-3d',
-              transformOrigin: '55% 90%',
+              transformOrigin: '50% 100%',
             }}
           >
-            <div className="absolute bottom-[12%] left-[4%] z-10">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/8 px-2.5 py-0.5 text-[8px] font-medium uppercase tracking-[0.3em] text-primary/60 border border-primary/10">
-                <span className="h-1 w-1 rounded-full bg-primary/50 animate-pulse" />
-                start
-              </span>
+            <div className="absolute bottom-[2%] left-[4%] z-10 font-mono text-[10px] uppercase tracking-widest text-primary/60 flex items-center gap-3">
+               <div className="flex gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-primary animate-pulse" style={{ animationDelay: '0ms' }} />
+                <span className="w-2 h-2 rounded-full bg-primary animate-pulse" style={{ animationDelay: '200ms' }} />
+                <span className="w-2 h-2 rounded-full bg-primary animate-pulse" style={{ animationDelay: '400ms' }} />
+              </div>
+              START
             </div>
-            <div className="absolute top-[42%] right-[1%] z-10">
-              <span className="inline-flex items-center gap-1 rounded-full bg-foreground/3 px-2.5 py-0.5 text-[8px] font-medium uppercase tracking-[0.3em] text-foreground/25 border border-border/10">
-                <div
-                  className="w-2 h-2 rounded-xs"
-                  style={{
-                    backgroundImage:
-                      'repeating-conic-gradient(var(--foreground) 0% 25%, transparent 0% 50%)',
-                    backgroundSize: '2px 2px',
-                    opacity: 0.2,
-                  }}
-                />
-                finish
-              </span>
+            
+            <div className="absolute top-[35%] right-[2%] z-10 font-mono text-[10px] uppercase tracking-widest text-foreground/40 flex items-center gap-3">
+              CHECKERED
+              <div className="w-5 h-5 grid grid-cols-2 bg-foreground/20">
+                <div className="bg-foreground/60" /><div className="bg-transparent" />
+                <div className="bg-transparent" /><div className="bg-foreground/60" />
+              </div>
             </div>
 
             <TrackSVG
-              viewBox="0 0 1000 180"
+              viewBox="0 0 1000 220"
               path={DESKTOP_PATH}
               checkpoints={DESKTOP_CPS}
               activeCheckpoint={activeCheckpoint}
