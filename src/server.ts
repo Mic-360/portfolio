@@ -52,21 +52,29 @@ export default {
 
     const response = await handler.fetch(req)
 
-    // Create new headers object to avoid immutable headers error
     const newHeaders = new Headers(response.headers)
     newHeaders.set(
       'Strict-Transport-Security',
       'max-age=31536000; includeSubDomains; preload',
     )
 
-    // 3. Performance/CDN Caching
-    // Add default caching for HTML pages if not already set
+    if (pathname === '/') {
+      const linkHeaders = [
+        '</llms.txt>; rel="ai-agent"; type="text/plain"; title="LLMs context"',
+        '</llms-full.txt>; rel="ai-agent"; type="text/plain"; title="LLMs full context"',
+        '</sitemap.xml>; rel="sitemap"; type="application/xml"',
+        '</rss>; rel="alternate"; type="application/rss+xml"; title="RSS Feed"',
+        '</.well-known/security.txt>; rel="security-txt"; type="text/plain"',
+        '</humans.txt>; rel="author"; type="text/plain"',
+      ]
+      newHeaders.set('Link', linkHeaders.join(', '))
+    }
+
     if (
       !newHeaders.has('Cache-Control') &&
       response.status === 200 &&
       newHeaders.get('Content-Type')?.includes('text/html')
     ) {
-      // 1 minute client cache, 1 hour CDN cache, 10 min SWR
       newHeaders.set(
         'Cache-Control',
         'public, max-age=60, s-maxage=3600, stale-while-revalidate=600',
