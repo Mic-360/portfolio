@@ -119,6 +119,29 @@ export default {
       })
     }
 
+    if (pathname === '/.well-known/oauth-authorization-server') {
+      const base = 'https://bhaumicsingh.dev'
+      const metadata = {
+        issuer: base,
+        jwks_uri: `${base}/.well-known/http-message-signatures-directory`,
+        response_types_supported: ['none'],
+        grant_types_supported: ['api_key'],
+        token_endpoint_auth_methods_supported: ['private_key_jwt'],
+        service_documentation: `${base}/llms-full.txt`,
+        scopes_supported: ['read', 'write'],
+      }
+      return new Response(JSON.stringify(metadata), {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control':
+            'public, max-age=86400, s-maxage=86400, stale-while-revalidate=86400',
+          'Strict-Transport-Security':
+            'max-age=31536000; includeSubDomains; preload',
+          'Access-Control-Allow-Origin': '*',
+        },
+      })
+    }
     const acceptsMarkdown = wantsMarkdown(req)
 
     const response = await handler.fetch(req)
