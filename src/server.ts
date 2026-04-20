@@ -58,6 +58,67 @@ export default {
     const webBotAuthResponse = handleWebBotAuthDirectory(req)
     if (webBotAuthResponse) return webBotAuthResponse
 
+    if (pathname === '/.well-known/api-catalog') {
+      const base = 'https://bhaumicsingh.dev'
+      const catalog = {
+        linkset: [
+          {
+            anchor: `${base}/api/health`,
+            'service-doc': [
+              {
+                href: `${base}/llms-full.txt`,
+                type: 'text/plain',
+              },
+            ],
+            status: [
+              {
+                href: `${base}/api/health`,
+                type: 'application/json',
+              },
+            ],
+          },
+          {
+            anchor: `${base}/api/games`,
+            'service-doc': [
+              {
+                href: `${base}/llms-full.txt`,
+                type: 'text/plain',
+              },
+            ],
+          },
+          {
+            anchor: `${base}/api/certificates`,
+            'service-doc': [
+              {
+                href: `${base}/llms-full.txt`,
+                type: 'text/plain',
+              },
+            ],
+          },
+          {
+            anchor: `${base}/api/gravatar/{identifier}`,
+            'service-doc': [
+              {
+                href: `${base}/llms-full.txt`,
+                type: 'text/plain',
+              },
+            ],
+          },
+        ],
+      }
+      return new Response(JSON.stringify(catalog), {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/linkset+json',
+          'Cache-Control':
+            'public, max-age=86400, s-maxage=86400, stale-while-revalidate=86400',
+          'Strict-Transport-Security':
+            'max-age=31536000; includeSubDomains; preload',
+          'Access-Control-Allow-Origin': '*',
+        },
+      })
+    }
+
     const acceptsMarkdown = wantsMarkdown(req)
 
     const response = await handler.fetch(req)
@@ -70,6 +131,7 @@ export default {
 
     if (pathname === '/') {
       const linkHeaders = [
+        '</.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json"',
         '</llms.txt>; rel="ai-agent"; type="text/plain"; title="LLMs context"',
         '</llms-full.txt>; rel="ai-agent"; type="text/plain"; title="LLMs full context"',
         '</sitemap.xml>; rel="sitemap"; type="application/xml"',
