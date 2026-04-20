@@ -38,7 +38,7 @@
   --sidebar-ring: #7a9a65;
 
   --font-sans: 'SF Pro Display', 'SF Pro Text', 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  --font-serif: 'SF Pro Display', 'Playfair Display', Georgia, serif;
+  --font-serif: Georgia, serif;
   --font-mono: 'SF Mono', 'Fira Code', monospace;
 
   --radius: 0.75rem;
