@@ -244,6 +244,99 @@ export default {
       })
     }
 
+    if (pathname === '/.well-known/agent-skills/index.json') {
+      const base = 'https://bhaumicsingh.dev'
+      const index = {
+        $schema:
+          'https://schemas.agentskills.io/discovery/0.2.0/schema.json',
+        skills: [
+          {
+            name: 'content-retrieval',
+            type: 'skill-md',
+            description:
+              'Retrieve structured portfolio content including blog posts, project case studies, certificates, and Gravatar profile data',
+            url: `${base}/.well-known/agent-skills/content-retrieval/SKILL.md`,
+            digest:
+              'sha256:90aefd5af751eaa213403c01f7a742d9e939943edb0fcc1e5e8155e55e8b247e',
+          },
+          {
+            name: 'health-data',
+            type: 'skill-md',
+            description:
+              'Access real-time health and fitness metrics including steps, heart rate, sleep, SpO2, distance, and energy data',
+            url: `${base}/.well-known/agent-skills/health-data/SKILL.md`,
+            digest:
+              'sha256:5dfaeb3185cb075c84005891fd60497bd3b4fe0b17a006d7e2229db247cfa185',
+          },
+          {
+            name: 'games-data',
+            type: 'skill-md',
+            description:
+              'Retrieve and update gaming library data including titles, platforms, playtime, and status',
+            url: `${base}/.well-known/agent-skills/games-data/SKILL.md`,
+            digest:
+              'sha256:8d5165bc3da94ece806b59e1ffa664f018a1e98fe1e1493b2e6ea158cc69ff14',
+          },
+          {
+            name: 'blog-feed',
+            type: 'skill-md',
+            description:
+              'Subscribe to and retrieve blog posts via RSS 2.0, sitemap, or direct page access with markdown negotiation',
+            url: `${base}/.well-known/agent-skills/blog-feed/SKILL.md`,
+            digest:
+              'sha256:dc9ab02d83f605a0ad0fdd8e65a8bd2625bc4f3eddc5138da9741c095ec4939d',
+          },
+          {
+            name: 'markdown-negotiation',
+            type: 'skill-md',
+            description:
+              'Request any page as clean markdown via Accept: text/markdown header with token count estimation',
+            url: `${base}/.well-known/agent-skills/markdown-negotiation/SKILL.md`,
+            digest:
+              'sha256:5be16af456edcdc561a338c0ecb617283f85b2db6d1852bdb303e9b0fedc14a2',
+          },
+          {
+            name: 'pinterest-download',
+            type: 'skill-md',
+            description:
+              'Download Pinterest images via server-side proxy bypassing CORS and hotlink restrictions',
+            url: `${base}/.well-known/agent-skills/pinterest-download/SKILL.md`,
+            digest:
+              'sha256:0ae4dbf31f38d81a5a0eb47a8e17861ce57e439cf8ec684b1b9d926129bb431c',
+          },
+          {
+            name: 'site-context',
+            type: 'skill-md',
+            description:
+              'Retrieve full site context optimized for LLM consumption via llms.txt and llms-full.txt',
+            url: `${base}/.well-known/agent-skills/site-context/SKILL.md`,
+            digest:
+              'sha256:f39ac9c2ebfc551d38b20c31058926ab84a451a18b7e468cd0da3802958fbd5d',
+          },
+          {
+            name: 'og-images',
+            type: 'skill-md',
+            description:
+              'Generate dynamic Open Graph images for blog posts, projects, and the homepage',
+            url: `${base}/.well-known/agent-skills/og-images/SKILL.md`,
+            digest:
+              'sha256:9a101b741ac1a4d021ad1261458a424037baa8111a8a3ce3a7fd865517d80c05',
+          },
+        ],
+      }
+      return new Response(JSON.stringify(index), {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control':
+            'public, max-age=86400, s-maxage=86400, stale-while-revalidate=86400',
+          'Strict-Transport-Security':
+            'max-age=31536000; includeSubDomains; preload',
+          'Access-Control-Allow-Origin': '*',
+        },
+      })
+    }
+
     const acceptsMarkdown = wantsMarkdown(req)
 
     const response = await handler.fetch(req)
