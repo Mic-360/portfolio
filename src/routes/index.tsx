@@ -248,24 +248,27 @@ function App() {
     }
   }, [])
 
+  const APPLE_EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
+
   const container = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.12,
+        staggerChildren: 0.14,
       },
     },
   }
 
   const item = {
-    hidden: { opacity: 0, y: 32 },
+    hidden: { opacity: 0, y: 36, filter: 'blur(6px)' },
     show: {
       opacity: 1,
       y: 0,
+      filter: 'blur(0px)',
       transition: {
-        duration: 0.85,
-        ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
+        duration: 1.1,
+        ease: APPLE_EASE,
       },
     },
   }
@@ -301,7 +304,7 @@ function App() {
           />
         </a>
         <div className="flex min-w-0 flex-col">
-          <span className="text-3xl md:text-5xl lg:text-7xl font-semibold tracking-tight text-foreground font-serif">
+          <span className="text-3xl md:text-5xl font-semibold tracking-tight text-foreground font-serif capitalize">
             {siteInfo.name}
           </span>
           <span className="text-sm text-muted-foreground/70">
@@ -317,28 +320,108 @@ function App() {
         variants={item}
         className="flex flex-col items-center text-center px-2"
       >
-        <p className="text-[11px] uppercase tracking-[0.3em] text-primary/80 mb-8">
-          android · ai · cloud · web · design · devops
-        </p>
-        <h1 className="max-w-5xl font-serif text-5xl leading-[1.06] tracking-tight text-foreground sm:text-6xl lg:text-7xl xl:text-8xl">
-          Designing and shipping software that feels a step ahead.
-        </h1>
-        <p className="mt-7 max-w-2xl text-base leading-8 text-foreground/70 sm:text-lg">
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: APPLE_EASE, delay: 0.2 }}
+          className="mb-10 flex items-center gap-3"
+        >
+          <motion.svg
+            viewBox="0 0 60 1"
+            preserveAspectRatio="none"
+            className="h-px w-10 overflow-visible text-primary/60"
+            aria-hidden="true"
+          >
+            <motion.line
+              x1="0"
+              y1="0.5"
+              x2="60"
+              y2="0.5"
+              stroke="currentColor"
+              strokeWidth="1"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 1.2, ease: APPLE_EASE, delay: 0.3 }}
+            />
+          </motion.svg>
+          <p className="text-[10px] uppercase tracking-[0.4em] text-primary/80">
+            android · ai · cloud · web · design · devops
+          </p>
+          <motion.svg
+            viewBox="0 0 60 1"
+            preserveAspectRatio="none"
+            className="h-px w-10 overflow-visible text-primary/60"
+            aria-hidden="true"
+          >
+            <motion.line
+              x1="0"
+              y1="0.5"
+              x2="60"
+              y2="0.5"
+              stroke="currentColor"
+              strokeWidth="1"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 1.2, ease: APPLE_EASE, delay: 0.3 }}
+            />
+          </motion.svg>
+        </motion.div>
+        <motion.h1
+          initial={{ opacity: 0, y: 32, filter: 'blur(10px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          transition={{ duration: 1.6, ease: APPLE_EASE, delay: 0.1 }}
+          className="max-w-5xl font-sans text-5xl leading-[1.02] tracking-tight text-foreground sm:text-7xl lg:text-8xl"
+        >
+          Designing and shipping software that feels{' '}
+          <span className="relative inline-block whitespace-nowrap">
+            <span className="text-primary italic pr-2">a step ahead</span>
+            <motion.svg
+              viewBox="0 0 200 8"
+              preserveAspectRatio="none"
+              className="absolute -bottom-1 left-0 h-2 w-full overflow-visible text-primary/60"
+              aria-hidden="true"
+            >
+              <motion.path
+                d="M2,5 Q50,1 100,4 T198,3"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                initial={{ pathLength: 0, opacity: 0 }}
+                animate={{ pathLength: 1, opacity: 1 }}
+                transition={{ duration: 1.8, ease: APPLE_EASE, delay: 1.2 }}
+              />
+            </motion.svg>
+          </span>
+          .
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          transition={{ duration: 1.4, ease: APPLE_EASE, delay: 0.3 }}
+          className="mt-8 max-w-2xl text-lg leading-relaxed text-foreground/60 sm:text-xl font-medium"
+        >
           {siteInfo.currentRole} based in {siteInfo.location}, building web and
           android products with AI, cloud systems, and a latest-is-greatest
           mindset. Fewer widgets, more atmosphere, and work that reads clearly
           on every screen.
-        </p>
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+        </motion.p>
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, ease: APPLE_EASE, delay: 0.5 }}
+          className="mt-12 flex flex-wrap items-center justify-center gap-4"
+        >
           <Link
             to="/projects"
-            className="inline-flex items-center gap-2 rounded-full bg-foreground px-7 py-3 text-sm font-medium text-background transition-all duration-300 hover:bg-primary"
+            className="group relative inline-flex items-center gap-2 rounded-full bg-foreground px-8 py-3.5 text-sm font-semibold text-background overflow-hidden transition-transform duration-300 hover:scale-105 active:scale-95"
           >
-            Selected Work
+            <span className="relative z-10">Selected Work</span>
+            <div className="absolute inset-0 bg-primary opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           </Link>
           <Link
             to="/blog"
-            className="inline-flex items-center gap-2 rounded-full border border-border/30 px-7 py-3 text-sm font-medium text-foreground transition-all duration-300 hover:border-primary/50 hover:text-primary"
+            className="inline-flex items-center gap-2 rounded-full border border-border/20 bg-background/50 backdrop-blur-md px-8 py-3.5 text-sm font-medium text-foreground transition-all duration-300 hover:border-primary/40 hover:bg-primary/5 active:scale-95"
           >
             Latest Writing
           </Link>
@@ -347,12 +430,12 @@ function App() {
             data-cal-link={siteInfo.calLink}
             data-cal-config='{"layout":"week_view","useSlotsViewOnSmallScreen":"true"}'
             href={siteInfo.calLink}
-            className="inline-flex items-center gap-2 rounded-full border border-border/30 px-7 py-3 text-sm font-medium text-foreground transition-all duration-300 hover:border-primary/50 hover:text-primary"
+            className="inline-flex items-center gap-2 rounded-full border border-border/20 bg-background/50 backdrop-blur-md px-8 py-3.5 text-sm font-medium text-foreground transition-all duration-300 hover:border-primary/40 hover:bg-primary/5 active:scale-95"
           >
             <CalendarIcon size={14} className="text-primary" />
             Book a Call
           </a>
-        </div>
+        </motion.div>
       </motion.section>
 
       <motion.section
