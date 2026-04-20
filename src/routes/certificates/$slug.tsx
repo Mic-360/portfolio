@@ -3,6 +3,7 @@ import { Award } from 'lucide-react'
 import { motion } from 'motion/react'
 
 import type { CertificateMeta } from '@/lib/certificates'
+import { LinkPreview } from '@/components/ui/link-preview'
 import { siteMeta } from '@/config/site-data'
 import { getCertificateBySlug, getCertificateIndex } from '@/lib/certificates'
 
@@ -172,7 +173,7 @@ function CertificateDetail() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="mx-auto flex w-full max-w-375 flex-col gap-16 pb-16 md:gap-24"
+      className="mx-auto flex w-full max-w-375 flex-col gap-16 pb-16 md:gap-24 px-4 sm:px-6"
     >
       <motion.div
         variants={item}
@@ -251,15 +252,15 @@ function CertificateDetail() {
             </div>
           </div>
 
-          <a
-            href={certificate.verify_url}
+          <LinkPreview
+            url={certificate.verify_url}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 rounded-full bg-foreground px-6 py-2.5 text-sm font-medium text-background transition-all duration-300 hover:bg-primary hover:shadow-lg hover:shadow-primary/20"
           >
             Verify credential
             <span>↗</span>
-          </a>
+          </LinkPreview>
         </aside>
 
         <div className="grid gap-12">

@@ -176,7 +176,7 @@ function CertificatesIndex() {
       {allIssuers.length > 0 ? (
         <motion.div
           variants={item}
-          className="sticky top-0 z-30 mx-0 border-b border-border/10 bg-background/80 py-3 backdrop-blur-xl"
+          className="sticky top-0 z-30 mx-0 border-b border-border/10 bg-background/80 py-3 backdrop-blur-xl sm:px-4"
         >
           <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
             <button
