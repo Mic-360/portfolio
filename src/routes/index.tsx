@@ -24,6 +24,7 @@ import GravatarAvatar from '@/components/gravatar/GravatarAvatar'
 import GravatarSocialLinks from '@/components/gravatar/GravatarSocialLinks'
 import { LazyHeroVideo } from '@/components/LazyHeroVideo'
 import { PreviousRoadmap } from '@/components/PreviousRoadmap'
+import { AnimatedTestimonials } from '@/components/ui/animated-testimonials'
 import CalendarIcon from '@/components/ui/calendar-icon'
 import CurrentIcon from '@/components/ui/current-icon'
 import { LayoutGrid } from '@/components/ui/layout-grid'
@@ -1088,6 +1089,22 @@ function App() {
         variants={item}
         className="grid gap-6 lg:gap-8 max-w-480 mx-auto xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] px-4 sm:px-8 w-full"
       >
+        <Section title="certificates">
+          <AnimatedTestimonials
+            className="w-full"
+            autoplay
+            testimonials={featuredCertificates.map((cert: CertificateMeta) => ({
+              name: cert.title,
+              designation: `${cert.issuer} · ${cert.issued}`,
+              quote:
+                cert.skills.length > 0
+                  ? cert.skills.join(' · ')
+                  : `Credential ID: ${cert.credential_id ?? '—'}`,
+              src: cert.image_url,
+            }))}
+          />
+        </Section>
+
         <Section title="pinterest">
           <div className="relative">
             <motion.div
@@ -1177,71 +1194,6 @@ function App() {
               </p>
             )}
           </div>
-        </Section>
-
-        <Section title="certificates">
-          <div className="grid gap-3">
-            {featuredCertificates.map(
-              (cert: CertificateMeta, index: number) => (
-                <Link
-                  key={cert.id}
-                  to="/certificates/$slug"
-                  params={{ slug: cert.slug }}
-                  className="group block"
-                >
-                  <div
-                    className={`project-card-apple flex items-center gap-5 rounded-[1.8rem] border border-white/10 bg-background/40 shadow-xl backdrop-blur-2xl p-5 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-1.5 group-hover:bg-background/60 group-hover:shadow-[0_24px_48px_rgba(0,0,0,0.12)] ${
-                      index === 0
-                        ? 'flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:gap-6'
-                        : ''
-                    }`}
-                  >
-                    {index === 0 && cert.image_url ? (
-                      <div className="shrink-0 overflow-hidden rounded-2xl bg-foreground/5 sm:w-32 shadow-inner">
-                        <img
-                          src={cert.image_url}
-                          alt={cert.title}
-                          referrerPolicy="no-referrer"
-                          crossOrigin="anonymous"
-                          className="h-24 w-full object-contain sm:h-20 p-2 mix-blend-multiply dark:mix-blend-screen"
-                          loading="lazy"
-                        />
-                      </div>
-                    ) : null}
-                    <div className="flex flex-1 flex-col gap-1.5">
-                      <div className="flex items-center gap-3">
-                        <p className="text-[10px] uppercase tracking-[0.2em] text-primary/50">
-                          {cert.issuer}
-                        </p>
-                        <span className="h-px flex-1 bg-border/10" />
-                        <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/35">
-                          {cert.issued}
-                        </p>
-                      </div>
-                      <h3 className="font-serif text-base leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
-                        {cert.title}
-                      </h3>
-                      {cert.skills.length > 0 ? (
-                        <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/30">
-                          {cert.skills.slice(0, 3).join(' \u00b7 ')}
-                        </p>
-                      ) : null}
-                    </div>
-                    <span className="shrink-0 text-xs text-primary/40 transition-transform duration-300 group-hover:translate-x-1">
-                      &rarr;
-                    </span>
-                  </div>
-                </Link>
-              ),
-            )}
-          </div>
-          <LinkPreview
-            url={siteMeta.baseUrl + '/certificates'}
-            className="inline-flex items-center gap-2 self-end text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
-          >
-            all credentials
-            <span>&rarr;</span>
-          </LinkPreview>
         </Section>
       </motion.div>
 
