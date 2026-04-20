@@ -1,4 +1,8 @@
 import handler from '@tanstack/react-start/server-entry'
+import {
+  convertHtmlToMarkdown,
+  wantsMarkdown,
+} from './lib/markdown-negotiation.server'
 
 export default {
   async fetch(req: Request): Promise<Response> {
@@ -50,6 +54,8 @@ export default {
       })
     }
 
+    const acceptsMarkdown = wantsMarkdown(req)
+
     const response = await handler.fetch(req)
 
     const newHeaders = new Headers(response.headers)
@@ -68,6 +74,32 @@ export default {
         '</humans.txt>; rel="author"; type="text/plain"',
       ]
       newHeaders.set('Link', linkHeaders.join(', '))
+    }
+
+    if (
+      acceptsMarkdown &&
+      response.status === 200 &&
+      newHeaders.get('Content-Type')?.includes('text/html')
+    ) {
+      const html = await response.text()
+      const { markdown, tokens } = convertHtmlToMarkdown(html)
+      newHeaders.set('Content-Type', 'text/markdown; charset=utf-8')
+      newHeaders.set('x-markdown-tokens', String(tokens))
+      newHeaders.set('Vary', 'Accept')
+      newHeaders.set(
+        'Content-Signal',
+        'ai-train=yes, search=yes, ai-input=yes',
+      )
+      newHeaders.set(
+        'Cache-Control',
+        'public, max-age=60, s-maxage=3600, stale-while-revalidate=600',
+      )
+      newHeaders.delete('Content-Length')
+      return new Response(markdown, {
+        status: 200,
+        statusText: response.statusText,
+        headers: newHeaders,
+      })
     }
 
     if (
