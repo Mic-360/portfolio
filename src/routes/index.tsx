@@ -3,7 +3,7 @@ import { motion, useMotionValue, useScroll, useSpring } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 
 import type { CertificateMeta } from '@/lib/certificates'
-import type { BlogMeta, ProjectMeta } from '@/lib/content'
+import type { ProjectMeta } from '@/lib/content'
 import type { HealthSample } from '@/lib/health'
 import type { PinterestCreatedPin } from '@/lib/pinterest'
 
@@ -27,6 +27,7 @@ import { PreviousRoadmap } from '@/components/PreviousRoadmap'
 import { AnimatedTestimonials } from '@/components/ui/animated-testimonials'
 import CalendarIcon from '@/components/ui/calendar-icon'
 import CurrentIcon from '@/components/ui/current-icon'
+import { ExpandableCard } from '@/components/ui/expandable-card'
 import { LayoutGrid } from '@/components/ui/layout-grid'
 import { LinkPreview } from '@/components/ui/link-preview'
 import PreviousIcon from '@/components/ui/previous-icon'
@@ -265,6 +266,17 @@ function App() {
   const featuredPosts = posts.slice(0, 5)
   const featuredCertificates = certificates.slice(0, 7)
   const featuredPins = pinterestData.pins.slice(0, 4)
+  const featuredBlogCards = featuredPosts.map((post, index) => ({
+    id: post.slug,
+    slug: post.slug,
+    title: post.title,
+    summary: post.summary,
+    date: post.date,
+    image: post.image || `/og/blog/${post.slug}`,
+    eyebrow: post.categories[0] || 'essay',
+    tags: post.tags,
+    featured: index === 0,
+  }))
 
   return (
     <motion.div
@@ -895,80 +907,10 @@ function App() {
               the build.
             </h3>
           </motion.div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {featuredPosts.map((post: BlogMeta, index: number) => (
-              <motion.div
-                key={post.slug}
-                initial={{ opacity: 0, y: 32, filter: 'blur(6px)' }}
-                whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{
-                  duration: 1,
-                  delay: index * 0.08,
-                  ease: APPLE_EASE,
-                }}
-                className={index === 0 ? 'sm:col-span-2 lg:col-span-2' : ''}
-              >
-                <Link
-                  to="/blog/$slug"
-                  params={{ slug: post.slug }}
-                  className="group block h-full"
-                >
-                  <motion.article
-                    whileHover={{ y: -6, scale: 1.01 }}
-                    transition={{
-                      type: 'spring',
-                      stiffness: 400,
-                      damping: 30,
-                    }}
-                    className={`project-card-apple flex h-full flex-col justify-between gap-5 rounded-4xl border border-white/10 bg-background/40 shadow-2xl backdrop-blur-3xl p-6 sm:p-8 transition-colors duration-500 hover:border-primary/20 hover:bg-background/50 ${
-                      index === 0 ? 'sm:flex-row sm:items-center sm:gap-10' : ''
-                    }`}
-                  >
-                    <div className="flex flex-1 flex-col gap-3.5">
-                      <div className="flex items-center gap-3">
-                        <span className="text-[10px] uppercase tracking-[0.2em] text-primary/50">
-                          {post.categories.length > 0
-                            ? post.categories[0]
-                            : 'essay'}
-                        </span>
-                        <span className="h-px flex-1 bg-border/10" />
-                        <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/35">
-                          {formatDate(post.date)}
-                        </span>
-                      </div>
-                      <h3
-                        className={`font-serif leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary ${
-                          index === 0 ? 'text-xl sm:text-2xl' : 'text-lg'
-                        }`}
-                      >
-                        {post.title}
-                      </h3>
-                      <p
-                        className={`text-sm leading-7 text-foreground/45 ${
-                          index === 0 ? '' : 'line-clamp-2'
-                        }`}
-                      >
-                        {post.summary}
-                      </p>
-                    </div>
-                    <div className="flex items-center justify-between gap-4 border-t border-border/8 pt-3">
-                      {post.tags.length > 0 ? (
-                        <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/30">
-                          {post.tags.slice(0, 3).join(' · ')}
-                        </p>
-                      ) : (
-                        <span />
-                      )}
-                      <span className="text-xs text-primary/50 transition-transform duration-300 group-hover:translate-x-1">
-                        &rarr;
-                      </span>
-                    </div>
-                  </motion.article>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
+          <ExpandableCard
+            items={featuredBlogCards}
+            formatMeta={(post) => formatDate(post.date)}
+          />
           <div className="flex items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground/45">
               Build logs and essays.
