@@ -805,40 +805,51 @@ function App() {
               return (
                 <motion.div
                   key={project.slug}
-                  initial={{ opacity: 0, scale: 0.92, y: 60 }}
-                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                  initial={{
+                    opacity: 0,
+                    scale: 0.96,
+                    y: 48,
+                    filter: 'blur(8px)',
+                  }}
+                  whileInView={{
+                    opacity: 1,
+                    scale: 1,
+                    y: 0,
+                    filter: 'blur(0px)',
+                  }}
                   viewport={{ once: true, amount: 0.2 }}
                   transition={{
-                    duration: 0.9,
-                    ease: [0.25, 0.1, 0.25, 1],
+                    duration: 1.2,
+                    ease: APPLE_EASE,
+                    delay: index * 0.08,
                   }}
-                  className={isTall ? 'md:row-span-2' : ''}
+                  className="break-inside-avoid block w-full mb-6"
                 >
                   <Link
                     to="/projects/$slug"
                     params={{ slug: project.slug }}
-                    className="group block h-full"
+                    className="group block w-full"
                   >
                     <article
-                      className={`project-card-apple relative overflow-hidden rounded-2xl h-full ${
+                      className={`project-card-apple relative overflow-hidden rounded-[2.5rem] border border-white/10 shadow-2xl transition-all duration-[0.8s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-2 group-hover:shadow-[0_32px_64px_rgba(0,0,0,0.15)] w-full ${
                         isTall
-                          ? 'min-h-105 md:min-h-160'
-                          : 'min-h-85 md:min-h-75'
+                          ? 'min-h-88 md:min-h-144'
+                          : 'min-h-64 md:min-h-80'
                       }`}
                     >
                       <div className="media-hover-parent absolute inset-0">
                         <img
                           src={projectVisual}
                           alt={project.title}
-                          className="media-hover-image absolute inset-0 h-full w-full object-cover"
+                          className="media-hover-image absolute inset-0 h-full w-full object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
                           loading="lazy"
                         />
-                        <div className="absolute inset-0 bg-linear-to-t from-background via-background/50 to-transparent" />
-                        <div className="absolute inset-0 bg-linear-to-t from-background/80 via-transparent to-transparent" />
+                        <div className="absolute inset-0 bg-linear-to-t from-background via-background/30 to-transparent opacity-80" />
+                        <div className="absolute inset-0 bg-linear-to-t from-background/90 via-transparent to-transparent opacity-90" />
                       </div>
 
-                      <div className="absolute inset-x-0 bottom-0 z-10 border-t border-white/6 bg-background/60 p-5 backdrop-blur-xl sm:p-6">
-                        <div className="flex flex-col gap-2.5">
+                      <div className="absolute inset-x-0 bottom-0 z-10 border-t border-white/10 bg-background/60 p-6 sm:p-8 backdrop-blur-3xl">
+                        <div className="flex flex-col gap-2.5 translate-y-2 transition-transform duration-[0.8s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0">
                           <div className="flex items-center justify-between gap-4">
                             <p className="text-[10px] uppercase tracking-[0.25em] text-primary/50">
                               {project.categories.length > 0
