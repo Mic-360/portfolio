@@ -1,10 +1,11 @@
-import { createSign } from 'node:crypto'
+import { createPrivateKey, sign as cryptoSign } from 'node:crypto'
 
 const PRIVATE_JWK = {
   crv: 'Ed25519',
   d: 'hg_vlZhtte6AgjtrSHFnep_ETe-TI687Hy8MkMAbuF4',
   x: 'FrUk-IeJLhYQKqL3TZjVvFDGUDXhEFtaUcOcfHrLgNY',
   kty: 'OKP',
+  key_ops: ['sign'],
 } as const
 
 const PUBLIC_JWK = {
@@ -16,6 +17,11 @@ const PUBLIC_JWK = {
 const THUMBPRINT = 'i_fnByuN-kFo7u_1mXA7-QTOVSB80wKMm26RFHErIRw'
 
 const JWKS_BODY = JSON.stringify({ keys: [PUBLIC_JWK] })
+
+const privateKey = createPrivateKey({
+  key: PRIVATE_JWK,
+  format: 'jwk',
+})
 
 function signDirectory(authority: string): {
   body: string
@@ -33,19 +39,9 @@ function signDirectory(authority: string): {
 
   const signatureBase = `"@authority";req: ${authority}\n"@signature-params": ("@authority";req);alg="ed25519";keyid="${THUMBPRINT}";nonce="${nonce}";tag="http-message-signatures-directory";created=${now};expires=${expires}`
 
-  const privateKey = createSign('ed25519')
-  privateKey.update(signatureBase)
-  const sig = privateKey
-    .sign({
-      key: Buffer.from(
-        JSON.stringify({
-          ...PRIVATE_JWK,
-          key_ops: ['sign'],
-        }),
-      ),
-      format: 'jwk',
-    })
-    .toString('base64')
+  const sig = cryptoSign(null, Buffer.from(signatureBase), privateKey).toString(
+    'base64',
+  )
 
   return {
     body: JWKS_BODY,
