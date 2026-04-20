@@ -520,139 +520,11 @@ function App() {
         className="flex flex-col gap-24 md:gap-32 px-4 sm:px-8"
       >
         <Section title="current">
-          <div className="relative min-h-130 sm:min-h-145 lg:min-h-160">
-            <motion.div
-              initial={{ opacity: 0, y: 40, rotate: -8 }}
-              whileInView={{ opacity: 1, y: 0, rotate: -6 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{
-                delay: 0.1,
-                duration: 0.8,
-                ease: [0.25, 0.1, 0.25, 1],
-              }}
-              whileHover={{
-                y: -8,
-                rotate: -2,
-                scale: 1.03,
-                transition: { type: 'spring', stiffness: 300, damping: 20 },
-              }}
-              className="hidden sm:block absolute left-[2%] top-[2%] sm:left-[4%] sm:top-[4%] lg:left-[6%] lg:top-[6%] z-10 w-45 sm:w-50 lg:w-55"
-            >
-              <div className="group relative overflow-hidden rounded-3xl border border-white/10 bg-background/40 shadow-2xl backdrop-blur-3xl sm:backdrop-blur-3xl">
-                <div className="p-5">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary/80 mb-2 drop-shadow-sm">
-                    Education
-                  </p>
-                  <p className="text-xs leading-relaxed text-foreground/80 font-medium">
-                    {siteInfo.educationLine}
-                  </p>
-                </div>
-                <div className="aspect-square overflow-hidden rounded-t-3xl">
-                  <img
-                    src="/frieren/frieren-teach.svg"
-                    alt="Education"
-                    className="h-full w-full object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110"
-                    loading="lazy"
-                  />
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 40, rotate: 6 }}
-              whileInView={{ opacity: 1, y: 0, rotate: 4 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ delay: 0.25, duration: 1, ease: APPLE_EASE }}
-              whileHover={{
-                rotate: 1,
-                scale: 1.02,
-                transition: { type: 'spring', stiffness: 300, damping: 20 },
-              }}
-              className="hidden sm:block absolute right-[2%] top-[0%] sm:right-[6%] sm:top-[2%] lg:top-[3%] z-10 w-45 sm:w-52.5 lg:w-60"
-            >
-              <div className="group relative overflow-hidden rounded-3xl border border-white/10 bg-background/40 shadow-2xl backdrop-blur-3xl">
-                <div className="p-5">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary/80 mb-2 drop-shadow-sm">
-                    Interests
-                  </p>
-                  <p className="text-xs leading-relaxed text-foreground/80 font-medium">
-                    {siteInfo.interests}
-                  </p>
-                </div>
-                <div className="aspect-4/3 overflow-hidden rounded-t-3xl">
-                  <img
-                    src="/frieren/frienbook.svg"
-                    alt="Interests"
-                    className="h-full w-full object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110"
-                    loading="lazy"
-                  />
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 40, rotate: 4 }}
-              whileInView={{ opacity: 1, y: 0, rotate: 2 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ delay: 0.4, duration: 1, ease: APPLE_EASE }}
-              whileHover={{
-                rotate: 0,
-                scale: 1.02,
-                transition: { type: 'spring', stiffness: 300, damping: 20 },
-              }}
-              className="hidden md:block absolute left-[4%] bottom-[2%] sm:left-[8%] sm:bottom-[4%] lg:left-[10%] lg:bottom-[3%] z-10 w-40 sm:w-45 lg:w-50"
-            >
-              <div className="group relative overflow-hidden rounded-3xl border border-white/10 bg-background/40 shadow-2xl backdrop-blur-3xl">
-                <div className="aspect-3/2 overflow-hidden rounded-t-3xl flex items-center justify-center bg-primary/5">
-                  <img
-                    src="/frieren/party.svg"
-                    alt="Capabilities"
-                    className="h-3/4 w-3/4 object-contain transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="p-5">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary/80 mb-2 drop-shadow-sm">
-                    Capabilities
-                  </p>
-                  <p className="text-xs leading-relaxed text-foreground/80 font-medium">
-                    i can build{' '}
-                    <span className="font-semibold text-primary">
-                      literally anything.
-                    </span>
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, rotate: -8 }}
-              whileInView={{ opacity: 1, scale: 1, rotate: -4 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ delay: 0.5, duration: 1, ease: APPLE_EASE }}
-              whileHover={{
-                rotate: -2,
-                scale: 1.05,
-                transition: { type: 'spring', stiffness: 400, damping: 20 },
-              }}
-              className="absolute right-[6%] bottom-[8%] sm:right-[10%] sm:bottom-[10%] lg:right-[12%] lg:bottom-[8%] z-10 w-30 sm:w-35"
-            >
-              <div className="group overflow-hidden rounded-[20px] border border-white/10 bg-background/40 shadow-2xl backdrop-blur-3xl">
-                <div className="aspect-square overflow-hidden rounded-[20px] flex items-center justify-center bg-primary/10">
-                  <img
-                    src="/frieren/frieren.svg"
-                    alt="Frieren"
-                    className="h-4/5 w-4/5 object-contain transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110 group-hover:rotate-6"
-                    loading="lazy"
-                  />
-                </div>
-              </div>
-            </motion.div>
-
-            <div className="absolute inset-0 z-50 flex flex-col items-center justify-center px-4 pointer-events-none">
+          <div className="flex flex-col sm:block relative min-h-0 sm:min-h-145 lg:min-h-160">
+            <div className="relative sm:absolute sm:inset-0 z-50 flex flex-col items-center justify-center px-4 py-16 sm:py-0 pointer-events-none">
               <div
                 aria-hidden="true"
-                className="absolute inset-x-[6%] top-[16%] bottom-[12%] rounded-full bg-background/32 backdrop-blur-xl sm:inset-x-[10%] sm:top-[12%] sm:bottom-[10%]"
+                className="absolute inset-x-[2%] inset-y-[0%] sm:inset-x-[10%] sm:top-[12%] sm:bottom-[10%] rounded-full bg-background/32 backdrop-blur-xl"
                 style={{
                   maskImage:
                     'radial-gradient(circle at center, black 2%, black 12%, transparent 100%)',
@@ -673,7 +545,7 @@ function App() {
                 </span>
 
                 <h2
-                  className="max-w-3xl text-balance text-4xl leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl"
+                  className="max-w-3xl text-balance leading-[1.05] tracking-tight text-foreground text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
                   style={{ textShadow: '0 6px 24px rgb(0 0 0 / 0.38)' }}
                 >
                   Building tools at{' '}
@@ -699,7 +571,7 @@ function App() {
                       data-backlight="off"
                       className="mr-1 inline-block h-10 w-10 rounded-lg object-cover ring-1 ring-black/10 shadow-lg transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover/current:scale-[1.4] group-hover/current:rotate-360 group-hover/current:drop-shadow-[0_0_8px_var(--primary)] sm:h-12 sm:w-12"
                     />
-                    <span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
+                    <span className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
                       {siteInfo.currentCompany}
                     </span>
                   </motion.a>
@@ -713,8 +585,139 @@ function App() {
                   className="mt-5 max-w-2xl text-sm leading-7 text-foreground/80 sm:mt-6 sm:text-lg sm:leading-8"
                   style={{ textShadow: '0 3px 18px rgb(0 0 0 / 0.22)' }}
                 >
-                  {siteInfo.currentSummary}
+                  Building fast, reliable systems for modern web and android
+                  products with enterprise grade scalability and practices.
                 </motion.p>
+              </motion.div>
+            </div>
+
+            <div className="flex flex-col items-center gap-8 px-4 pb-12 sm:block sm:p-0">
+              <motion.div
+                initial={{ opacity: 0, y: 40, rotate: -8 }}
+                whileInView={{ opacity: 1, y: 0, rotate: -6 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{
+                  delay: 0.1,
+                  duration: 0.8,
+                  ease: [0.25, 0.1, 0.25, 1],
+                }}
+                whileHover={{
+                  y: -8,
+                  rotate: -2,
+                  scale: 1.03,
+                  transition: { type: 'spring', stiffness: 300, damping: 20 },
+                }}
+                className="relative sm:absolute sm:left-[4%] sm:top-[4%] lg:left-[6%] lg:top-[6%] z-10 w-full max-w-[280px] sm:max-w-none sm:w-50 lg:w-55"
+              >
+                <div className="group relative overflow-hidden rounded-3xl border border-white/10 bg-background/40 shadow-2xl backdrop-blur-3xl sm:backdrop-blur-3xl">
+                  <div className="p-5">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary/80 mb-2 drop-shadow-sm">
+                      Education
+                    </p>
+                    <p className="text-xs leading-relaxed text-foreground/80 font-medium">
+                      {siteInfo.educationLine}
+                    </p>
+                  </div>
+                  <div className="aspect-square overflow-hidden rounded-t-3xl">
+                    <img
+                      src="/frieren/frieren-teach.svg"
+                      alt="Education"
+                      className="h-full w-full object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110"
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 40, rotate: 6 }}
+                whileInView={{ opacity: 1, y: 0, rotate: 4 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ delay: 0.25, duration: 1, ease: APPLE_EASE }}
+                whileHover={{
+                  rotate: 1,
+                  scale: 1.02,
+                  transition: { type: 'spring', stiffness: 300, damping: 20 },
+                }}
+                className="relative sm:absolute sm:right-[6%] sm:top-[2%] lg:top-[3%] z-10 w-full max-w-[280px] sm:max-w-none sm:w-52.5 lg:w-60"
+              >
+                <div className="group relative overflow-hidden rounded-3xl border border-white/10 bg-background/40 shadow-2xl backdrop-blur-3xl">
+                  <div className="p-5">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary/80 mb-2 drop-shadow-sm">
+                      Interests
+                    </p>
+                    <p className="text-xs leading-relaxed text-foreground/80 font-medium">
+                      {siteInfo.interests}
+                    </p>
+                  </div>
+                  <div className="aspect-4/3 overflow-hidden rounded-t-3xl">
+                    <img
+                      src="/frieren/frienbook.svg"
+                      alt="Interests"
+                      className="h-full w-full object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110"
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 40, rotate: 4 }}
+                whileInView={{ opacity: 1, y: 0, rotate: 2 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ delay: 0.4, duration: 1, ease: APPLE_EASE }}
+                whileHover={{
+                  rotate: 0,
+                  scale: 1.02,
+                  transition: { type: 'spring', stiffness: 300, damping: 20 },
+                }}
+                className="relative sm:absolute sm:left-[8%] sm:bottom-[4%] lg:left-[10%] lg:bottom-[3%] z-10 w-full max-w-[280px] sm:max-w-none sm:w-45 lg:w-50"
+              >
+                <div className="group relative overflow-hidden rounded-3xl border border-white/10 bg-background/40 shadow-2xl backdrop-blur-3xl">
+                  <div className="aspect-3/2 overflow-hidden rounded-t-3xl flex items-center justify-center bg-primary/5">
+                    <img
+                      src="/frieren/party.svg"
+                      alt="Capabilities"
+                      className="h-3/4 w-3/4 object-contain transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="p-5">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary/80 mb-2 drop-shadow-sm">
+                      Capabilities
+                    </p>
+                    <p className="text-xs leading-relaxed text-foreground/80 font-medium">
+                      i can build{' '}
+                      <span className="font-semibold text-primary">
+                        literally anything.
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, rotate: -8 }}
+                whileInView={{ opacity: 1, scale: 1, rotate: -4 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ delay: 0.5, duration: 1, ease: APPLE_EASE }}
+                whileHover={{
+                  rotate: -2,
+                  scale: 1.05,
+                  transition: { type: 'spring', stiffness: 400, damping: 20 },
+                }}
+                className="relative sm:absolute sm:right-[10%] sm:bottom-[10%] lg:right-[12%] lg:bottom-[8%] z-10 w-3/5 max-w-[180px] sm:max-w-none sm:w-35"
+              >
+                <div className="group overflow-hidden rounded-[20px] border border-white/10 bg-background/40 shadow-2xl backdrop-blur-3xl">
+                  <div className="aspect-square overflow-hidden rounded-[20px] flex items-center justify-center bg-primary/10">
+                    <img
+                      src="/frieren/frieren.svg"
+                      alt="Frieren"
+                      className="h-4/5 w-4/5 object-contain transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110 group-hover:rotate-6"
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
               </motion.div>
             </div>
           </div>
