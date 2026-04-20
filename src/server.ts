@@ -5,6 +5,22 @@ import {
 } from './lib/markdown-negotiation.server'
 import { handleWebBotAuthDirectory } from './lib/web-bot-auth.server'
 
+function appendVary(headers: Headers, value: string) {
+  const existing = headers.get('Vary')
+  if (!existing) {
+    headers.set('Vary', value)
+    return
+  }
+
+  const parts = existing
+    .split(',')
+    .map((part) => part.trim().toLowerCase())
+
+  if (!parts.includes(value.toLowerCase())) {
+    headers.set('Vary', `${existing}, ${value}`)
+  }
+}
+
 export default {
   async fetch(req: Request): Promise<Response> {
     const url = new URL(req.url)
@@ -338,8 +354,18 @@ export default {
     }
 
     const acceptsMarkdown = wantsMarkdown(req)
+    let upstreamRequest = req
 
-    const response = await handler.fetch(req)
+    if (acceptsMarkdown && ['GET', 'HEAD'].includes(req.method)) {
+      const upstreamHeaders = new Headers(req.headers)
+      upstreamHeaders.set('Accept', 'text/html,application/xhtml+xml')
+      upstreamRequest = new Request(req.url, {
+        method: req.method,
+        headers: upstreamHeaders,
+      })
+    }
+
+    const response = await handler.fetch(upstreamRequest)
 
     const newHeaders = new Headers(response.headers)
     newHeaders.set(
@@ -369,10 +395,10 @@ export default {
       const { markdown, tokens } = convertHtmlToMarkdown(html)
       newHeaders.set('Content-Type', 'text/markdown; charset=utf-8')
       newHeaders.set('x-markdown-tokens', String(tokens))
-      newHeaders.set('Vary', 'Accept')
+      appendVary(newHeaders, 'Accept')
       newHeaders.set(
         'Content-Signal',
-        'ai-train=yes, search=yes, ai-input=yes',
+        'ai-train=no, search=yes, ai-input=no',
       )
       newHeaders.set(
         'Cache-Control',

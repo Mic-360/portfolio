@@ -4,119 +4,119 @@
 User-agent: *
 Allow: /
 Disallow: /api/
-Content-Signal: ai-train=yes, search=yes, ai-input=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 # Google
 User-agent: Googlebot
 Allow: /
 Crawl-delay: 1
-Content-Signal: search=yes, ai-train=yes, ai-input=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 User-agent: Googlebot-Image
 Allow: /
-Content-Signal: search=yes, ai-train=yes, ai-input=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 User-agent: Googlebot-Video
 Allow: /
-Content-Signal: search=yes, ai-train=yes, ai-input=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 # Bing
 User-agent: Bingbot
 Allow: /
 Crawl-delay: 1
-Content-Signal: search=yes, ai-train=yes, ai-input=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 # Yandex
 User-agent: YandexBot
 Allow: /
 Crawl-delay: 2
-Content-Signal: search=yes, ai-train=yes, ai-input=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 # Baidu
 User-agent: Baiduspider
 Allow: /
 Crawl-delay: 2
-Content-Signal: search=yes, ai-train=yes, ai-input=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 # DuckDuckGo
 User-agent: DuckDuckBot
 Allow: /
-Content-Signal: search=yes, ai-train=yes, ai-input=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 # Apple
 User-agent: Applebot
 Allow: /
-Content-Signal: search=yes, ai-train=yes, ai-input=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 # AI Crawlers - Allow for AI platform indexing
 User-agent: GPTBot
 Allow: /
-Content-Signal: ai-train=yes, ai-input=yes, search=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 User-agent: ChatGPT-User
 Allow: /
-Content-Signal: ai-input=yes, ai-train=yes, search=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 User-agent: Google-Extended
 Allow: /
-Content-Signal: ai-train=yes, ai-input=yes, search=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 User-agent: Anthropic-ai
 Allow: /
-Content-Signal: ai-train=yes, ai-input=yes, search=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 User-agent: Claude-Web
 Allow: /
-Content-Signal: ai-input=yes, ai-train=yes, search=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 User-agent: ClaudeBot
 Allow: /
-Content-Signal: ai-train=yes, ai-input=yes, search=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 User-agent: CCBot
 Allow: /
-Content-Signal: ai-train=yes, ai-input=yes, search=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 User-agent: PerplexityBot
 Allow: /
-Content-Signal: ai-input=yes, search=yes, ai-train=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 User-agent: Bytespider
 Allow: /
-Content-Signal: ai-train=yes, ai-input=yes, search=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 User-agent: cohere-ai
 Allow: /
-Content-Signal: ai-train=yes, ai-input=yes, search=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 # Social Media Crawlers
 User-agent: Twitterbot
 Allow: /
-Content-Signal: search=yes, ai-input=yes, ai-train=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 User-agent: facebookexternalhit
 Allow: /
-Content-Signal: search=yes, ai-input=yes, ai-train=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 User-agent: LinkedInBot
 Allow: /
-Content-Signal: search=yes, ai-input=yes, ai-train=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 User-agent: Slackbot
 Allow: /
-Content-Signal: search=yes, ai-input=yes, ai-train=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 User-agent: Discordbot
 Allow: /
-Content-Signal: search=yes, ai-input=yes, ai-train=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 User-agent: WhatsApp
 Allow: /
-Content-Signal: search=yes, ai-input=yes, ai-train=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 User-agent: TelegramBot
 Allow: /
-Content-Signal: search=yes, ai-input=yes, ai-train=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 # Sitemaps
 Sitemap: https://bhaumicsingh.dev/sitemap/xml

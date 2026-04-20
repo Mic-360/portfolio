@@ -12,17 +12,19 @@ Request any HTML page as clean, structured markdown by including `Accept: text/m
 Send a standard HTTP GET with the Accept header:
 
 **Example request:**
+
 ```
 GET https://bhaumicsingh.dev/blog/my-post HTTP/1.1
 Accept: text/markdown
 ```
 
 **Response headers:**
+
 ```
 Content-Type: text/markdown; charset=utf-8
 x-markdown-tokens: 1842
 Vary: Accept
-Content-Signal: ai-train=yes, search=yes, ai-input=yes
+Content-Signal: ai-train=no, search=yes, ai-input=no
 ```
 
 The `x-markdown-tokens` header provides an estimated token count (approximately 4 characters per token) so you can budget context window usage before reading the body.
@@ -30,6 +32,7 @@ The `x-markdown-tokens` header provides an estimated token count (approximately 
 ## What Gets Stripped
 
 The converter removes these non-content elements:
+
 - `<script>`, `<style>`, `<noscript>` tags
 - `<nav>`, `<footer>` elements
 - `<svg>`, `<iframe>`, `<video>`, `<audio>`, `<canvas>` embeds
