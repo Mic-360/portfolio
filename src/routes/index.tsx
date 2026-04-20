@@ -898,17 +898,30 @@ function App() {
 
       <motion.div variants={item} className="px-4 sm:px-8">
         <Section title="blogs">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 1.2, ease: APPLE_EASE }}
+            className="mb-8 flex items-end justify-between gap-6"
+          >
+            <h3 className="font-serif text-3xl leading-[1.08] tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+              Notes from
+              <br />
+              the build.
+            </h3>
+          </motion.div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {featuredPosts.map((post: BlogMeta, index: number) => (
               <motion.div
                 key={post.slug}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 32, filter: 'blur(6px)' }}
+                whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{
-                  duration: 0.7,
+                  duration: 1,
                   delay: index * 0.08,
-                  ease: [0.25, 0.1, 0.25, 1],
+                  ease: APPLE_EASE,
                 }}
                 className={index === 0 ? 'sm:col-span-2 lg:col-span-2' : ''}
               >
@@ -918,17 +931,17 @@ function App() {
                   className="group block h-full"
                 >
                   <motion.article
-                    whileHover={{ y: -3 }}
+                    whileHover={{ y: -6, scale: 1.01 }}
                     transition={{
                       type: 'spring',
                       stiffness: 400,
-                      damping: 25,
+                      damping: 30,
                     }}
-                    className={`project-card-apple flex h-full flex-col justify-between gap-4 rounded-2xl border border-border/10 bg-card/40 p-5 sm:p-6 ${
-                      index === 0 ? 'sm:flex-row sm:items-center sm:gap-8' : ''
+                    className={`project-card-apple flex h-full flex-col justify-between gap-5 rounded-4xl border border-white/10 bg-background/40 shadow-2xl backdrop-blur-3xl p-6 sm:p-8 transition-colors duration-500 hover:border-primary/20 hover:bg-background/50 ${
+                      index === 0 ? 'sm:flex-row sm:items-center sm:gap-10' : ''
                     }`}
                   >
-                    <div className="flex flex-1 flex-col gap-3">
+                    <div className="flex flex-1 flex-col gap-3.5">
                       <div className="flex items-center gap-3">
                         <span className="text-[10px] uppercase tracking-[0.2em] text-primary/50">
                           {post.categories.length > 0
