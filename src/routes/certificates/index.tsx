@@ -123,7 +123,7 @@ function CertificatesIndex() {
         <div className="pointer-events-none absolute inset-x-[18%] top-[8%] h-28 rounded-full bg-primary/10 blur-3xl" />
         <div className="pointer-events-none absolute right-[6%] top-[10%] h-72 w-72 rounded-full bg-primary/6 blur-[120px]" />
 
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center justify-between gap-4 px-4 sm:px-6">
           <div className="flex items-center gap-2.5">
             <span className="text-primary/50">
               <Award size={18} />
@@ -141,7 +141,7 @@ function CertificatesIndex() {
           </Link>
         </div>
 
-        <div className="flex flex-col gap-8 pt-8 lg:pt-12">
+        <div className="flex flex-col gap-8 pt-8 lg:pt-12 px-4 sm:px-6">
           <div className="grid gap-5">
             <h1 className="font-serif text-4xl leading-[1.08] tracking-tight text-foreground sm:text-5xl xl:text-6xl">
               Every credential, verified.
@@ -176,7 +176,7 @@ function CertificatesIndex() {
       {allIssuers.length > 0 ? (
         <motion.div
           variants={item}
-          className="sticky top-0 z-30 -mx-4 border-b border-border/10 bg-background/80 px-4 py-3 backdrop-blur-xl"
+          className="sticky top-0 z-30 mx-0 border-b border-border/10 bg-background/80 py-3 backdrop-blur-xl"
         >
           <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
             <button
@@ -210,7 +210,7 @@ function CertificatesIndex() {
         </motion.div>
       ) : null}
 
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 px-4 sm:px-6">
         <AnimatePresence mode="popLayout">
           {filteredCertificates.map(
             (certificate: CertificateMeta, index: number) => {
@@ -338,7 +338,7 @@ function CertificatesIndex() {
 
       <motion.footer
         variants={item}
-        className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-end sm:justify-between"
+        className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-end sm:justify-between px-4 sm:px-6"
       >
         <div className="flex items-end gap-6">
           <img

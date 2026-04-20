@@ -118,7 +118,7 @@ function PinterestGalleryPage() {
       <motion.header variants={item} className="relative overflow-hidden pb-4">
         <div className="pointer-events-none absolute inset-x-[18%] top-[8%] h-28 rounded-full bg-primary/10 blur-3xl" />
 
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center justify-between gap-4 px-4 sm:px-6">
           <div className="flex items-center gap-2.5">
             <span className="text-primary/50">
               <ImageIcon size={18} />
@@ -144,7 +144,7 @@ function PinterestGalleryPage() {
           </div>
         </div>
 
-        <div className="flex items-center justify-between gap-4 pt-6">
+        <div className="flex items-center justify-between gap-4 pt-6 px-4 sm:px-6">
           <div className="space-y-1">
             <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
               total pins
@@ -165,7 +165,7 @@ function PinterestGalleryPage() {
       {pins.length > 0 ? (
         <motion.div
           variants={item}
-          className="columns-2 gap-4 sm:columns-3 lg:columns-4 xl:columns-5"
+          className="columns-2 gap-4 sm:columns-3 lg:columns-4 xl:columns-5 px-4 sm:px-6"
         >
           {pins.map((pin: PinterestCreatedPin, index: number) => (
             <motion.div
@@ -219,7 +219,7 @@ function PinterestGalleryPage() {
       ) : (
         <motion.div
           variants={item}
-          className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-border/10 bg-card/30 p-12"
+          className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-border/10 bg-card/30 p-12 px-4 sm:px-6"
         >
           <ImageIcon size={32} className="text-muted-foreground/20" />
           <p className="text-sm text-foreground/70">
@@ -241,7 +241,7 @@ function PinterestGalleryPage() {
       {/* Footer */}
       <motion.footer
         variants={item}
-        className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-end sm:justify-between"
+        className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-end sm:justify-between px-4 sm:px-6"
       >
         <p className="max-w-2xl text-sm leading-7 text-muted-foreground/70">
           Every pin is download-ready. Browse the overview for curated

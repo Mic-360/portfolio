@@ -278,7 +278,7 @@ function BlogPost() {
         variants={container}
         initial="hidden"
         animate="show"
-        className="mx-auto flex w-full max-w-375 flex-col gap-16 pb-16 md:gap-24"
+        className="mx-auto flex w-full max-w-375 flex-col gap-16 pb-16 md:gap-24 px-4 sm:px-6"
       >
         <motion.div
           variants={item}

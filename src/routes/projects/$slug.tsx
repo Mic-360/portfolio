@@ -281,7 +281,7 @@ function ProjectDetail() {
         variants={container}
         initial="hidden"
         animate="show"
-        className="mx-auto flex w-full max-w-375 flex-col gap-16 pb-16 md:gap-24"
+        className="mx-auto flex w-full max-w-375 flex-col gap-16 pb-16 md:gap-24 px-4 sm:px-6"
       >
         {/* Back navigation */}
         <motion.div
@@ -303,7 +303,7 @@ function ProjectDetail() {
         {/* Cinematic Hero */}
         <motion.section
           variants={item}
-          className="relative -mx-4 sm:-mx-6 lg:-mx-8 overflow-hidden rounded-2xl sm:rounded-3xl"
+          className="relative -mx-4 sm:-mx-6 lg:-mx-8 overflow-hidden"
         >
           <div className="relative aspect-video sm:aspect-21/9 w-full overflow-hidden bg-card/30">
             <img
@@ -326,25 +326,12 @@ function ProjectDetail() {
               }}
               className="flex max-w-2xl flex-col gap-4"
             >
-              <p className="text-[10px] uppercase tracking-[0.25em] text-foreground/40">
+              <p className="text-[10px] uppercase tracking-[0.25em] text-primary">
                 {formatDate(project.date)}
               </p>
               <h1 className="font-serif text-3xl leading-[1.08] tracking-tight text-foreground sm:text-4xl lg:text-5xl xl:text-6xl">
                 {project.title}
               </h1>
-              <p className="max-w-lg text-sm leading-7 text-foreground/70 sm:text-base sm:leading-8">
-                {project.summary}
-              </p>
-              <div className="flex flex-wrap gap-2 pt-1">
-                {project.stack.map((tech) => (
-                  <span
-                    key={tech}
-                    className="rounded-full border border-border/20 bg-background/40 px-3 py-1 text-[11px] font-medium text-foreground/60 backdrop-blur-sm"
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
             </motion.div>
           </div>
         </motion.section>
@@ -357,7 +344,7 @@ function ProjectDetail() {
           {/* Left sidebar: metadata */}
           <aside className="grid content-start gap-8 lg:sticky lg:top-24 lg:self-start">
             <div className="grid gap-4">
-              <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/70">
+              <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-primary">
                 Details
               </p>
               <div className="grid gap-0">
@@ -379,7 +366,7 @@ function ProjectDetail() {
 
             {project.links.length > 0 ? (
               <div className="grid gap-4">
-                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/70">
+                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-primary">
                   Links
                 </p>
                 <div className="grid gap-0">

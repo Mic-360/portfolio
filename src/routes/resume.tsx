@@ -112,7 +112,7 @@ function ResumePage() {
 
       <motion.section
         variants={item}
-        className="flex flex-col gap-8 text-center rounded-3xl bg-primary/3 p-10 sm:p-14 relative overflow-hidden"
+        className="flex flex-col gap-8 text-center rounded-3xl bg-primary/3 p-10 sm:p-14 relative overflow-hidden mx-4 sm:mx-6"
       >
         <div className="absolute inset-0 bg-linear-to-br from-primary/4 via-transparent to-transparent pointer-events-none" />
         <div className="relative z-10 flex flex-col gap-5">
@@ -175,7 +175,7 @@ function ResumePage() {
       <motion.footer variants={item}>
         <Link
           to="/"
-          className="group inline-flex items-center gap-2 text-xs text-muted-foreground/70 hover:text-primary transition-colors duration-300"
+          className="group inline-flex items-center gap-2 text-xs text-muted-foreground/70 hover:text-primary transition-colors duration-300 px-4 sm:px-6"
         >
           <span className="transform group-hover:-translate-x-0.5 transition-transform duration-300">
             ←

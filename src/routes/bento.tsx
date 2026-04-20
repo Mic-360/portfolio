@@ -52,7 +52,7 @@ export const Route = createFileRoute('/bento')({
 
 function BentoPage() {
   return (
-    <article className="flex flex-col gap-6 min-h-screen">
+    <article className="flex flex-col gap-6 min-h-screen px-4 sm:px-6">
       <div className="flex items-center justify-between gap-4 pb-2">
         <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/60">
           Bento

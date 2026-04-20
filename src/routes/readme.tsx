@@ -169,12 +169,9 @@ function ReadmePage() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="mx-auto flex w-full max-w-375 flex-col gap-20 md:gap-28"
+      className="mx-auto flex w-full max-w-375 flex-col gap-20 md:gap-28 px-4 sm:px-6"
     >
-      <motion.section
-        variants={item}
-        className="pb-12"
-      >
+      <motion.section variants={item} className="pb-12">
         <div className="flex items-center justify-between gap-4 pb-10">
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/60">
             README
@@ -199,7 +196,9 @@ function ReadmePage() {
                 className="h-12 w-12 rounded-full ring-1 ring-border/20 object-cover"
               />
               <div>
-                <p className="text-sm font-semibold tracking-tight text-foreground">Bhaumic Singh</p>
+                <p className="text-sm font-semibold tracking-tight text-foreground">
+                  Bhaumic Singh
+                </p>
                 <a
                   href="https://github.com/Mic-360"
                   target="_blank"

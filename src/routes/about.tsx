@@ -140,7 +140,7 @@ function AboutPage() {
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className="mx-auto flex w-full max-w-7xl flex-col gap-16"
+      className="mx-auto flex w-full max-w-7xl flex-col gap-16 px-4 sm:px-6"
     >
       <motion.section
         variants={itemVariants}
@@ -266,7 +266,9 @@ function AboutPage() {
             </p>
             <div className="flex flex-wrap gap-x-4 gap-y-3 text-sm leading-7 text-foreground/78">
               {profile.interests.map((interest: GravatarInterest) => (
-                <span key={interest.id}>#{interest.name.replace(/\s+/g, '_').toLowerCase()}</span>
+                <span key={interest.id}>
+                  #{interest.name.replace(/\s+/g, '_').toLowerCase()}
+                </span>
               ))}
             </div>
           </div>

@@ -395,7 +395,7 @@ function App() {
           <motion.svg
             viewBox="0 0 60 1"
             preserveAspectRatio="none"
-            className="h-px w-10 overflow-visible text-primary/60"
+            className="h-px w-10 overflow-hidden text-primary/60"
             aria-hidden="true"
           >
             <motion.line
@@ -416,7 +416,7 @@ function App() {
           <motion.svg
             viewBox="0 0 60 1"
             preserveAspectRatio="none"
-            className="h-px w-10 overflow-visible text-primary/60"
+            className="h-px w-10 overflow-hidden text-primary/60"
             aria-hidden="true"
           >
             <motion.line

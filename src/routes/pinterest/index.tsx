@@ -104,7 +104,7 @@ function PinterestIndexPage() {
         <div className="pointer-events-none absolute inset-x-[18%] top-[8%] h-28 rounded-full bg-primary/10 blur-3xl" />
         <div className="pointer-events-none absolute right-[6%] top-[10%] h-72 w-72 rounded-full bg-primary/6 blur-[120px]" />
 
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center justify-between gap-4 px-4 sm:px-6">
           <div className="flex items-center gap-2.5">
             <span className="text-primary/50">
               <ImageIcon size={18} />
@@ -122,7 +122,7 @@ function PinterestIndexPage() {
           </Link>
         </div>
 
-        <div className="flex flex-col gap-8 pt-8 lg:pt-12">
+        <div className="flex flex-col gap-8 pt-8 lg:pt-12 px-4 sm:px-6">
           <div className="grid gap-5">
             <h1 className="font-serif text-4xl leading-[1.08] tracking-tight text-foreground sm:text-5xl xl:text-6xl">
               Visual studies, curated pins.
@@ -159,7 +159,7 @@ function PinterestIndexPage() {
           href={heroPin.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="group block"
+          className="group block px-4 sm:px-6"
         >
           <motion.div
             whileHover={{ y: -4 }}
@@ -187,7 +187,7 @@ function PinterestIndexPage() {
                   </h2>
                 </div>
                 <span className="text-sm text-white/50 transition-transform duration-300 group-hover:translate-x-1">
-                  &nearr;
+                  &rarr;
                 </span>
               </div>
             </div>
@@ -198,7 +198,7 @@ function PinterestIndexPage() {
       {previewPins.length > 0 ? (
         <motion.div
           variants={item}
-          className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+          className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 px-4 sm:px-6"
         >
           {previewPins.map((pin: PinterestCreatedPin, index: number) => (
             <motion.div
@@ -255,7 +255,7 @@ function PinterestIndexPage() {
 
       <motion.section
         variants={item}
-        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 px-4 sm:px-6"
       >
         <ActionCard
           title="Full Gallery"
@@ -279,7 +279,7 @@ function PinterestIndexPage() {
 
       <motion.footer
         variants={item}
-        className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-end sm:justify-between"
+        className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-end sm:justify-between px-4 sm:px-6"
       >
         <div className="flex items-end gap-6">
           <p className="max-w-2xl text-sm leading-7 text-muted-foreground/70">
