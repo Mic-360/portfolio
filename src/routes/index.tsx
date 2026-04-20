@@ -1,10 +1,5 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
-import {
-  motion,
-  useMotionValue,
-  useScroll,
-  useSpring,
-} from 'motion/react'
+import { motion, useMotionValue, useScroll, useSpring } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 
 import type { CertificateMeta } from '@/lib/certificates'
@@ -27,11 +22,13 @@ import { GamesCinematic } from '@/components/GamesCinematic'
 import GitHubHeatmap from '@/components/GitHubHeatmap'
 import GravatarAvatar from '@/components/gravatar/GravatarAvatar'
 import GravatarSocialLinks from '@/components/gravatar/GravatarSocialLinks'
+import { LazyHeroVideo } from '@/components/LazyHeroVideo'
 import { PreviousRoadmap } from '@/components/PreviousRoadmap'
 import CalendarIcon from '@/components/ui/calendar-icon'
 import CurrentIcon from '@/components/ui/current-icon'
 import { LinkPreview } from '@/components/ui/link-preview'
 import PreviousIcon from '@/components/ui/previous-icon'
+import WorldMap from '@/components/ui/world-map'
 import { gravatarConfig } from '@/config/gravatar'
 import {
   contactLinks,
@@ -41,7 +38,6 @@ import {
   siteInfo,
   siteMeta,
 } from '@/config/site-data'
-import { LazyHeroVideo } from '@/components/LazyHeroVideo'
 
 declare global {
   interface Window {
@@ -1283,19 +1279,37 @@ function App() {
       <motion.div variants={item}>
         <Section title="contact">
           <div className="relative overflow-hidden pb-8">
-            <div className="pointer-events-none absolute inset-x-[14%] top-[8%] h-24 rounded-full bg-primary/10 blur-3xl" />
-            <div className="pointer-events-none absolute right-[8%] top-[18%] h-72 w-full sm:w-72 rounded-full bg-primary/8 blur-[120px]" />
-
-            <div className="media-hover-parent absolute inset-y-0 left-[34%] right-[-6%]">
-              <img
-                src={siteImages.profilePhoto}
-                alt={siteInfo.name}
-                className="hero-blend-media absolute inset-0 h-full w-full object-contain object-bottom sm:object-cover sm:object-center"
+            <div className="pointer-events-none absolute inset-0 z-0">
+              <WorldMap
+                lineColor="hsl(var(--primary))"
+                className="absolute inset-0 h-full w-full opacity-40"
+                dots={[
+                  {
+                    start: { lat: 22.57, lng: 88.36 },
+                    end: { lat: 37.77, lng: -122.42 },
+                  },
+                  {
+                    start: { lat: 22.57, lng: 88.36 },
+                    end: { lat: 51.51, lng: -0.13 },
+                  },
+                  {
+                    start: { lat: 22.57, lng: 88.36 },
+                    end: { lat: 35.68, lng: 139.69 },
+                  },
+                  {
+                    start: { lat: 22.57, lng: 88.36 },
+                    end: { lat: 1.35, lng: 103.82 },
+                  },
+                  {
+                    start: { lat: 22.57, lng: 88.36 },
+                    end: { lat: -33.87, lng: 151.21 },
+                  },
+                ]}
               />
-              <div className="absolute inset-0 bg-linear-to-l from-background/10 via-background/58 to-background" />
-              <div className="absolute inset-y-0 right-[-2%] w-[24%] bg-linear-to-l from-background via-background to-transparent blur-3xl" />
-              <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent opacity-90" />
             </div>
+
+            {/* <div className="pointer-events-none absolute inset-x-[14%] top-[8%] h-24 rounded-full bg-primary/10 blur-3xl" />
+            <div className="pointer-events-none absolute right-[8%] top-[18%] h-72 w-full sm:w-72 rounded-full bg-primary/8 blur-[120px]" /> */}
 
             <div className="relative z-10 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.72fr)] lg:items-end px-4 sm:px-8">
               <div className="grid gap-8 py-2 lg:pr-12">
