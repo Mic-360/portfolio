@@ -1103,7 +1103,7 @@ function App() {
 
       <motion.div
         variants={item}
-        className="grid gap-4 xl:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] px-4 sm:px-8"
+        className="grid gap-6 lg:gap-8 max-w-[1920px] mx-auto xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] px-4 sm:px-8 w-full"
       >
         <Section title="pinterest">
           <div className="relative">
