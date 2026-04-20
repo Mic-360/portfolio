@@ -2,6 +2,7 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { motion, useScroll, useSpring } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { ProjectMeta } from '@/lib/content'
+import { LinkPreview } from '@/components/ui/link-preview'
 import { siteMeta } from '@/config/site-data'
 import { getProjectBySlug, getProjectIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
@@ -371,16 +372,16 @@ function ProjectDetail() {
                 </p>
                 <div className="grid gap-0">
                   {project.links.map((link, index) => (
-                    <a
+                    <LinkPreview
                       key={`${link.label}-${link.url}-${index}`}
-                      href={link.url}
+                      url={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center justify-between gap-4 border-b border-border/10 py-3 text-sm text-foreground/70 transition-colors duration-300 hover:text-primary"
                     >
                       <span>{link.label}</span>
-                      <span className="text-muted-foreground/70">&nearr;</span>
-                    </a>
+                      <span className="text-muted-foreground/70">&rarr;</span>
+                    </LinkPreview>
                   ))}
                 </div>
               </div>

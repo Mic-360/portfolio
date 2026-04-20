@@ -191,7 +191,7 @@ function ProjectsIndex() {
       {allCategories.length > 0 ? (
         <motion.div
           variants={item}
-          className="sticky top-0 z-30 mx-0 px-0 py-3 backdrop-blur-xl bg-background/80 border-b border-border/10"
+          className="sticky top-0 z-30 mx-0 px-0 py-3 backdrop-blur-xl bg-background/80 border-b border-border/10 sm:px-4"
         >
           <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
             <button
