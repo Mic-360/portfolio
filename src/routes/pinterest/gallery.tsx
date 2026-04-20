@@ -3,7 +3,7 @@ import { ImageIcon } from 'lucide-react'
 import { motion } from 'motion/react'
 
 import type { PinterestCreatedPin } from '@/lib/pinterest'
-import { FocusCards } from '@/components/ui/focus-cards'
+import { LayoutGrid } from '@/components/ui/layout-grid'
 import { LinkPreview } from '@/components/ui/link-preview'
 import { pinterest, siteMeta } from '@/config/site-data'
 import { getPinterestCreatedPins } from '@/lib/pinterest'
@@ -165,41 +165,43 @@ function PinterestGalleryPage() {
 
       {/* Masonry gallery */}
       {pins.length > 0 ? (
-        <motion.div variants={item} className="px-4 sm:px-6">
-          <FocusCards
-            className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
-            cards={pins.map((pin: PinterestCreatedPin) => ({
-              title: pin.title,
-              src: pin.imageUrl,
-            }))}
-            renderOverlay={(_, index) => {
-              const pin = pins[index]
-              return (
-                <div className="flex h-full flex-col justify-between">
-                  <p className="line-clamp-2 text-sm font-medium tracking-tight text-white/90">
+        <motion.div
+          variants={item}
+          className="flex flex-col gap-12 px-4 sm:px-6"
+        >
+          <LayoutGrid
+            className="sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5"
+            cards={pins.map((pin: PinterestCreatedPin, index: number) => ({
+              id: index,
+              thumbnail: pin.imageUrl,
+              width: pin.imageWidth,
+              height: pin.imageHeight,
+              content: (
+                <div className="flex flex-col gap-1">
+                  <p className="line-clamp-2 font-serif text-sm leading-tight text-white sm:text-base">
                     {pin.title}
                   </p>
-                  <div className="flex items-center justify-between gap-2 border-t border-white/10 pt-3">
+                  <div className="flex items-center gap-3 pt-1">
                     <a
                       href={pin.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[10px] uppercase tracking-[0.15em] text-white/70 transition-colors duration-300 hover:text-white"
+                      className="text-[10px] uppercase tracking-[0.15em] text-white/70 transition-colors hover:text-white"
                       onClick={(e) => e.stopPropagation()}
                     >
                       Open ↗
                     </a>
                     <a
                       href={buildDownloadUrl(pin)}
-                      className="text-[10px] uppercase tracking-[0.15em] text-white/70 transition-colors duration-300 hover:text-white"
+                      className="text-[10px] uppercase tracking-[0.15em] text-white/70 transition-colors hover:text-white"
                       onClick={(e) => e.stopPropagation()}
                     >
                       Download ↓
                     </a>
                   </div>
                 </div>
-              )
-            }}
+              ),
+            }))}
           />
         </motion.div>
       ) : (

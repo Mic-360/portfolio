@@ -26,6 +26,7 @@ import { LazyHeroVideo } from '@/components/LazyHeroVideo'
 import { PreviousRoadmap } from '@/components/PreviousRoadmap'
 import CalendarIcon from '@/components/ui/calendar-icon'
 import CurrentIcon from '@/components/ui/current-icon'
+import { LayoutGrid } from '@/components/ui/layout-grid'
 import { LinkPreview } from '@/components/ui/link-preview'
 import PreviousIcon from '@/components/ui/previous-icon'
 import WorldMap from '@/components/ui/world-map'
@@ -1120,64 +1121,36 @@ function App() {
 
             {featuredPins.length > 0 ? (
               <div className="flex flex-col gap-6">
-                {featuredPins[0] ? (
-                  <a
-                    href={featuredPins[0].url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group block"
-                  >
-                    <div className="project-card-apple relative overflow-hidden rounded-3xl border border-border/10">
-                      <div className="media-hover-parent relative aspect-video">
-                        <img
-                          src={featuredPins[0].imageUrl}
-                          alt=""
-                          loading="lazy"
-                          width={featuredPins[0].imageWidth}
-                          height={featuredPins[0].imageHeight}
-                          className="media-hover-image absolute inset-0 h-full w-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
-                      </div>
-                      <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
-                        <p className="line-clamp-2 font-serif text-sm leading-tight tracking-tight text-white sm:text-base">
-                          {featuredPins[0].title}
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                ) : null}
-
-                <div className="columns-1 sm:columns-2 md:columns-3 gap-5 w-full">
-                  {featuredPins.slice(1).map((pin: PinterestCreatedPin) => (
-                    <a
-                      key={pin.id}
-                      href={pin.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group break-inside-avoid block w-full mb-5"
-                    >
-                      <div className="project-card-apple flex flex-col w-full overflow-hidden rounded-[1.8rem] border border-white/5 bg-background/40 backdrop-blur-2xl shadow-xl transition-all duration-[0.8s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:shadow-[0_24px_48px_rgba(0,0,0,0.15)] group-hover:-translate-y-1.5 isolate">
-                        <div className="media-hover-parent relative w-full h-auto bg-foreground/5">
-                          <img
-                            src={pin.imageUrl}
-                            alt={pin.title || ''}
-                            loading="lazy"
-                            width={pin.imageWidth}
-                            height={pin.imageHeight}
-                            className="media-hover-image w-full h-auto object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
-                          />
-                          <div className="absolute inset-0 bg-linear-to-t from-background/80 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                        </div>
-                        <div className="p-4 bg-background/60 border-t border-border/5">
-                          <p className="line-clamp-2 text-[11px] font-medium leading-tight text-foreground/80 transition-colors duration-300 group-hover:text-primary">
+                <LayoutGrid
+                  className="sm:columns-2 md:columns-3"
+                  cards={featuredPins
+                    .slice(0, 5)
+                    .map((pin: PinterestCreatedPin, index: number) => ({
+                      id: index,
+                      thumbnail: pin.imageUrl,
+                      width: pin.imageWidth,
+                      height: pin.imageHeight,
+                      content: (
+                        <div className="flex flex-col gap-1">
+                          <p className="text-xs uppercase tracking-[0.2em] text-white/50">
+                            Pin
+                          </p>
+                          <p className="line-clamp-2 font-serif text-sm leading-tight text-white sm:text-base">
                             {pin.title}
                           </p>
+                          <a
+                            href={pin.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-1 inline-flex items-center gap-1 text-xs text-white/60 transition-colors hover:text-white"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            Open on Pinterest ↗
+                          </a>
                         </div>
-                      </div>
-                    </a>
-                  ))}
-                </div>
+                      ),
+                    }))}
+                />
 
                 <LinkPreview
                   url={siteMeta.baseUrl + '/pinterest'}

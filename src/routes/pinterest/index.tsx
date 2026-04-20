@@ -2,10 +2,10 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { ImageIcon } from 'lucide-react'
 import { motion } from 'motion/react'
 
-import type { PinterestCreatedPin } from '@/lib/pinterest'
-import { FocusCards } from '@/components/ui/focus-cards'
+import { LayoutGrid } from '@/components/ui/layout-grid'
 import { LinkPreview } from '@/components/ui/link-preview'
 import { siteMeta } from '@/config/site-data'
+import type { PinterestCreatedPin } from '@/lib/pinterest'
 import { getPinterestCreatedPins } from '@/lib/pinterest'
 
 export const Route = createFileRoute('/pinterest/')({
@@ -199,30 +199,35 @@ function PinterestIndexPage() {
 
       {previewPins.length > 0 ? (
         <motion.div variants={item} className="px-4 sm:px-6">
-          <FocusCards
-            cards={previewPins.map((pin: PinterestCreatedPin) => ({
-              title: pin.title,
-              src: pin.imageUrl,
-            }))}
-            renderOverlay={(card, index) => {
-              const pin = previewPins[index]
-              return (
-                <div className="flex h-full flex-col justify-end gap-2">
-                  <p className="line-clamp-2 text-lg font-medium tracking-tight text-white md:text-xl">
-                    {card.title}
-                  </p>
-                  <a
-                    href={pin.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs text-white/60 transition-colors hover:text-white"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    Open on Pinterest ↗
-                  </a>
-                </div>
-              )
-            }}
+          <LayoutGrid
+            className="sm:columns-2 md:columns-3"
+            cards={previewPins.map(
+              (pin: PinterestCreatedPin, index: number) => ({
+                id: index,
+                thumbnail: pin.imageUrl,
+                width: pin.imageWidth,
+                height: pin.imageHeight,
+                content: (
+                  <div className="flex flex-col gap-1">
+                    <p className="text-xs uppercase tracking-[0.2em] text-white/50">
+                      Pin
+                    </p>
+                    <p className="line-clamp-2 font-serif text-sm leading-tight text-white sm:text-base">
+                      {pin.title}
+                    </p>
+                    <a
+                      href={pin.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-1 inline-flex items-center gap-1 text-xs text-white/60 transition-colors hover:text-white"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Open on Pinterest ↗
+                    </a>
+                  </div>
+                ),
+              }),
+            )}
           />
         </motion.div>
       ) : null}
