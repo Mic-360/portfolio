@@ -91,3 +91,6 @@ Allow: /
 
 # Sitemaps
 Sitemap: https://bhaumicsingh.dev/sitemap/xml
+
+# Content Signals — https://contentsignals.org/
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
