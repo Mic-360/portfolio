@@ -1087,7 +1087,7 @@ function App() {
 
       <motion.div
         variants={item}
-        className="grid gap-6 lg:gap-8 max-w-480 mx-auto xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] px-4 sm:px-8 w-full"
+        className="grid gap-18 lg:gap-12 max-w-480 mx-auto xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] px-4 sm:px-8 w-full"
       >
         <Section title="certificates">
           <AnimatedTestimonials

@@ -597,7 +597,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           <VideoBackground />
           <FeedbackHandler />
           <CommandMenu />
-          <main className="mx-auto w-full max-w-395 py-4 text-sm lowercase">{children}</main>
+          <main className="mx-auto w-full max-w-395 py-4 text-sm lowercase overflow-hidden">{children}</main>
           <Footer />
           <FloatingNavDock />
           <DoomErrorBoundary onError={() => setShowDoom(false)}>
