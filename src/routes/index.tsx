@@ -1004,9 +1004,20 @@ function App() {
 
       <motion.div variants={item} className="px-4 sm:px-8">
         <Section title="healthstat">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 1.2, ease: APPLE_EASE }}
+            className="mb-6 flex flex-col gap-3"
+          >
+            <h3 className="font-serif text-3xl leading-[1.05] tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+              The body, in numbers.
+            </h3>
+          </motion.div>
           <div className="grid min-w-0 gap-8">
-            <div className="grid min-w-0 gap-0 overflow-hidden rounded-2xl border border-border/10 bg-card/30 p-4 sm:p-6">
-              <div className="flex flex-col divide-y divide-border/15">
+            <div className="grid min-w-0 gap-0 overflow-hidden rounded-[2.5rem] border border-white/10 bg-background/40 shadow-2xl backdrop-blur-3xl p-5 sm:p-8">
+              <div className="flex flex-col divide-y divide-border/10">
                 <MetricRow
                   label="steps"
                   samples={sanitizeSamples(health.steps)}
