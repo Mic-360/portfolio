@@ -1,10 +1,11 @@
-import { motion } from 'motion/react'
 import { Link, createFileRoute } from '@tanstack/react-router'
+import { motion } from 'motion/react'
 
 import type { GravatarInterest, GravatarLink } from '@/types/gravatar'
 import GravatarAvatar from '@/components/gravatar/GravatarAvatar'
 import GravatarGallery from '@/components/gravatar/GravatarGallery'
 import GravatarSocialLinks from '@/components/gravatar/GravatarSocialLinks'
+import { LinkPreview } from '@/components/ui/link-preview'
 import { gravatarConfig } from '@/config/gravatar'
 import { siteMeta } from '@/config/site-data'
 import { getGravatarProfile } from '@/lib/gravatar-profile'
@@ -168,8 +169,8 @@ function AboutPage() {
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(260px,0.9fr)] lg:items-end">
             <div className="flex flex-col gap-6">
               <div className="flex items-center gap-4">
-                <a
-                  href={profile.profile_url}
+                <LinkPreview
+                  url={profile.profile_url}
                   target="_blank"
                   rel="noopener noreferrer me"
                   className="shrink-0"
@@ -180,7 +181,7 @@ function AboutPage() {
                     alt={profile.display_name}
                     className="h-24 w-24 border border-white/20 shadow-2xl sm:h-28 sm:w-28"
                   />
-                </a>
+                </LinkPreview>
                 <div className="min-w-0">
                   <p className="text-[10px] uppercase tracking-[0.2em] text-white/40">
                     identity
@@ -223,14 +224,14 @@ function AboutPage() {
                 <p className="text-[10px] uppercase tracking-[0.24em] text-white/54">
                   profile
                 </p>
-                <a
-                  href={profile.profile_url}
+                <LinkPreview
+                  url={profile.profile_url}
                   target="_blank"
                   rel="noopener noreferrer me"
                   className="text-sm text-white/80 transition-colors hover:text-white"
                 >
                   view source profile
-                </a>
+                </LinkPreview>
               </div>
               {profile.registration_date ? (
                 <div className="space-y-1">
@@ -281,16 +282,16 @@ function AboutPage() {
             </p>
             <div className="grid grid-cols-2 gap-4 divide-y divide-border/25">
               {profile.links.map((link: GravatarLink) => (
-                <a
+                <LinkPreview
                   key={link.url}
-                  href={link.url}
+                  url={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-between gap-4 py-3 text-sm transition-colors hover:text-primary"
                 >
                   <span>{link.label}</span>
                   <span className="text-muted-foreground">↗</span>
-                </a>
+                </LinkPreview>
               ))}
             </div>
           </div>

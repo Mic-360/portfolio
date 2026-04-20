@@ -1,8 +1,22 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { motion } from 'motion/react'
+import type React from 'react'
 import type { ImgHTMLAttributes } from 'react'
 
+import { LinkPreview } from '@/components/ui/link-preview'
 import { siteImages, siteMeta } from '@/config/site-data'
+
+import GithubIcon from '@/components/ui/github-icon'
+import InstagramIcon from '@/components/ui/instagram-icon'
+import LinkedinIcon from '@/components/ui/linkedin-icon'
+import TwitterIcon from '@/components/ui/twitter-icon'
+
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  GitHub: GithubIcon,
+  Instagram: InstagramIcon,
+  LinkedIn: LinkedinIcon,
+  X: TwitterIcon,
+}
 
 export const Route = createFileRoute('/readme')({
   head: () => {
@@ -199,14 +213,14 @@ function ReadmePage() {
                 <p className="text-sm font-semibold tracking-tight text-foreground">
                   Bhaumic Singh
                 </p>
-                <a
-                  href="https://github.com/Mic-360"
+                <LinkPreview
+                  url="https://github.com/Mic-360"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-foreground"
                 >
                   github.com/Mic-360
-                </a>
+                </LinkPreview>
               </div>
             </div>
 
@@ -329,9 +343,17 @@ function ReadmePage() {
 
       <motion.section
         variants={item}
-        className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center"
+        className="relative overflow-hidden rounded-3xl"
       >
-        <div className="flex flex-col gap-6">
+        <img
+          src="https://raw.githubusercontent.com/Mic-360/Mic-360/main/space-shooter.gif"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-background/70 backdrop-blur-xs" />
+
+        <div className="relative flex flex-col items-center gap-6 px-6 py-16 text-center sm:py-20">
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/70">
             Connect
           </p>
@@ -342,37 +364,29 @@ function ReadmePage() {
             Repositories, profiles, and the rest of the portfolio.
           </p>
 
-          <div className="grid gap-0">
-            {socials.map((social) => (
-              <a
-                key={social.label}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-between gap-4 border-b border-border/10 py-3 text-sm text-foreground/70 transition-colors duration-300 hover:text-foreground"
-              >
-                <span>{social.label}</span>
-                <span className="text-muted-foreground/70">↗</span>
-              </a>
-            ))}
+          <div className="grid grid-cols-4 w-full max-w-sm gap-2 items-center">
+            {socials.map((social) => {
+              const Icon = iconMap[social.label]
+              return (
+                <LinkPreview
+                  key={social.label}
+                  url={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex text-foreground transition-colors duration-300 hover:text-primary items-center justify-center gap-2 py-3"
+                >
+                  <Icon className="h-5 w-5 text-muted-foreground/70" />
+                </LinkPreview>
+              )
+            })}
           </div>
-        </div>
-
-        <div className="overflow-hidden rounded-3xl">
-          <ReadmeImage
-            src="https://raw.githubusercontent.com/Mic-360/Mic-360/main/space-shooter.gif"
-            alt="Space Shooter"
-            width={640}
-            height={360}
-            className="h-auto w-full object-cover"
-          />
         </div>
       </motion.section>
 
-      <motion.footer variants={item} className="pt-6">
+      <motion.footer variants={item}>
         <Link
           to="/"
-          className="inline-flex items-center gap-2 rounded-full bg-foreground/5 px-5 py-2.5 text-sm text-muted-foreground/60 transition-all duration-300 hover:bg-foreground/8 hover:text-foreground"
+          className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm text-muted-foreground/60 transition-all duration-300 hover:text-foreground"
         >
           ← Home
         </Link>
