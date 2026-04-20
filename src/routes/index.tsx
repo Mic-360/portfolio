@@ -1166,29 +1166,29 @@ function App() {
                   </a>
                 ) : null}
 
-                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                <div className="columns-1 sm:columns-2 md:columns-3 gap-5 w-full">
                   {featuredPins.slice(1).map((pin: PinterestCreatedPin) => (
                     <a
                       key={pin.id}
                       href={pin.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group block"
+                      className="group break-inside-avoid block w-full mb-5"
                     >
-                      <div className="project-card-apple overflow-hidden rounded-xl border border-border/10 bg-card/40">
-                        <div className="media-hover-parent relative aspect-square">
+                      <div className="project-card-apple flex flex-col w-full overflow-hidden rounded-[1.8rem] border border-white/5 bg-background/40 backdrop-blur-2xl shadow-xl transition-all duration-[0.8s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:shadow-[0_24px_48px_rgba(0,0,0,0.15)] group-hover:-translate-y-1.5 isolate">
+                        <div className="media-hover-parent relative w-full h-auto bg-foreground/5">
                           <img
                             src={pin.imageUrl}
-                            alt=""
+                            alt={pin.title || ''}
                             loading="lazy"
                             width={pin.imageWidth}
                             height={pin.imageHeight}
-                            className="media-hover-image absolute inset-0 h-full w-full object-cover"
+                            className="media-hover-image w-full h-auto object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
                           />
-                          <div className="absolute inset-0 bg-linear-to-t from-card/50 via-transparent to-transparent" />
+                          <div className="absolute inset-0 bg-linear-to-t from-background/80 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                         </div>
-                        <div className="p-2.5">
-                          <p className="line-clamp-1 text-[11px] font-medium text-foreground/70 transition-colors duration-300 group-hover:text-primary">
+                        <div className="p-4 bg-background/60 border-t border-border/5">
+                          <p className="line-clamp-2 text-[11px] font-medium leading-tight text-foreground/80 transition-colors duration-300 group-hover:text-primary">
                             {pin.title}
                           </p>
                         </div>
