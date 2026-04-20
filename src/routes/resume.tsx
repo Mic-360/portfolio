@@ -1,7 +1,8 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
-import { motion } from 'motion/react'
+import { CometCard } from '@/components/ui/comet-card'
 import { siteInfo, siteMeta } from '@/config/site-data'
 import { getResume } from '@/lib/content'
+import { Link, createFileRoute } from '@tanstack/react-router'
+import { motion } from 'motion/react'
 
 export const Route = createFileRoute('/resume')({
   loader: async () => ({
@@ -110,67 +111,68 @@ function ResumePage() {
         dangerouslySetInnerHTML={{ __html: resume.html }}
       />
 
-      <motion.section
-        variants={item}
-        className="flex flex-col gap-8 text-center rounded-3xl bg-primary/3 p-10 sm:p-14 relative overflow-hidden mx-4 sm:mx-6"
-      >
-        <div className="absolute inset-0 bg-linear-to-br from-primary/4 via-transparent to-transparent pointer-events-none" />
-        <div className="relative z-10 flex flex-col gap-5">
-          <motion.h2
-            variants={item}
-            className="font-serif text-3xl tracking-tight sm:text-4xl"
-          >
-            Let's Connect
-          </motion.h2>
-          <motion.p
-            variants={item}
-            className="text-base text-foreground/70 max-w-2xl mx-auto leading-8"
-          >
-            I'm always open to discussing new projects, creative ideas, or
-            opportunities to be part of your visions.
-          </motion.p>
-          <motion.div
-            variants={item}
-            className="flex flex-wrap justify-center gap-4 mt-4"
-          >
-            <button
-              data-cal-namespace="connect"
-              data-cal-link={siteInfo.calLink}
-              data-cal-config='{"layout":"week_view","useSlotsViewOnSmallScreen":"true"}'
-              className="group inline-flex items-center gap-2 rounded-full bg-foreground px-7 py-3 text-sm font-medium text-background transition-all duration-300 hover:bg-primary cursor-pointer"
-            >
-              Get in Touch
-              <span className="transform group-hover:translate-x-0.5 transition-transform duration-300">
-                →
-              </span>
-            </button>
-            <a
-              href="/Resume-web.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 rounded-full border border-border/30 px-7 py-3 text-sm font-medium text-foreground transition-all duration-300 hover:border-primary/50 hover:text-primary"
-            >
-              Download PDF
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="w-3.5 h-3.5"
+      <motion.div variants={item} className="mx-4 sm:mx-6">
+        <CometCard rotateDepth={10} translateDepth={12}>
+          <section className="relative flex flex-col gap-8 overflow-hidden rounded-3xl bg-primary/3 p-10 text-center sm:p-14">
+            <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-primary/4 via-transparent to-transparent" />
+            <div className="relative z-10 flex flex-col gap-5">
+              <motion.h2
+                variants={item}
+                className="font-serif text-3xl tracking-tight sm:text-4xl"
               >
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                <polyline points="15 3 21 3 21 9" />
-                <line x1="10" y1="14" x2="21" y2="3" />
-              </svg>
-            </a>
-          </motion.div>
-        </div>
-      </motion.section>
+                Let's Connect
+              </motion.h2>
+              <motion.p
+                variants={item}
+                className="mx-auto max-w-2xl text-base leading-8 text-foreground/70"
+              >
+                I'm always open to discussing new projects, creative ideas, or
+                opportunities to be part of your visions.
+              </motion.p>
+              <motion.div
+                variants={item}
+                className="mt-4 flex flex-wrap justify-center gap-4"
+              >
+                <button
+                  data-cal-namespace="connect"
+                  data-cal-link={siteInfo.calLink}
+                  data-cal-config='{"layout":"week_view","useSlotsViewOnSmallScreen":"true"}'
+                  className="group inline-flex cursor-pointer items-center gap-2 rounded-full bg-foreground px-7 py-3 text-sm font-medium text-background transition-all duration-300 hover:bg-primary"
+                >
+                  Get in Touch
+                  <span className="transform transition-transform duration-300 group-hover:translate-x-0.5">
+                    →
+                  </span>
+                </button>
+                <a
+                  href="/Resume-web.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-2 rounded-full border border-border/30 px-7 py-3 text-sm font-medium text-foreground transition-all duration-300 hover:border-primary/50 hover:text-primary"
+                >
+                  Download PDF
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-3.5 w-3.5"
+                  >
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                    <polyline points="15 3 21 3 21 9" />
+                    <line x1="10" y1="14" x2="21" y2="3" />
+                  </svg>
+                </a>
+              </motion.div>
+            </div>
+          </section>
+        </CometCard>
+      </motion.div>
 
       <motion.footer variants={item}>
         <Link
