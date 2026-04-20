@@ -142,6 +142,28 @@ export default {
         },
       })
     }
+
+    if (pathname === '/.well-known/oauth-protected-resource') {
+      const base = 'https://bhaumicsingh.dev'
+      const metadata = {
+        resource: base,
+        authorization_servers: [base],
+        scopes_supported: ['read', 'write'],
+        bearer_methods_supported: ['header'],
+      }
+      return new Response(JSON.stringify(metadata), {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control':
+            'public, max-age=86400, s-maxage=86400, stale-while-revalidate=86400',
+          'Strict-Transport-Security':
+            'max-age=31536000; includeSubDomains; preload',
+          'Access-Control-Allow-Origin': '*',
+        },
+      })
+    }
+
     const acceptsMarkdown = wantsMarkdown(req)
 
     const response = await handler.fetch(req)
