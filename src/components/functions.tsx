@@ -172,7 +172,7 @@ function InteractiveChart({
   const [hoverIndex, setHoverIndex] = useState<number | null>(null)
   const svgRef = useRef<SVGSVGElement>(null)
 
-  const width = 300 // internal viewBox width
+  const width = 300
   if (data.length === 0)
     return (
       <div
@@ -229,7 +229,6 @@ function InteractiveChart({
   if (type === 'bar') {
     const barWidth = Math.max(2, (width / points.length) * 0.7)
     renderChart = points.map((p, i) => {
-      // Calculate origin (usually 0 if minimum is 0, otherwise floor)
       const baseMin = Math.min(0, min)
       const rawY = height - ((p.val - baseMin) / (max - baseMin || 1)) * height
       const h = Math.max(1, height - rawY)
@@ -238,7 +237,7 @@ function InteractiveChart({
           key={i}
           initial={{ height: 0, y: height }}
           animate={{ height: h, y: rawY }}
-          transition={{ duration: 0.5, delay: i * 0.015, ease: 'easeOut' }}
+          transition={{ duration: 0.8, delay: i * 0.012, ease: [0.16, 1, 0.3, 1] }}
           x={p.x - barWidth / 2}
           width={barWidth}
           fill={color}
@@ -257,7 +256,7 @@ function InteractiveChart({
           scale: hoverIndex === i ? 1.5 : 1,
           opacity: hoverIndex === null ? 0.5 : hoverIndex === i ? 1 : 0.2,
         }}
-        transition={{ duration: 0.3, delay: i * 0.01 }}
+        transition={{ duration: 0.4, delay: i * 0.01, ease: [0.16, 1, 0.3, 1] }}
         cx={p.x}
         cy={p.y}
         r={2.5}
@@ -275,14 +274,14 @@ function InteractiveChart({
         <motion.path
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.12 }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
           d={areaPath}
           fill={color}
         />
         <motion.path
           initial={{ pathLength: 0 }}
           animate={{ pathLength: 1 }}
-          transition={{ duration: 1, ease: 'easeOut' }}
+          transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
           d={linePath}
           fill="none"
           stroke={color}
@@ -298,7 +297,7 @@ function InteractiveChart({
       <motion.path
         initial={{ pathLength: 0 }}
         animate={{ pathLength: 1 }}
-        transition={{ duration: 1, ease: 'easeOut' }}
+        transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
         d={linePath}
         fill="none"
         stroke={color}
@@ -348,19 +347,20 @@ function InteractiveChart({
       </svg>
       {activePoint && (
         <motion.div
-          initial={{ opacity: 0, y: 5 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0 }}
+          initial={{ opacity: 0, scale: 0.9, y: 5 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.9, y: 2 }}
+          transition={{ duration: 0.2, ease: 'easeOut' }}
           style={{
             left: `${activePointOffset}%`,
-            transform: 'translate(-50%, calc(-100% - 0.5rem))',
+            transform: 'translate(-50%, calc(-100% - 0.75rem))',
           }}
-          className="pointer-events-none absolute top-0 z-10 max-w-[min(15rem,calc(100%-0.5rem))] rounded-md border border-border/40 bg-background/90 px-2.5 py-1 text-[10px] leading-4 tabular-nums text-foreground shadow-xs backdrop-blur-md"
+          className="pointer-events-none absolute top-0 z-10 min-w-max rounded-xl border border-white/10 bg-background/60 px-3 py-1.5 text-[11px] leading-tight tabular-nums text-foreground shadow-[0_4px_24px_rgba(0,0,0,0.12)] backdrop-blur-2xl"
         >
           <span className="block font-semibold text-primary">
             {formatValue(activePoint.val)}
           </span>
-          <span className="block text-muted-foreground opacity-80">
+          <span className="block text-muted-foreground/70 mt-0.5 font-medium">
             {new Date(activePoint.timestamp).toLocaleDateString('en-US', {
               month: 'short',
               day: 'numeric',
