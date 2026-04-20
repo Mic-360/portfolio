@@ -95,21 +95,24 @@ function RoleCard({
           className={`relative mt-2 flex items-start gap-4 ${isRight ? 'flex-row-reverse' : ''}`}
         >
           {role.icon && (
-            <div className="relative shrink-0 overflow-hidden rounded-[14px] bg-white ring-1 ring-black/5 dark:ring-white/10">
-              <img
-                src={role.icon}
-                alt={role.company}
-                loading="lazy"
-                className="h-10 w-10 object-contain p-1 mix-blend-luminosity opacity-80 transition-all duration-500 group-hover/role:mix-blend-normal group-hover/role:opacity-100"
-              />
-            </div>
+            <img
+              src={role.icon}
+              alt={role.company}
+              loading="lazy"
+              className="h-10 w-10 object-cover p-1 mix-blend-luminosity opacity-80 transition-all duration-500 group-hover/role:mix-blend-normal group-hover/role:opacity-100 rounded-full"
+            />
           )}
           <div
             className={`flex flex-col min-w-0 ${isRight ? 'items-end' : ''}`}
           >
-            <span className="font-serif text-lg tracking-tight text-foreground transition-colors duration-300 group-hover/role:text-primary truncate font-semibold">
+            <a
+              href={role.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-serif text-lg tracking-tight text-foreground transition-colors duration-300 group-hover/role:text-primary truncate font-semibold"
+            >
               {role.company}
-            </span>
+            </a>
             <span className="text-xs text-foreground/60 font-medium">
               {role.role}
             </span>
