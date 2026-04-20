@@ -673,7 +673,7 @@ function App() {
                 </span>
 
                 <h2
-                  className="max-w-3xl text-balance font-serif text-4xl leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl"
+                  className="max-w-3xl text-balance text-4xl leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl"
                   style={{ textShadow: '0 6px 24px rgb(0 0 0 / 0.38)' }}
                 >
                   Building tools at{' '}
@@ -681,7 +681,7 @@ function App() {
                     href={siteInfo.currentCompanyUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group/current relative inline-flex flex-wrap items-center justify-center gap-2 text-primary transition-colors duration-500 hover:text-primary/80"
+                    className="group/current relative font-serif inline-flex flex-wrap items-center justify-center gap-2 text-primary transition-colors duration-500 hover:text-primary/80"
                     whileHover={{ scale: 1.02 }}
                     transition={{
                       type: 'spring',
