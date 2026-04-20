@@ -512,6 +512,144 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
+  useEffect(() => {
+    if (
+      typeof window === 'undefined' ||
+      !('modelContext' in navigator) ||
+      navigator.userAgent.includes('Nitro')
+    )
+      return
+
+    const controller = new AbortController()
+    const ctx = (navigator as any).modelContext
+
+    ctx.registerTool(
+      {
+        name: 'get-site-context',
+        title: 'Get Site Context',
+        description:
+          'Retrieve structured information about this portfolio site including identity, expertise, blog index, project index, and certificates',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            detail: {
+              type: 'string',
+              enum: ['short', 'full'],
+              description:
+                'Level of detail: "short" for summary, "full" for comprehensive context',
+            },
+          },
+        },
+        annotations: { readOnlyHint: true },
+        execute: async (input: any) => {
+          const endpoint =
+            input?.detail === 'short' ? '/llms.txt' : '/llms-full.txt'
+          const res = await fetch(endpoint)
+          return { content: await res.text() }
+        },
+      },
+      { signal: controller.signal },
+    )
+
+    ctx.registerTool(
+      {
+        name: 'search-blog',
+        title: 'Search Blog Posts',
+        description:
+          'Search and retrieve blog posts from this site via the RSS feed',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            query: {
+              type: 'string',
+              description: 'Search term to filter blog posts by title',
+            },
+          },
+        },
+        annotations: { readOnlyHint: true },
+        execute: async (input: any) => {
+          const res = await fetch('/rss')
+          const xml = await res.text()
+          const parser = new DOMParser()
+          const doc = parser.parseFromString(xml, 'application/xml')
+          const items = Array.from(doc.querySelectorAll('item'))
+          const posts = items.map((item) => ({
+            title: item.querySelector('title')?.textContent || '',
+            link: item.querySelector('link')?.textContent || '',
+            description:
+              item.querySelector('description')?.textContent || '',
+            pubDate: item.querySelector('pubDate')?.textContent || '',
+          }))
+          if (input?.query) {
+            const q = input.query.toLowerCase()
+            return {
+              posts: posts.filter(
+                (p) =>
+                  p.title.toLowerCase().includes(q) ||
+                  p.description.toLowerCase().includes(q),
+              ),
+            }
+          }
+          return { posts }
+        },
+      },
+      { signal: controller.signal },
+    )
+
+    ctx.registerTool(
+      {
+        name: 'get-health-data',
+        title: 'Get Health Data',
+        description:
+          'Retrieve real-time health and fitness metrics including steps, heart rate, sleep, and SpO2',
+        inputSchema: {
+          type: 'object',
+          properties: {},
+        },
+        annotations: { readOnlyHint: true },
+        execute: async () => {
+          const res = await fetch('/api/health')
+          return await res.json()
+        },
+      },
+      { signal: controller.signal },
+    )
+
+    ctx.registerTool(
+      {
+        name: 'get-page-markdown',
+        title: 'Get Page as Markdown',
+        description:
+          'Fetch any page on this site as clean markdown with navigation and scripts stripped',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            path: {
+              type: 'string',
+              description:
+                'URL path to fetch, e.g. "/blog/my-post" or "/about"',
+            },
+          },
+          required: ['path'],
+        },
+        annotations: { readOnlyHint: true },
+        execute: async (input: any) => {
+          const res = await fetch(input.path, {
+            headers: { Accept: 'text/markdown' },
+          })
+          const tokens = res.headers.get('x-markdown-tokens')
+          return {
+            content: await res.text(),
+            tokens: tokens ? parseInt(tokens, 10) : null,
+          }
+        },
+      },
+      { signal: controller.signal },
+    )
+
+    return () => controller.abort()
+  }, [])
+
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning>
       <head>
