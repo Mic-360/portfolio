@@ -41,6 +41,7 @@ import {
   siteInfo,
   siteMeta,
 } from '@/config/site-data'
+import { LazyHeroVideo } from '@/components/LazyHeroVideo'
 
 declare global {
   interface Window {
@@ -527,7 +528,7 @@ function App() {
           </span>
         </div>
 
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 z-0 overflow-hidden">
           <LazyHeroVideo src="/horizon.mp4" />
           <div className="hero-grid-overlay absolute inset-y-[8%] right-[3%] w-[82%]" />
           <div className="hero-seamless-edge absolute inset-0" />
