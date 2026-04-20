@@ -7,6 +7,53 @@ import LayersIcon from '@/components/ui/layers-icon'
 import PenIcon from '@/components/ui/pen-icon'
 import PreviousIcon from '@/components/ui/previous-icon'
 
+const APPLE_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1]
+
+function SectionHairline() {
+  return (
+    <div className="relative h-px flex-1 overflow-visible">
+      {/* Base track */}
+      <div className="absolute inset-x-0 bottom-1/2 h-px bg-border/20" />
+      {/* Animated line */}
+      <motion.svg
+        viewBox="0 0 600 1"
+        preserveAspectRatio="none"
+        className="absolute inset-0 h-px w-full overflow-visible mix-blend-plus-lighter dark:mix-blend-screen"
+        aria-hidden="true"
+      >
+        <defs>
+          <linearGradient id="hairline-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="var(--primary)" stopOpacity="0.05" />
+            <stop offset="20%" stopColor="var(--primary)" stopOpacity="0.6" />
+            <stop offset="80%" stopColor="var(--primary)" stopOpacity="0.6" />
+            <stop offset="100%" stopColor="var(--primary)" stopOpacity="0.05" />
+          </linearGradient>
+        </defs>
+        <motion.line
+          x1="0"
+          y1="0.5"
+          x2="600"
+          y2="0.5"
+          stroke="url(#hairline-grad)"
+          strokeWidth="1"
+          initial={{ pathLength: 0, opacity: 0 }}
+          whileInView={{ pathLength: 1, opacity: 1 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 1.8, ease: APPLE_EASE, delay: 0.1 }}
+        />
+      </motion.svg>
+      {/* Moving flare */}
+      <motion.div
+        className="absolute bottom-1/2 left-0 h-[2px] w-24 -translate-y-1/2 bg-primary blur-[2px]"
+        initial={{ left: '-10%', opacity: 0 }}
+        whileInView={{ left: '110%', opacity: [0, 1, 1, 0] }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 2.2, ease: APPLE_EASE, delay: 0.2 }}
+      />
+    </div>
+  )
+}
+
 function Section({
   title,
   children,
@@ -72,25 +119,37 @@ function Section({
         {title}
       </>
     ) : title === 'contact' ? (
-      <p className='hidden'>
-        {title}
-      </p>
+      <p className="hidden">{title}</p>
     ) : (
       title
     )
 
+  const isContact = title === 'contact'
+
   return (
     <motion.section
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-80px' }}
-      transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-      className="flex flex-col gap-8"
+      initial={{ opacity: 0, y: 32, filter: 'blur(8px)' }}
+      whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 1.1, ease: APPLE_EASE }}
+      className="flex flex-col gap-10"
     >
-      {title ? (
-        <h2 className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/60">
-          {titleContent}
-        </h2>
+      {title && !isContact ? (
+        <div className="flex items-center gap-4">
+          <h2 className="shrink-0 text-[10px] font-medium uppercase tracking-[0.32em] text-muted-foreground/70">
+            {titleContent}
+          </h2>
+          <SectionHairline />
+          <motion.span
+            initial={{ opacity: 0, x: -8 }}
+            whileInView={{ opacity: 0.4, x: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.7, ease: APPLE_EASE, delay: 1.2 }}
+            className="shrink-0 font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/50 tabular-nums"
+          >
+            §
+          </motion.span>
+        </div>
       ) : null}
       {children}
     </motion.section>
