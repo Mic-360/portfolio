@@ -591,36 +591,31 @@ function App() {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 40, rotate: 6 }}
-              whileInView={{ opacity: 1, y: 0, rotate: 4 }}
+              initial={{ opacity: 0, y: 40, rotate: 4 }}
+              whileInView={{ opacity: 1, y: 0, rotate: 2 }}
               viewport={{ once: true, margin: '-40px' }}
-              transition={{
-                delay: 0.4,
-                duration: 0.8,
-                ease: [0.25, 0.1, 0.25, 1],
-              }}
+              transition={{ delay: 0.4, duration: 1, ease: APPLE_EASE }}
               whileHover={{
-                y: -8,
                 rotate: 0,
-                scale: 1.03,
+                scale: 1.02,
                 transition: { type: 'spring', stiffness: 300, damping: 20 },
               }}
               className="hidden md:block absolute left-[4%] bottom-[2%] sm:left-[8%] sm:bottom-[4%] lg:left-[10%] lg:bottom-[3%] z-10 w-40 sm:w-45 lg:w-50"
             >
-              <div className="group relative overflow-hidden rounded-3xl border border-border/20 bg-card/70 shadow-lg backdrop-blur-xl">
+              <div className="group relative overflow-hidden rounded-3xl border border-white/10 bg-background/40 shadow-2xl backdrop-blur-3xl">
                 <div className="aspect-3/2 overflow-hidden rounded-t-3xl flex items-center justify-center bg-primary/5">
                   <img
                     src="/frieren/party.svg"
                     alt="Capabilities"
-                    className="h-3/4 w-3/4 object-contain transition-transform duration-700 group-hover:scale-110"
+                    className="h-3/4 w-3/4 object-contain transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110"
                     loading="lazy"
                   />
                 </div>
-                <div className="p-4">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-primary/70 mb-1.5">
+                <div className="p-5">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary/80 mb-2 drop-shadow-sm">
                     Capabilities
                   </p>
-                  <p className="text-xs leading-5 text-foreground/70">
+                  <p className="text-xs leading-relaxed text-foreground/80 font-medium">
                     i can build{' '}
                     <span className="font-semibold text-primary">
                       literally anything.
