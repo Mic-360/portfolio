@@ -3,6 +3,7 @@ import { ImageIcon } from 'lucide-react'
 import { motion } from 'motion/react'
 
 import type { PinterestCreatedPin } from '@/lib/pinterest'
+import { LinkPreview } from '@/components/ui/link-preview'
 import { pinterest, siteMeta } from '@/config/site-data'
 import { getPinterestCreatedPins } from '@/lib/pinterest'
 
@@ -189,7 +190,7 @@ function PinterestGalleryPage() {
                 >
                   <img
                     src={pin.imageUrl}
-                    alt=""
+                    alt={pin.title}
                     loading="lazy"
                     width={pin.imageWidth}
                     height={pin.imageHeight}
@@ -225,14 +226,14 @@ function PinterestGalleryPage() {
           <p className="text-sm text-foreground/70">
             Couldn&apos;t load created pins right now. You can still check them
             on{' '}
-            <a
-              href={pinterest.createdUrl}
+            <LinkPreview
+              url={pinterest.createdUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary underline underline-offset-4 transition-colors hover:text-primary/80"
             >
               Pinterest
-            </a>
+            </LinkPreview>
             .
           </p>
         </motion.div>
@@ -248,14 +249,14 @@ function PinterestGalleryPage() {
           highlights.
         </p>
         <div className="flex items-center gap-4">
-          <a
-            href={profileUrl}
+          <LinkPreview
+            url={profileUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
           >
             {profileUrl.replace('https://', '')}
-          </a>
+          </LinkPreview>
           <Link
             to="/pinterest"
             className="inline-flex items-center gap-2 text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"

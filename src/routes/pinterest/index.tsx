@@ -3,6 +3,7 @@ import { ImageIcon } from 'lucide-react'
 import { motion } from 'motion/react'
 
 import type { PinterestCreatedPin } from '@/lib/pinterest'
+import { LinkPreview } from '@/components/ui/link-preview'
 import { siteMeta } from '@/config/site-data'
 import { getPinterestCreatedPins } from '@/lib/pinterest'
 
@@ -288,14 +289,14 @@ function PinterestIndexPage() {
           </p>
         </div>
         <div className="flex items-center gap-4">
-          <a
-            href={profileUrl}
+          <LinkPreview
+            url={profileUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
           >
             {profileUrl.replace('https://', '')}
-          </a>
+          </LinkPreview>
           <Link
             to="/"
             className="inline-flex items-center gap-2 text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
@@ -363,13 +364,13 @@ function ActionCard({ body, href, meta, title, to }: ActionCardProps) {
   }
 
   return (
-    <a
-      href={href}
+    <LinkPreview
+      url={href}
       target="_blank"
       rel="noopener noreferrer"
       className="group block h-full"
     >
       {content}
-    </a>
+    </LinkPreview>
   )
 }
