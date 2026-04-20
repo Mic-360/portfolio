@@ -193,6 +193,57 @@ export default {
       })
     }
 
+    if (pathname === '/.well-known/agent-card.json') {
+      const base = 'https://bhaumicsingh.dev'
+      const card = {
+        name: 'bhaumicsingh-portfolio',
+        version: '1.0.0',
+        description:
+          'Portfolio and blog by Bhaumic Singh — full stack software engineer. Provides blog posts, project case studies, certificates, health metrics, and games data.',
+        supportedInterfaces: [
+          {
+            url: `${base}/api`,
+            protocol: 'https',
+          },
+        ],
+        capabilities: {
+          streaming: false,
+          pushNotifications: false,
+        },
+        skills: [
+          {
+            id: 'content-retrieval',
+            name: 'Content Retrieval',
+            description:
+              'Retrieve blog posts, project details, certificates, and profile information',
+          },
+          {
+            id: 'health-data',
+            name: 'Health Data',
+            description:
+              'Access real-time health and fitness metrics including steps, heart rate, and sleep data',
+          },
+          {
+            id: 'games-data',
+            name: 'Games Data',
+            description:
+              'Retrieve gaming library and activity data',
+          },
+        ],
+      }
+      return new Response(JSON.stringify(card), {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control':
+            'public, max-age=86400, s-maxage=86400, stale-while-revalidate=86400',
+          'Strict-Transport-Security':
+            'max-age=31536000; includeSubDomains; preload',
+          'Access-Control-Allow-Origin': '*',
+        },
+      })
+    }
+
     const acceptsMarkdown = wantsMarkdown(req)
 
     const response = await handler.fetch(req)
