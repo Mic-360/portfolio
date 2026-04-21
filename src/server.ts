@@ -2,8 +2,8 @@ import handler from '@tanstack/react-start/server-entry'
 import {
   convertHtmlToMarkdown,
   wantsMarkdown,
-} from './lib/markdown-negotiation.server'
-import { handleWebBotAuthDirectory } from './lib/web-bot-auth.server'
+} from '@/server/markdown-negotiation.server'
+import { handleWebBotAuthDirectory } from '@/server/web-bot-auth.server'
 
 function appendVary(headers: Headers, value: string) {
   const existing = headers.get('Vary')

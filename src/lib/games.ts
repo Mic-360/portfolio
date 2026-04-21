@@ -4,7 +4,7 @@
 
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
-import { getGamesDataInternal, updateGamesDataInternal } from './games.server'
+import { getGamesDataInternal, updateGamesDataInternal } from '@/server/games.server'
 
 export const gameSchema = z.object({
   id: z.string(),

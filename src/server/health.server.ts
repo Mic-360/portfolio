@@ -5,7 +5,7 @@ import { join } from 'node:path'
 import { z } from 'zod'
 
 const HEALTH_SOURCES: Record<string, string> = import.meta.glob(
-  '../content/health.json',
+  '@/content/health.json',
   {
     eager: true,
     query: '?raw',

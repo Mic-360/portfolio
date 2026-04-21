@@ -4,7 +4,7 @@
 
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
-import { getCertificateBySlugInternal, getCertificateIndexInternal, updateCertificatesDataInternal } from './certificates.server'
+import { getCertificateBySlugInternal, getCertificateIndexInternal, updateCertificatesDataInternal } from '@/server/certificates.server'
 
 export const certificateSchema = z.object({
   id: z.number(),

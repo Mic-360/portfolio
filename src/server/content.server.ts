@@ -79,7 +79,7 @@ export type ProjectPost = ProjectMeta & {
 }
 
 const BLOG_POST_SOURCES: Record<string, string> = import.meta.glob(
-  '../content/blog/*.mdx',
+  '@/content/blog/*.mdx',
   {
     eager: true,
     query: '?raw',
@@ -88,7 +88,7 @@ const BLOG_POST_SOURCES: Record<string, string> = import.meta.glob(
 )
 
 const PROJECT_POST_SOURCES: Record<string, string> = import.meta.glob(
-  '../content/projects/*.mdx',
+  '@/content/projects/*.mdx',
   {
     eager: true,
     query: '?raw',
@@ -97,7 +97,7 @@ const PROJECT_POST_SOURCES: Record<string, string> = import.meta.glob(
 )
 
 const RESUME_SOURCES: Record<string, string> = import.meta.glob(
-  '../content/resume.tex',
+  '@/content/resume.tex',
   {
     eager: true,
     query: '?raw',
@@ -431,7 +431,7 @@ export async function getResumeInternal() {
   }
 
   try {
-    const { parseLatexResume } = await import('./latex-parser')
+    const { parseLatexResume } = await import('@/lib/latex-parser')
     const resume = parseLatexResume(latexSource)
 
     return {

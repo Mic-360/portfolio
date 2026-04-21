@@ -1,6 +1,6 @@
+import { createFileRoute } from '@tanstack/react-router'
 import { requirePostApiKey } from '@/lib/api-auth'
 import { getGamesData, updateGamesData } from '@/lib/games'
-import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/api/games')({
   server: {

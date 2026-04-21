@@ -6,14 +6,13 @@ import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
 
 export type {
-  GravatarProfile,
-  VerifiedAccount,
-  GalleryImage,
+  GalleryImage, GravatarProfile,
+  VerifiedAccount
 } from '@/types/gravatar'
 
 export const getGravatarProfile = createServerFn({ method: 'GET' })
   .inputValidator(z.string().min(1))
   .handler(async ({ data: identifier }) => {
-    const { fetchGravatarProfileInternal } = await import('./gravatar.server')
+    const { fetchGravatarProfileInternal } = await import('@/server/gravatar.server')
     return fetchGravatarProfileInternal(identifier)
   })

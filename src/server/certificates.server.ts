@@ -4,11 +4,11 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { z } from 'zod'
-import { certificateSchema } from './certificates'
-import type { CertificateMeta, CertificateUpdateInput } from './certificates';
+import type { CertificateMeta, CertificateUpdateInput } from '@/lib/certificates';
+import { certificateSchema } from '@/lib/certificates'
 
 const CERTIFICATE_SOURCES: Record<string, string> = import.meta.glob(
-  '../content/certificate.json',
+  '@/content/certificate.json',
   {
     eager: true,
     query: '?raw',

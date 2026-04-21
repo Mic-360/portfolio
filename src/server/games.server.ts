@@ -4,8 +4,8 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { z } from 'zod'
-import {  gameSchema } from './games'
-import type {GameMeta} from './games';
+import type { GameMeta } from '@/lib/games';
+import { gameSchema } from '@/lib/games'
 
 const GAMES_SOURCES: Record<string, string> = import.meta.glob(
   '../content/games.json',

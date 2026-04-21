@@ -11,7 +11,7 @@ import {
   getProjectBySlugInternal,
   getProjectIndexInternal,
   getResumeInternal,
-} from './content.server'
+} from '@/server/content.server'
 
 export type BlogMeta = {
   slug: string

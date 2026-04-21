@@ -4,7 +4,7 @@
 
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
-import { getHealthDataInternal, writeHealthDataInternal } from './health.server'
+import { getHealthDataInternal, writeHealthDataInternal } from '@/server/health.server'
 
 export const healthSampleSchema = z.object({
   value: z.union([z.number(), z.string()]),
