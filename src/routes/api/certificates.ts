@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { requirePostApiKey } from '@/lib/api-auth'
 import { getCertificateIndex, updateCertificatesData } from '@/lib/certificates'
 
 export const Route = createFileRoute('/api/certificates')({
@@ -26,9 +27,6 @@ export const Route = createFileRoute('/api/certificates')({
       },
       POST: async ({ request }) => {
         try {
-          const { requirePostApiKey } = await import(
-            '@/lib/api-auth.server'
-          )
           const authFailure = requirePostApiKey(request)
           if (authFailure) {
             return authFailure

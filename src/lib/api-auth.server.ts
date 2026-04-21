@@ -15,7 +15,7 @@ function hasMatchingApiKey(receivedKey: string, expectedKey: string) {
   return timingSafeEqual(receivedBuffer, expectedBuffer)
 }
 
-export function requirePostApiKey(request: Request) {
+export function requirePostApiKeyInternal(request: Request) {
   const expectedApiKey = env.POST_API_KEY
 
   if (!expectedApiKey) {
