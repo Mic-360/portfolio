@@ -5,7 +5,7 @@ runConfig:
   maxInstances: 10
   concurrency: 80
   cpu: 1
-  memoryMiB: 512
+  memoryMiB: 1024
   timeoutSeconds: 180
 
 # Environment variables and secrets.
@@ -17,6 +17,10 @@ env:
   #   availability:
   #     - BUILD
   #     - RUNTIME
+  - variable: NODE_OPTIONS
+    value: "--max_old_space_size=4096"
+    availability:
+      - BUILD
 
   # Grant access to secrets in Cloud Secret Manager.
   # See https://firebase.google.com/docs/app-hosting/configure#secret-parameters
