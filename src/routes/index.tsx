@@ -836,24 +836,23 @@ function App() {
                           <img
                             src={projectVisual}
                             alt={project.title}
-                            className="absolute inset-0 h-full w-full object-cover"
+                            className="absolute inset-0 h-full w-full object-center"
                             loading="lazy"
                           />
-                          <div className="absolute inset-0 bg-linear-to-t from-black/40 via-black/20 to-transparent" />
                           <div className="absolute inset-x-0 bottom-0 p-6">
-                            <p className="mb-2 text-[10px] uppercase tracking-[0.25em] text-white/50">
+                            <p className="mb-2 text-[10px] uppercase tracking-[0.25em] text-primary">
                               {project.categories.length > 0
                                 ? project.categories[0]
                                 : 'project'}
                             </p>
-                            <h3 className="font-serif text-xl leading-tight tracking-tight text-white sm:text-2xl">
+                            <h3 className="font-serif text-xl leading-tight tracking-tight sm:text-2xl">
                               {project.title}
                             </h3>
                           </div>
                         </div>
                       }
                       backContent={
-                        <div className="flex h-full flex-col justify-between p-6 sm:p-8 bg-foreground dark:bg-background">
+                        <div className="flex h-full flex-col justify-between p-6 sm:p-8">
                           <div className="flex flex-col gap-3">
                             <div className="flex items-center justify-between gap-4">
                               <p className="text-[10px] uppercase tracking-[0.25em] text-primary/60">
@@ -865,10 +864,10 @@ function App() {
                                 {formatDate(project.date)}
                               </p>
                             </div>
-                            <h3 className="font-serif text-xl leading-tight tracking-tight text-background dark:text-foreground sm:text-2xl">
+                          <h3 className="font-serif text-xl leading-tight tracking-tight text-foreground sm:text-2xl">
                               {project.title}
                             </h3>
-                            <p className="text-sm leading-7 text-background dark:text-foreground/70">
+                          <p className="text-sm leading-7 text-foreground/70">
                               {project.summary}
                             </p>
                             {project.stack.length > 0 ? (
@@ -1160,10 +1159,11 @@ function App() {
       <motion.div variants={item}>
         <Section title="contact">
           <div className="relative overflow-hidden pb-8">
-            <div className="pointer-events-none absolute inset-0 z-0">
+            <div className="pointer-events-none absolute inset-0 z-0 [mask-image:linear-gradient(to_bottom,white_20%,transparent_100%)]">
+              <div className="absolute inset-0 bg-primary/10 blur-[100px]" />
               <WorldMap
                 lineColor="hsl(var(--primary))"
-                className="absolute inset-0 h-full w-full opacity-40"
+                className="absolute inset-0 h-full w-full opacity-80 sm:opacity-100"
                 dots={[
                   {
                     start: { lat: 22.57, lng: 88.36 },

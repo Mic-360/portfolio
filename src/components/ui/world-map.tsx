@@ -27,10 +27,9 @@ export default function WorldMap({
 
   const svgMap = map.getSVG({
     radius: 0.22,
-    color: mode === 'normal' || mode === 'midnight' ? '#FFFFFF40' : '#00000040',
+    color: mode === 'normal' || mode === 'midnight' ? '#FFFFFF60' : '#00000060',
     shape: 'circle',
-    backgroundColor:
-      mode === 'normal' || mode === 'midnight' ? 'black' : 'white',
+    backgroundColor: 'transparent',
   })
 
   const projectPoint = (lat: number, lng: number) => {
@@ -94,10 +93,10 @@ export default function WorldMap({
 
         <defs>
           <linearGradient id="path-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="white" stopOpacity="0" />
+            <stop offset="0%" stopColor={lineColor} stopOpacity="0" />
             <stop offset="5%" stopColor={lineColor} stopOpacity="1" />
             <stop offset="95%" stopColor={lineColor} stopOpacity="1" />
-            <stop offset="100%" stopColor="white" stopOpacity="0" />
+            <stop offset="100%" stopColor={lineColor} stopOpacity="0" />
           </linearGradient>
         </defs>
 

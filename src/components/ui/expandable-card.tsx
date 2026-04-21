@@ -104,14 +104,14 @@ export function ExpandableCard({
               layoutId={`expandable-card-${item.id}-${id}`}
               onClick={() => setActiveId(item.id)}
               className={cn(
-                'group relative flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-4xl border border-white/10 bg-background/45 text-left shadow-2xl backdrop-blur-3xl transition-colors duration-500 hover:border-primary/25 hover:bg-background/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
+                'group relative flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-4xl border border-border/10 bg-background/45 text-left shadow-2xl backdrop-blur-3xl transition-colors duration-500 hover:border-primary/25 hover:bg-background/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
                 item.featured && 'sm:col-span-2 lg:col-span-2',
               )}
             >
               <motion.div
                 layoutId={`expandable-card-image-${item.id}-${id}`}
                 className={cn(
-                  'relative overflow-hidden border-b border-white/8',
+                  'relative overflow-hidden border-b border-border/10',
                   item.featured ? 'aspect-16/8 sm:aspect-16/7' : 'aspect-4/3',
                 )}
               >
@@ -122,7 +122,7 @@ export function ExpandableCard({
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-background via-background/15 to-transparent opacity-90" />
-                <div className="absolute inset-x-0 top-0 flex items-center justify-between gap-4 p-5 text-[10px] uppercase tracking-[0.24em] text-white/65 sm:p-6">
+                <div className="absolute inset-x-0 top-0 flex items-center justify-between gap-4 p-5 text-[10px] uppercase tracking-[0.24em] text-foreground/65 sm:p-6">
                   <span>{item.eyebrow}</span>
                   <span>{meta}</span>
                 </div>
@@ -130,7 +130,7 @@ export function ExpandableCard({
                   <motion.h3
                     layoutId={`expandable-card-title-${item.id}-${id}`}
                     className={cn(
-                      'max-w-3xl font-serif leading-[1.02] tracking-tight text-white transition-colors duration-300 group-hover:text-primary-foreground',
+                      'max-w-3xl font-serif leading-[1.02] tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary',
                       item.featured ? 'text-2xl sm:text-3xl' : 'text-xl',
                     )}
                   >
@@ -202,7 +202,7 @@ export function ExpandableCard({
                   <div className="flex h-full w-full items-center justify-center px-0 sm:px-4">
                     <motion.div
                       ref={dialogRef}
-                      className="relative flex w-full max-w-4xl flex-col overflow-hidden rounded-4xl border border-white/10 bg-background/92 shadow-[0_40px_120px_rgb(0_0_0_/0.4)] max-h-[70svh] md:max-h-[70vh]"
+                      className="relative flex w-full max-w-4xl flex-col overflow-hidden rounded-4xl border border-border/10 bg-background/92 shadow-[0_40px_120px_rgb(0_0_0_/0.4)] max-h-[70svh] md:max-h-[70vh]"
                     >
                       <div className="relative h-[24svh] min-h-44 shrink-0 overflow-hidden sm:h-[28vh]">
                         <img
@@ -214,22 +214,22 @@ export function ExpandableCard({
                         <button
                           type="button"
                           onClick={() => setActiveId(null)}
-                          className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-background/55 text-foreground backdrop-blur-md transition-colors hover:border-primary/40 hover:text-primary"
+                          className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full border border-border/15 bg-background/55 text-foreground backdrop-blur-md transition-colors hover:border-primary/40 hover:text-primary"
                           aria-label="Close expanded card"
                         >
                           <CloseIcon />
                         </button>
                         <div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 p-5 sm:gap-4 sm:p-8 lg:p-10">
-                          <div className="flex flex-wrap items-center gap-3 text-[10px] uppercase tracking-[0.24em] text-white/68">
+                          <div className="flex flex-wrap items-center gap-3 text-[10px] uppercase tracking-[0.24em] text-foreground/68">
                             <span>{activeItem.eyebrow}</span>
-                            <span className="h-px w-8 bg-white/20" />
+                            <span className="h-px w-8 bg-foreground/20" />
                             <span>
                               {formatMeta
                                 ? formatMeta(activeItem)
                                 : activeItem.date}
                             </span>
                           </div>
-                          <h3 className="max-w-4xl font-serif text-2xl leading-none tracking-tight text-white sm:text-4xl lg:text-5xl">
+                          <h3 className="max-w-4xl font-serif text-2xl leading-none tracking-tight text-foreground sm:text-4xl lg:text-5xl">
                             {activeItem.title}
                           </h3>
                         </div>

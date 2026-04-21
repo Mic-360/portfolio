@@ -29,20 +29,20 @@ export function FlippingCard({
     >
       <div
         className={cn(
-          'relative rounded-xl border border-neutral-200 bg-white shadow-lg transition-all duration-700 transform-3d group-hover/flipping-card:transform-[rotateY(180deg)] dark:border-neutral-800 dark:bg-neutral-950',
+          'relative rounded-xl shadow-lg transition-all duration-700 transform-3d group-hover/flipping-card:transform-[rotateY(180deg)] dark:border-neutral-800 dark:bg-neutral-950',
           'h-(--height) w-(--width)',
           className,
         )}
       >
         {/* Front Face */}
-        <div className="absolute inset-0 h-full w-full transform-[rotateY(0deg)] rounded-[inherit] backface-hidden transform-3d overflow-hidden bg-card-foreground">
-          <div className="h-full w-full transform-[translateZ(70px)_scale(.98)] rounded-[inherit]">
+        <div className="absolute inset-0 h-full w-full transform-[rotateY(0deg)] rounded-[inherit] backface-hidden transform-3d overflow-hidden">
+          <div className="h-full w-full transform-[translateZ(70px)_scale(.99)] rounded-[inherit]">
             {frontContent}
           </div>
         </div>
         {/* Back Face */}
-        <div className="absolute inset-0 h-full w-full transform-[rotateY(180deg)] rounded-[inherit] backface-hidden transform-3d overflow-hidden bg-card-foreground dark:bg-card-background">
-          <div className="h-full w-full transform-[translateZ(70px)_scale(.98)] rounded-[inherit]">
+        <div className="absolute inset-0 h-full w-full transform-[rotateY(180deg)] rounded-[inherit] backface-hidden transform-3d overflow-hidden">
+          <div className="h-full w-full transform-[translateZ(70px)_scale(.99)] rounded-[inherit]">
             {backContent}
           </div>
         </div>
