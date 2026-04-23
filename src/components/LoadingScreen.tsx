@@ -78,7 +78,7 @@ export function LoadingScreen() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, ease: EASE_OUT }}
-            className="flex w-full items-center justify-between text-[10px] uppercase tracking-[0.4em] text-primary-foreground/55"
+            className="flex w-full items-center justify-between text-[10px] uppercase tracking-[0.4em] text-primary dark:text-primary-foreground/55"
           >
             <span>est · 2001</span>
             <span className="hidden sm:block">prayagraj · in</span>
@@ -160,17 +160,17 @@ export function LoadingScreen() {
           </div>
 
           <div className="flex w-full max-w-md flex-col items-center gap-3">
-            <div className="flex items-baseline gap-2 font-mono text-sm tracking-widest text-primary-foreground">
+            <div className="flex items-baseline gap-2 font-mono text-sm tracking-widest text-primary dark:text-primary-foreground">
               <motion.span className="tabular-nums">{display}</motion.span>
-              <span className="text-primary-foreground/60">%</span>
+              <span className="text-primary/60 dark:text-primary-foreground/60">%</span>
             </div>
-            <div className="relative h-px w-full overflow-hidden bg-primary-foreground/25">
+            <div className="relative h-px w-full overflow-hidden bg-primary dark:bg-primary-foreground/25">
               <motion.div
-                className="absolute inset-y-0 left-0 bg-primary-foreground"
+                className="absolute inset-y-0 left-0 bg-primary dark:bg-primary-foreground"
                 style={{ width: widthPct }}
               />
             </div>
-            <div className="mt-1 flex w-full items-center justify-between text-[10px] uppercase tracking-[0.32em] text-primary-foreground/55">
+            <div className="mt-1 flex w-full items-center justify-between text-[10px] uppercase tracking-[0.32em] text-primary dark:text-primary-foreground/55">
               <span>loading assets</span>
               <span>full stack engineer</span>
             </div>
