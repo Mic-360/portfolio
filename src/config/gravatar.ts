@@ -30,7 +30,7 @@ export interface AvatarOptions {
 
 export const gravatarConfig = {
   /** Owner email used throughout the portfolio. */
-  email: 'bhaumiksingh2000@gmail.com',
+  email: 'connect@bhaumicsingh.dev',
 
   /** Profile slug (used as identifier when hash isn't needed). */
   slug: 'bhaumic',

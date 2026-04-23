@@ -113,7 +113,7 @@ async function fetchGravatarProfileWithRetry(
 
   const headers: Record<string, string> = {
     Accept: 'application/json',
-    'User-Agent': 'Bhaumic-Portfolio/1.0 (Contact: bhaumiksingh2000@gmail.com)',
+    'User-Agent': 'Bhaumic-Portfolio/1.0 (Contact: connect@bhaumicsingh.dev)',
   }
 
   // Attach API key if available (unlocks full profile data)
