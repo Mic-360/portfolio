@@ -379,7 +379,8 @@ body::-webkit-scrollbar-thumb {
 
 /* Firefox */
 * {
-  scrollbar-width: none; /* enable disable scrollbar */
+  scrollbar-width: none;
+  /* enable disable scrollbar */
   scrollbar-color: transparent transparent;
 }
 
@@ -579,23 +580,6 @@ body::after {
   --theme-transition-radius: 0px;
 }
 
-.theme-transition-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 70;
-  pointer-events: none;
-  will-change: clip-path, opacity, filter;
-  background:
-    radial-gradient(circle at var(--theme-transition-x) var(--theme-transition-y),
-      color-mix(in oklab, var(--primary) 38%, var(--background)) 0%,
-      color-mix(in oklab, var(--primary) 18%, transparent) 12%,
-      color-mix(in oklab, var(--background) 78%, transparent) 22%,
-      transparent 40%),
-    radial-gradient(circle at var(--theme-transition-x) var(--theme-transition-y),
-      color-mix(in oklab, var(--primary) 18%, transparent) 0%,
-      transparent 28%);
-}
-
 .hero-blend-media {
   mask-image: radial-gradient(circle at 62% 48%, rgb(0 0 0 / 1) 0%, rgb(0 0 0 / 0.96) 42%, rgb(0 0 0 / 0.48) 72%, transparent 100%);
   -webkit-mask-image: radial-gradient(circle at 62% 48%, rgb(0 0 0 / 1) 0%, rgb(0 0 0 / 0.96) 42%, rgb(0 0 0 / 0.48) 72%, transparent 100%);
@@ -734,26 +718,13 @@ body::after {
     @apply border-border outline-ring/50;
   }
 
-  /* Smooth theme transitions */
-  :root {
-    transition: --background 0.42s cubic-bezier(0.22, 1, 0.36, 1),
-      --foreground 0.42s cubic-bezier(0.22, 1, 0.36, 1),
-      --card 0.42s cubic-bezier(0.22, 1, 0.36, 1),
-      --primary 0.42s cubic-bezier(0.22, 1, 0.36, 1),
-      --border 0.42s cubic-bezier(0.22, 1, 0.36, 1),
-      --muted 0.42s cubic-bezier(0.22, 1, 0.36, 1),
-      --accent 0.42s cubic-bezier(0.22, 1, 0.36, 1),
-      --secondary 0.42s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
   body,
   main,
   .bg-card,
   .bg-background {
     transition: background-color 0.42s cubic-bezier(0.22, 1, 0.36, 1),
       color 0.42s cubic-bezier(0.22, 1, 0.36, 1),
-      border-color 0.42s cubic-bezier(0.22, 1, 0.36, 1),
-      box-shadow 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+      border-color 0.42s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   body {

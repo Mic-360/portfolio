@@ -1,31 +1,22 @@
+import { AnimatePresence, motion } from 'motion/react'
 import {
   createContext,
   useCallback,
   useContext,
   useEffect,
   useRef,
-  useState
+  useState,
 } from 'react'
-import { AnimatePresence, motion } from 'motion/react'
-import type {CSSProperties, ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react'
 
-export type ThemeMode =
-  | 'normal'
-  | 'sunny'
-  | 'midnight'
-  | 'frieren'
+export type ThemeMode = 'normal' | 'sunny' | 'midnight' | 'frieren'
 
 export interface ThemeTransitionOrigin {
   x: number
   y: number
 }
 
-const CYCLE_ORDER: Array<ThemeMode> = [
-  'normal',
-  'sunny',
-  'midnight',
-  'frieren',
-]
+const CYCLE_ORDER: Array<ThemeMode> = ['normal', 'sunny', 'midnight', 'frieren']
 
 interface ThemeContextType {
   mode: ThemeMode
@@ -165,16 +156,19 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         clearTransitionMetadata()
         setTransitionState(null)
         transitionTimeoutRef.current = null
-      }, 700)
+      }, 650)
     },
     [mode],
   )
 
-  const cycleTheme = useCallback((origin?: ThemeTransitionOrigin) => {
-    const idx = CYCLE_ORDER.indexOf(mode)
-    const next = CYCLE_ORDER[(idx + 1) % CYCLE_ORDER.length]
-    setMode(next, origin)
-  }, [mode, setMode])
+  const cycleTheme = useCallback(
+    (origin?: ThemeTransitionOrigin) => {
+      const idx = CYCLE_ORDER.indexOf(mode)
+      const next = CYCLE_ORDER[(idx + 1) % CYCLE_ORDER.length]
+      setMode(next, origin)
+    },
+    [mode, setMode],
+  )
 
   return (
     <ThemeContext.Provider value={{ mode, setMode, cycleTheme }}>
@@ -199,32 +193,34 @@ function ThemeTransitionOverlay({
   origin: ThemeTransitionOrigin
   radius: number
 }) {
-  const style = {
-    '--theme-transition-x': `${origin.x}px`,
-    '--theme-transition-y': `${origin.y}px`,
-  } as CSSProperties
-
-  const expandedRadius = Math.max(radius, 1)
+  const diameter = Math.max(radius, 1) * 2
+  const style: CSSProperties = {
+    position: 'fixed',
+    left: origin.x - radius,
+    top: origin.y - radius,
+    width: diameter,
+    height: diameter,
+    borderRadius: '50%',
+    pointerEvents: 'none',
+    zIndex: 70,
+    willChange: 'transform, opacity',
+    transform: 'translateZ(0)',
+    background: `radial-gradient(circle,
+      color-mix(in oklab, var(--primary) 32%, var(--background)) 0%,
+      color-mix(in oklab, var(--primary) 14%, transparent) 28%,
+      transparent 62%)`,
+  }
 
   return (
     <motion.div
       aria-hidden
-      className="theme-transition-overlay"
       style={style}
-      initial={{
-        opacity: 0,
-        clipPath: `circle(0px at ${origin.x}px ${origin.y}px)`,
-        filter: 'blur(0px) saturate(1)',
-      }}
-      animate={{
-        opacity: [0, 0.78, 0.2, 0],
-        clipPath: `circle(${expandedRadius}px at ${origin.x}px ${origin.y}px)`,
-        filter: ['blur(0px) saturate(1)', 'blur(0px) saturate(1)', 'blur(8px) saturate(0.96)', 'blur(20px) saturate(0.9)'],
-      }}
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: [0, 0.55, 0.32, 0], scale: 1 }}
       exit={{ opacity: 0 }}
       transition={{
-        duration: 0.7,
-        ease: [0.25, 0.1, 0.25, 1],
+        duration: 0.65,
+        ease: [0.22, 1, 0.36, 1],
       }}
     />
   )
