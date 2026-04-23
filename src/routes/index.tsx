@@ -1159,7 +1159,7 @@ function App() {
       <motion.div variants={item}>
         <Section title="contact">
           <div className="relative overflow-hidden pb-8">
-            <div className="pointer-events-none absolute inset-0 z-0 [mask-image:linear-gradient(to_bottom,white_20%,transparent_100%)]">
+            <div className="pointer-events-none absolute inset-0 z-0 mask-[linear-gradient(to_bottom,white_20%,transparent_100%)]">
               <div className="absolute inset-0 bg-primary/10 blur-[100px]" />
               <WorldMap
                 lineColor="hsl(var(--primary))"

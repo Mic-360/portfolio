@@ -14,6 +14,7 @@ import { CommandMenu } from '../components/CommandMenu'
 import { FloatingNavDock } from '../components/FloatingNavDock'
 import Footer from '../components/Footer'
 import { GoogleAnalyticsTracker } from '../components/GoogleAnalyticsTracker'
+import { LoadingScreen } from '../components/LoadingScreen'
 import { ThemeProvider } from '../components/ThemeProvider'
 import { BacklightFilterDefs } from '../components/ui/backlight'
 import { VideoBackground } from '../components/VideoBackground'
@@ -590,6 +591,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body className="bg-background text-foreground antialiased">
         <BacklightFilterDefs />
+        <LoadingScreen />
         <ThemeProvider>
           {gaMeasurementId ? (
             <GoogleAnalyticsTracker measurementId={gaMeasurementId} />
@@ -597,7 +599,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           <VideoBackground />
           <FeedbackHandler />
           <CommandMenu />
-          <main className="mx-auto w-full max-w-395 py-4 text-sm lowercase overflow-hidden [view-transition-name:main-content] ">{children}</main>
+          <main className="mx-auto w-full max-w-395 py-4 text-sm lowercase overflow-hidden [view-transition-name:main-content] ">
+            {children}
+          </main>
           <Footer />
           <FloatingNavDock />
           <DoomErrorBoundary onError={() => setShowDoom(false)}>
