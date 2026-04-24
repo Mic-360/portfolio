@@ -1,4 +1,3 @@
-import { getCalApi } from '@calcom/embed-react'
 import {
   HeadContent,
   Link,
@@ -10,11 +9,10 @@ import React, { Suspense, useCallback, useEffect, useState } from 'react'
 import { FeedbackHandler } from '../components/FeedbackHandler'
 import { useKonamiCode } from '../hooks/useKonamiCode'
 
-import { CommandMenu } from '../components/CommandMenu'
 import { FloatingNavDock } from '../components/FloatingNavDock'
 import Footer from '../components/Footer'
 import { GoogleAnalyticsTracker } from '../components/GoogleAnalyticsTracker'
-import { LoadingScreen } from '../components/LoadingScreen'
+import { LazyCommandMenu } from '../components/LazyCommandMenu'
 import { ThemeProvider } from '../components/ThemeProvider'
 import { BacklightFilterDefs } from '../components/ui/backlight'
 import { VideoBackground } from '../components/VideoBackground'
@@ -524,8 +522,12 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   }, [])
 
   useEffect(() => {
+    let initialized = false
     const initializeCal = async () => {
+      if (initialized) return
+      initialized = true
       try {
+        const { getCalApi } = await import('@calcom/embed-react')
         const cal = await getCalApi({ namespace: 'connect' })
         cal('ui', {
           cssVarsPerTheme: {
@@ -540,26 +542,46 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       }
     }
 
-    const hasIdleCallback = typeof window.requestIdleCallback === 'function'
+    // Defer Cal.com embed until the user shows intent (pointer or first scroll).
+    // Keeps ~22KB off the critical path on first paint.
+    const opts: AddEventListenerOptions = { once: true, passive: true }
+    const trigger = () => void initializeCal()
+    window.addEventListener('pointerdown', trigger, opts)
+    window.addEventListener('pointermove', trigger, opts)
+    window.addEventListener('scroll', trigger, opts)
+    window.addEventListener('keydown', trigger, opts)
 
-    const timeoutId = hasIdleCallback
-      ? window.requestIdleCallback(
-          () => {
-            void initializeCal()
-          },
-          { timeout: 3000 },
-        )
-      : window.setTimeout(() => {
-          void initializeCal()
-        }, 1)
+    // Fallback: warm it up lazily after a long idle window if the user hasn't interacted.
+    const hasIdleCallback = typeof window.requestIdleCallback === 'function'
+    let idleId: number | undefined
+    let timeoutId: number | undefined
+    const warmStart = () => {
+      if (hasIdleCallback) {
+        idleId = window.requestIdleCallback(trigger, { timeout: 6000 })
+      } else {
+        timeoutId = window.setTimeout(trigger, 5000)
+      }
+    }
+    const onLoad = () => window.setTimeout(warmStart, 2500)
+    if (document.readyState === 'complete') {
+      onLoad()
+    } else {
+      window.addEventListener('load', onLoad, { once: true })
+    }
 
     return () => {
-      if (hasIdleCallback && typeof window.cancelIdleCallback === 'function') {
-        window.cancelIdleCallback(timeoutId)
-        return
+      window.removeEventListener('pointerdown', trigger)
+      window.removeEventListener('pointermove', trigger)
+      window.removeEventListener('scroll', trigger)
+      window.removeEventListener('keydown', trigger)
+      window.removeEventListener('load', onLoad)
+      if (
+        idleId !== undefined &&
+        typeof window.cancelIdleCallback === 'function'
+      ) {
+        window.cancelIdleCallback(idleId)
       }
-
-      window.clearTimeout(timeoutId)
+      if (timeoutId !== undefined) window.clearTimeout(timeoutId)
     }
   }, [])
 
@@ -591,14 +613,13 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body className="bg-background text-foreground antialiased">
         <BacklightFilterDefs />
-        <LoadingScreen />
         <ThemeProvider>
           {gaMeasurementId ? (
             <GoogleAnalyticsTracker measurementId={gaMeasurementId} />
           ) : null}
           <VideoBackground />
           <FeedbackHandler />
-          <CommandMenu />
+          <LazyCommandMenu />
           <main className="mx-auto w-full max-w-395 py-4 text-sm lowercase overflow-hidden [view-transition-name:main-content] ">
             {children}
           </main>

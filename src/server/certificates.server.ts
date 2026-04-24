@@ -4,7 +4,10 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { z } from 'zod'
-import type { CertificateMeta, CertificateUpdateInput } from '@/lib/certificates';
+import type {
+  CertificateMeta,
+  CertificateUpdateInput,
+} from '@/lib/certificates'
 import { certificateSchema } from '@/lib/certificates'
 
 const CERTIFICATE_SOURCES: Record<string, string> = import.meta.glob(
@@ -103,16 +106,17 @@ function updateCertificatesData(newCerts: Array<CertificateUpdateInput>) {
 
   for (const cert of newCerts) {
     // Matching logic for duplicates: title OR credential_id OR verify_url
-    const duplicate = existingRecords.some((existing) =>
-      (existing.title === cert.title) ||
-      (cert.credential_id && existing.credential_id === cert.credential_id) ||
-      (existing.verify_url === cert.verify_url)
+    const duplicate = existingRecords.some(
+      (existing) =>
+        existing.title === cert.title ||
+        (cert.credential_id && existing.credential_id === cert.credential_id) ||
+        existing.verify_url === cert.verify_url,
     )
 
     if (!duplicate) {
       existingRecords.push({
         ...cert,
-        slug: slugify(cert.title)
+        slug: slugify(cert.title),
       })
       hasChanges = true
     }

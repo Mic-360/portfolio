@@ -85,14 +85,14 @@ Sending raw camera frames or full-resolution uploads to the inference API would 
 
 ## Tech Stack
 
-| Component | Technology | Rationale |
-| --- | --- | --- |
-| Framework | React Router v7 | File-based routing with loader/action patterns; Remix successor with SSR optionality |
-| UI Library | React 19 | Concurrent rendering, stable API, first-class hooks for capture state management |
-| Build Tool | Vite 5 | Sub-second HMR, native ESM, production tree-shaking and code splitting |
-| Styling | Tailwind CSS v3 | Utility-first approach eliminates style collision risk in embedded contexts |
-| Animations | Motion (Framer Motion) | Declarative animation API with GPU-accelerated transitions; no custom loops |
-| Camera | react-webcam | Direct MediaDevices API access with a stable React abstraction layer |
-| AI Inference | Twinverse AI V1 | Managed inference endpoint; removes GPU infrastructure and model training from scope |
+| Component    | Technology             | Rationale                                                                            |
+| ------------ | ---------------------- | ------------------------------------------------------------------------------------ |
+| Framework    | React Router v7        | File-based routing with loader/action patterns; Remix successor with SSR optionality |
+| UI Library   | React 19               | Concurrent rendering, stable API, first-class hooks for capture state management     |
+| Build Tool   | Vite 5                 | Sub-second HMR, native ESM, production tree-shaking and code splitting               |
+| Styling      | Tailwind CSS v3        | Utility-first approach eliminates style collision risk in embedded contexts          |
+| Animations   | Motion (Framer Motion) | Declarative animation API with GPU-accelerated transitions; no custom loops          |
+| Camera       | react-webcam           | Direct MediaDevices API access with a stable React abstraction layer                 |
+| AI Inference | Twinverse AI V1        | Managed inference endpoint; removes GPU infrastructure and model training from scope |
 
 TwinTry demonstrates that the hard problem in virtual try-on is not the AI — it is the capture-to-result UX loop. Getting the selfie timer, compression, model selection, and result display to feel instantaneous and trustworthy is where the engineering effort actually lives.

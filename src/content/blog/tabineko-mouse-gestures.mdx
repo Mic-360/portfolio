@@ -61,15 +61,15 @@ I have no regrets.
 
 Seven gestures. Seven actions.
 
-| Gesture | Action |
-|---|---|
-| Swipe Left | Go Back |
-| Swipe Right | Go Forward |
-| Swipe Up | Scroll to Top |
-| Swipe Down | Scroll to Bottom |
-| Right then Down | Next Tab |
-| Left then Up | Previous Tab |
-| Circle | Refresh Page |
+| Gesture         | Action           |
+| --------------- | ---------------- |
+| Swipe Left      | Go Back          |
+| Swipe Right     | Go Forward       |
+| Swipe Up        | Scroll to Top    |
+| Swipe Down      | Scroll to Bottom |
+| Right then Down | Next Tab         |
+| Left then Up    | Previous Tab     |
+| Circle          | Refresh Page     |
 
 All triggered by right-click drag. No accidental fires on normal right-click. The direction detection only commits once you've moved enough to make intent clear.
 
@@ -78,6 +78,7 @@ All triggered by right-click drag. No accidental fires on normal right-click. Th
 It's a Chrome extension. You write JS, load it unpacked, test it. Simple.
 
 My build pipeline:
+
 1. **Astro** compiles the popup
 2. **Bun** bundles the content and background scripts
 3. Custom CSP extraction script extracts inline scripts

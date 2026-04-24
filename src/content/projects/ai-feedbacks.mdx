@@ -84,11 +84,11 @@ The dashboard's semantic search is backed by the feedback stored in the Next.js 
 
 ## Tech Stack Rationale
 
-| Component | Technology | Rationale |
-| --- | --- | --- |
-| Dashboard | Next.js 15 | App Router enables co-located API routes and streaming RSC; avoids a separate API server |
-| Styling | Tailwind CSS v4 | CSS-first configuration; no PostCSS config overhead |
-| AI | Google Gemini | Native multimodal support — image and text in the same API call without preprocessing |
-| Extension | Chrome MV3 | Service worker architecture required for tab screenshot access and persistent console interception |
-| Forms | TanStack Form | Type-safe form state with minimal bundle overhead |
-| Animation | Framer Motion | Declarative animation primitives for the crop selector overlay and dashboard transitions |
+| Component | Technology      | Rationale                                                                                          |
+| --------- | --------------- | -------------------------------------------------------------------------------------------------- |
+| Dashboard | Next.js 15      | App Router enables co-located API routes and streaming RSC; avoids a separate API server           |
+| Styling   | Tailwind CSS v4 | CSS-first configuration; no PostCSS config overhead                                                |
+| AI        | Google Gemini   | Native multimodal support — image and text in the same API call without preprocessing              |
+| Extension | Chrome MV3      | Service worker architecture required for tab screenshot access and persistent console interception |
+| Forms     | TanStack Form   | Type-safe form state with minimal bundle overhead                                                  |
+| Animation | Framer Motion   | Declarative animation primitives for the crop selector overlay and dashboard transitions           |

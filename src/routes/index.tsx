@@ -1,6 +1,6 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { motion, useMotionValue, useScroll, useSpring } from 'motion/react'
-import { useEffect, useRef, useState } from 'react'
+import { Suspense, lazy, useEffect, useRef, useState } from 'react'
 
 import type { CertificateMeta } from '@/lib/certificates'
 import type { ProjectMeta } from '@/lib/content'
@@ -16,15 +16,12 @@ import { getGravatarProfile } from '@/lib/gravatar-profile'
 import { getHealthData } from '@/lib/health'
 import { getPinterestCreatedPins } from '@/lib/pinterest'
 
-import { KeyboardHint } from '@/components/CommandMenu'
 import { MetricRow, Section } from '@/components/functions'
-import { GamesCinematic } from '@/components/GamesCinematic'
-import GitHubHeatmap from '@/components/GitHubHeatmap'
 import GravatarAvatar from '@/components/gravatar/GravatarAvatar'
 import GravatarSocialLinks from '@/components/gravatar/GravatarSocialLinks'
+import { KeyboardHint } from '@/components/KeyboardHint'
 import { LazyHeroVideo } from '@/components/LazyHeroVideo'
 import { PreviousRoadmap } from '@/components/PreviousRoadmap'
-import { AnimatedTestimonials } from '@/components/ui/animated-testimonials'
 import CalendarIcon from '@/components/ui/calendar-icon'
 import CurrentIcon from '@/components/ui/current-icon'
 import { ExpandableCard } from '@/components/ui/expandable-card'
@@ -32,7 +29,6 @@ import { FlippingCard } from '@/components/ui/flipping-card'
 import { LayoutGrid } from '@/components/ui/layout-grid'
 import { LinkPreview } from '@/components/ui/link-preview'
 import PreviousIcon from '@/components/ui/previous-icon'
-import WorldMap from '@/components/ui/world-map'
 import { gravatarConfig } from '@/config/gravatar'
 import {
   contactLinks,
@@ -42,6 +38,57 @@ import {
   siteInfo,
   siteMeta,
 } from '@/config/site-data'
+
+// Heavy below-the-fold components — loaded lazily to keep the main bundle small.
+const GamesCinematic = lazy(() =>
+  import('@/components/GamesCinematic').then((m) => ({
+    default: m.GamesCinematic,
+  })),
+)
+const GitHubHeatmap = lazy(() => import('@/components/GitHubHeatmap'))
+const AnimatedTestimonials = lazy(() =>
+  import('@/components/ui/animated-testimonials').then((m) => ({
+    default: m.AnimatedTestimonials,
+  })),
+)
+const WorldMap = lazy(() => import('@/components/ui/world-map'))
+
+function DeferredSection({
+  children,
+  minHeight,
+}: {
+  children: React.ReactNode
+  minHeight?: number | string
+}) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    if (!('IntersectionObserver' in window)) {
+      setVisible(true)
+      return
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          io.disconnect()
+          setVisible(true)
+        }
+      },
+      { rootMargin: '400px 0px' },
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
+  return (
+    <div ref={ref} style={minHeight ? { minHeight } : undefined}>
+      {visible ? <Suspense fallback={null}>{children}</Suspense> : null}
+    </div>
+  )
+}
 
 declare global {
   interface Window {
@@ -302,7 +349,7 @@ function App() {
           <span className="text-3xl md:text-5xl font-semibold tracking-tight text-foreground font-serif capitalize">
             {siteInfo.name}
           </span>
-          <span className="text-sm text-muted-foreground/70">
+          <span className="text-sm text-muted-foreground">
             {siteInfo.currentRole}
           </span>
         </div>
@@ -362,8 +409,8 @@ function App() {
           </motion.svg>
         </motion.div>
         <motion.h1
-          initial={{ opacity: 0, y: 32, filter: 'blur(10px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          initial={{ y: 32 }}
+          animate={{ y: 0 }}
           transition={{ duration: 1.6, ease: APPLE_EASE, delay: 0.1 }}
           className="max-w-5xl font-serif text-5xl leading-[1.02] tracking-tight text-foreground sm:text-7xl lg:text-8xl"
         >
@@ -457,7 +504,7 @@ function App() {
         </div>
 
         <div className="absolute inset-0 z-0 overflow-hidden">
-          <LazyHeroVideo src="/horizon.mp4" />
+          <LazyHeroVideo src="/horizon.mp4" poster="/space-shooter.png" />
           <div className="hero-grid-overlay absolute inset-y-[8%] right-[3%] w-[82%]" />
           <div className="hero-seamless-edge absolute inset-0" />
         </div>
@@ -864,10 +911,10 @@ function App() {
                                 {formatDate(project.date)}
                               </p>
                             </div>
-                          <h3 className="font-serif text-xl leading-tight tracking-tight text-foreground sm:text-2xl">
+                            <h3 className="font-serif text-xl leading-tight tracking-tight text-foreground sm:text-2xl">
                               {project.title}
                             </h3>
-                          <p className="text-sm leading-7 text-foreground/70">
+                            <p className="text-sm leading-7 text-foreground/70">
                               {project.summary}
                             </p>
                             {project.stack.length > 0 ? (
@@ -1028,7 +1075,9 @@ function App() {
             </div>
 
             <Link to="/readme" className="block min-w-0 overflow-hidden">
-              <GitHubHeatmap username={siteInfo.githubUsername} />
+              <DeferredSection minHeight={120}>
+                <GitHubHeatmap username={siteInfo.githubUsername} />
+              </DeferredSection>
             </Link>
 
             {health.updatedAt && isMounted ? (
@@ -1045,19 +1094,23 @@ function App() {
         className="grid gap-18 lg:gap-12 max-w-480 mx-auto xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] px-4 sm:px-8 w-full"
       >
         <Section title="certificates">
-          <AnimatedTestimonials
-            className="w-full"
-            autoplay
-            testimonials={featuredCertificates.map((cert: CertificateMeta) => ({
-              name: cert.title,
-              designation: `${cert.issuer} · ${cert.issued}`,
-              quote:
-                cert.skills.length > 0
-                  ? cert.skills.join(' · ')
-                  : `Credential ID: ${cert.credential_id ?? '—'}`,
-              src: cert.image_url,
-            }))}
-          />
+          <DeferredSection minHeight={360}>
+            <AnimatedTestimonials
+              className="w-full"
+              autoplay
+              testimonials={featuredCertificates.map(
+                (cert: CertificateMeta) => ({
+                  name: cert.title,
+                  designation: `${cert.issuer} · ${cert.issued}`,
+                  quote:
+                    cert.skills.length > 0
+                      ? cert.skills.join(' · ')
+                      : `Credential ID: ${cert.credential_id ?? '—'}`,
+                  src: cert.image_url,
+                }),
+              )}
+            />
+          </DeferredSection>
         </Section>
 
         <Section title="pinterest">
@@ -1086,6 +1139,8 @@ function App() {
                   src="/pin.svg"
                   alt="pinterest"
                   aria-hidden="true"
+                  loading="lazy"
+                  decoding="async"
                   className="h-auto w-full"
                 />
               </motion.div>
@@ -1153,7 +1208,9 @@ function App() {
       </motion.div>
 
       <motion.div variants={item}>
-        <GamesCinematic gamesData={gamesData} />
+        <DeferredSection minHeight={400}>
+          <GamesCinematic gamesData={gamesData} />
+        </DeferredSection>
       </motion.div>
 
       <motion.div variants={item}>
@@ -1161,32 +1218,34 @@ function App() {
           <div className="relative overflow-hidden pb-8">
             <div className="pointer-events-none absolute inset-0 z-0 mask-[linear-gradient(to_bottom,white_20%,transparent_100%)]">
               <div className="absolute inset-0 bg-primary/10 blur-[100px]" />
-              <WorldMap
-                lineColor="hsl(var(--primary))"
-                className="absolute inset-0 h-full w-full opacity-80 sm:opacity-100"
-                dots={[
-                  {
-                    start: { lat: 22.57, lng: 88.36 },
-                    end: { lat: 37.77, lng: -122.42 },
-                  },
-                  {
-                    start: { lat: 22.57, lng: 88.36 },
-                    end: { lat: 51.51, lng: -0.13 },
-                  },
-                  {
-                    start: { lat: 22.57, lng: 88.36 },
-                    end: { lat: 35.68, lng: 139.69 },
-                  },
-                  {
-                    start: { lat: 22.57, lng: 88.36 },
-                    end: { lat: 1.35, lng: 103.82 },
-                  },
-                  {
-                    start: { lat: 22.57, lng: 88.36 },
-                    end: { lat: -33.87, lng: 151.21 },
-                  },
-                ]}
-              />
+              <DeferredSection>
+                <WorldMap
+                  lineColor="hsl(var(--primary))"
+                  className="absolute inset-0 h-full w-full opacity-80 sm:opacity-100"
+                  dots={[
+                    {
+                      start: { lat: 22.57, lng: 88.36 },
+                      end: { lat: 37.77, lng: -122.42 },
+                    },
+                    {
+                      start: { lat: 22.57, lng: 88.36 },
+                      end: { lat: 51.51, lng: -0.13 },
+                    },
+                    {
+                      start: { lat: 22.57, lng: 88.36 },
+                      end: { lat: 35.68, lng: 139.69 },
+                    },
+                    {
+                      start: { lat: 22.57, lng: 88.36 },
+                      end: { lat: 1.35, lng: 103.82 },
+                    },
+                    {
+                      start: { lat: 22.57, lng: 88.36 },
+                      end: { lat: -33.87, lng: 151.21 },
+                    },
+                  ]}
+                />
+              </DeferredSection>
             </div>
 
             <div className="relative z-10 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.72fr)] lg:items-end px-4 sm:px-8">
@@ -1311,7 +1370,7 @@ function App() {
 
       <motion.p
         variants={item}
-        className="flex flex-col items-center justify-between gap-1 text-center font-mono text-[10px] tracking-[0.2em] text-muted-foreground/30 sm:flex-row sm:text-left px-8"
+        className="flex flex-col items-center justify-between gap-1 text-center font-mono text-[10px] tracking-[0.2em] text-muted-foreground sm:flex-row sm:text-left px-8"
       >
         <span>Yes, this portfolio can run DOOM.</span>
         <span>Konami Code: ↑ ↑ ↓ ↓ ← → ← → b a</span>

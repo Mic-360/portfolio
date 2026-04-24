@@ -18,11 +18,37 @@ import { FloatingDock } from '@/components/ui/floating-dock'
 import { siteInfo } from '@/config/site-data'
 import { useTheme } from '@/components/ThemeProvider'
 
-const themeIcons: Record<ThemeMode, React.ComponentType<{ className?: string }>> = {
+const themeIcons: Record<
+  ThemeMode,
+  React.ComponentType<{ className?: string }>
+> = {
   normal: IconMoon,
   sunny: IconSunHigh,
   midnight: IconMoonStars,
   frieren: IconBook2,
+}
+
+const CYCLE: Array<ThemeMode> = ['normal', 'sunny', 'midnight', 'frieren']
+
+const THEME_VIDEO: Partial<Record<ThemeMode, string>> = {
+  sunny: '/leaves.mp4',
+  midnight: '/moon.mp4',
+  frieren: '/frieren.mp4',
+}
+
+const prefetchedVideos = new Set<string>()
+
+function prefetchThemeVideo(mode: ThemeMode) {
+  if (typeof document === 'undefined') return
+  const src = THEME_VIDEO[mode]
+  if (!src || prefetchedVideos.has(src)) return
+  prefetchedVideos.add(src)
+  const link = document.createElement('link')
+  link.rel = 'prefetch'
+  link.as = 'video'
+  link.href = src
+  link.crossOrigin = 'anonymous'
+  document.head.appendChild(link)
 }
 
 export function FloatingNavDock() {
@@ -64,6 +90,12 @@ export function FloatingNavDock() {
           x: rect.left + rect.width / 2,
           y: rect.top + rect.height / 2,
         })
+      },
+      onPointerEnter: () => {
+        // Warm up the next theme's video so the switch feels instant.
+        const idx = CYCLE.indexOf(mode)
+        const next = CYCLE[(idx + 1) % CYCLE.length]
+        prefetchThemeVideo(next)
       },
     },
     {
@@ -109,9 +141,27 @@ function ThemeDockIcon({ mode }: { mode: ThemeMode }) {
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={mode}
-          initial={{ opacity: 0, scale: 0.55, rotate: -18, y: 8, filter: 'blur(6px)' }}
-          animate={{ opacity: 1, scale: 1, rotate: 0, y: 0, filter: 'blur(0px)' }}
-          exit={{ opacity: 0, scale: 0.6, rotate: 18, y: -8, filter: 'blur(6px)' }}
+          initial={{
+            opacity: 0,
+            scale: 0.55,
+            rotate: -18,
+            y: 8,
+            filter: 'blur(6px)',
+          }}
+          animate={{
+            opacity: 1,
+            scale: 1,
+            rotate: 0,
+            y: 0,
+            filter: 'blur(0px)',
+          }}
+          exit={{
+            opacity: 0,
+            scale: 0.6,
+            rotate: 18,
+            y: -8,
+            filter: 'blur(6px)',
+          }}
           transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
           className="absolute inset-0 flex items-center justify-center"
         >

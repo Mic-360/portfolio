@@ -39,8 +39,18 @@ export const Route = createFileRoute('/bento')({
             '@context': 'https://schema.org',
             '@type': 'BreadcrumbList',
             itemListElement: [
-              { '@type': 'ListItem', position: 1, name: 'Home', item: siteMeta.baseUrl },
-              { '@type': 'ListItem', position: 2, name: 'Bento', item: canonicalUrl },
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: siteMeta.baseUrl,
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Bento',
+                item: canonicalUrl,
+              },
             ],
           }),
         },

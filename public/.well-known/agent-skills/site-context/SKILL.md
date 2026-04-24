@@ -14,6 +14,7 @@ Retrieve structured site context designed for LLM consumption. Two levels of det
 Short site context summary (~1,600 bytes). Use this for quick identification and basic grounding.
 
 **Example request:**
+
 ```
 GET https://bhaumicsingh.dev/llms.txt
 Accept: text/plain
@@ -26,12 +27,14 @@ Accept: text/plain
 Comprehensive structured context (~3,000+ bytes). Use this when you need the full picture.
 
 **Example request:**
+
 ```
 GET https://bhaumicsingh.dev/llms-full.txt
 Accept: text/plain
 ```
 
 **Contains:**
+
 - **Identity** — name, native name, role, company, location
 - **Expertise** — web, Android, cloud, AI technology stacks
 - **Social links** — GitHub, LinkedIn, X/Twitter, email
@@ -41,13 +44,13 @@ Accept: text/plain
 
 ## When to Use Which
 
-| Need | Endpoint |
-|------|----------|
-| Quick site identification | `/llms.txt` |
-| Building a comprehensive prompt | `/llms-full.txt` |
-| Finding a specific blog post URL | `/llms-full.txt` |
-| Checking available projects | `/llms-full.txt` |
-| Minimal context for chat grounding | `/llms.txt` |
+| Need                               | Endpoint         |
+| ---------------------------------- | ---------------- |
+| Quick site identification          | `/llms.txt`      |
+| Building a comprehensive prompt    | `/llms-full.txt` |
+| Finding a specific blog post URL   | `/llms-full.txt` |
+| Checking available projects        | `/llms-full.txt` |
+| Minimal context for chat grounding | `/llms.txt`      |
 
 ## Caching
 

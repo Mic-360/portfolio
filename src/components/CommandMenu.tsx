@@ -104,7 +104,11 @@ function uniqueSorted(values: Array<string>) {
   )
 }
 
-export function CommandMenu() {
+export function CommandMenu({
+  openOnMount = false,
+}: {
+  openOnMount?: boolean
+} = {}) {
   const mounted = useMounted()
   const [open, setOpen] = React.useState(false)
   const [pages, setPages] = React.useState<Array<PageId>>(['root'])
@@ -124,6 +128,10 @@ export function CommandMenu() {
   const [feedbackOn, setFeedbackOn] = React.useState(true)
 
   const page = pages[pages.length - 1]
+
+  React.useEffect(() => {
+    if (openOnMount) setOpen(true)
+  }, [openOnMount])
 
   React.useEffect(() => {
     setMuted(getMuteAudio())

@@ -131,7 +131,12 @@ export const Route = createFileRoute('/sitemap/xml')({
             changefreq: 'yearly',
             priority: '0.5',
             images: cert.image_url
-              ? [{ loc: cert.image_url, caption: cert.title } satisfies SitemapImage]
+              ? [
+                  {
+                    loc: cert.image_url,
+                    caption: cert.title,
+                  } satisfies SitemapImage,
+                ]
               : [],
           })),
         ]

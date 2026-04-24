@@ -237,7 +237,11 @@ function InteractiveChart({
           key={i}
           initial={{ height: 0, y: height }}
           animate={{ height: h, y: rawY }}
-          transition={{ duration: 0.8, delay: i * 0.012, ease: [0.16, 1, 0.3, 1] }}
+          transition={{
+            duration: 0.8,
+            delay: i * 0.012,
+            ease: [0.16, 1, 0.3, 1],
+          }}
           x={p.x - barWidth / 2}
           width={barWidth}
           fill={color}
@@ -470,16 +474,25 @@ function MetricRow({
         {summaryItems.map((item) => (
           <div key={item.label} className="min-w-0 text-center">
             <span className="block text-muted-foreground/60">{item.label}</span>
-            <span className="block truncate font-medium text-foreground/80 mt-0.5">{item.value}</span>
+            <span className="block truncate font-medium text-foreground/80 mt-0.5">
+              {item.value}
+            </span>
           </div>
         ))}
       </div>
 
       <div className="hidden w-22 px-2 shrink-0 flex-col gap-1.5 text-right font-mono text-[11px] tabular-nums sm:flex sm:justify-center">
         {summaryItems.map((item) => (
-          <div key={item.label} className="flex w-full justify-between items-center group/stat">
-            <span className="text-muted-foreground/45 transition-colors duration-300 group-hover/stat:text-muted-foreground">{item.label}</span>
-            <span className="font-medium text-foreground/50 transition-colors duration-300 group-hover/stat:text-foreground">{item.value}</span>
+          <div
+            key={item.label}
+            className="flex w-full justify-between items-center group/stat"
+          >
+            <span className="text-muted-foreground/45 transition-colors duration-300 group-hover/stat:text-muted-foreground">
+              {item.label}
+            </span>
+            <span className="font-medium text-foreground/50 transition-colors duration-300 group-hover/stat:text-foreground">
+              {item.value}
+            </span>
           </div>
         ))}
       </div>

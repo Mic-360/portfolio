@@ -4,7 +4,10 @@
 
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
-import { getHealthDataInternal, writeHealthDataInternal } from '@/server/health.server'
+import {
+  getHealthDataInternal,
+  writeHealthDataInternal,
+} from '@/server/health.server'
 
 export const healthSampleSchema = z.object({
   value: z.union([z.number(), z.string()]),
@@ -27,11 +30,9 @@ export const healthDataSchema = z.object({
 
 export type HealthData = z.infer<typeof healthDataSchema>
 
-export const getHealthData = createServerFn({ method: 'GET' }).handler(
-  () => {
-    return getHealthDataInternal()
-  },
-)
+export const getHealthData = createServerFn({ method: 'GET' }).handler(() => {
+  return getHealthDataInternal()
+})
 
 export const updateHealthData = createServerFn({ method: 'POST' })
   .inputValidator(healthDataSchema)
@@ -104,9 +105,7 @@ export interface HealthStats {
   unit?: string
 }
 
-export function calculateStats(
-  samples: Array<HealthSample> = [],
-): HealthStats {
+export function calculateStats(samples: Array<HealthSample> = []): HealthStats {
   if (!samples.length)
     return {
       total: 0,

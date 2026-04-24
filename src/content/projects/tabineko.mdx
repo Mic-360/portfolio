@@ -100,11 +100,11 @@ Keeping `gesture.ts` as a pure function with no DOM or browser API dependencies 
 
 ## Tech Stack Rationale
 
-| Component | Technology | Rationale |
-| --- | --- | --- |
-| Extension Runtime | Chrome MV3 | Current standard; required for Chrome Web Store distribution |
-| Language | TypeScript 5 | Strict types across all three runtime contexts; catches cross-context message shape mismatches at compile time |
-| Popup UI | Astro | Zero-JS static output by default; avoids inline script CSP violations without custom post-processing for most content |
-| Bundler / Build Runtime | Bun | Sub-second builds with native TypeScript support; eliminates separate transpilation step |
-| Icon Generation | Sharp | High-quality PNG resizing to 16/32/48/128px without heap bloat; runs as a build step |
-| Packaging | adm-zip | Pure-JS ZIP generation; no OS tooling dependency, reproducible on any platform |
+| Component               | Technology   | Rationale                                                                                                             |
+| ----------------------- | ------------ | --------------------------------------------------------------------------------------------------------------------- |
+| Extension Runtime       | Chrome MV3   | Current standard; required for Chrome Web Store distribution                                                          |
+| Language                | TypeScript 5 | Strict types across all three runtime contexts; catches cross-context message shape mismatches at compile time        |
+| Popup UI                | Astro        | Zero-JS static output by default; avoids inline script CSP violations without custom post-processing for most content |
+| Bundler / Build Runtime | Bun          | Sub-second builds with native TypeScript support; eliminates separate transpilation step                              |
+| Icon Generation         | Sharp        | High-quality PNG resizing to 16/32/48/128px without heap bloat; runs as a build step                                  |
+| Packaging               | adm-zip      | Pure-JS ZIP generation; no OS tooling dependency, reproducible on any platform                                        |

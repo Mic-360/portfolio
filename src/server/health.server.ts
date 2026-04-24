@@ -39,8 +39,6 @@ export const healthDataSchema = z.object({
 
 export type HealthData = z.infer<typeof healthDataSchema>
 
-
-
 function getBundledHealthData(): HealthData {
   const raw = Object.values(HEALTH_SOURCES)[0]
   if (!raw) {
@@ -95,7 +93,7 @@ function readHealthData(): HealthData {
 function writeHealthData(data: HealthData) {
   const merged: HealthData = {
     ...data,
-    updatedAt: new Date().toISOString()
+    updatedAt: new Date().toISOString(),
   }
 
   inMemoryHealthData = healthDataSchema.parse(merged)

@@ -42,12 +42,12 @@ A chaotic marriage that infuriates purists on both sides. Perfect.
 
 Here's what happens when you massively over-engineer a file deletion tool:
 
-| Operation | npkill (Node) | hakai (Rust+Bun) | Gain |
-| --- | --- | --- | --- |
-| Scan 50k dirs | ~8-12s | <1s | **10-15x** |
-| Size calculation | Sequential | Parallel (rayon) | **8-12x** |
-| Delete 5GB folder | ~45s (blocks UI) | Async, non-blocking | **4-6x** |
-| Cold startup | ~400ms | <50ms | **8x** |
+| Operation         | npkill (Node)    | hakai (Rust+Bun)    | Gain       |
+| ----------------- | ---------------- | ------------------- | ---------- |
+| Scan 50k dirs     | ~8-12s           | <1s                 | **10-15x** |
+| Size calculation  | Sequential       | Parallel (rayon)    | **8-12x**  |
+| Delete 5GB folder | ~45s (blocks UI) | Async, non-blocking | **4-6x**   |
+| Cold startup      | ~400ms           | <50ms               | **8x**     |
 
 When you multi-select 100 folders and hit enter, `hakai` fires up to 8 concurrent deletion tasks via `tokio`. The UI never blocks. The scan never pauses. Folders just vanish. It finishes before your hand reaches the mouse.
 

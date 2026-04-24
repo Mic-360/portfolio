@@ -4,7 +4,10 @@
 
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
-import { getGamesDataInternal, updateGamesDataInternal } from '@/server/games.server'
+import {
+  getGamesDataInternal,
+  updateGamesDataInternal,
+} from '@/server/games.server'
 
 export const gameSchema = z.object({
   id: z.string(),
@@ -18,11 +21,9 @@ export type GameMeta = z.infer<typeof gameSchema>
 
 export const updateGamesSchema = z.array(gameSchema)
 
-export const getGamesData = createServerFn({ method: 'GET' }).handler(
-  () => {
-    return getGamesDataInternal()
-  },
-)
+export const getGamesData = createServerFn({ method: 'GET' }).handler(() => {
+  return getGamesDataInternal()
+})
 
 export const updateGamesData = createServerFn({ method: 'POST' })
   .inputValidator(updateGamesSchema)

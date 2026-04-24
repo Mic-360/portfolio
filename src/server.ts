@@ -12,9 +12,7 @@ function appendVary(headers: Headers, value: string) {
     return
   }
 
-  const parts = existing
-    .split(',')
-    .map((part) => part.trim().toLowerCase())
+  const parts = existing.split(',').map((part) => part.trim().toLowerCase())
 
   if (!parts.includes(value.toLowerCase())) {
     headers.set('Vary', `${existing}, ${value}`)
@@ -242,8 +240,7 @@ export default {
           {
             id: 'games-data',
             name: 'Games Data',
-            description:
-              'Retrieve gaming library and activity data',
+            description: 'Retrieve gaming library and activity data',
           },
         ],
       }
@@ -263,8 +260,7 @@ export default {
     if (pathname === '/.well-known/agent-skills/index.json') {
       const base = 'https://bhaumicsingh.dev'
       const index = {
-        $schema:
-          'https://schemas.agentskills.io/discovery/0.2.0/schema.json',
+        $schema: 'https://schemas.agentskills.io/discovery/0.2.0/schema.json',
         skills: [
           {
             name: 'content-retrieval',
@@ -396,10 +392,7 @@ export default {
       newHeaders.set('Content-Type', 'text/markdown; charset=utf-8')
       newHeaders.set('x-markdown-tokens', String(tokens))
       appendVary(newHeaders, 'Accept')
-      newHeaders.set(
-        'Content-Signal',
-        'ai-train=no, search=yes, ai-input=no',
-      )
+      newHeaders.set('Content-Signal', 'ai-train=no, search=yes, ai-input=no')
       newHeaders.set(
         'Cache-Control',
         'public, max-age=60, s-maxage=3600, stale-while-revalidate=600',

@@ -226,7 +226,10 @@
     "issuer": "codedamn",
     "issued": "Mar 2022",
     "credential_id": "844114d1f9a27444b02b860a376540e08eea1318",
-    "skills": ["JavaScript", "Continuous Integration and Continuous Delivery (CI/CD)"],
+    "skills": [
+      "JavaScript",
+      "Continuous Integration and Continuous Delivery (CI/CD)"
+    ],
     "verify_url": "https://codedamn.com/certificate/verify/844114d1f9a27444b02b860a376540e08eea1318",
     "image_url": "/certificates/gh-actions.jpg"
   },

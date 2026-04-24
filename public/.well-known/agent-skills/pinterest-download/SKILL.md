@@ -15,18 +15,20 @@ Fetch and proxy a Pinterest image.
 
 **Parameters:**
 
-| Parameter  | Required | Description |
-|-----------|----------|-------------|
-| `image`   | Yes      | HTTPS URL from `i.pinimg.com` |
-| `fallback`| No       | Alternate Pinterest image URL if primary fails |
-| `name`    | No       | Desired filename (default: `pinterest-image`) |
+| Parameter  | Required | Description                                    |
+| ---------- | -------- | ---------------------------------------------- |
+| `image`    | Yes      | HTTPS URL from `i.pinimg.com`                  |
+| `fallback` | No       | Alternate Pinterest image URL if primary fails |
+| `name`     | No       | Desired filename (default: `pinterest-image`)  |
 
 **Example request:**
+
 ```
 GET https://bhaumicsingh.dev/api/pinterest/download?image=https://i.pinimg.com/originals/ab/cd/ef.jpg&name=my-pin
 ```
 
 **Success response:**
+
 ```
 HTTP/1.1 200 OK
 Content-Type: image/jpeg

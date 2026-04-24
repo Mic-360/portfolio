@@ -83,14 +83,14 @@ Flutter's web target and Android target share application logic but differ in pl
 
 ## Tech Stack Rationale
 
-| Component | Technology | Rationale |
-| --- | --- | --- |
-| Frontend | Flutter + Dart | Single codebase for Android APK and web PWA; strong typing end-to-end |
-| State Management | Riverpod | Compile-time dependency resolution, minimal boilerplate, `autoDispose` for memory hygiene |
-| Navigation | GoRouter | Declarative deep-link routing with type-safe route parameters |
-| HTTP Server | Fastify + TypeScript | Lower per-request overhead than Express; plugin ecosystem covers auth, rate limiting, and OpenAPI |
-| Upload Protocol | tus | Resumable chunked uploads as a protocol guarantee, not an application retry policy |
-| Job Queue | BullMQ | Redis-backed async workers; stateless and horizontally scalable |
-| Caching | Redis | 43% query reduction; shared session state across worker processes |
-| Image Processing | Jimp | Pure-Node image operations; adequate throughput for current upload volume |
-| Authentication | Firebase Auth | Managed Google OAuth; JWT verification backend-authoritative |
+| Component        | Technology           | Rationale                                                                                         |
+| ---------------- | -------------------- | ------------------------------------------------------------------------------------------------- |
+| Frontend         | Flutter + Dart       | Single codebase for Android APK and web PWA; strong typing end-to-end                             |
+| State Management | Riverpod             | Compile-time dependency resolution, minimal boilerplate, `autoDispose` for memory hygiene         |
+| Navigation       | GoRouter             | Declarative deep-link routing with type-safe route parameters                                     |
+| HTTP Server      | Fastify + TypeScript | Lower per-request overhead than Express; plugin ecosystem covers auth, rate limiting, and OpenAPI |
+| Upload Protocol  | tus                  | Resumable chunked uploads as a protocol guarantee, not an application retry policy                |
+| Job Queue        | BullMQ               | Redis-backed async workers; stateless and horizontally scalable                                   |
+| Caching          | Redis                | 43% query reduction; shared session state across worker processes                                 |
+| Image Processing | Jimp                 | Pure-Node image operations; adequate throughput for current upload volume                         |
+| Authentication   | Firebase Auth        | Managed Google OAuth; JWT verification backend-authoritative                                      |

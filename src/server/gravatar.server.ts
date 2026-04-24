@@ -4,7 +4,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-
 import type { GravatarProfile } from '@/types/gravatar'
 import { gravatarConfig } from '@/config/gravatar'
 import { gravatarProfileSchema } from '@/types/gravatar'

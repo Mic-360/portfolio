@@ -82,8 +82,7 @@ export function DoomEasterEgg({ onClose }: { onClose: () => void }) {
     const errorHandler = (event: ErrorEvent) => {
       if (
         event.filename.includes('js-dos') ||
-        (event.error instanceof TypeError &&
-          event.message.includes('setState'))
+        (event.error instanceof TypeError && event.message.includes('setState'))
       ) {
         event.preventDefault()
         if (!cancelled) {

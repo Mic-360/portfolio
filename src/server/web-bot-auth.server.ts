@@ -50,9 +50,7 @@ function signDirectory(authority: string): {
   }
 }
 
-export function handleWebBotAuthDirectory(
-  req: Request,
-): Response | null {
+export function handleWebBotAuthDirectory(req: Request): Response | null {
   const url = new URL(req.url)
   if (
     url.pathname.toLowerCase() !==

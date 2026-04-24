@@ -43,10 +43,11 @@ export type ProjectPost = ProjectMeta & {
   html: string
 }
 
-export const getBlogIndex = createServerFn({ method: 'GET' })
-  .handler(async () => {
+export const getBlogIndex = createServerFn({ method: 'GET' }).handler(
+  async () => {
     return getBlogIndexInternal()
-  })
+  },
+)
 
 export const getBlogPostBySlug = createServerFn({ method: 'GET' })
   .inputValidator(z.object({ slug: z.string() }))
@@ -54,10 +55,11 @@ export const getBlogPostBySlug = createServerFn({ method: 'GET' })
     return getBlogPostBySlugInternal(data.slug)
   })
 
-export const getProjectIndex = createServerFn({ method: 'GET' })
-  .handler(async () => {
+export const getProjectIndex = createServerFn({ method: 'GET' }).handler(
+  async () => {
     return getProjectIndexInternal()
-  })
+  },
+)
 
 export const getProjectBySlug = createServerFn({ method: 'GET' })
   .inputValidator(z.object({ slug: z.string() }))
@@ -65,12 +67,12 @@ export const getProjectBySlug = createServerFn({ method: 'GET' })
     return getProjectBySlugInternal(data.slug)
   })
 
-export const getBlogPostsWithHtml = createServerFn({ method: 'GET' })
-  .handler(async () => {
+export const getBlogPostsWithHtml = createServerFn({ method: 'GET' }).handler(
+  async () => {
     return getBlogPostsWithHtmlInternal()
-  })
+  },
+)
 
-export const getResume = createServerFn({ method: 'GET' })
-  .handler(async () => {
-    return getResumeInternal()
-  })
+export const getResume = createServerFn({ method: 'GET' }).handler(async () => {
+  return getResumeInternal()
+})

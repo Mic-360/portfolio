@@ -4,7 +4,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { z } from 'zod'
-import type { GameMeta } from '@/lib/games';
+import type { GameMeta } from '@/lib/games'
 import { gameSchema } from '@/lib/games'
 
 const GAMES_SOURCES: Record<string, string> = import.meta.glob(
@@ -80,8 +80,7 @@ function updateGamesData(newGames: Array<GameMeta>) {
 
   for (const game of newGames) {
     const duplicate = existingRecords.some(
-      (existing) =>
-        existing.id === game.id || existing.title === game.title
+      (existing) => existing.id === game.id || existing.title === game.title,
     )
 
     if (!duplicate) {

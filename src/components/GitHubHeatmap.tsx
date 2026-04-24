@@ -228,13 +228,7 @@ export default function GitHubHeatmap({ username }: GitHubHeatmapProps) {
           scale: {
             color: {
               type: 'threshold',
-              range: [
-                '#21262d',
-                '#344d3d',
-                '#4c7b52',
-                '#7a9a65',
-                '#63a06a',
-              ],
+              range: ['#21262d', '#344d3d', '#4c7b52', '#7a9a65', '#63a06a'],
               domain: [1, 5, 10, 15],
             },
           },

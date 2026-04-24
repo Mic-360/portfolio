@@ -14,12 +14,14 @@ Subscribe to and retrieve blog posts via multiple formats. The blog covers web d
 Full RSS 2.0 feed with `content:encoded` for complete post content inline.
 
 **Example request:**
+
 ```
 GET https://bhaumicsingh.dev/rss
 Accept: application/xml
 ```
 
 **Response format:** RSS 2.0 XML with Atom self-link. Each `<item>` includes:
+
 - `<title>` — post title
 - `<link>` — canonical URL
 - `<description>` — post summary
@@ -43,6 +45,7 @@ Returns clean markdown with `x-markdown-tokens` header when `Accept: text/markdo
 Read an individual blog post by its URL slug.
 
 **Example:**
+
 ```
 GET https://bhaumicsingh.dev/blog/building-portfolio-with-tanstack
 Accept: text/markdown
@@ -60,6 +63,7 @@ Accept: application/xml
 ## Discovery
 
 Find available blog posts by:
+
 1. Parsing the RSS feed for the latest entries
 2. Checking `/llms-full.txt` for a complete blog index with URLs
 3. Parsing `/sitemap.xml` for all published URLs

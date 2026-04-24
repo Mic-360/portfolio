@@ -18,16 +18,16 @@
 
 ## Tech Stack
 
-| Layer | Tech |
-|-------|------|
-| **Framework** | [TanStack Start](https://tanstack.com/start) (React 19 + TanStack Router) |
-| **Styling** | [Tailwind CSS v4](https://tailwindcss.com/) with CSS custom properties |
-| **Content** | MDX via unified/remark/rehype + `gray-matter` |
-| **Animations** | [Motion](https://motion.dev/) (formerly Framer Motion) |
-| **Runtime** | [Nitro](https://nitro.unjs.io/) via TanStack Start |
-| **Validation** | [Zod](https://zod.dev/) |
-| **OG Images** | Dynamic SVG generation with `@resvg/resvg-js` |
-| **Search** | Command palette via `cmdk` |
+| Layer          | Tech                                                                      |
+| -------------- | ------------------------------------------------------------------------- |
+| **Framework**  | [TanStack Start](https://tanstack.com/start) (React 19 + TanStack Router) |
+| **Styling**    | [Tailwind CSS v4](https://tailwindcss.com/) with CSS custom properties    |
+| **Content**    | MDX via unified/remark/rehype + `gray-matter`                             |
+| **Animations** | [Motion](https://motion.dev/) (formerly Framer Motion)                    |
+| **Runtime**    | [Nitro](https://nitro.unjs.io/) via TanStack Start                        |
+| **Validation** | [Zod](https://zod.dev/)                                                   |
+| **OG Images**  | Dynamic SVG generation with `@resvg/resvg-js`                             |
+| **Search**     | Command palette via `cmdk`                                                |
 
 ## Features
 
@@ -48,18 +48,18 @@
 
 ## Pages
 
-| Route | Description |
-|-------|-------------|
-| `/` | Home — profile, experience roadmap, blogs, projects, certificates, health stats, GitHub heatmap, Pinterest |
-| `/about` | Extended bio |
-| `/blog` | Blog index and individual posts (`/blog/:slug`) |
-| `/projects` | Project index and detail pages (`/projects/:slug`) |
-| `/certificates` | Certificate gallery and detail pages (`/certificates/:slug`) |
-| `/pinterest/gallery` | Full Pinterest created pins gallery |
-| `/resume` | Resume viewer |
-| `/readme` | GitHub-style README page |
-| `/bento` | Bento grid layout |
-| `/rss` | RSS feed |
+| Route                | Description                                                                                                |
+| -------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `/`                  | Home — profile, experience roadmap, blogs, projects, certificates, health stats, GitHub heatmap, Pinterest |
+| `/about`             | Extended bio                                                                                               |
+| `/blog`              | Blog index and individual posts (`/blog/:slug`)                                                            |
+| `/projects`          | Project index and detail pages (`/projects/:slug`)                                                         |
+| `/certificates`      | Certificate gallery and detail pages (`/certificates/:slug`)                                               |
+| `/pinterest/gallery` | Full Pinterest created pins gallery                                                                        |
+| `/resume`            | Resume viewer                                                                                              |
+| `/readme`            | GitHub-style README page                                                                                   |
+| `/bento`             | Bento grid layout                                                                                          |
+| `/rss`               | RSS feed                                                                                                   |
 
 ## Getting Started
 

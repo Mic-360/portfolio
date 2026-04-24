@@ -2,5 +2,5 @@ import { createServerOnlyFn } from '@tanstack/react-start'
 import { requirePostApiKeyInternal } from '@/server/api-auth.server'
 
 export const requirePostApiKey = createServerOnlyFn((request: Request) => {
-	return requirePostApiKeyInternal(request)
+  return requirePostApiKeyInternal(request)
 })

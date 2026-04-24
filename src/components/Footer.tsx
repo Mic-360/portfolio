@@ -45,6 +45,8 @@ export default function Footer() {
             src="/frieren/team.svg"
             alt=""
             aria-hidden="true"
+            loading="lazy"
+            decoding="async"
             className="hero-blend-media absolute inset-0 h-full w-full object-contain object-center sm:object-bottom opacity-30"
           />
           <div className="absolute inset-0 bg-linear-to-l from-background/10 via-background/62 to-background" />
@@ -66,7 +68,7 @@ export default function Footer() {
 
             <div className="h-px w-full bg-border/15" />
 
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-[10px] tracking-[0.2em] text-muted-foreground/70">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-[10px] tracking-[0.2em] text-muted-foreground">
               <span>MIT licensed</span>
               <span>built with TanStack Start</span>
               <Link to="/rss" className="transition-colors hover:text-primary">
@@ -85,7 +87,7 @@ export default function Footer() {
               className="group flex items-end justify-between gap-5 lg:justify-end"
             >
               <div className="grid gap-1.5 text-left lg:text-right">
-                <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                   scan profile
                 </p>
                 <p className="text-sm leading-7 text-foreground/70">
@@ -97,6 +99,8 @@ export default function Footer() {
                 alt="Gravatar QR code"
                 width={84}
                 height={84}
+                loading="lazy"
+                decoding="async"
                 className="h-18 w-18 shrink-0 rounded-2xl border border-border/15 bg-background/30 p-1.5 transition-transform duration-500 ease-out group-hover:scale-105"
               />
             </motion.a>
@@ -134,7 +138,7 @@ export default function Footer() {
                 })}
             </ul>
 
-            <p className="text-[10px] tracking-[0.2em] text-muted-foreground/70 lg:justify-self-end">
+            <p className="text-[10px] tracking-[0.2em] text-muted-foreground lg:justify-self-end">
               {siteInfo.name} · {siteInfo.currentRole}
             </p>
           </div>

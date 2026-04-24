@@ -107,13 +107,13 @@ Deployed applications occupy ports 5000–5999. `portManager.js` scans this rang
 
 ## Tech Stack Rationale
 
-| Component | Technology | Rationale |
-| --- | --- | --- |
-| Runtime | Node.js | Pure JavaScript ecosystem; no native compilation on ARM |
-| Database | sql.js (WebAssembly SQLite) | Zero native compilation; full SQLite capability in pure JavaScript |
-| Sessions | session-file-store | Pure JS; stores sessions as JSON files, no native deps |
-| Auth | Passport.js + GitHub OAuth | Standard OAuth implementation; GitHub identity is natural for a deployment platform tied to GitHub repos |
-| Frontend | React + Vite + Tailwind CSS | Fast HMR in development; static build output served directly by Nginx in production |
-| Reverse proxy | Nginx | Single ingress point; routes dashboard and API traffic by path, serves static assets directly |
-| Tunneling | Cloudflare Tunnels | Solves the public IP problem without router configuration; programmatic tunnel provisioning via CLI |
-| Process manager | PM2 | `ecosystem.config.js` declares the multi-process system as code; auto-restart and log rotation on resource-constrained hardware |
+| Component       | Technology                  | Rationale                                                                                                                       |
+| --------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Runtime         | Node.js                     | Pure JavaScript ecosystem; no native compilation on ARM                                                                         |
+| Database        | sql.js (WebAssembly SQLite) | Zero native compilation; full SQLite capability in pure JavaScript                                                              |
+| Sessions        | session-file-store          | Pure JS; stores sessions as JSON files, no native deps                                                                          |
+| Auth            | Passport.js + GitHub OAuth  | Standard OAuth implementation; GitHub identity is natural for a deployment platform tied to GitHub repos                        |
+| Frontend        | React + Vite + Tailwind CSS | Fast HMR in development; static build output served directly by Nginx in production                                             |
+| Reverse proxy   | Nginx                       | Single ingress point; routes dashboard and API traffic by path, serves static assets directly                                   |
+| Tunneling       | Cloudflare Tunnels          | Solves the public IP problem without router configuration; programmatic tunnel provisioning via CLI                             |
+| Process manager | PM2                         | `ecosystem.config.js` declares the multi-process system as code; auto-restart and log rotation on resource-constrained hardware |

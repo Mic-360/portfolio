@@ -162,7 +162,9 @@ export function LoadingScreen() {
           <div className="flex w-full max-w-md flex-col items-center gap-3">
             <div className="flex items-baseline gap-2 font-mono text-sm tracking-widest text-primary dark:text-primary-foreground">
               <motion.span className="tabular-nums">{display}</motion.span>
-              <span className="text-primary/60 dark:text-primary-foreground/60">%</span>
+              <span className="text-primary/60 dark:text-primary-foreground/60">
+                %
+              </span>
             </div>
             <div className="relative h-px w-full overflow-hidden bg-primary dark:bg-primary-foreground/25">
               <motion.div

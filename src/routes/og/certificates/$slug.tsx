@@ -17,15 +17,19 @@ export const Route = createFileRoute('/og/certificates/$slug')({
   server: {
     handlers: {
       GET: async ({ params }) => {
-        const certificate = await getCertificateBySlug({ data: { slug: params.slug } })
+        const certificate = await getCertificateBySlug({
+          data: { slug: params.slug },
+        })
 
         if (!certificate) {
           return new Response('Not found', { status: 404 })
         }
 
-        const imageUrl = certificate.image_url 
-          ? (certificate.image_url.startsWith('http') ? certificate.image_url : `${process.env.PUBLIC_SITE_URL || 'http://localhost:3000'}${certificate.image_url}`)
-          : undefined;
+        const imageUrl = certificate.image_url
+          ? certificate.image_url.startsWith('http')
+            ? certificate.image_url
+            : `${process.env.PUBLIC_SITE_URL || 'http://localhost:3000'}${certificate.image_url}`
+          : undefined
 
         return withCrawlerHeaders(
           await createOgImageResponse({

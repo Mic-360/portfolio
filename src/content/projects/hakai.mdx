@@ -98,12 +98,12 @@ Six built-in language profiles -- `node`, `rust`, `python`, `flutter`, `java`, a
 
 ## Tech Stack Rationale
 
-| Component | Technology | Rationale |
-| --- | --- | --- |
-| Filesystem Engine | Rust | Zero-cost abstractions, direct OS API access, no garbage collector pauses during I/O-heavy operations |
-| Parallelism | Rayon | Work-stealing thread pool with ergonomic parallel iterators, proven in production Rust codebases |
-| Async Deletion | Tokio | Industry-standard async runtime with robust task scheduling and cancellation support |
-| TUI | Bun | Sub-50ms startup, fast rendering pipeline, and familiar TypeScript ergonomics for UI development |
-| IPC | NDJSON over stdio | Zero-dependency, streaming-friendly, human-readable, and trivially debuggable |
+| Component         | Technology        | Rationale                                                                                             |
+| ----------------- | ----------------- | ----------------------------------------------------------------------------------------------------- |
+| Filesystem Engine | Rust              | Zero-cost abstractions, direct OS API access, no garbage collector pauses during I/O-heavy operations |
+| Parallelism       | Rayon             | Work-stealing thread pool with ergonomic parallel iterators, proven in production Rust codebases      |
+| Async Deletion    | Tokio             | Industry-standard async runtime with robust task scheduling and cancellation support                  |
+| TUI               | Bun               | Sub-50ms startup, fast rendering pipeline, and familiar TypeScript ergonomics for UI development      |
+| IPC               | NDJSON over stdio | Zero-dependency, streaming-friendly, human-readable, and trivially debuggable                         |
 
 This architecture ensures that each component operates within its optimal domain: Rust handles the performance-critical systems work, Bun handles the interactive presentation, and the IPC protocol keeps them cleanly decoupled.

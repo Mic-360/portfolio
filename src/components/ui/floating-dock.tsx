@@ -24,6 +24,7 @@ export type DockItem = {
   href?: string
   rel?: string
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
+  onPointerEnter?: () => void
 }
 
 export const FloatingDock = ({
@@ -79,6 +80,7 @@ const FloatingDockMobile = ({
                 {item.onClick ? (
                   <button
                     onClick={item.onClick}
+                    onPointerEnter={item.onPointerEnter}
                     aria-label={item.title}
                     title={item.title}
                     className="flex h-10 w-10 items-center justify-center rounded-full border border-border/15 bg-background/55 backdrop-blur-2xl backdrop-saturate-150 shadow-sm shadow-black/[0.03] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-background/70"
@@ -89,6 +91,7 @@ const FloatingDockMobile = ({
                   <a
                     href={item.href}
                     rel={item.rel}
+                    onPointerEnter={item.onPointerEnter}
                     aria-label={item.title}
                     title={item.title}
                     className="flex h-10 w-10 items-center justify-center rounded-full border border-border/15 bg-background/55 backdrop-blur-2xl backdrop-saturate-150 shadow-sm shadow-black/[0.03] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-background/70"
@@ -144,6 +147,7 @@ function IconContainer({
   href,
   rel,
   onClick,
+  onPointerEnter,
 }: {
   mouseX: MotionValue
   title: string
@@ -151,6 +155,7 @@ function IconContainer({
   href?: string
   rel?: string
   onClick?: DockItem['onClick']
+  onPointerEnter?: DockItem['onPointerEnter']
 }) {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -231,6 +236,7 @@ function IconContainer({
     return (
       <button
         onClick={onClick}
+        onPointerEnter={onPointerEnter}
         aria-label={title}
         title={title}
         className="cursor-pointer rounded-full p-0.5 transition-[transform,background-color,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:bg-foreground/[0.06]"
@@ -244,6 +250,7 @@ function IconContainer({
     <a
       href={href}
       rel={rel}
+      onPointerEnter={onPointerEnter}
       aria-label={title}
       title={title}
       className="rounded-full p-0.5 transition-[transform,background-color,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:bg-foreground/[0.06]"

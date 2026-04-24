@@ -2,7 +2,7 @@
 
 import DottedMap from 'dotted-map'
 import { motion } from 'motion/react'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useTheme } from '../ThemeProvider'
 
@@ -21,16 +21,21 @@ export default function WorldMap({
   className,
 }: MapProps) {
   const svgRef = useRef<SVGSVGElement>(null)
-  const map = new DottedMap({ height: 100, grid: 'diagonal' })
-
   const { mode } = useTheme()
+  const [svgMapUrl, setSvgMapUrl] = useState<string | null>(null)
 
-  const svgMap = map.getSVG({
-    radius: 0.22,
-    color: mode === 'normal' || mode === 'midnight' ? '#FFFFFF60' : '#00000060',
-    shape: 'circle',
-    backgroundColor: 'transparent',
-  })
+  useEffect(() => {
+    const map = new DottedMap({ height: 100, grid: 'diagonal' })
+    const svgMap = map.getSVG({
+      radius: 0.22,
+      color:
+        mode === 'normal' || mode === 'midnight' ? '#FFFFFF60' : '#00000060',
+      shape: 'circle',
+      backgroundColor: 'transparent',
+    })
+
+    setSvgMapUrl(`data:image/svg+xml;utf8,${encodeURIComponent(svgMap)}`)
+  }, [mode])
 
   const projectPoint = (lat: number, lng: number) => {
     const x = (lng + 180) * (800 / 360)
@@ -51,14 +56,16 @@ export default function WorldMap({
     <div
       className={`w-full aspect-2/1 rounded-lg relative font-sans ${className ?? ''}`}
     >
-      <img
-        src={`data:image/svg+xml;utf8,${encodeURIComponent(svgMap)}`}
-        className="h-full w-full mask-[linear-gradient(to_bottom,transparent,white_10%,white_90%,transparent)] pointer-events-none select-none"
-        alt="world map"
-        height="495"
-        width="1056"
-        draggable={false}
-      />
+      {svgMapUrl ? (
+        <img
+          src={svgMapUrl}
+          className="h-full w-full mask-[linear-gradient(to_bottom,transparent,white_10%,white_90%,transparent)] pointer-events-none select-none"
+          alt="world map"
+          height="495"
+          width="1056"
+          draggable={false}
+        />
+      ) : null}
       <svg
         ref={svgRef}
         viewBox="0 0 800 400"

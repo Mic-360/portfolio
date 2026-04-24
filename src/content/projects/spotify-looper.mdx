@@ -86,12 +86,12 @@ Spotify's SDKs do not emit events when playback position crosses an arbitrary bo
 
 ## Tech Stack Rationale
 
-| Component | Technology | Rationale |
-| --- | --- | --- |
-| UI Framework | Flutter + Dart | Single codebase covering Android APK and web PWA; consistent layout and theming |
-| State Management | Riverpod | Compile-time dependency injection; clean separation of auth, playback, and loop state domains |
-| Audio Playback | Spotify SDK (App Remote + Web Playback) | Required for programmatic seek control over user's Spotify library |
-| Authentication | OAuth 2.0 (Spotify Web API) | Spotify's mandated authorization flow; automated refresh sustains session reliability |
-| Token Storage | flutter_secure_storage | Keystore-backed on Android, Web Crypto on web — tokens never touch plaintext storage |
-| Theming | Material 3 + PaletteGenerator | Dynamic color from album art; coherent per-track visual identity |
-| Deployment | Firebase Hosting | Zero-config web PWA deployment with CDN-backed asset delivery |
+| Component        | Technology                              | Rationale                                                                                     |
+| ---------------- | --------------------------------------- | --------------------------------------------------------------------------------------------- |
+| UI Framework     | Flutter + Dart                          | Single codebase covering Android APK and web PWA; consistent layout and theming               |
+| State Management | Riverpod                                | Compile-time dependency injection; clean separation of auth, playback, and loop state domains |
+| Audio Playback   | Spotify SDK (App Remote + Web Playback) | Required for programmatic seek control over user's Spotify library                            |
+| Authentication   | OAuth 2.0 (Spotify Web API)             | Spotify's mandated authorization flow; automated refresh sustains session reliability         |
+| Token Storage    | flutter_secure_storage                  | Keystore-backed on Android, Web Crypto on web — tokens never touch plaintext storage          |
+| Theming          | Material 3 + PaletteGenerator           | Dynamic color from album art; coherent per-track visual identity                              |
+| Deployment       | Firebase Hosting                        | Zero-config web PWA deployment with CDN-backed asset delivery                                 |

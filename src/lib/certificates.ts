@@ -4,7 +4,11 @@
 
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
-import { getCertificateBySlugInternal, getCertificateIndexInternal, updateCertificatesDataInternal } from '@/server/certificates.server'
+import {
+  getCertificateBySlugInternal,
+  getCertificateIndexInternal,
+  updateCertificatesDataInternal,
+} from '@/server/certificates.server'
 
 export const certificateSchema = z.object({
   id: z.number(),
@@ -19,16 +23,20 @@ export const certificateSchema = z.object({
   image_url: z.string(),
 })
 
-export const updateCertificatesSchema = z.array(certificateSchema.omit({ slug: true }))
+export const updateCertificatesSchema = z.array(
+  certificateSchema.omit({ slug: true }),
+)
 
 export type CertificateMeta = z.infer<typeof certificateSchema>
-export type CertificateUpdateInput = z.infer<typeof updateCertificatesSchema>[number]
+export type CertificateUpdateInput = z.infer<
+  typeof updateCertificatesSchema
+>[number]
 
-export const getCertificateIndex = createServerFn({ method: 'GET' })
-  .handler(() => {
-
+export const getCertificateIndex = createServerFn({ method: 'GET' }).handler(
+  () => {
     return getCertificateIndexInternal()
-  })
+  },
+)
 
 export const getCertificateBySlug = createServerFn({ method: 'GET' })
   .inputValidator(z.object({ slug: z.string() }))

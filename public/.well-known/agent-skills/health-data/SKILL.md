@@ -14,12 +14,14 @@ Access real-time health and fitness metrics synced from Apple Health. Data inclu
 Retrieve all health metrics with computed statistics and daily aggregates.
 
 **Example request:**
+
 ```
 GET https://bhaumicsingh.dev/api/health
 Accept: application/json
 ```
 
 **Example response:**
+
 ```json
 {
   "status": "ok",
@@ -49,6 +51,7 @@ Accept: application/json
 **Available metric categories:** `steps`, `activeEnergy`, `restingEnergy`, `distance`, `spO2`, `heartRate`, `sleep`
 
 Each category (except sleep) includes:
+
 - `stats` — min, max, avg, and total (where applicable)
 - `dailyAggregates` — values aggregated by day (sum for cumulative metrics, avg for rate metrics)
 - `raw` — individual data points with timestamps
@@ -58,6 +61,7 @@ Each category (except sleep) includes:
 Update health data. Requires the `x-api-key` header.
 
 **Example request:**
+
 ```
 POST https://bhaumicsingh.dev/api/health
 Content-Type: application/json
@@ -73,9 +77,9 @@ x-api-key: <your-api-key>
 
 ## Authentication
 
-| Method | Auth Required |
-|--------|--------------|
-| GET    | None         |
+| Method | Auth Required      |
+| ------ | ------------------ |
+| GET    | None               |
 | POST   | `x-api-key` header |
 
 ## Error Handling

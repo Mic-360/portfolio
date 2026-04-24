@@ -77,11 +77,11 @@ The rate limiter uses Go's `golang.org/x/time/rate` token bucket implementation 
 
 ## Tech Stack Rationale
 
-| Component | Technology | Rationale |
-| --- | --- | --- |
-| Runtime | Go | Compiled binary, low memory footprint, native concurrency primitives, no GC pauses under normal WAF-scale load |
-| TUI | Bubble Tea | Elm-architecture model makes the dashboard state machine predictable; composable components for multi-panel layouts |
-| Rule config | YAML | Human-readable, diff-friendly, trivial to version-control alongside application code |
-| Packaging | Docker | Single-file Compose sidecar pattern; `depends_on` + environment variable config is idiomatic for microservice deployment |
+| Component   | Technology | Rationale                                                                                                                |
+| ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Runtime     | Go         | Compiled binary, low memory footprint, native concurrency primitives, no GC pauses under normal WAF-scale load           |
+| TUI         | Bubble Tea | Elm-architecture model makes the dashboard state machine predictable; composable components for multi-panel layouts      |
+| Rule config | YAML       | Human-readable, diff-friendly, trivial to version-control alongside application code                                     |
+| Packaging   | Docker     | Single-file Compose sidecar pattern; `depends_on` + environment variable config is idiomatic for microservice deployment |
 
 At steady state: under 2ms added latency per request, under 30MB resident memory, binary size under 15MB. Handles thousands of requests per second on a single CPU core — appropriate for protecting services from the hobby tier up to moderate production traffic.

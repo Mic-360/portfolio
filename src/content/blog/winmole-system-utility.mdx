@@ -41,14 +41,14 @@ So: PowerShell handles the heavy lifting. Compiled Go binaries handle the visual
 
 **The command surface:**
 
-| Command | What it does |
-|---|---|
-| `wimo clean` | Deep system cleanup — temp files, browser caches, Windows Update leftovers, system logs |
-| `wimo uninstall` | Interactive app uninstaller pulling from Registry, Winget, and local programs |
-| `wimo optimize` | Flush DNS, clear icon and thumbnail caches, trim SSD, restart services |
-| `wimo analyze` | Go TUI — real-time directory scanner with live size updates |
-| `wimo status` | Go TUI — card dashboard: CPU, RAM, disk, network, processes, health score |
-| `wimo purge` | Nuke build artifacts: `node_modules`, `.next`, `target`, `__pycache__`, Flutter cache |
+| Command          | What it does                                                                            |
+| ---------------- | --------------------------------------------------------------------------------------- |
+| `wimo clean`     | Deep system cleanup — temp files, browser caches, Windows Update leftovers, system logs |
+| `wimo uninstall` | Interactive app uninstaller pulling from Registry, Winget, and local programs           |
+| `wimo optimize`  | Flush DNS, clear icon and thumbnail caches, trim SSD, restart services                  |
+| `wimo analyze`   | Go TUI — real-time directory scanner with live size updates                             |
+| `wimo status`    | Go TUI — card dashboard: CPU, RAM, disk, network, processes, health score               |
+| `wimo purge`     | Nuke build artifacts: `node_modules`, `.next`, `target`, `__pycache__`, Flutter cache   |
 
 28+ cleanup targets across user caches, browser data, package managers, and dev tool leftovers.
 

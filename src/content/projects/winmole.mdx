@@ -89,14 +89,14 @@ The `status` command's card layout is built with Lip Gloss for styled borders, p
 
 ## Tech Stack
 
-| Component | Technology | Rationale |
-| --- | --- | --- |
-| System Integration | PowerShell 5.1+ | First-class Windows API access, ships on all modern Windows, no installation required |
-| .NET File I/O | System.IO.Directory | Streaming enumeration avoids `Get-ChildItem` object allocation overhead |
-| Parallelism | PowerShell Runspace Pools | Pre-warmed thread pool (up to 16 threads) for concurrent size calculation and deletion |
-| Dashboard TUI | Go + Bubble Tea | Elm-architecture event loop with alt-screen mode; goroutines handle concurrent scanning |
-| Terminal Styling | Lip Gloss | Declarative ANSI styling with responsive layout primitives |
-| System Metrics | gopsutil | Cross-platform hardware metrics library; provides CPU, memory, disk, and network data |
-| Package Management | winget integration | Native Windows package manager; no third-party dependency for app inventory |
+| Component          | Technology                | Rationale                                                                               |
+| ------------------ | ------------------------- | --------------------------------------------------------------------------------------- |
+| System Integration | PowerShell 5.1+           | First-class Windows API access, ships on all modern Windows, no installation required   |
+| .NET File I/O      | System.IO.Directory       | Streaming enumeration avoids `Get-ChildItem` object allocation overhead                 |
+| Parallelism        | PowerShell Runspace Pools | Pre-warmed thread pool (up to 16 threads) for concurrent size calculation and deletion  |
+| Dashboard TUI      | Go + Bubble Tea           | Elm-architecture event loop with alt-screen mode; goroutines handle concurrent scanning |
+| Terminal Styling   | Lip Gloss                 | Declarative ANSI styling with responsive layout primitives                              |
+| System Metrics     | gopsutil                  | Cross-platform hardware metrics library; provides CPU, memory, disk, and network data   |
+| Package Management | winget integration        | Native Windows package manager; no third-party dependency for app inventory             |
 
 WiMo demonstrates that PowerShell and Go are genuinely complementary runtimes: PowerShell owns the system integration surface where Windows API breadth matters, and Go owns the real-time rendering surface where concurrency and render performance matter. The two communicate through process invocation with clean handoff, keeping each component in its area of strength.

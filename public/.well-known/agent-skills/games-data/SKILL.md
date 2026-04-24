@@ -14,12 +14,14 @@ Retrieve and manage the gaming library. Returns game metadata including titles, 
 Retrieve the full games collection.
 
 **Example request:**
+
 ```
 GET https://bhaumicsingh.dev/api/games
 Accept: application/json
 ```
 
 **Example response:**
+
 ```json
 {
   "status": "ok",
@@ -40,6 +42,7 @@ Accept: application/json
 Add or update games in the collection. Accepts a single game object or an array. Requires the `x-api-key` header.
 
 **Example request:**
+
 ```
 POST https://bhaumicsingh.dev/api/games
 Content-Type: application/json
@@ -51,6 +54,7 @@ x-api-key: <your-api-key>
 ```
 
 **Success response:**
+
 ```json
 {
   "status": "success",
@@ -61,9 +65,9 @@ x-api-key: <your-api-key>
 
 ## Authentication
 
-| Method | Auth Required |
-|--------|--------------|
-| GET    | None         |
+| Method | Auth Required      |
+| ------ | ------------------ |
+| GET    | None               |
 | POST   | `x-api-key` header |
 
 ## Error Handling

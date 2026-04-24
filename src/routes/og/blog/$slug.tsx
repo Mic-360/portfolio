@@ -24,9 +24,11 @@ export const Route = createFileRoute('/og/blog/$slug')({
           return new Response('Not found', { status: 404 })
         }
 
-        const imageUrl = post.image 
-          ? (post.image.startsWith('http') ? post.image : `${process.env.PUBLIC_SITE_URL || 'http://localhost:3000'}${post.image}`)
-          : undefined;
+        const imageUrl = post.image
+          ? post.image.startsWith('http')
+            ? post.image
+            : `${process.env.PUBLIC_SITE_URL || 'http://localhost:3000'}${post.image}`
+          : undefined
 
         return withCrawlerHeaders(
           await createOgImageResponse({

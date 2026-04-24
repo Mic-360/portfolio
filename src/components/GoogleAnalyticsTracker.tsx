@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 
 declare global {
   interface Window {
-    dataLayer: Array<unknown>
+    dataLayer?: Array<unknown>
     gtag?: (...args: Array<unknown>) => void
   }
 }
@@ -32,8 +32,7 @@ export function GoogleAnalyticsTracker({
         return
       }
 
-      // eslint-disable-next-line no-self-assign
-      window.dataLayer = window.dataLayer
+      window.dataLayer = window.dataLayer || []
       window.gtag =
         window.gtag ||
         function gtag(...args: Array<unknown>) {

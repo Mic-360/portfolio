@@ -14,12 +14,14 @@ Retrieve blog posts, project case studies, certificates, and profile information
 Return all professional certificates with metadata.
 
 **Example request:**
+
 ```
 GET https://bhaumicsingh.dev/api/certificates
 Accept: application/json
 ```
 
 **Example response:**
+
 ```json
 {
   "status": "ok",
@@ -41,6 +43,7 @@ Accept: application/json
 Fetch a Gravatar profile by email hash or username. The response is cached for 6 hours at the CDN level.
 
 **Example request:**
+
 ```
 GET https://bhaumicsingh.dev/api/gravatar/bhaumic
 Accept: application/json

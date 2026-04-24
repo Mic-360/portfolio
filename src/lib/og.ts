@@ -17,14 +17,22 @@ function escapeXml(input: string) {
     .replace(/'/g, '&apos;')
 }
 
-function buildOgSvg({ title, description, label, date, image }: OgImageOptions) {
+function buildOgSvg({
+  title,
+  description,
+  label,
+  date,
+  image,
+}: OgImageOptions) {
   const safeTitle = escapeXml(title)
   const safeDescription = description ? escapeXml(description) : ''
   const safeLabel = label ? escapeXml(label) : ''
   const safeDate = date ? escapeXml(date) : ''
-  
+
   // Clean potentially problematic URLs
-  const safeImage = image ? `<image href="${escapeXml(image)}" x="0" y="0" width="1200" height="630" preserveAspectRatio="xMidYMid slice" opacity="0.3" />` : ''
+  const safeImage = image
+    ? `<image href="${escapeXml(image)}" x="0" y="0" width="1200" height="630" preserveAspectRatio="xMidYMid slice" opacity="0.3" />`
+    : ''
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">

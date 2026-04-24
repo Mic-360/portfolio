@@ -73,8 +73,8 @@ The deliberate design choice is that the review appears in the Copilot Chat pane
 
 ## Tech Stack Rationale
 
-| Component | Technology | Rationale |
-| --- | --- | --- |
-| Language | TypeScript | VS Code extension API is TypeScript-native; full type coverage for the Git repository and editor APIs |
-| Extension host | VS Code API | Direct access to the Git index watcher, inter-extension command dispatch, and settings system |
-| Review engine | GitHub Copilot Chat | Existing, authenticated AI review capability within VS Code; no additional API keys or external services required |
+| Component      | Technology          | Rationale                                                                                                         |
+| -------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Language       | TypeScript          | VS Code extension API is TypeScript-native; full type coverage for the Git repository and editor APIs             |
+| Extension host | VS Code API         | Direct access to the Git index watcher, inter-extension command dispatch, and settings system                     |
+| Review engine  | GitHub Copilot Chat | Existing, authenticated AI review capability within VS Code; no additional API keys or external services required |

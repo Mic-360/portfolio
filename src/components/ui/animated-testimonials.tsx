@@ -1,9 +1,9 @@
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react'
 import { AnimatePresence, motion } from 'motion/react'
 
+import { siteMeta } from '@/config/site-data'
 import { useEffect, useState } from 'react'
 import { LinkPreview } from './link-preview'
-import { siteMeta } from '@/config/site-data'
 
 type Testimonial = {
   quote: string
@@ -90,6 +90,8 @@ export const AnimatedTestimonials = ({
                   alt={testimonial.name}
                   width={500}
                   height={500}
+                  loading="lazy"
+                  decoding="async"
                   draggable={true}
                   data-backlight="off"
                   className="h-full w-full rounded-2xl object-contain object-center bg-foreground/5 p-3"
@@ -153,12 +155,14 @@ export const AnimatedTestimonials = ({
           <div className="flex items-center gap-3">
             <button
               onClick={handlePrev}
+              aria-label="Previous testimonial"
               className="group/button flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-background/60 backdrop-blur-sm transition-colors hover:bg-background/80"
             >
               <IconArrowLeft className="h-4 w-4 text-muted-foreground transition-transform duration-300 group-hover/button:rotate-12" />
             </button>
             <button
               onClick={handleNext}
+              aria-label="Next testimonial"
               className="group/button flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-background/60 backdrop-blur-sm transition-colors hover:bg-background/80"
             >
               <IconArrowRight className="h-4 w-4 text-muted-foreground transition-transform duration-300 group-hover/button:-rotate-12" />

@@ -183,6 +183,7 @@ export const Carousel = ({
         </div>
         <div className="mr-10 flex justify-end gap-2">
           <button
+            aria-label="Scroll carousel left"
             className="relative z-40 flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 disabled:opacity-50"
             onClick={scrollLeft}
             disabled={!canScrollLeft}
@@ -190,6 +191,7 @@ export const Carousel = ({
             <IconArrowNarrowLeft className="h-6 w-6 text-gray-500" />
           </button>
           <button
+            aria-label="Scroll carousel right"
             className="relative z-40 flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 disabled:opacity-50"
             onClick={scrollRight}
             disabled={!canScrollRight}
