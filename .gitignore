@@ -13,6 +13,5 @@ count.txt
 todos.json
 .yarn
 .vscode
-*.lock
 *.dev.*
 .data
