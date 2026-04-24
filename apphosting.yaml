@@ -17,6 +17,10 @@ env:
   #   availability:
   #     - BUILD
   #     - RUNTIME
+  - variable: GOOGLE_PACKAGE_MANAGER
+    value: 'bun'
+    availability:
+      - BUILD
   - variable: NODE_OPTIONS
     value: '--max_old_space_size=4096'
     availability:

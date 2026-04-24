@@ -1,7 +1,7 @@
+import { URL, fileURLToPath } from 'node:url'
 import { devtools } from '@tanstack/devtools-vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import viteReact from '@vitejs/plugin-react'
-import { URL, fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
 import viteTsConfigPaths from 'vite-tsconfig-paths'
 
@@ -51,7 +51,10 @@ const config = defineConfig({
           // the id is "\0vite/preload-helper.js" which does not contain
           // "node_modules". Letting it fall through caused it to be merged
           // into vendor-cal-heatmap, dragging that chunk into the main entry.
-          if (id.includes('vite/preload-helper') || id.includes('vite/modulepreload-polyfill'))
+          if (
+            id.includes('vite/preload-helper') ||
+            id.includes('vite/modulepreload-polyfill')
+          )
             return 'vendor-vite'
           if (!id.includes('node_modules')) return
           if (id.includes('motion')) return 'vendor-motion'
@@ -124,7 +127,10 @@ const config = defineConfig({
           headers: { 'Cache-Control': 'public, max-age=31536000, immutable' },
         },
         '/robots.txt': {
-          headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate' },
+          headers: {
+            'Cache-Control':
+              'no-store, no-cache, must-revalidate, proxy-revalidate',
+          },
           swr: false,
           cache: false,
         },
