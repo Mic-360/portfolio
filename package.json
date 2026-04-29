@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev --port 3000",
-    "build": "vite build",
+    "build": "node scripts/build-resume.mjs && vite build",
+    "build:resume": "node scripts/build-resume.mjs",
     "preview": "vite preview",
     "test": "vitest run",
     "lint": "eslint",
@@ -68,6 +69,7 @@
     "@vitejs/plugin-react": "^5.0.4",
     "babel-plugin-react-compiler": "^1.0.0",
     "jsdom": "^27.0.0",
+    "node-latex-compiler": "1.0.5",
     "prettier": "^3.5.3",
     "sharp": "^0.34.5",
     "tailwindcss": "^4.0.6",

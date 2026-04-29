@@ -145,9 +145,8 @@ function ResumePage() {
                   </span>
                 </button>
                 <a
-                  href="/resume.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/CV_Bhaumic_Singh.pdf"
+                  download="CV_Bhaumic_Singh.pdf"
                   className="group inline-flex items-center gap-2 rounded-full border border-border/30 px-7 py-3 text-sm font-medium text-foreground transition-all duration-300 hover:border-primary/50 hover:text-primary"
                 >
                   Download PDF
