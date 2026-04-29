@@ -1,0 +1,99 @@
+---
+title: "Shortlinks: I Built a Link Shortener in 2026 Because Apparently Nobody Told bit.ly to Stop Tracking People"
+date: '2026-04-29'
+summary: "Every URL you share is a surveillance receipt. So I built a link shortener that strips the tracking junk, detects the platform, and — because 2026 — ships an MCP server for AI agents. You're welcome."
+tags:
+  - 'Next.js'
+  - 'Appwrite'
+  - 'MCP'
+  - 'TypeScript'
+categories:
+  - 'Dev Story'
+image: '/shortlinks.png'
+---
+
+# Shortlinks: I Built a Link Shortener in 2026 Because Apparently Nobody Told bit.ly to Stop Tracking People
+
+> "Every short link is just a tracking pixel wearing a trench coat."
+
+It started, as all questionable life decisions do, with a LinkedIn share.
+
+I went to paste an article link into a message and watched the URL balloon to 400 characters. `utm_source=newsletter&utm_medium=email&utm_campaign=q1_2026_march_week3_segment_b_resend_v2_final_FINAL`. Beautiful. Poetic. A complete dossier on exactly where I came from, what newsletter I read, and which A/B test variant I was deemed worthy of.
+
+I thought: surely there's a good link shortener that strips this garbage. Something clean. Something that doesn't also sell my click data to seventeen ad networks.
+
+Reader, there wasn't.
+
+So naturally I built one.
+
+## The Audacity of Building a Link Shortener
+
+Let me be upfront: link shorteners are a solved problem. bit.ly exists. TinyURL exists. There are approximately four hundred other services doing this. The correct answer here was to pick one and move on with my life.
+
+I did not pick one and move on with my life.
+
+The problem isn't shortening. The problem is that every major shortener is in the business of *analytics*, which is a polite word for surveillance. You don't get a short link — you get a tracking pixel with a redirect stapled to it. Your clicks are a product being sold before you've finished clicking.
+
+The pitch for Shortlinks is boring on purpose: strip the tracking parameters, make a short link, count the clicks as a single integer on the link document, and stop there. No cohort analysis. No funnel attribution. No "users who clicked this also clicked..." sidebar.
+
+## The URL Cleaning Pipeline (Or: Knowing Your Enemy)
+
+The fun part was cataloguing every tracking parameter I could find. You think `utm_source` is the whole list? Adorable.
+
+```
+utm_*       — Google's gift to marketers everywhere
+fbclid      — Facebook wants to know you clicked
+gclid       — Google Ads, watching from the shadows
+msclkid     — Microsoft decided they wanted some too
+igshid      — Instagram's secret handshake
+igsh        — Instagram's even more secret handshake (yes, both)
+mc_cid      — Mailchimp, tracking your email opens with links now
+twclid      — Twitter/X, forever lurking
+yclid       — Yandex, making a surprise appearance
+spm         — Alibaba's contribution to the surveillance economy
+_ga, _gl    — Google Analytics, haunting your query strings
+```
+
+The cleaner runs through the URL's query params and drops anything that matches. Platform-specific params — YouTube's `v=` and `list=`, Google Drive's file IDs, document anchors — are preserved. Cleaning should never break a link. That's the one invariant that matters.
+
+What's left after cleaning is what gets stored. The original URL is also preserved for auditability. You can verify the receipt.
+
+## Platform Detection: The Feature Nobody Asked For That Turned Out to Be Useful
+
+I added platform detection because redirect metadata seemed useful to have. Twenty-three platforms — LinkedIn, YouTube, Instagram, X, Google Drive, Docs, Sheets, Forms, Maps, GitHub, Notion, Figma, Spotify, Discord, Telegram, Notion, Pinterest, Reddit, TikTok, Amazon, Medium, WhatsApp — matched by host regex. Everything else falls through to `web`.
+
+The platform is metadata only. Every short link still redirects from a flat path. But when you're scanning a list of shortened links and trying to remember which YouTube video you shared two weeks ago, having `youtube` stamped on it is genuinely useful.
+
+It also routes the redirect through a platform path segment — `/youtube/abc123` instead of just `/abc123` — which has the side effect of being faintly readable by human beings, a property link shorteners have historically not prioritized.
+
+## Three Doors Into the Same Engine
+
+This is the part I'm actually proud of.
+
+The same URL cleaning and link creation logic ships in three interfaces from one codebase:
+
+**Website.** Paste a URL, get a short link, copy it. The whole flow is a single form. Nothing else on the page does anything clever. That's the point.
+
+**REST API.** `POST /api/v1/links` with a JSON body. Returns the slug, the short URL, the cleaned URL, and the detected platform. Rate-limited to two creations per second per identity — same limit as the website, applied consistently.
+
+**MCP server.** This is where it gets slightly absurd in a good way. The same engine ships as a Model Context Protocol server that AI agents can connect to. Three tools: `create_short_link`, `clean_url` (strip tracking params and get metadata without creating a link), and `get_link_info` (look up an existing slug). Drop the endpoint into Claude Desktop and your AI assistant can shorten links.
+
+I built a link shortener that AI agents can use. In 2026, this is apparently a reasonable thing to do. I've made peace with it.
+
+## Rate Limiting Without Storing Your IP Address
+
+The rate limiter does two creations per second per identity. The implementation detail I'm pleased with: rate limit identifiers are SHA-256 hashes of the IP or API key, stored in Appwrite as the window key. The raw IP never hits the database. A record that says `sha256:a3f9...` can't be reverse-engineered to identify anyone. It's still a useful rate limit. It just doesn't double as a surveillance database.
+
+The window logic creates a document per identity per second. On conflict, it increments an attribute with a ceiling. If the ceiling is exceeded, Appwrite returns an error that the rate limiter catches and translates to a 429. The rate limit document expires sixty seconds after the window closes. No cron jobs, no cleanup workers.
+
+## Was It Worth Building?
+
+Probably not from a pure time-to-value calculation. bit.ly is free. I could have just used that.
+
+But bit.ly would have tracked me. And building this took one weekend, left me with a codebase I can actually read, and gave me an MCP server I can wire into my AI tooling for link operations.
+
+The tracking parameter list alone was worth researching. Turns out the surveillance economy has done tremendous work on naming conventions. At least they're thorough.
+
+Try it at [shortlinks.bhaumicsingh.tech](https://shortlinks.bhaumicsingh.tech). Paste something long, get something short, notice the `utm_` junk is gone, move on with your day.
+
+Source is on [GitHub](https://github.com/Mic-360/shortlinks) if you'd like to audit the list of things being stripped from your URLs.

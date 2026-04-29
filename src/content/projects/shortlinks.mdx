@@ -1,0 +1,107 @@
+---
+title: 'Shortlinks'
+date: '2026-04-29'
+summary: 'A privacy-first link shortener that strips tracking parameters, detects platforms across 23 services, and ships the same engine as a REST API and an MCP server for AI agents — backed by Appwrite.'
+stack:
+  - 'Next.js'
+  - 'TypeScript'
+  - 'Appwrite'
+  - 'MCP'
+  - 'Zod'
+links:
+  - label: 'GitHub'
+    url: 'https://github.com/Mic-360/shortlinks'
+  - label: 'Live'
+    url: 'https://shortlinks.bhaumiksingh.tech'
+tags:
+  - 'nextjs'
+  - 'typescript'
+  - 'appwrite'
+  - 'mcp'
+  - 'api'
+categories:
+  - 'tooling'
+image: '/shortlinks.png'
+---
+
+# Shortlinks
+
+A privacy-first, editorial link shortener that strips tracking parameters before storing, detects the originating platform across 23 services, and exposes the same core engine through three interfaces: a website, a REST API, and an MCP server for AI agents.
+
+## Overview
+
+Most link shorteners monetize click analytics, which means tracking identifiers embedded in URLs are preserved — or even augmented — on the way through. Shortlinks inverts this: tracking parameters are stripped at creation time, the cleaned URL is what gets stored and served, and click counts are stored as a single aggregate integer with no session data attached. The system is backed by Appwrite for storage and rate limiting, deployed on Next.js App Router.
+
+## Architecture
+
+The core logic is a shared service layer consumed by all three interfaces. URL cleaning, platform detection, slug generation, rate limiting, and link storage are implemented once and not duplicated per interface.
+
+### URL Cleaning
+
+The cleaner parses the input URL and drops any query parameter that matches a known tracking identifier. The match list covers prefix-based patterns (`utm_*`, `mc_*`, `pk_*`, `hsa_*`, `_hs*`, `oly_*`, `vero_*`) and an exact-match set of over thirty identifiers including `fbclid`, `gclid`, `msclkid`, `igshid`, `igsh`, `twclid`, `yclid`, `spm`, `_ga`, `_gl`, and their platform-specific variants.
+
+Platform-functional parameters are preserved — YouTube's `v=` and `list=`, Google Drive file IDs, document fragment anchors. The constraint is that cleaning must never break a link. Both the original URL and the cleaned URL are stored, providing a verifiable audit trail.
+
+### Platform Detection
+
+Platform detection is a regex match against the URL hostname, covering 23 services: LinkedIn, YouTube, Instagram, X/Twitter, Google Drive, Docs, Sheets, Forms, Maps, Facebook, TikTok, Reddit, GitHub, Notion, Figma, Amazon, Medium, WhatsApp, Telegram, Discord, Spotify, Pinterest, and a `web` fallback. Detection is metadata only — it informs the stored record and the human-readable path segment but does not affect redirect behavior.
+
+### Link Storage and Slug Generation
+
+Short links are stored in Appwrite as documents keyed by their slug. Slug generation retries up to six times on conflict before failing. Reserved slugs (for internal routes like `api`, `docs`) are excluded from generation. A link record carries: slug, original URL, cleaned URL, platform, platform host, creator identity, click count, active flag, and optional expiry.
+
+Redirects are served from a flat App Router catch-all route that increments `clickCount` in Appwrite on each hit. The increment is best-effort and never blocks the redirect response.
+
+### Rate Limiting
+
+Rate limiting is implemented without storing raw IP addresses. Each identity — derived from an API key header or a hashed IP — is passed through SHA-256 before being used as a database key. The limit is 2 creations per second per identity.
+
+The rate limiter creates a document for each `{scope, identityHash, windowStart}` tuple. On conflict (document already exists for this window), it increments a bounded attribute in Appwrite using `incrementDocumentAttribute` with a ceiling. If the ceiling is exceeded, Appwrite returns an error that maps to a 429. Documents expire 60 seconds after their window, eliminating the need for a separate cleanup job.
+
+## Interfaces
+
+### Website
+
+A single-page form: paste a URL, receive a short link. The form validates client-side and calls the REST API. There is no account, no email wall, no cookie consent banner.
+
+### REST API
+
+```
+POST /api/v1/links        — create a short link
+GET  /api/v1/links/:slug  — fetch link metadata
+POST /api/v1/clean        — clean a URL without creating a link
+GET  /api/health          — service liveness
+```
+
+All endpoints accept and return JSON. Rate limit state is returned in standard `X-RateLimit-*` headers. The API is the canonical interface — the website is a thin client on top of it.
+
+### MCP Server
+
+The same engine ships as a Model Context Protocol server, accessible at `/api/mcp` (HTTP transport) and as a standalone stdio binary for local tooling. Three tools are exposed:
+
+- **`create_short_link`** — strip tracking params, create a link, return slug and short URL.
+- **`clean_url`** — strip tracking params and return cleaned URL with platform metadata, without creating a link.
+- **`get_link_info`** — look up metadata for an existing slug by key.
+
+The MCP server supports both anonymous and API-key-authenticated identities, with the same rate limit applied consistently across all three interfaces from the same `checkRateLimit` call.
+
+## Key Design Decisions
+
+| Decision | Rationale |
+|---|---|
+| Appwrite as backend | Managed database with atomic attribute increment — removes the need for a dedicated caching layer for rate limiting |
+| SHA-256 identity hashing | Rate limit windows remain functional without ever persisting raw IP addresses |
+| Single service layer | URL cleaning, platform detection, and link creation logic are shared across website, REST, and MCP — no drift between interfaces |
+| 307 redirects | Temporary redirect preserves the ability to update destinations without breaking existing short links |
+| NDJSON MCP transport | Standard HTTP-based MCP transport; also ships a stdio binary for local agent configuration |
+
+## Tech Stack
+
+| Component | Technology |
+|---|---|
+| Framework | Next.js (App Router, server components) |
+| Language | TypeScript |
+| Database | Appwrite (documents, attribute increment) |
+| Validation | Zod |
+| MCP | @modelcontextprotocol/sdk |
+| Deployment | Appwrite Cloud / Next.js edge-compatible |
