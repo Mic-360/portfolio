@@ -25,7 +25,7 @@ import { PreviousRoadmap } from '@/components/PreviousRoadmap'
 import CalendarIcon from '@/components/ui/calendar-icon'
 import CurrentIcon from '@/components/ui/current-icon'
 import { ExpandableCard } from '@/components/ui/expandable-card'
-import { FlippingCard } from '@/components/ui/flipping-card'
+import { HoverExpand } from '@/components/ui/hover-expand'
 import { LayoutGrid } from '@/components/ui/layout-grid'
 import { LinkPreview } from '@/components/ui/link-preview'
 import PreviousIcon from '@/components/ui/previous-icon'
@@ -310,10 +310,40 @@ function App() {
     },
   }
 
-  const featuredProjects = projects.slice(0, 5)
   const featuredPosts = posts.slice(0, 5)
   const featuredCertificates = certificates.slice(0, 7)
   const featuredPins = pinterestData.pins.slice(0, 4)
+  const projectRows = projects.map((project: ProjectMeta) => {
+    const primaryCategory = project.categories[0] || 'project'
+
+    return {
+      label: project.title,
+      sublabel: formatDate(project.date),
+      image: project.image || `/og/projects/${project.slug}`,
+      imageAlt: project.title,
+      description: project.summary,
+      details: (
+        <div className="flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-white/60 sm:text-xs">
+          <span className="rounded-full border border-white/12 bg-white/8 px-2.5 py-1 font-medium text-white/82">
+            {primaryCategory}
+          </span>
+          {project.stack.slice(0, 4).map((stackItem) => (
+            <span key={`${project.slug}-${stackItem}`}>{stackItem}</span>
+          ))}
+        </div>
+      ),
+      action: (
+        <Link
+          to="/projects/$slug"
+          params={{ slug: project.slug }}
+          className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-[10px] font-medium uppercase tracking-[0.22em] text-white transition-colors duration-300 hover:bg-white/16 sm:text-xs"
+        >
+          Open project
+          <span aria-hidden="true">&rarr;</span>
+        </Link>
+      ),
+    }
+  })
   const featuredBlogCards = featuredPosts.map((post, index) => ({
     id: post.slug,
     slug: post.slug,
@@ -840,100 +870,17 @@ function App() {
               shipped to people.
             </h3>
           </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-            {featuredProjects.map((project: ProjectMeta, index: number) => {
-              const projectVisual =
-                project.image || `/og/projects/${project.slug}`
-              const isTall = index % 3 === 0
-
-              return (
-                <motion.div
-                  key={project.slug}
-                  initial={{
-                    opacity: 0,
-                    scale: 0.96,
-                    y: 48,
-                    filter: 'blur(8px)',
-                  }}
-                  whileInView={{
-                    opacity: 1,
-                    scale: 1,
-                    y: 0,
-                    filter: 'blur(0px)',
-                  }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{
-                    duration: 1.2,
-                    ease: APPLE_EASE,
-                    delay: index * 0.08,
-                  }}
-                  className="w-full"
-                >
-                  <Link
-                    to="/projects/$slug"
-                    params={{ slug: project.slug }}
-                    className="block w-full"
-                  >
-                    <FlippingCard
-                      height={isTall ? 480 : 340}
-                      width={350}
-                      className="w-full! rounded-[2.5rem]"
-                      frontContent={
-                        <div className="relative h-full w-full overflow-hidden rounded-[inherit]">
-                          <img
-                            src={projectVisual}
-                            alt={project.title}
-                            className="absolute inset-0 h-full w-full object-center"
-                            loading="lazy"
-                          />
-                          <div className="absolute inset-x-0 bottom-0 p-6">
-                            <p className="mb-2 text-[10px] uppercase tracking-[0.25em] text-primary">
-                              {project.categories.length > 0
-                                ? project.categories[0]
-                                : 'project'}
-                            </p>
-                            <h3 className="font-serif text-xl leading-tight tracking-tight sm:text-2xl">
-                              {project.title}
-                            </h3>
-                          </div>
-                        </div>
-                      }
-                      backContent={
-                        <div className="flex h-full flex-col justify-between p-6 sm:p-8">
-                          <div className="flex flex-col gap-3">
-                            <div className="flex items-center justify-between gap-4">
-                              <p className="text-[10px] uppercase tracking-[0.25em] text-primary/60">
-                                {project.categories.length > 0
-                                  ? project.categories[0]
-                                  : 'project'}
-                              </p>
-                              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60">
-                                {formatDate(project.date)}
-                              </p>
-                            </div>
-                            <h3 className="font-serif text-xl leading-tight tracking-tight text-foreground sm:text-2xl">
-                              {project.title}
-                            </h3>
-                            <p className="text-sm leading-7 text-foreground/70">
-                              {project.summary}
-                            </p>
-                            {project.stack.length > 0 ? (
-                              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
-                                {project.stack.slice(0, 4).join(' · ')}
-                              </p>
-                            ) : null}
-                          </div>
-                          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary">
-                            View project
-                            <span aria-hidden="true">&rarr;</span>
-                          </span>
-                        </div>
-                      }
-                    />
-                  </Link>
-                </motion.div>
-              )
-            })}
+          <div className="relative overflow-hidden backdrop-blur-3xl">
+            <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-14 bg-linear-to-b from-background via-background/80 to-transparent" />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-18 bg-linear-to-t from-background via-background/88 to-transparent" />
+            <div className="h-136 overflow-y-auto overscroll-contain py-2 sm:h-146 sm:py-3">
+              <HoverExpand
+                items={projectRows}
+                collapsedHeight={96}
+                expandedHeight={460}
+                className="text-foreground"
+              />
+            </div>
           </div>
           <div className="flex items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground/70">
