@@ -228,6 +228,19 @@ and \textbf{RESTful/GraphQL APIs} to \textbf{CI/CD automation} and \textbf{real-
 
 \begin{samepage}
 \projentry
+  {Private Cinema Streaming App for Google Drive}{HikariPlay}
+  {Live}
+  {https://hikari-play.bhaumiksingh.tech}
+  {
+    \begin{resbullets}
+      \item Built a full-stack \textbf{Svelte 5 + SvelteKit} private cinema application in a \textbf{Turborepo} Bun monorepo — indexes a Google Drive folder recursively (custom \texttt{pLimit(6)} concurrency limiter), resolves poster art via a four-stage \textbf{AniList GraphQL → OMDb → Drive → placeholder} fallback with dual-layer caching (24h server in-memory Map + 30-day client \textbf{IndexedDB}), and byte-proxies video through the server for Range-request-aware streaming.
+      \item Engineered a two-strategy stream resolver (\textbf{Drive API} \texttt{alt=media} key auth → \textbf{public \texttt{/uc} confirmation-HTML} fallback), a \textbf{Fuse.js} fuzzy-search gallery with \textbf{Svelte 5 \texttt{\$state}/\texttt{\$derived}} runes, \textbf{GSAP 3 ScrollTrigger} landing-page animations, and a zero-server \textbf{localStorage} resume tracker — deployed as a \textbf{PWA} on \textbf{Cloud Run}.
+    \end{resbullets}
+  }
+\end{samepage}
+
+\begin{samepage}
+\projentry
   {AI Virtual Try-On Plugin for WooCommerce}{Tryon Modal}
   {GitHub}
   {https://github.com/Mic-360/tryon-modal}
