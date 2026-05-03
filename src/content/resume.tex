@@ -230,7 +230,7 @@ and \textbf{RESTful/GraphQL APIs} to \textbf{CI/CD automation} and \textbf{real-
 \projentry
   {Private Cinema Streaming App for Google Drive}{HikariPlay}
   {Live}
-  {https://hikari-play.bhaumiksingh.tech}
+  {https://movies.bhaumiksingh.tech}
   {
     \begin{resbullets}
       \item Built a full-stack \textbf{Svelte 5 + SvelteKit} private cinema application in a \textbf{Turborepo} Bun monorepo — indexes a Google Drive folder recursively (custom \texttt{pLimit(6)} concurrency limiter), resolves poster art via a four-stage \textbf{AniList GraphQL → OMDb → Drive → placeholder} fallback with dual-layer caching (24h server in-memory Map + 30-day client \textbf{IndexedDB}), and byte-proxies video through the server for Range-request-aware streaming.
