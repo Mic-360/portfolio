@@ -44,6 +44,7 @@ import {
 import { ArrowRight, Calendar } from 'lucide-react'
 
 // Heavy below-the-fold components — loaded lazily to keep the main bundle small.
+const PixelBlast = lazy(() => import('@/components/ui/pixel-blast'))
 const Hyperspeed = lazy(() => import('@/components/ui/hyperspeed'))
 const GamesCinematic = lazy(() =>
   import('@/components/GamesCinematic').then((m) => ({
@@ -724,14 +725,38 @@ function App() {
             <div className="relative sm:absolute sm:inset-0 z-50 flex flex-col items-center justify-center px-4 py-16 sm:py-0 pointer-events-none">
               <div
                 aria-hidden="true"
-                className="absolute inset-x-[2%] inset-y-[0%] sm:inset-x-[10%] sm:top-[12%] sm:bottom-[10%] rounded-full bg-background/32 backdrop-blur-xl"
+                className="absolute inset-x-[2%] inset-y-[0%] sm:inset-x-[10%] sm:top-[12%] sm:bottom-[10%] rounded-full bg-background/32 backdrop-blur-xl overflow-hidden"
                 style={{
                   maskImage:
                     'radial-gradient(circle at center, black 2%, black 12%, transparent 100%)',
                   WebkitMaskImage:
                     'radial-gradient(circle at center, black 2%, black 12%, transparent 100%)',
                 }}
-              />
+              ></div>
+              <div className="absolute inset-0 -z-10 opacity-30 mix-blend-screen">
+                <Suspense fallback={null}>
+                  <PixelBlast
+                    variant="square"
+                    pixelSize={4}
+                    color="#7a9a65"
+                    patternScale={2}
+                    patternDensity={1}
+                    pixelSizeJitter={0}
+                    enableRipples
+                    rippleSpeed={0.4}
+                    rippleThickness={0.12}
+                    rippleIntensityScale={1.5}
+                    liquid={false}
+                    liquidStrength={0.12}
+                    liquidRadius={1.2}
+                    liquidWobbleSpeed={5}
+                    speed={0.5}
+                    edgeFade={0.25}
+                    transparent
+                  />
+                </Suspense>
+              </div>
+
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -796,6 +821,7 @@ function App() {
             </div>
 
             <div className="flex flex-col items-center gap-8 px-4 pb-12 sm:block sm:p-0">
+              {/* Education */}
               <motion.div
                 initial={{ opacity: 0, y: 40, rotate: -8 }}
                 whileInView={{ opacity: 1, y: 0, rotate: -6 }}
@@ -813,7 +839,7 @@ function App() {
                 }}
                 className="relative sm:absolute sm:left-[4%] sm:top-[4%] lg:left-[6%] lg:top-[6%] z-10 w-full max-w-70 sm:max-w-none sm:w-50 lg:w-55"
               >
-                <div className="group relative overflow-hidden rounded-3xl border border-white/10 bg-background/40 shadow-2xl backdrop-blur-3xl sm:backdrop-blur-3xl">
+                <div className="group relative overflow-hidden rounded-3xl border border-white/10 bg-background/80 shadow-2xl backdrop-blur-3xl sm:backdrop-blur-3xl">
                   <div className="p-5">
                     <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary/80 mb-2 drop-shadow-sm">
                       Education
@@ -833,6 +859,7 @@ function App() {
                 </div>
               </motion.div>
 
+              {/* Interest */}
               <motion.div
                 initial={{ opacity: 0, y: 40, rotate: 6 }}
                 whileInView={{ opacity: 1, y: 0, rotate: 4 }}
@@ -865,6 +892,7 @@ function App() {
                 </div>
               </motion.div>
 
+              {/* Capabilities */}
               <motion.div
                 initial={{ opacity: 0, y: 40, rotate: 4 }}
                 whileInView={{ opacity: 1, y: 0, rotate: 2 }}
@@ -900,6 +928,7 @@ function App() {
                 </div>
               </motion.div>
 
+              {/* frieren */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.9, rotate: -8 }}
                 whileInView={{ opacity: 1, scale: 1, rotate: -4 }}
@@ -940,7 +969,7 @@ function App() {
             >
               <Suspense fallback={null}>
                 <Hyperspeed
-                  effectOptions={ 
+                  effectOptions={
                     hyperspeedPresets.six as unknown as Partial<HyperspeedOptions>
                   }
                 />
