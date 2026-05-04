@@ -9,14 +9,14 @@ import {
 } from 'react'
 import type { CSSProperties, ReactNode } from 'react'
 
-export type ThemeMode = 'normal' | 'sunny' | 'midnight' | 'frieren'
+export type ThemeMode = 'normal' | 'sunny'
 
 export interface ThemeTransitionOrigin {
   x: number
   y: number
 }
 
-const CYCLE_ORDER: Array<ThemeMode> = ['normal', 'sunny', 'midnight', 'frieren']
+const CYCLE_ORDER: Array<ThemeMode> = ['normal', 'sunny']
 
 interface ThemeContextType {
   mode: ThemeMode
@@ -42,12 +42,6 @@ function applyThemeAttributes(newMode: ThemeMode) {
       break
     case 'sunny':
       html.setAttribute('data-theme', 'sunny')
-      break
-    case 'midnight':
-      html.setAttribute('data-theme', 'midnight')
-      break
-    case 'frieren':
-      html.setAttribute('data-theme', 'frieren')
       break
   }
 }

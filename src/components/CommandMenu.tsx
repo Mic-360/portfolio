@@ -4,7 +4,6 @@ import {
   ArrowLeft,
   Award,
   BookOpen,
-  BookSearch,
   Bot,
   Briefcase,
   Calendar,
@@ -22,7 +21,6 @@ import {
   Linkedin,
   Map as MapIcon,
   Moon,
-  MoonStar,
   Palette,
   Pen,
   Printer,
@@ -482,7 +480,7 @@ type RootPageProps = {
   handleNavigate: (to: string) => void
   pushPage: (id: PageId) => void
   closeMenu: () => void
-  setMode: (m: 'normal' | 'sunny' | 'midnight' | 'frieren') => void
+  setMode: (m: 'normal' | 'sunny') => void
   cycleTheme: () => void
   copy: (text: string, label: string) => void
   openExternal: (url: string) => void
@@ -795,24 +793,7 @@ function RootPage({
           <Sun />
           <span>sunny</span>
         </CommandItem>
-        <CommandItem
-          onSelect={() => {
-            setMode('midnight')
-            closeMenu()
-          }}
-        >
-          <MoonStar />
-          <span>midnight</span>
-        </CommandItem>
-        <CommandItem
-          onSelect={() => {
-            setMode('frieren')
-            closeMenu()
-          }}
-        >
-          <BookSearch />
-          <span>frieren</span>
-        </CommandItem>
+
       </CommandGroup>
 
       <CommandSeparator />
@@ -1080,29 +1061,17 @@ function ThemePage({
   cycleTheme,
 }: {
   mode: string
-  setMode: (m: 'normal' | 'sunny' | 'midnight' | 'frieren') => void
+  setMode: (m: 'normal' | 'sunny') => void
   cycleTheme: () => void
 }) {
   const themes: Array<{
-    id: 'normal' | 'sunny' | 'midnight' | 'frieren'
+    id: 'normal' | 'sunny'
     label: string
     hint: string
     Icon: React.ComponentType<{ className?: string }>
   }> = [
     { id: 'normal', label: 'default', hint: 'calm dark', Icon: Moon },
     { id: 'sunny', label: 'sunny', hint: 'light + forest audio', Icon: Sun },
-    {
-      id: 'midnight',
-      label: 'midnight',
-      hint: 'dark + night audio',
-      Icon: MoonStar,
-    },
-    {
-      id: 'frieren',
-      label: 'frieren',
-      hint: 'anime + mozart',
-      Icon: BookSearch,
-    },
   ]
   return (
     <CommandGroup heading="Themes">

@@ -1,13 +1,11 @@
 import {
   IconArticle,
-  IconBook2,
   IconBrandGithub,
   IconFileText,
   IconFolder,
   IconHome,
   IconMessage,
   IconMoon,
-  IconMoonStars,
   IconSunHigh,
   IconUser,
 } from '@tabler/icons-react'
@@ -24,16 +22,12 @@ const themeIcons: Record<
 > = {
   normal: IconMoon,
   sunny: IconSunHigh,
-  midnight: IconMoonStars,
-  frieren: IconBook2,
 }
 
-const CYCLE: Array<ThemeMode> = ['normal', 'sunny', 'midnight', 'frieren']
+const CYCLE: Array<ThemeMode> = ['normal', 'sunny']
 
 const THEME_VIDEO: Partial<Record<ThemeMode, string>> = {
   sunny: '/leaves.mp4',
-  midnight: '/moon.mp4',
-  frieren: '/frieren.mp4',
 }
 
 const prefetchedVideos = new Set<string>()
