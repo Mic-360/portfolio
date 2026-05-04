@@ -1,6 +1,7 @@
 import { BloomEffect, EffectComposer, EffectPass, RenderPass, SMAAEffect, SMAAPreset } from 'postprocessing';
 import { FC, useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { useTheme } from '@/components/ThemeProvider';
 
 interface Distortion {
   uniforms: Record<string, { value: any }>;
@@ -748,7 +749,7 @@ class Road {
     this.uTime = { value: 0 };
   }
 
-  createPlane(side: number, width: number, isRoad: boolean) {
+  createPlane(side: number, _width: number, isRoad: boolean) {
     const options = this.options;
     const segments = 100;
     const geometry = new THREE.PlaneGeometry(
@@ -1273,6 +1274,7 @@ const DEFAULT_EFFECT_OPTIONS: Partial<HyperspeedOptions> = {};
 const Hyperspeed: FC<HyperspeedProps> = ({ effectOptions = DEFAULT_EFFECT_OPTIONS }) => {
   const hyperspeed = useRef<HTMLDivElement>(null);
   const appRef = useRef<App | null>(null);
+  const { mode } = useTheme();
 
   useEffect(() => {
     if (appRef.current) {
@@ -1294,6 +1296,11 @@ const Hyperspeed: FC<HyperspeedProps> = ({ effectOptions = DEFAULT_EFFECT_OPTION
       ...effectOptions,
       colors: { ...defaultOptions.colors, ...effectOptions.colors }
     };
+    
+    if (mode === 'sunny') {
+      options.colors.roadColor = 0xeeebe3;
+    }
+
     if (typeof options.distortion === 'string') {
       options.distortion = distortions[options.distortion];
     }
@@ -1307,7 +1314,7 @@ const Hyperspeed: FC<HyperspeedProps> = ({ effectOptions = DEFAULT_EFFECT_OPTION
         appRef.current.dispose();
       }
     };
-  }, [effectOptions]);
+  }, [effectOptions, mode]);
 
   return <div id="lights" className="w-full h-full" ref={hyperspeed}></div>;
 };
