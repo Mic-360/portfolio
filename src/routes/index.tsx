@@ -31,6 +31,7 @@ import { LinkPreview } from '@/components/ui/link-preview'
 import PreviousIcon from '@/components/ui/previous-icon'
 import type { HyperspeedOptions } from '@/components/ui/hyperspeed'
 import ScrambledText from '@/components/ui/scrambled-text'
+import { ProjectShowcase } from '@/components/ProjectShowcase'
 import { gravatarConfig } from '@/config/gravatar'
 import { hyperspeedPresets } from '@/config/hyperspeed.preset'
 import {
@@ -1041,14 +1042,14 @@ function App() {
         </Section>
       </motion.div>
 
-      <motion.div variants={item} className="px-4 sm:px-8">
+      <motion.div variants={item} className="px-4 sm:px-6 relative">
         <Section title="projects">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-80px' }}
             transition={{ duration: 1.2, ease: APPLE_EASE }}
-            className="mb-10 max-w-3xl"
+            className="mb-4 max-w-3xl px-4 sm:px-6 sm:absolute sm:top-10"
           >
             <h3 className="font-serif text-4xl leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
               Selected work,
@@ -1056,36 +1057,20 @@ function App() {
               shipped to people.
             </h3>
           </motion.div>
-          <div className="relative overflow-hidden backdrop-blur-3xl">
-            <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-14 bg-linear-to-b from-background via-background/80 to-transparent" />
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-18 bg-linear-to-t from-background via-background/88 to-transparent" />
-            <div className="h-136 overflow-y-auto overscroll-contain py-2 sm:h-146 sm:py-3">
-              <HoverExpand
-                items={projectRows}
-                collapsedHeight={96}
-                expandedHeight={460}
-                className="text-foreground"
-              />
-            </div>
-          </div>
-          <div className="flex items-center justify-between gap-4">
-            <p className="text-sm text-muted-foreground/70">
-              More in the archive.
-            </p>
-            <LinkPreview
-              url={siteMeta.baseUrl + '/projects'}
-              className="group/link inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary/80"
-            >
-              View all projects
-              <span className="inline-block transition-transform duration-300 group-hover/link:translate-x-1">
-                &rarr;
-              </span>
-            </LinkPreview>
-          </div>
+          <ProjectShowcase 
+            projects={projects.map((p) => ({
+              id: p.slug,
+              title: p.title,
+              img: p.image || `/og/projects/${p.slug}`,
+              description: p.summary,
+              content: p.categories[0] || 'Project',
+              slug: p.slug
+            }))}
+          />
         </Section>
       </motion.div>
 
-      <motion.div variants={item} className="px-4 sm:px-8">
+      <motion.div variants={item} className="px-4 sm:px-6">
         <Section title="blogs">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
