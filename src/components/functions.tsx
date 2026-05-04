@@ -1,6 +1,6 @@
 import { Award, ImagesIcon } from 'lucide-react'
-import { motion } from 'motion/react'
-import { useRef, useState } from 'react'
+import { motion, useMotionValue, useScroll, useSpring } from 'motion/react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import CurrentIcon from '@/components/ui/current-icon'
 import HealthstatIcon from '@/components/ui/healthstat-icon'
 import LayersIcon from '@/components/ui/layers-icon'
@@ -155,6 +155,95 @@ function Section({
     </motion.section>
   )
 }
+
+export function Magnetic({
+  children,
+  strength = 0.28,
+  className,
+}: {
+  children: React.ReactNode
+  strength?: number
+  className?: string
+}) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+  const sx = useSpring(x, { stiffness: 220, damping: 22, mass: 0.4 })
+  const sy = useSpring(y, { stiffness: 220, damping: 22, mass: 0.4 })
+
+  return (
+    <motion.span
+      ref={ref}
+      className={className}
+      style={{ x: sx, y: sy, display: 'inline-block' }}
+      onPointerMove={(e) => {
+        const r = ref.current?.getBoundingClientRect()
+        if (!r) return
+        x.set((e.clientX - (r.left + r.width / 2)) * strength)
+        y.set((e.clientY - (r.top + r.height / 2)) * strength)
+      }}
+      onPointerLeave={() => {
+        x.set(0)
+        y.set(0)
+      }}
+    >
+      {children}
+    </motion.span>
+  )
+}
+
+export function DeferredSection({
+  children,
+  minHeight,
+}: {
+  children: React.ReactNode
+  minHeight?: number | string
+}) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    if (!('IntersectionObserver' in window)) {
+      setVisible(true)
+      return
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          io.disconnect()
+          setVisible(true)
+        }
+      },
+      { rootMargin: '400px 0px' },
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
+  return (
+    <div ref={ref} style={minHeight ? { minHeight } : undefined}>
+      {visible ? <Suspense fallback={null}>{children}</Suspense> : null}
+    </div>
+  )
+}
+
+export function ScrollProgress() {
+  const { scrollYProgress } = useScroll()
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 28,
+    restDelta: 0.001,
+  })
+  return (
+    <motion.div
+      className="pointer-events-none fixed inset-x-0 top-0 z-60 h-px origin-left bg-linear-to-r from-primary/40 via-primary to-primary/40"
+      style={{ scaleX }}
+    />
+  )
+}
+
 
 function InteractiveChart({
   data,

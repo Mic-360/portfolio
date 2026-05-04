@@ -1,9 +1,8 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { motion, useMotionValue, useScroll, useSpring } from 'motion/react'
-import { Suspense, lazy, useEffect, useRef, useState } from 'react'
+import { motion } from 'motion/react'
+import { Suspense, lazy, useEffect, useState } from 'react'
 
 import type { CertificateMeta } from '@/lib/certificates'
-import type { ProjectMeta } from '@/lib/content'
 import type { HealthSample } from '@/lib/health'
 import type { PinterestCreatedPin } from '@/lib/pinterest'
 
@@ -16,7 +15,13 @@ import { getGravatarProfile } from '@/lib/gravatar-profile'
 import { getHealthData } from '@/lib/health'
 import { getPinterestCreatedPins } from '@/lib/pinterest'
 
-import { MetricRow, Section } from '@/components/functions'
+import {
+  DeferredSection,
+  Magnetic,
+  MetricRow,
+  ScrollProgress,
+  Section,
+} from '@/components/functions'
 import GravatarAvatar from '@/components/gravatar/GravatarAvatar'
 import GravatarSocialLinks from '@/components/gravatar/GravatarSocialLinks'
 import { KeyboardHint } from '@/components/KeyboardHint'
@@ -25,7 +30,6 @@ import { PreviousRoadmap } from '@/components/PreviousRoadmap'
 import CircularText from '@/components/ui/circular-text'
 import CurrentIcon from '@/components/ui/current-icon'
 import { ExpandableCard } from '@/components/ui/expandable-card'
-import { HoverExpand } from '@/components/ui/hover-expand'
 import { LayoutGrid } from '@/components/ui/layout-grid'
 import { LinkPreview } from '@/components/ui/link-preview'
 import PreviousIcon from '@/components/ui/previous-icon'
@@ -59,43 +63,6 @@ const AnimatedTestimonials = lazy(() =>
   })),
 )
 const WorldMap = lazy(() => import('@/components/ui/world-map'))
-
-function DeferredSection({
-  children,
-  minHeight,
-}: {
-  children: React.ReactNode
-  minHeight?: number | string
-}) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
-
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    if (!('IntersectionObserver' in window)) {
-      setVisible(true)
-      return
-    }
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          io.disconnect()
-          setVisible(true)
-        }
-      },
-      { rootMargin: '400px 0px' },
-    )
-    io.observe(el)
-    return () => io.disconnect()
-  }, [])
-
-  return (
-    <div ref={ref} style={minHeight ? { minHeight } : undefined}>
-      {visible ? <Suspense fallback={null}>{children}</Suspense> : null}
-    </div>
-  )
-}
 
 declare global {
   interface Window {
@@ -202,57 +169,6 @@ function sanitizeSamples<T extends { value: number | string }>(
   return samples || []
 }
 
-function ScrollProgress() {
-  const { scrollYProgress } = useScroll()
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 120,
-    damping: 28,
-    restDelta: 0.001,
-  })
-  return (
-    <motion.div
-      className="pointer-events-none fixed inset-x-0 top-0 z-60 h-px origin-left bg-linear-to-r from-primary/40 via-primary to-primary/40"
-      style={{ scaleX }}
-    />
-  )
-}
-
-function Magnetic({
-  children,
-  strength = 0.28,
-  className,
-}: {
-  children: React.ReactNode
-  strength?: number
-  className?: string
-}) {
-  const ref = useRef<HTMLSpanElement>(null)
-  const x = useMotionValue(0)
-  const y = useMotionValue(0)
-  const sx = useSpring(x, { stiffness: 220, damping: 22, mass: 0.4 })
-  const sy = useSpring(y, { stiffness: 220, damping: 22, mass: 0.4 })
-
-  return (
-    <motion.span
-      ref={ref}
-      className={className}
-      style={{ x: sx, y: sy, display: 'inline-block' }}
-      onPointerMove={(e) => {
-        const r = ref.current?.getBoundingClientRect()
-        if (!r) return
-        x.set((e.clientX - (r.left + r.width / 2)) * strength)
-        y.set((e.clientY - (r.top + r.height / 2)) * strength)
-      }}
-      onPointerLeave={() => {
-        x.set(0)
-        y.set(0)
-      }}
-    >
-      {children}
-    </motion.span>
-  )
-}
-
 function App() {
   const {
     posts,
@@ -320,37 +236,7 @@ function App() {
   const featuredPosts = posts.slice(0, 5)
   const featuredCertificates = certificates.slice(0, 7)
   const featuredPins = pinterestData.pins.slice(0, 4)
-  const projectRows = projects.map((project: ProjectMeta) => {
-    const primaryCategory = project.categories[0] || 'project'
 
-    return {
-      label: project.title,
-      sublabel: formatDate(project.date),
-      image: project.image || `/og/projects/${project.slug}`,
-      imageAlt: project.title,
-      description: project.summary,
-      details: (
-        <div className="flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-white/60 sm:text-xs">
-          <span className="rounded-full border border-white/12 bg-white/8 px-2.5 py-1 font-medium text-white/82">
-            {primaryCategory}
-          </span>
-          {project.stack.slice(0, 4).map((stackItem) => (
-            <span key={`${project.slug}-${stackItem}`}>{stackItem}</span>
-          ))}
-        </div>
-      ),
-      action: (
-        <Link
-          to="/projects/$slug"
-          params={{ slug: project.slug }}
-          className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-[10px] font-medium uppercase tracking-[0.22em] text-white transition-colors duration-300 hover:bg-white/16 sm:text-xs"
-        >
-          Open project
-          <span aria-hidden="true">&rarr;</span>
-        </Link>
-      ),
-    }
-  })
   const featuredBlogCards = featuredPosts.map((post, index) => ({
     id: post.slug,
     slug: post.slug,
@@ -373,7 +259,7 @@ function App() {
       <ScrollProgress />
       <motion.section
         variants={item}
-        className="relative flex flex-col lg:flex-row items-center w-full min-h-[85vh] px-4 sm:px-8 overflow-hidden"
+        className="relative flex flex-col lg:flex-row items-center w-full min-h-screen px-4 sm:px-8 overflow-hidden"
       >
         {/* Background Tagline Typography */}
         <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none select-none overflow-hidden opacity-[0.06] dark:opacity-[0.03]">
@@ -606,7 +492,7 @@ function App() {
             initial={{ opacity: 0, x: -20, rotate: 0 }}
             animate={{ opacity: 1, x: 0, rotate: -3 }}
             transition={{ duration: 0.8, delay: 1.2, type: 'spring' }}
-            className="absolute bottom-[5%] left-[-15%] xl:left-[5%] z-20 bg-background border border-border shadow-2xl p-4 pointer-events-auto hidden lg:flex items-center gap-4"
+            className="absolute bottom-[15%] left-[-15%] xl:left-[5%] z-20 bg-background border border-border shadow-2xl p-4 pointer-events-auto hidden lg:flex items-center gap-4"
           >
             <div className="flex flex-col gap-4">
               <p className="text-sm font-serif font-medium text-foreground">
@@ -637,7 +523,7 @@ function App() {
             initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 1.4, type: 'spring' }}
-            className="absolute bottom-[10%] lg:bottom-[6%] right-[1%] z-30 hidden md:flex items-center justify-center"
+            className="absolute bottom-[10%] right-[1%] z-30 hidden md:flex items-center justify-center"
           >
             <div className="w-28 h-28 border-[1.5px] border-primary/60 rounded-full flex items-center justify-center pointer-events-auto text-primary backdrop-blur-sm bg-background/10">
               <CircularText
@@ -1057,14 +943,14 @@ function App() {
               shipped to people.
             </h3>
           </motion.div>
-          <ProjectShowcase 
+          <ProjectShowcase
             projects={projects.map((p) => ({
               id: p.slug,
               title: p.title,
               img: p.image || `/og/projects/${p.slug}`,
               description: p.summary,
               content: p.categories[0] || 'Project',
-              slug: p.slug
+              slug: p.slug,
             }))}
           />
         </Section>
