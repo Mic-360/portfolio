@@ -439,12 +439,13 @@ function App() {
             transition={{ duration: 1, ease: APPLE_EASE, delay: 0.4 }}
             className="mb-10 max-w-2xl"
           >
-            <ScrambledText 
+            <ScrambledText
               className="font-sans! text-lg! sm:text-2xl! text-foreground/80! font-medium leading-relaxed"
               radius={80}
             >
-              Based in {siteInfo.location}, building web and android products with
-              AI, cloud systems, and a latest - is - greatest mindset. Researched with{' '}
+              Based in {siteInfo.location}, building web and android products
+              with AI, cloud systems, and a latest - is - greatest mindset.
+              Researched with{' '}
               <span className="underline decoration-primary/50 underline-offset-4 decoration-2">
                 suspicious seriousness!
               </span>
