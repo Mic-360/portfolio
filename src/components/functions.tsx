@@ -135,7 +135,7 @@ function Section({
       className="flex flex-col gap-10"
     >
       {title && !isContact ? (
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 px-4 sm:px-6">
           <h2 className="shrink-0 text-[10px] font-medium uppercase tracking-[0.32em] text-muted-foreground/70">
             {titleContent}
           </h2>
