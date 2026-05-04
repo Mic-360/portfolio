@@ -620,7 +620,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           <VideoBackground />
           <FeedbackHandler />
           <LazyCommandMenu />
-          <main className="mx-auto w-full max-w-395 text-sm lowercase overflow-hidden [view-transition-name:main-content] ">
+          <main className="mx-auto w-full text-sm lowercase overflow-hidden [view-transition-name:main-content] ">
             {children}
           </main>
           <Footer />

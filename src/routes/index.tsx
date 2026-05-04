@@ -29,8 +29,10 @@ import { HoverExpand } from '@/components/ui/hover-expand'
 import { LayoutGrid } from '@/components/ui/layout-grid'
 import { LinkPreview } from '@/components/ui/link-preview'
 import PreviousIcon from '@/components/ui/previous-icon'
+import type { HyperspeedOptions } from '@/components/ui/hyperspeed'
 import ScrambledText from '@/components/ui/scrambled-text'
 import { gravatarConfig } from '@/config/gravatar'
+import { hyperspeedPresets } from '@/config/hyperspeed.preset'
 import {
   contactLinks,
   gravatar,
@@ -42,6 +44,7 @@ import {
 import { ArrowRight, Calendar } from 'lucide-react'
 
 // Heavy below-the-fold components — loaded lazily to keep the main bundle small.
+const Hyperspeed = lazy(() => import('@/components/ui/hyperspeed'))
 const GamesCinematic = lazy(() =>
   import('@/components/GamesCinematic').then((m) => ({
     default: m.GamesCinematic,
@@ -715,10 +718,7 @@ function App() {
         </div>
       </motion.section>
 
-      <motion.div
-        variants={item}
-        className="flex flex-col gap-24 md:gap-32 px-4 sm:px-8"
-      >
+      <motion.div variants={item} className="flex flex-col gap-24 md:gap-32">
         <Section title="current">
           <div className="flex flex-col sm:block relative min-h-0 sm:min-h-145 lg:min-h-160">
             <div className="relative sm:absolute sm:inset-0 z-50 flex flex-col items-center justify-center px-4 py-16 sm:py-0 pointer-events-none">
@@ -928,63 +928,87 @@ function App() {
         </Section>
 
         <Section title="previous">
-          <motion.div
-            initial={{ opacity: 0, y: 32 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 1.2, ease: APPLE_EASE }}
-            className="flex flex-col items-center text-center mb-16"
-          >
-            <motion.span
-              initial={{ opacity: 0, y: 8 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.9, ease: APPLE_EASE, delay: 0.1 }}
-              className="inline-flex items-center gap-2 rounded-full border border-border/20 bg-foreground/3 px-4 py-1.5 text-[10px] font-medium uppercase tracking-[0.32em] text-muted-foreground/60 backdrop-blur-sm mb-8"
+          <div className="relative overflow-hidden">
+            <div
+              className="absolute inset-0 z-0 hidden md:block opacity-40 mix-blend-screen pointer-events-none"
+              style={{
+                maskImage:
+                  'linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)',
+                WebkitMaskImage:
+                  'linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)',
+              }}
             >
-              <PreviousIcon size={14} className="h-3.5 w-3.5 opacity-70" />
-              experience
-            </motion.span>
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.2, ease: APPLE_EASE, delay: 0.15 }}
-              className="max-w-3xl font-serif text-5xl leading-[1.04] tracking-tight text-foreground sm:text-6xl lg:text-7xl"
-            >
-              Where{' '}
-              <span className="italic font-light text-foreground/80">I've</span>{' '}
-              been.
-            </motion.h2>
-            <motion.svg
-              viewBox="0 0 80 8"
-              preserveAspectRatio="none"
-              className="mt-6 h-2 w-20 overflow-visible text-primary/60"
-              aria-hidden="true"
-            >
-              <motion.path
-                d="M2,4 Q20,1 40,4 T78,4"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.2"
-                strokeLinecap="round"
-                initial={{ pathLength: 0 }}
-                whileInView={{ pathLength: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.2, ease: APPLE_EASE, delay: 0.6 }}
-              />
-            </motion.svg>
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, ease: APPLE_EASE, delay: 0.4 }}
-              className="mt-6 max-w-lg text-base leading-8 text-foreground/45"
-            >
-              A track record of shipping products across roles and companies.
-            </motion.p>
-          </motion.div>
-          <PreviousRoadmap />
+              <Suspense fallback={null}>
+                <Hyperspeed
+                  effectOptions={ 
+                    hyperspeedPresets.six as unknown as Partial<HyperspeedOptions>
+                  }
+                />
+              </Suspense>
+            </div>
+            <div className="relative z-10 px-4 py-16 sm:px-8 sm:py-20 md:px-12 md:py-24">
+              <motion.div
+                initial={{ opacity: 0, y: 32 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 1.2, ease: APPLE_EASE }}
+                className="flex flex-col items-center text-center mb-16"
+              >
+                <motion.span
+                  initial={{ opacity: 0, y: 8 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.9, ease: APPLE_EASE, delay: 0.1 }}
+                  className="inline-flex items-center gap-2 rounded-full border border-border/20 bg-foreground/3 px-4 py-1.5 text-[10px] font-medium uppercase tracking-[0.32em] text-muted-foreground/60 backdrop-blur-sm mb-8"
+                >
+                  <PreviousIcon size={14} className="h-3.5 w-3.5 opacity-70" />
+                  experience
+                </motion.span>
+                <motion.h2
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1.2, ease: APPLE_EASE, delay: 0.15 }}
+                  className="max-w-3xl font-serif text-5xl leading-[1.04] tracking-tight text-foreground sm:text-6xl lg:text-7xl"
+                >
+                  Where{' '}
+                  <span className="italic font-light text-foreground/80">
+                    I've
+                  </span>{' '}
+                  been.
+                </motion.h2>
+                <motion.svg
+                  viewBox="0 0 80 8"
+                  preserveAspectRatio="none"
+                  className="mt-6 h-2 w-20 overflow-visible text-primary/60"
+                  aria-hidden="true"
+                >
+                  <motion.path
+                    d="M2,4 Q20,1 40,4 T78,4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.2"
+                    strokeLinecap="round"
+                    initial={{ pathLength: 0 }}
+                    whileInView={{ pathLength: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1.2, ease: APPLE_EASE, delay: 0.6 }}
+                  />
+                </motion.svg>
+                <motion.p
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1, ease: APPLE_EASE, delay: 0.4 }}
+                  className="mt-6 max-w-lg text-base leading-8 text-foreground/45"
+                >
+                  A track record of shipping products across roles and
+                  companies.
+                </motion.p>
+              </motion.div>
+              <PreviousRoadmap />
+            </div>
+          </div>
         </Section>
       </motion.div>
 
