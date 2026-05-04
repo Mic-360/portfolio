@@ -11,7 +11,7 @@ export const siteInfo = {
   location: 'Prayagraj, India',
   locationNative: 'प्रयागराज, भारत',
   currentGame: 'Horizon Forbidden West',
-  currentRole: 'Full Stack software engineer',
+  currentRole: 'Full Stack Software Engineer',
   currentCompany: 'KarkhanaHub.com',
   currentCompanyUrl: 'https://karkhanahub.com/',
   currentSummary:

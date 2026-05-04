@@ -22,13 +22,14 @@ import GravatarSocialLinks from '@/components/gravatar/GravatarSocialLinks'
 import { KeyboardHint } from '@/components/KeyboardHint'
 import { LazyHeroVideo } from '@/components/LazyHeroVideo'
 import { PreviousRoadmap } from '@/components/PreviousRoadmap'
-import CalendarIcon from '@/components/ui/calendar-icon'
+import CircularText from '@/components/ui/circular-text'
 import CurrentIcon from '@/components/ui/current-icon'
 import { ExpandableCard } from '@/components/ui/expandable-card'
 import { HoverExpand } from '@/components/ui/hover-expand'
 import { LayoutGrid } from '@/components/ui/layout-grid'
 import { LinkPreview } from '@/components/ui/link-preview'
 import PreviousIcon from '@/components/ui/previous-icon'
+import ScrambledText from '@/components/ui/scrambled-text'
 import { gravatarConfig } from '@/config/gravatar'
 import {
   contactLinks,
@@ -38,6 +39,7 @@ import {
   siteInfo,
   siteMeta,
 } from '@/config/site-data'
+import { ArrowRight, Calendar } from 'lucide-react'
 
 // Heavy below-the-fold components — loaded lazily to keep the main bundle small.
 const GamesCinematic = lazy(() =>
@@ -364,163 +366,293 @@ function App() {
       className="flex flex-col gap-20 md:gap-28"
     >
       <ScrollProgress />
-      <motion.div
-        variants={item}
-        className="flex items-center gap-4 w-full -mb-12 py-4 sm:py-6 px-4 sm:px-8 overflow-hidden"
-      >
-        <GravatarAvatar
-          hash={avatarHash}
-          size={44}
-          alt={`${siteInfo.name} profile photo`}
-          className="h-22 w-22 ring-1 ring-border/20 shrink-0"
-          rel="me"
-        />
-        <div className="flex min-w-0 flex-col">
-          <span className="text-3xl md:text-5xl font-semibold tracking-tight text-foreground font-serif capitalize">
-            {siteInfo.name}
-          </span>
-          <span className="text-sm text-muted-foreground">
-            {siteInfo.currentRole}
-          </span>
-        </div>
-        <div className="ml-auto hidden lg:block">
-          <KeyboardHint />
-        </div>
-      </motion.div>
-
       <motion.section
         variants={item}
-        className="flex flex-col items-center text-center px-2"
+        className="relative flex flex-col lg:flex-row items-center w-full min-h-[85vh] px-4 sm:px-8 overflow-hidden"
       >
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: APPLE_EASE, delay: 0.2 }}
-          className="mb-10 flex items-center gap-3"
-        >
-          <motion.svg
-            viewBox="0 0 60 1"
-            preserveAspectRatio="none"
-            className="h-px w-10 overflow-hidden text-primary/60"
-            aria-hidden="true"
-          >
-            <motion.line
-              x1="0"
-              y1="0.5"
-              x2="60"
-              y2="0.5"
-              stroke="currentColor"
-              strokeWidth="1"
-              initial={{ pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-              transition={{ duration: 1.2, ease: APPLE_EASE, delay: 0.3 }}
-            />
-          </motion.svg>
-          <p className="text-[10px] uppercase tracking-[0.4em] text-primary/80">
-            android · ai · cloud · web · design · devops
+        {/* Background Tagline Typography */}
+        <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none select-none overflow-hidden opacity-[0.06] dark:opacity-[0.03]">
+          <p className="font-serif text-[16vw] sm:text-[12vw] font-black uppercase leading-[0.85] tracking-tighter text-center w-[150%] text-foreground wrap-break-word">
+            {Array(3)
+              .fill(siteInfo.tagline.split(', ').join(' • '))
+              .join(' • ')}
           </p>
-          <motion.svg
-            viewBox="0 0 60 1"
-            preserveAspectRatio="none"
-            className="h-px w-10 overflow-hidden text-primary/60"
-            aria-hidden="true"
-          >
-            <motion.line
-              x1="0"
-              y1="0.5"
-              x2="60"
-              y2="0.5"
-              stroke="currentColor"
-              strokeWidth="1"
-              initial={{ pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-              transition={{ duration: 1.2, ease: APPLE_EASE, delay: 0.3 }}
+        </div>
+
+        <svg
+          className="pointer-events-none absolute inset-0 z-0 h-full w-full mix-blend-overlay select-none opacity-30"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <filter id="heroNoise">
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.4"
+              numOctaves="2"
+              result="turb"
+              stitchTiles="stitch"
             />
-          </motion.svg>
-        </motion.div>
-        <motion.h1
-          initial={{ y: 32 }}
-          animate={{ y: 0 }}
-          transition={{ duration: 1.6, ease: APPLE_EASE, delay: 0.1 }}
-          className="max-w-5xl font-serif text-5xl leading-[1.02] tracking-tight text-foreground sm:text-7xl lg:text-8xl"
-        >
-          Designing and shipping software that feels{' '}
-          <span className="relative inline-block whitespace-nowrap">
-            <span className="text-primary italic pr-2 font-sans">
-              a step ahead
-            </span>
-            <motion.svg
-              viewBox="0 0 200 8"
-              preserveAspectRatio="none"
-              className="absolute -bottom-1 left-0 h-2 w-full overflow-visible text-primary/60"
-              aria-hidden="true"
+            <feColorMatrix in="turb" type="saturate" values="0" />
+            <feComponentTransfer>
+              <feFuncR type="linear" slope="1.2" />
+              <feFuncG type="linear" slope="1.2" />
+              <feFuncB type="linear" slope="1.2" />
+            </feComponentTransfer>
+          </filter>
+          <rect
+            width="100%"
+            height="100%"
+            filter="url(#heroNoise)"
+            opacity="0.5"
+          />
+        </svg>
+
+        {/* Left Side: Content */}
+        <div className="flex flex-col z-20 w-full lg:w-[60%] pt-10 sm:pt-20">
+          {/* Banner badge */}
+          <motion.div
+            initial={{ opacity: 0, rotate: -5, scale: 0.9 }}
+            animate={{ opacity: 1, rotate: -2, scale: 1 }}
+            transition={{ duration: 0.8, ease: APPLE_EASE, delay: 0.1 }}
+            className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/20 backdrop-blur-sm border border-primary/30 text-foreground font-bold text-[10px] sm:text-xs uppercase tracking-widest w-max mb-6 shadow-xl"
+          >
+            {siteInfo.currentRole}{' '}
+            <span className="font-light text-primary">+</span>
+          </motion.div>
+
+          {/* Big Name */}
+          <motion.h1
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1.2, ease: APPLE_EASE, delay: 0.2 }}
+            className="font-serif text-5xl sm:text-6xl lg:text-7xl xl:text-9xl leading-[0.85] font-black tracking-tighter uppercase text-foreground mb-8 relative z-10 wrap-break-word"
+            style={{ textShadow: '4px 4px 0px rgba(var(--primary), 0.1)' }}
+          >
+            {siteInfo.name.split(' ')[0]}
+            <br />
+            {siteInfo.name.split(' ').slice(1).join(' ')}
+          </motion.h1>
+
+          {/* Paragraph */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: APPLE_EASE, delay: 0.4 }}
+            className="mb-10 max-w-2xl"
+          >
+            <ScrambledText 
+              className="font-sans! text-lg! sm:text-2xl! text-foreground/80! font-medium leading-relaxed"
+              radius={80}
             >
-              <motion.path
-                d="M2,5 Q50,1 100,4 T198,3"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                initial={{ pathLength: 0, opacity: 0 }}
-                animate={{ pathLength: 1, opacity: 1 }}
-                transition={{ duration: 1.8, ease: APPLE_EASE, delay: 1.2 }}
+              Based in {siteInfo.location}, building web and android products with
+              AI, cloud systems, and a latest - is - greatest mindset. Researched with{' '}
+              <span className="underline decoration-primary/50 underline-offset-4 decoration-2">
+                suspicious seriousness!
+              </span>
+              .
+            </ScrambledText>
+          </motion.div>
+
+          {/* Actions */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: APPLE_EASE, delay: 0.5 }}
+            className="flex flex-wrap items-center gap-6 mb-16 sm:mb-24"
+          >
+            <Magnetic>
+              <a
+                data-cal-namespace="connect"
+                data-cal-link={siteInfo.calLink}
+                data-cal-config='{"layout":"week_view","useSlotsViewOnSmallScreen":"true"}'
+                href={siteInfo.calLink}
+                className="group bg-foreground text-background relative w-auto flex items-center cursor-pointer overflow-hidden rounded-full border border-border px-8 sm:px-10 py-2 text-center font-semibold transition-transform duration-300 hover:scale-105 active:scale-95 text-sm sm:text-base shadow-sm"
+              >
+                <div className="flex items-center justify-center gap-2">
+                  <div className="bg-primary h-2 w-2 rounded-full transition-all duration-300 group-hover:scale-[100.8]"></div>
+                  <span className="inline-block transition-all duration-300 group-hover:translate-x-12 group-hover:opacity-0 capitalize">
+                    Book a call
+                  </span>
+                </div>
+                <div className="text-primary-foreground absolute inset-0 z-10 flex h-full w-full translate-x-12 items-center justify-center gap-2 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 capitalize">
+                  <span>Book a call</span>
+                  <Calendar className="h-4 w-4" />
+                </div>
+              </a>
+            </Magnetic>
+            <Magnetic>
+              <Link
+                to="/blog"
+                className="group flex items-center gap-2 font-medium text-foreground underline-offset-8 hover:underline decoration-border/50 hover:decoration-primary transition-all duration-300 text-sm sm:text-base"
+              >
+                Latest Writing
+                <ArrowRight className="h-4 w-4 transition-all duration-300 -rotate-45 group-hover:rotate-0" />
+              </Link>
+            </Magnetic>
+          </motion.div>
+
+          {/* Stats */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.5, delay: 0.8 }}
+            className="flex flex-wrap items-center gap-8 border-t border-border/20 pb-4 mt-auto"
+          >
+            <div className="flex flex-col">
+              <span className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
+                Experience
+              </span>
+              <span className="text-2xl sm:text-3xl font-serif">
+                2+
+                <span className="text-sm font-sans text-muted-foreground">
+                  /yrs
+                </span>
+              </span>
+            </div>
+            <div className="flex flex-col border-l border-border/20 pl-8">
+              <span className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
+                Status
+              </span>
+              <span className="text-xl sm:text-2xl font-serif flex items-center gap-2">
+                active{' '}
+                <span className="h-2 w-2 mt-2 rounded-full bg-primary animate-pulse" />
+              </span>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Right Side: Image and Floating Elements */}
+        <div className="absolute right-0 top-0 w-full lg:w-[50%] h-full flex justify-end items-end pointer-events-none z-10 mt-20 lg:mt-0 overflow-visible opacity-40 lg:opacity-100">
+          {/* Large Circle Background */}
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 2, ease: 'easeOut' }}
+            className="absolute right-[-20%] top-[10%] w-[600px] h-[600px] bg-primary rounded-full blur-[80px] opacity-20 dark:opacity-10"
+          />
+
+          {/* The Person Image */}
+          <motion.img
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1.2, ease: APPLE_EASE, delay: 0.3 }}
+            src="/profile_image.png"
+            alt={siteInfo.name}
+            data-backlight="off"
+            className="relative z-10 w-[70%] max-w-[450px] object-contain translate-x-[10%] lg:translate-x-0"
+          />
+
+          {/* Floating Terminal */}
+          <motion.div
+            initial={{ opacity: 0, y: -20, rotate: 0 }}
+            animate={{ opacity: 1, y: 0, rotate: 2 }}
+            transition={{ duration: 0.8, delay: 0.8, type: 'spring' }}
+            className="absolute top-[15%] left-[10%] z-20 bg-background/95 backdrop-blur-md border border-border rounded-xl shadow-2xl p-4 w-64 pointer-events-auto hidden md:block"
+          >
+            <div className="flex items-center justify-between mb-3 border-b border-border/50 pb-2">
+              <span className="text-xs font-mono text-muted-foreground">
+                build.exe
+              </span>
+              <div className="flex gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-destructive" />
+                <div className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
+                <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
+              </div>
+            </div>
+            <div className="font-mono text-[10px] sm:text-xs text-primary space-y-1">
+              <p className="opacity-70">{`> initialize_systems()`}</p>
+              <p className="opacity-70">{`> loading core...`}</p>
+              <p>{`> 99% complete`}</p>
+              <div className="h-1.5 w-full bg-muted mt-2 rounded overflow-hidden">
+                <motion.div
+                  initial={{ width: '0%' }}
+                  animate={{ width: '99%' }}
+                  transition={{ duration: 2, delay: 1.5, ease: 'easeInOut' }}
+                  className="h-full bg-primary"
+                />
+              </div>
+              <p className="mt-2 text-foreground">status: shipping</p>
+            </div>
+          </motion.div>
+
+          {/* Floating Sticky Note */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, rotate: 0 }}
+            animate={{ opacity: 1, scale: 1, rotate: 6 }}
+            transition={{ duration: 0.8, delay: 1, type: 'spring' }}
+            className="absolute top-[55%] lg:top-[60%] right-[2%] z-20 bg-[#fef5e7] dark:bg-amber-950/80 border border-amber-200/50 dark:border-amber-800/50 shadow-xl p-5 w-52 pointer-events-auto hidden md:block"
+          >
+            <p className="font-serif font-bold text-sm mb-3 uppercase tracking-wider text-amber-900 dark:text-amber-100 border-b border-amber-900/20 dark:border-amber-100/20 pb-1">
+              Build Formula
+            </p>
+            <ul className="font-mono text-xs space-y-1.5 text-amber-800 dark:text-amber-200/80">
+              <li>+ CLEAN CODE</li>
+              <li>+ MODERN UI</li>
+              <li>+ SCALABILITY</li>
+              <li>+ AI DRIVEN</li>
+            </ul>
+            <p className="font-serif italic font-bold text-lg mt-3 text-amber-950 dark:text-amber-50">
+              = SHIPPED
+            </p>
+          </motion.div>
+
+          {/* Floating Timeline Sticker */}
+          <motion.div
+            initial={{ opacity: 0, x: -20, rotate: 0 }}
+            animate={{ opacity: 1, x: 0, rotate: -3 }}
+            transition={{ duration: 0.8, delay: 1.2, type: 'spring' }}
+            className="absolute bottom-[5%] left-[-15%] xl:left-[5%] z-20 bg-background border border-border shadow-2xl p-4 pointer-events-auto hidden lg:flex items-center gap-4"
+          >
+            <div className="flex flex-col gap-4">
+              <p className="text-sm font-serif font-medium text-foreground">
+                Idea to Prototype to{' '}
+                <span className="bg-primary/20 text-primary px-1 py-0.5 rounded italic">
+                  full deployment.
+                </span>
+              </p>
+              <div className="flex items-center justify-evenly gap-3 mt-1 text-[10px] font-mono">
+                <span className="bg-muted px-2 py-1 rounded-full text-foreground/80">
+                  Idea
+                </span>
+                <span className="text-muted-foreground">---</span>
+                <span className="bg-muted px-2 py-1 rounded-full text-foreground/80">
+                  Code
+                </span>
+                <span className="text-muted-foreground">---</span>
+                <span className="bg-foreground text-background px-2 py-1 rounded-full flex items-center gap-1">
+                  Live <ArrowRight className="h-2 w-2" />
+                </span>
+              </div>
+              <KeyboardHint />
+            </div>
+          </motion.div>
+
+          {/* Circular Stamp */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 1.4, type: 'spring' }}
+            className="absolute bottom-[10%] lg:bottom-[6%] right-[1%] z-30 hidden md:flex items-center justify-center"
+          >
+            <div className="w-28 h-28 border-[1.5px] border-primary/60 rounded-full flex items-center justify-center pointer-events-auto text-primary backdrop-blur-sm bg-background/10">
+              <CircularText
+                text="RESEARCHED • SHIPPED • DESIGNED • "
+                spinDuration={12}
+                className="absolute inset-0 w-full h-full text-md font-bold uppercase tracking-widest font-sans"
               />
-            </motion.svg>
-          </span>
-          .
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ duration: 1.4, ease: APPLE_EASE, delay: 0.3 }}
-          className="mt-8 max-w-2xl text-lg leading-relaxed text-foreground/60 sm:text-xl font-medium"
-        >
-          {siteInfo.currentRole} based in {siteInfo.location}, building web and
-          android products with AI, cloud systems, and a latest-is-greatest
-          mindset. Fewer widgets, more atmosphere, and work that reads clearly
-          on every screen.
-        </motion.p>
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, ease: APPLE_EASE, delay: 0.5 }}
-          className="mt-12 flex flex-wrap items-center justify-center gap-4"
-        >
-          <Magnetic>
-            <Link
-              to="/projects"
-              className="group relative inline-flex items-center gap-2 rounded-full bg-foreground px-8 py-3.5 text-sm font-semibold text-background overflow-hidden transition-transform duration-300 hover:scale-105 active:scale-95"
-            >
-              <span className="relative z-10">Selected Work</span>
-              <div className="absolute inset-0 bg-primary opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-            </Link>
-          </Magnetic>
-          <Magnetic>
-            <Link
-              to="/blog"
-              className="inline-flex items-center gap-2 rounded-full border border-border/20 bg-background/50 backdrop-blur-md px-8 py-3.5 text-sm font-medium text-foreground transition-all duration-300 hover:border-primary/40 hover:bg-primary/5 active:scale-95"
-            >
-              Latest Writing
-            </Link>
-          </Magnetic>
-          <Magnetic>
-            <a
-              data-cal-namespace="connect"
-              data-cal-link={siteInfo.calLink}
-              data-cal-config='{"layout":"week_view","useSlotsViewOnSmallScreen":"true"}'
-              href={siteInfo.calLink}
-              className="inline-flex items-center gap-2 rounded-full border border-border/20 bg-background/50 backdrop-blur-md px-8 py-3.5 text-sm font-medium text-foreground transition-all duration-300 hover:border-primary/40 hover:bg-primary/5 active:scale-95"
-            >
-              <CalendarIcon size={14} className="text-primary" />
-              Book a Call
-            </a>
-          </Magnetic>
-        </motion.div>
+              <div className="absolute font-serif italic font-bold text-xl pointer-events-none">
+                {siteInfo.name
+                  .split(' ')
+                  .map((n) => n[0])
+                  .join('')}
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </motion.section>
 
       <motion.section
         variants={item}
-        className="hero-seamless-stage relative -mt-8 min-h-80 overflow-hidden lg:min-h-105"
+        className="hero-seamless-stage relative min-h-80 overflow-hidden lg:min-h-105 -mt-28"
       >
         <div className="pointer-events-none absolute inset-x-[12%] top-[10%] h-28 rounded-full bg-primary/10 blur-3xl" />
         <div className="pointer-events-none absolute inset-x-[24%] bottom-[18%] h-36 rounded-full bg-primary/8 blur-3xl" />
@@ -541,19 +673,19 @@ function App() {
 
         <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-5 p-6 sm:p-8">
           <div className="flex items-center gap-4 sm:max-w-[72%]">
-            <img
-              src="/icon.svg"
-              width={56}
-              height={56}
-              className="h-14 w-14 shrink-0"
-              alt="Bhaumic Singh logo"
+            <GravatarAvatar
+              hash={avatarHash}
+              size={44}
+              alt={`${siteInfo.name} profile photo`}
+              className="h-14 w-14 shrink-0 ring-1 ring-border/20"
+              rel="me"
             />
             <div className="min-w-0 text-foreground">
               <p className="text-[10px] uppercase tracking-[0.2em] text-foreground/40">
                 currently building
               </p>
               <p className="mt-1 block text-lg font-semibold leading-tight transition-colors hover:text-primary sm:text-xl">
-                {siteInfo.currentRole}
+                Machine E-commerce
                 <span className="block text-sm font-normal text-foreground/70">
                   at {siteInfo.currentCompany}
                 </span>
