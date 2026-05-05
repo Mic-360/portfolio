@@ -1,31 +1,33 @@
 import {
   HeadContent,
-  Link,
   Scripts,
   createRootRouteWithContext,
 } from '@tanstack/react-router'
 import { AnimatePresence } from 'motion/react'
 import React, { Suspense, useCallback, useEffect, useState } from 'react'
-import { FeedbackHandler } from '../components/FeedbackHandler'
-import { useKonamiCode } from '../hooks/useKonamiCode'
+import { FeedbackHandler } from '@/components/FeedbackHandler'
+import { useKonamiCode } from '@/hooks/useKonamiCode'
 
-import { FloatingNavDock } from '../components/FloatingNavDock'
-import Footer from '../components/Footer'
-import { GoogleAnalyticsTracker } from '../components/GoogleAnalyticsTracker'
-import { LazyCommandMenu } from '../components/LazyCommandMenu'
-import { ThemeProvider } from '../components/ThemeProvider'
-import { BacklightFilterDefs } from '../components/ui/backlight'
-import { VideoBackground } from '../components/VideoBackground'
-import { gravatar, siteImages, siteInfo, siteMeta } from '../config/site-data'
-import { CrowdCanvas } from '../components/CrowdCanvas'
+import { FloatingNavDock } from '@/components/FloatingNavDock'
+import Footer from '@/components/Footer'
+import { GoogleAnalyticsTracker } from '@/components/GoogleAnalyticsTracker'
+import { LazyCommandMenu } from '@/components/LazyCommandMenu'
+import { ThemeProvider } from '@/components/ThemeProvider'
+import { BacklightFilterDefs } from '@/components/ui/backlight'
+import { VideoBackground } from '@/components/VideoBackground'
+import { gravatar, siteImages, siteInfo, siteMeta } from '@/config/site-data'
+import { CrowdCanvas } from '@/components/CrowdCanvas'
 
-import appCss from '../styles.css?url'
+import appCss from '@/styles.css?url'
 import type { QueryClient } from '@tanstack/react-query'
 
 import { env } from '@/env'
 import { WEBMCP_INIT_SCRIPT } from '@/lib/utils'
+import NotFound from '@/layout/not-found'
+import GlobalError from '@/layout/error'
+import GlobalPending from '@/layout/loading'
 
-const DoomEasterEgg = React.lazy(() => import('../components/DoomEasterEgg'))
+const DoomEasterEgg = React.lazy(() => import('@/components/DoomEasterEgg'))
 
 class DoomErrorBoundary extends React.Component<
   { children: React.ReactNode; onError: () => void },
@@ -408,24 +410,10 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   },
 
   notFoundComponent: NotFound,
+  errorComponent: GlobalError,
+  pendingComponent: GlobalPending,
   shellComponent: RootDocument,
 })
-
-function NotFound() {
-  return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-6 text-center">
-      <img src="/frieren/404-frieren.svg" alt="404" className="h-56 w-56" />
-      <h1 className="font-serif text-6xl tracking-tight">404</h1>
-      <p className="text-base text-muted-foreground/50">page not found</p>
-      <Link
-        to="/"
-        className="mt-2 rounded-full bg-foreground px-7 py-3 text-sm font-medium text-background transition-all duration-300 hover:bg-primary"
-      >
-        Go Home
-      </Link>
-    </div>
-  )
-}
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   const [showDoom, setShowDoom] = useState(false)
