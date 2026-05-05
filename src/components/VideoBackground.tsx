@@ -8,7 +8,7 @@ const AUDIO_VOLUME = 0.45
 export function VideoBackground() {
   const { mode } = useTheme()
   const showVideo =
-    mode === 'sunny' || mode === 'midnight' || mode === 'frieren'
+    mode === 'sunny'
   const sunnyAudioRef = useRef<HTMLAudioElement>(null)
   const midnightAudioRef = useRef<HTMLAudioElement>(null)
   const frierenAudioRef = useRef<HTMLAudioElement>(null)
@@ -39,13 +39,7 @@ export function VideoBackground() {
     frierenAudio.currentTime = 0
 
     const activeAudio =
-      mode === 'sunny'
-        ? sunnyAudio
-        : mode === 'midnight'
-          ? midnightAudio
-          : mode === 'frieren'
-            ? frierenAudio
-            : null
+      mode === 'sunny' ? sunnyAudio : undefined
 
     if (!activeAudio) {
       return
@@ -59,31 +53,17 @@ export function VideoBackground() {
     }
   }, [mode, muted])
 
-  const videoSource =
-    mode === 'midnight'
-      ? '/moon.mp4'
-      : mode === 'frieren'
-        ? '/frieren.mp4'
-        : '/leaves.mp4'
+  const videoSource = '/leaves.mp4'
 
-  const videoBlendMode =
-    mode === 'midnight' || mode === 'frieren' ? 'overlay' : 'multiply'
+  const videoBlendMode = 'multiply'
 
-  const videoOpacity =
-    mode === 'midnight' ? 0.74 : mode === 'frieren' ? 0.62 : 0.75
+  const videoOpacity = 0.75
 
-  const videoFilter =
-    mode === 'midnight'
-      ? 'brightness(1.18) contrast(1.14) saturate(0.9)'
-      : mode === 'frieren'
-        ? 'brightness(0.94) contrast(1.04) saturate(0.72)'
-        : undefined
+  const videoFilter = undefined
 
   return (
     <>
       <audio ref={sunnyAudioRef} src="/forest.mp3" loop preload="none" />
-      <audio ref={midnightAudioRef} src="/night.mp3" loop preload="none" />
-      <audio ref={frierenAudioRef} src="/mozart.mp3" loop preload="none" />
 
       <AnimatePresence mode="wait">
         {showVideo && (
@@ -106,17 +86,6 @@ export function VideoBackground() {
             >
               <source src={videoSource} type="video/mp4" />
             </video>
-            {mode === 'midnight' ? (
-              <>
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(214,226,255,0.16),transparent_46%),linear-gradient(180deg,rgba(9,12,18,0.08),rgba(9,12,18,0.34))]" />
-                <div className="absolute inset-0 mix-blend-multiply bg-[linear-gradient(180deg,rgba(7,10,16,0.06),rgba(7,10,16,0.28))]" />
-              </>
-            ) : mode === 'frieren' ? (
-              <>
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(241,224,177,0.16),transparent_36%),radial-gradient(circle_at_right,rgba(141,164,180,0.14),transparent_42%),linear-gradient(180deg,rgba(227,220,204,0.08),rgba(92,103,120,0.18))]" />
-                <div className="absolute inset-0 mix-blend-multiply bg-[linear-gradient(180deg,rgba(73,79,96,0.05),rgba(73,79,96,0.18))]" />
-              </>
-            ) : null}
           </motion.div>
         )}
       </AnimatePresence>
