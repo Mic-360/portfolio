@@ -1,7 +1,6 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { AnimatePresence, motion } from 'motion/react'
-import { useEffect, useState } from 'react'
-import LayersIcon from '@/components/ui/layers-icon'
+import { useEffect, useMemo, useState } from 'react'
 import { siteMeta } from '@/config/site-data'
 import { getProjectIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
@@ -102,8 +101,9 @@ function ProjectsIndex() {
     setActiveCategory(urlTag ?? null)
   }, [urlTag])
 
-  const allCategories = Array.from(
-    new Set(projects.flatMap((project) => project.categories)),
+  const allCategories = useMemo(
+    () => Array.from(new Set(projects.flatMap((project) => project.categories))),
+    [projects],
   )
 
   const filteredProjects = activeCategory
@@ -115,189 +115,223 @@ function ProjectsIndex() {
       )
     : projects
 
+  const stackSurfaces = useMemo(
+    () => Array.from(new Set(projects.flatMap((p) => p.stack))).length,
+    [projects],
+  )
+  const yearsSpan = useMemo(() => {
+    if (projects.length === 0) return '—'
+    const years = projects.map((p) => new Date(p.date).getFullYear())
+    const min = Math.min(...years)
+    const max = Math.max(...years)
+    return min === max ? `${min}` : `${min}–${max}`
+  }, [projects])
+
+  const featured = filteredProjects[0]
+  const rest = filteredProjects.slice(1)
+
   return (
     <PageLayout>
-      <motion.header
-        variants={PAGE_ITEM_VARIANTS}
-        className="relative overflow-hidden pb-8"
-      >
-        <div className="pointer-events-none absolute inset-x-[18%] top-0 h-28 rounded-full bg-primary/10 blur-3xl" />
-        <div className="pointer-events-none absolute right-[6%] top-[10%] h-72 w-72 rounded-full bg-primary/6 blur-[120px]" />
+      {/* ─── Masthead: spec sheet ─── */}
+      <motion.header variants={PAGE_ITEM_VARIANTS} className="relative">
+        <div className="instrument-panel relative border border-foreground/10">
+          <span className="instrument-bracket-bl" />
+          <span className="instrument-bracket-br" />
 
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2.5">
-            <span className="text-primary/50">
-              <LayersIcon size={18} />
-            </span>
-            <span className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/70">
-              projects archive
-            </span>
-          </div>
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
-          >
-            <span>&larr;</span>
-            home
-          </Link>
-        </div>
-
-        <div className="flex flex-col gap-8 pt-8 lg:pt-12">
-          <div className="grid gap-5">
-            <h1 className="font-serif text-4xl leading-[1.08] tracking-tight text-foreground sm:text-5xl xl:text-6xl">
-              Every project, one archive.
-            </h1>
-            <p className="max-w-2xl text-base leading-8 text-foreground/70 sm:text-lg">
-              An archive of Android, web, AI, and systems projects. Each build
-              has its own atmosphere, technical footprint, and path into the
-              full write-up.
-            </p>
+          {/* bezel */}
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-foreground/10 bg-background/40 px-4 py-3 backdrop-blur-sm sm:px-6">
+            <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.28em] text-muted-foreground/65">
+              <span className="flex h-4 w-4 items-center justify-center border border-foreground/20 text-[8px] text-foreground/60">
+                ◇
+              </span>
+              <span>registry · vol·001</span>
+            </div>
+            <Link
+              to="/"
+              className="font-mono text-[10px] uppercase tracking-[0.28em] text-muted-foreground/55 transition-colors hover:text-primary"
+            >
+              ← return ⁄ home
+            </Link>
           </div>
 
-          <div className="flex items-center justify-between gap-4">
-            <div className="space-y-1">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
-                selected builds
+          <div className="grid gap-10 px-4 py-8 sm:px-8 sm:py-12 lg:grid-cols-[1.4fr_1fr] lg:gap-14">
+            <div className="flex flex-col gap-5">
+              <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-primary/60">
+                ▸ engineering registry
               </p>
-              <p className="font-serif text-2xl text-foreground">
-                {projects.length.toString().padStart(2, '0')}
+              <h1 className="font-serif text-4xl leading-[1.02] tracking-tight text-foreground sm:text-5xl xl:text-6xl">
+                Curated builds,
+                <br />
+                <em className="font-serif italic text-primary">indexed</em> by hand.
+              </h1>
+              <p className="max-w-xl font-mono text-xs leading-7 text-muted-foreground/80 sm:text-[13px]">
+                A working registry of projects built across Android, web, AI, and
+                systems. Each entry carries its own stack manifest, build year,
+                and write-up. No filler, no portfolio padding.
               </p>
             </div>
+
+            {/* spec readout */}
+            <div className="grid grid-cols-2 self-end gap-px border border-foreground/10 bg-foreground/8 lg:grid-cols-2">
+              <SpecCell
+                label="builds"
+                value={projects.length.toString().padStart(3, '0')}
+              />
+              <SpecCell
+                label="categories"
+                value={allCategories.length.toString().padStart(2, '0')}
+              />
+              <SpecCell
+                label="stack surfaces"
+                value={stackSurfaces.toString().padStart(2, '0')}
+              />
+              <SpecCell label="span" value={yearsSpan} />
+            </div>
+          </div>
+
+          {/* ekg-style bottom rule */}
+          <div className="border-t border-foreground/10 bg-background/40 px-4 py-2 sm:px-6">
+            <div className="animus-sync-bar" />
           </div>
         </div>
       </motion.header>
 
+      {/* ─── Filter rail ─── */}
       {allCategories.length > 0 ? (
         <motion.div
           variants={PAGE_ITEM_VARIANTS}
-          className="sticky top-0 z-30 mx-0 px-0 py-3 backdrop-blur-xl bg-background/80 border-b border-border/10"
+          className="sticky top-0 z-30 -mx-4 border-y border-border/15 bg-background/85 px-4 py-3 backdrop-blur-xl sm:-mx-6 sm:px-6"
         >
-          <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
-            <button
-              type="button"
-              onClick={() => setActiveCategory(null)}
-              className={`filter-pill shrink-0 ${
-                activeCategory === null
-                  ? 'filter-pill-active'
-                  : 'filter-pill-inactive'
-              }`}
-            >
-              All
-            </button>
-            {allCategories.map((cat) => (
-              <button
-                key={cat}
-                type="button"
-                onClick={() =>
-                  setActiveCategory(activeCategory === cat ? null : cat)
-                }
-                className={`filter-pill shrink-0 ${
-                  activeCategory === cat
-                    ? 'filter-pill-active'
-                    : 'filter-pill-inactive'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+          <div className="flex items-center gap-4 overflow-x-auto scrollbar-hide">
+            <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.28em] text-muted-foreground/50">
+              filter ::
+            </span>
+            <div className="flex gap-2">
+              <FilterTag
+                label="all"
+                active={activeCategory === null}
+                onClick={() => setActiveCategory(null)}
+              />
+              {allCategories.map((cat) => (
+                <FilterTag
+                  key={cat}
+                  label={cat}
+                  active={activeCategory === cat}
+                  onClick={() =>
+                    setActiveCategory(activeCategory === cat ? null : cat)
+                  }
+                />
+              ))}
+            </div>
           </div>
         </motion.div>
       ) : null}
 
-      <div className="grid gap-6 sm:grid-cols-2">
-        <AnimatePresence mode="popLayout">
-          {filteredProjects.map((project, index) => {
-            const projectVisual =
-              project.image || `/og/projects/${project.slug}`
-            const isHero = index % 3 === 0
+      {/* ─── Featured build ─── */}
+      <AnimatePresence mode="popLayout">
+        {featured ? (
+          <motion.div
+            key={`featured-${featured.slug}`}
+            layout
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+          >
+            <Link
+              to="/projects/$slug"
+              params={{ slug: featured.slug }}
+              className="animus-corner group block border border-foreground/10"
+            >
+              <div className="grid gap-0 lg:grid-cols-[1.1fr_1fr]">
+                <div className="media-hover-parent relative aspect-video overflow-hidden bg-foreground/5 lg:aspect-auto">
+                  <img
+                    src={featured.image || `/og/projects/${featured.slug}`}
+                    alt={featured.title}
+                    className="media-hover-image absolute inset-0 h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-linear-to-r from-card/30 via-transparent to-transparent" />
+                  <div className="absolute left-3 top-3 font-mono text-[10px] uppercase tracking-[0.28em] text-foreground/85 mix-blend-difference">
+                    flagship · 0001
+                  </div>
+                </div>
 
-            return (
-              <motion.div
-                key={project.slug}
-                layout
-                layoutId={project.slug}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{
-                  duration: 0.5,
-                  ease: [0.25, 0.1, 0.25, 1],
-                  layout: { duration: 0.4 },
-                }}
-                className={isHero ? 'sm:col-span-2' : 'sm:col-span-1'}
-              >
-                <Link
-                  to="/projects/$slug"
-                  params={{ slug: project.slug }}
-                  className="group block"
-                >
-                  <motion.article
-                    whileHover={{ y: -4 }}
-                    transition={{
-                      type: 'spring',
-                      stiffness: 300,
-                      damping: 20,
-                    }}
-                    className="project-card-apple overflow-hidden rounded-2xl border border-border/10 bg-card/50"
-                  >
-                    <div
-                      className={`media-hover-parent relative overflow-hidden ${
-                        isHero ? 'aspect-video' : 'aspect-4/3'
-                      }`}
-                    >
-                      <img
-                        src={projectVisual}
-                        alt={project.title}
-                        className="media-hover-image absolute inset-0 h-full w-full object-cover"
-                        loading="lazy"
-                      />
-                      <div className="absolute inset-0 bg-linear-to-t from-card/60 via-transparent to-transparent" />
+                <div className="flex flex-col justify-between gap-6 bg-card/40 p-6 sm:p-8">
+                  <div className="flex flex-col gap-4">
+                    <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.28em] text-muted-foreground/60">
+                      <span className="text-primary/70">
+                        {featured.categories[0] ?? 'project'}
+                      </span>
+                      <span className="h-px flex-1 bg-foreground/10" />
+                      <span>{formatDate(featured.date)}</span>
                     </div>
+                    <h2 className="font-serif text-2xl leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary sm:text-4xl">
+                      {featured.title}
+                    </h2>
+                    <p className="text-sm leading-7 text-foreground/70">
+                      {featured.summary}
+                    </p>
+                  </div>
 
-                    <div className="flex flex-col gap-3 p-5 sm:p-6">
-                      <div className="flex items-center justify-between gap-4">
-                        <p className="text-[10px] uppercase tracking-[0.2em] text-primary/50">
-                          {project.categories.length > 0
-                            ? project.categories[0]
-                            : 'project'}
-                        </p>
-                        <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
-                          {formatDate(project.date)}
-                        </p>
-                      </div>
-
-                      <h2 className="font-serif text-xl leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary sm:text-2xl">
-                        {project.title}
-                      </h2>
-
-                      <p
-                        className={`text-sm leading-7 text-foreground/70 ${
-                          isHero ? 'max-w-2xl' : 'line-clamp-2'
-                        }`}
-                      >
-                        {project.summary}
-                      </p>
-
-                      <div className="flex items-center justify-between gap-4 border-t border-border/10 pt-3">
-                        <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/35">
-                          {project.stack.slice(0, 4).join(' \u00b7 ')}
-                        </p>
-                        <span className="text-xs text-primary/60 transition-transform duration-300 group-hover:translate-x-1">
-                          &rarr;
+                  <div className="space-y-3 border-t border-foreground/10 pt-4">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-muted-foreground/50">
+                      stack manifest
+                    </p>
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-[11px] tracking-tight text-foreground/75">
+                      {featured.stack.map((s, i) => (
+                        <span key={s} className="flex items-center gap-2">
+                          <span>{s}</span>
+                          {i < featured.stack.length - 1 ? (
+                            <span className="text-primary/40">/</span>
+                          ) : null}
                         </span>
-                      </div>
+                      ))}
                     </div>
-                  </motion.article>
-                </Link>
-              </motion.div>
-            )
-          })}
-        </AnimatePresence>
+                    <div className="flex items-center justify-between pt-2">
+                      <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-muted-foreground/50">
+                        open file
+                      </span>
+                      <span className="font-mono text-xs text-primary/80 transition-transform duration-300 group-hover:translate-x-1">
+                        →
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+
+      {/* ─── Registry index ─── */}
+      <div>
+        <div className="mb-3 flex items-baseline justify-between border-b border-foreground/10 pb-2">
+          <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-muted-foreground/60">
+            ▸ index of builds
+          </p>
+          <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-muted-foreground/40">
+            {rest.length.toString().padStart(2, '0')} entries
+          </p>
+        </div>
+
+        <ol className="divide-y divide-foreground/8">
+          <AnimatePresence mode="popLayout">
+            {rest.map((project, index) => (
+              <RegistryRow
+                key={project.slug}
+                index={index + 2}
+                project={project}
+              />
+            ))}
+          </AnimatePresence>
+        </ol>
       </div>
 
+      {/* ─── Footer ─── */}
       <motion.footer
         variants={PAGE_ITEM_VARIANTS}
-        className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-end sm:justify-between"
+        className="flex flex-col gap-6 border-t border-foreground/10 pt-8 sm:flex-row sm:items-end sm:justify-between"
       >
         <div className="flex items-end gap-6">
           <img
@@ -306,19 +340,144 @@ function ProjectsIndex() {
             alt=""
             data-backlight="off"
           />
-          <p className="max-w-2xl text-sm leading-7 text-muted-foreground/70">
-            Each project opens into a fuller build story with the technical
-            breakdown, writing, and outbound links.
-          </p>
+          <div className="space-y-2">
+            <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-primary/60">
+              ▸ end of registry
+            </p>
+            <p className="max-w-md font-mono text-[11px] leading-6 text-muted-foreground/70">
+              Each entry opens to a build log: architecture notes, the technical
+              decisions, and the writing.
+            </p>
+          </div>
         </div>
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
+          className="font-mono text-[10px] uppercase tracking-[0.28em] text-muted-foreground/55 transition-colors hover:text-primary"
         >
-          <span>&larr;</span>
-          back home
+          ← return ⁄ home
         </Link>
       </motion.footer>
     </PageLayout>
+  )
+}
+
+function SpecCell({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex flex-col gap-1 bg-background/55 px-4 py-3">
+      <p className="font-mono text-[9px] uppercase tracking-[0.32em] text-muted-foreground/55">
+        {label}
+      </p>
+      <p className="font-serif text-2xl tracking-tight text-foreground">
+        {value}
+      </p>
+    </div>
+  )
+}
+
+function FilterTag({
+  label,
+  active,
+  onClick,
+}: {
+  label: string
+  active: boolean
+  onClick: () => void
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`shrink-0 border px-3 py-1 font-mono text-[10px] uppercase tracking-[0.22em] transition-all duration-200 ${
+        active
+          ? 'border-primary bg-primary/15 text-primary'
+          : 'border-foreground/15 text-muted-foreground/70 hover:border-foreground/35 hover:text-foreground'
+      }`}
+    >
+      [{label}]
+    </button>
+  )
+}
+
+function RegistryRow({
+  index,
+  project,
+}: {
+  index: number
+  project: ReturnType<typeof Route.useLoaderData>['projects'][number]
+}) {
+  const visual = project.image || `/og/projects/${project.slug}`
+  return (
+    <motion.li
+      layout
+      layoutId={project.slug}
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{ duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
+    >
+      <Link
+        to="/projects/$slug"
+        params={{ slug: project.slug }}
+        className="group grid grid-cols-[auto_1fr] items-start gap-x-5 gap-y-3 py-6 transition-colors duration-300 hover:bg-foreground/3 sm:grid-cols-[auto_1fr_auto] sm:gap-x-8 sm:px-2"
+      >
+        <div className="flex flex-col gap-2 pt-1">
+          <span className="font-mono text-[11px] tracking-[0.18em] text-primary/60">
+            {index.toString().padStart(4, '0')}
+          </span>
+          <span className="font-mono text-[9px] uppercase tracking-[0.28em] text-muted-foreground/50">
+            {new Date(project.date).getFullYear()}
+          </span>
+        </div>
+
+        <div className="flex flex-col gap-3 min-w-0">
+          <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.24em] text-muted-foreground/55">
+            <span className="text-primary/70">
+              {project.categories[0] ?? 'project'}
+            </span>
+            <span className="h-px w-6 bg-foreground/15" />
+            <span>{formatDate(project.date)}</span>
+          </div>
+          <h3 className="font-serif text-xl leading-tight tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary sm:text-2xl">
+            {project.title}
+          </h3>
+          <p className="line-clamp-2 max-w-2xl text-sm leading-7 text-foreground/70">
+            {project.summary}
+          </p>
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 pt-1 font-mono text-[10px] tracking-tight text-muted-foreground/65">
+            {project.stack.slice(0, 5).map((s, i) => (
+              <span key={s} className="flex items-center gap-2">
+                <span>{s}</span>
+                {i < Math.min(project.stack.length, 5) - 1 ? (
+                  <span className="text-primary/35">/</span>
+                ) : null}
+              </span>
+            ))}
+            {project.stack.length > 5 ? (
+              <span className="text-muted-foreground/40">
+                +{project.stack.length - 5}
+              </span>
+            ) : null}
+          </div>
+        </div>
+
+        <div className="hidden sm:block">
+          <div className="media-hover-parent animus-corner relative h-24 w-40 overflow-hidden border border-foreground/10 bg-foreground/5">
+            <img
+              src={visual}
+              alt=""
+              className="media-hover-image absolute inset-0 h-full w-full object-cover"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-linear-to-t from-card/40 via-transparent to-transparent" />
+          </div>
+          <div className="mt-2 flex items-center justify-end gap-1 font-mono text-[10px] uppercase tracking-[0.24em] text-muted-foreground/50 transition-colors group-hover:text-primary">
+            <span>open</span>
+            <span className="transition-transform duration-300 group-hover:translate-x-1">
+              →
+            </span>
+          </div>
+        </div>
+      </Link>
+    </motion.li>
   )
 }
