@@ -793,7 +793,6 @@ function RootPage({
           <Sun />
           <span>sunny</span>
         </CommandItem>
-
       </CommandGroup>
 
       <CommandSeparator />

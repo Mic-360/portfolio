@@ -244,7 +244,6 @@ export function ScrollProgress() {
   )
 }
 
-
 function InteractiveChart({
   data,
   color = 'var(--primary)',

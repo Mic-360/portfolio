@@ -1,18 +1,18 @@
-import React, { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { SplitText } from 'gsap/SplitText';
-import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin';
+import React, { useEffect, useRef } from 'react'
+import { gsap } from 'gsap'
+import { SplitText } from 'gsap/SplitText'
+import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin'
 
-gsap.registerPlugin(SplitText, ScrambleTextPlugin);
+gsap.registerPlugin(SplitText, ScrambleTextPlugin)
 
 export interface ScrambledTextProps {
-  radius?: number;
-  duration?: number;
-  speed?: number;
-  scrambleChars?: string;
-  className?: string;
-  style?: React.CSSProperties;
-  children: React.ReactNode;
+  radius?: number
+  duration?: number
+  speed?: number
+  scrambleChars?: string
+  className?: string
+  style?: React.CSSProperties
+  children: React.ReactNode
 }
 
 const ScrambledText: React.FC<ScrambledTextProps> = ({
@@ -22,30 +22,30 @@ const ScrambledText: React.FC<ScrambledTextProps> = ({
   scrambleChars = '.:',
   className = '',
   style = {},
-  children
+  children,
 }) => {
-  const rootRef = useRef<HTMLDivElement | null>(null);
+  const rootRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    if (!rootRef.current) return;
+    if (!rootRef.current) return
 
     const split = SplitText.create(rootRef.current.querySelector('p'), {
       type: 'chars',
-      charsClass: 'inline-block will-change-transform'
-    });
+      charsClass: 'inline-block will-change-transform',
+    })
 
-    split.chars.forEach(el => {
-      const c = el as HTMLElement;
-      gsap.set(c, { attr: { 'data-content': c.innerHTML } });
-    });
+    split.chars.forEach((el) => {
+      const c = el as HTMLElement
+      gsap.set(c, { attr: { 'data-content': c.innerHTML } })
+    })
 
     const handleMove = (e: PointerEvent) => {
-      split.chars.forEach(el => {
-        const c = el as HTMLElement;
-        const { left, top, width, height } = c.getBoundingClientRect();
-        const dx = e.clientX - (left + width / 2);
-        const dy = e.clientY - (top + height / 2);
-        const dist = Math.hypot(dx, dy);
+      split.chars.forEach((el) => {
+        const c = el as HTMLElement
+        const { left, top, width, height } = c.getBoundingClientRect()
+        const dx = e.clientX - (left + width / 2)
+        const dy = e.clientY - (top + height / 2)
+        const dist = Math.hypot(dx, dy)
 
         if (dist < radius) {
           gsap.to(c, {
@@ -54,22 +54,22 @@ const ScrambledText: React.FC<ScrambledTextProps> = ({
             scrambleText: {
               text: c.dataset.content || '',
               chars: scrambleChars,
-              speed
+              speed,
             },
-            ease: 'none'
-          });
+            ease: 'none',
+          })
         }
-      });
-    };
+      })
+    }
 
-    const el = rootRef.current;
-    el.addEventListener('pointermove', handleMove);
+    const el = rootRef.current
+    el.addEventListener('pointermove', handleMove)
 
     return () => {
-      el.removeEventListener('pointermove', handleMove);
-      split.revert();
-    };
-  }, [radius, duration, speed, scrambleChars]);
+      el.removeEventListener('pointermove', handleMove)
+      split.revert()
+    }
+  }, [radius, duration, speed, scrambleChars])
 
   return (
     <div
@@ -79,7 +79,7 @@ const ScrambledText: React.FC<ScrambledTextProps> = ({
     >
       <p>{children}</p>
     </div>
-  );
-};
+  )
+}
 
-export default ScrambledText;
+export default ScrambledText

@@ -1,7 +1,6 @@
 import { gsap } from 'gsap'
 import { Observer } from 'gsap/Observer'
 import React, { useEffect, useRef } from 'react'
-import { useIsMobile } from '@/hooks/use-mobile'
 import {
   ACESFilmicToneMapping,
   AmbientLight,
@@ -11,24 +10,26 @@ import {
   MathUtils,
   MeshPhysicalMaterial,
   Object3D,
+  PMREMGenerator,
   PerspectiveCamera,
   Plane,
-  PMREMGenerator,
   PointLight,
   Raycaster,
+  SRGBColorSpace,
   Scene,
   ShaderChunk,
   SphereGeometry,
-  SRGBColorSpace,
+  Sprite,
+  SpriteMaterial,
+  TextureLoader,
   Vector2,
   Vector3,
   WebGLRenderer,
-  WebGLRendererParameters,
-  TextureLoader,
-  SpriteMaterial,
-  Sprite,
 } from 'three'
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
+import type {
+  WebGLRendererParameters} from 'three';
+import { useIsMobile } from '@/hooks/use-mobile'
 
 gsap.registerPlugin(Observer)
 
@@ -103,11 +104,11 @@ class X {
   #resizeObserver?: ResizeObserver
   #intersectionObserver?: IntersectionObserver
   #resizeTimer?: number
-  #animationFrameId: number = 0
+  #animationFrameId = 0
   #clock: Clock = new Clock()
   #animationState = { elapsed: 0, delta: 0 }
-  #isAnimating: boolean = false
-  #isVisible: boolean = false
+  #isAnimating = false
+  #isVisible = false
 
   canvas!: HTMLCanvasElement
   camera!: PerspectiveCamera
@@ -131,7 +132,7 @@ class X {
   onBeforeRender: (state: { elapsed: number; delta: number }) => void = () => {}
   onAfterRender: (state: { elapsed: number; delta: number }) => void = () => {}
   onAfterResize: (size: SizeData) => void = () => {}
-  isDisposed: boolean = false
+  isDisposed = false
 
   constructor(config: XConfig) {
     this.#config = { ...config }
@@ -164,7 +165,7 @@ class X {
     } else {
       console.error('Three: Missing canvas or id parameter')
     }
-    this.canvas!.style.display = 'block'
+    this.canvas.style.display = 'block'
     const rendererOptions: WebGLRendererParameters = {
       canvas: this.canvas,
       powerPreference: 'high-performance',
@@ -280,7 +281,7 @@ class X {
     this.render = value.render.bind(value)
   }
 
-  #onIntersection(entries: IntersectionObserverEntry[]) {
+  #onIntersection(entries: Array<IntersectionObserverEntry>) {
     this.#isAnimating = entries[0].isIntersecting
     this.#isAnimating ? this.#startAnimation() : this.#stopAnimation()
   }
@@ -814,7 +815,7 @@ class Z extends InstancedMesh {
   physics: W
   ambientLight: AmbientLight | undefined
   light: PointLight | undefined
-  sprites: Sprite[] = []
+  sprites: Array<Sprite> = []
 
   constructor(renderer: WebGLRenderer, params: Partial<typeof XConfig> = {}) {
     const config = { ...XConfig, ...params }
@@ -859,16 +860,16 @@ class Z extends InstancedMesh {
     this.add(this.light)
   }
 
-  setColors(colors: number[]) {
+  setColors(colors: Array<number>) {
     if (Array.isArray(colors) && colors.length > 1) {
-      const colorUtils = (function (colorsArr: number[]) {
-        let baseColors: number[] = colorsArr
-        let colorObjects: Color[] = []
+      const colorUtils = (function (colorsArr: Array<number>) {
+        let baseColors: Array<number> = colorsArr
+        let colorObjects: Array<Color> = []
         baseColors.forEach((col) => {
           colorObjects.push(new Color(col))
         })
         return {
-          setColors: (cols: number[]) => {
+          setColors: (cols: Array<number>) => {
             baseColors = cols
             colorObjects = []
             baseColors.forEach((col) => {

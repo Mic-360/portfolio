@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
+import { AnimatePresence, motion } from 'motion/react'
 import { Link } from '@tanstack/react-router'
 import { ArrowRight } from 'lucide-react'
 
@@ -15,7 +15,7 @@ export interface ProjectShowcaseItem {
 export function ProjectShowcase({
   projects,
 }: {
-  projects: ProjectShowcaseItem[]
+  projects: Array<ProjectShowcaseItem>
 }) {
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [hoveredId, setHoveredId] = useState<string | null>(null)
@@ -56,7 +56,7 @@ export function ProjectShowcase({
                 className="text-primary hover:underline underline-offset-8 font-serif mb-4 font-light text-lg cursor-pointer flex items-center gap-2 group"
               >
                 <span>View All Projects</span>
-                <ArrowRight className='h-4 w-4 -rotate-45 group-hover:rotate-0 transition-transform duration-300' />
+                <ArrowRight className="h-4 w-4 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
               </Link>
               <ul className="flex flex-col w-fit text-right gap-2 sm:gap-4 pb-10 backdrop-blur-2xl">
                 {projects.map((project) => {

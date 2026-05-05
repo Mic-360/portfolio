@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import { gsap } from "gsap"
-import { useEffect, useRef } from "react"
-import { useIsMobile } from "@/hooks/use-mobile"
+import { gsap } from 'gsap'
+import { useEffect, useRef } from 'react'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 interface CrowdCanvasProps {
   src: string
@@ -18,7 +18,7 @@ const CrowdCanvas = ({ src, rows = 15, cols = 7 }: CrowdCanvasProps) => {
     const canvas = canvasRef.current
     if (!canvas) return
 
-    const ctx = canvas.getContext("2d")
+    const ctx = canvas.getContext('2d')
     if (!ctx) return
 
     const config = {
@@ -32,18 +32,19 @@ const CrowdCanvas = ({ src, rows = 15, cols = 7 }: CrowdCanvasProps) => {
     // UTILS
     const randomRange = (min: number, max: number) =>
       min + Math.random() * (max - min)
-    const randomIndex = (array: any[]) => randomRange(0, array.length) | 0
-    const removeFromArray = (array: any[], i: number) => array.splice(i, 1)[0]
-    const removeItemFromArray = (array: any[], item: any) =>
+    const randomIndex = (array: Array<any>) => randomRange(0, array.length) | 0
+    const removeFromArray = (array: Array<any>, i: number) => array.splice(i, 1)[0]
+    const removeItemFromArray = (array: Array<any>, item: any) =>
       removeFromArray(array, array.indexOf(item))
-    const removeRandomFromArray = (array: any[]) =>
+    const removeRandomFromArray = (array: Array<any>) =>
       removeFromArray(array, randomIndex(array))
-    const getRandomFromArray = (array: any[]) => array[randomIndex(array) | 0]
+    const getRandomFromArray = (array: Array<any>) => array[randomIndex(array) | 0]
 
     // TWEEN FACTORIES
     const resetPeep = ({ stage, peep }: { stage: any; peep: any }) => {
       const direction = Math.random() > 0.5 ? 1 : -1
-      const offsetY = (100 - 250 * gsap.parseEase("power2.in")(Math.random())) * scaleFactor
+      const offsetY =
+        (100 - 250 * gsap.parseEase('power2.in')(Math.random())) * scaleFactor
       const startY = stage.height - peep.height + offsetY
       let startX: number
       let endX: number
@@ -81,7 +82,7 @@ const CrowdCanvas = ({ src, rows = 15, cols = 7 }: CrowdCanvasProps) => {
         {
           duration: xDuration,
           x: endX,
-          ease: "none",
+          ease: 'none',
         },
         0,
       )
@@ -104,16 +105,16 @@ const CrowdCanvas = ({ src, rows = 15, cols = 7 }: CrowdCanvasProps) => {
     // TYPES
     type Peep = {
       image: HTMLImageElement
-      rect: number[]
+      rect: Array<number>
       width: number
       height: number
-      drawArgs: any[]
+      drawArgs: Array<any>
       x: number
       y: number
       anchorY: number
       scaleX: number
       walk: any
-      setRect: (rect: number[]) => void
+      setRect: (rect: Array<number>) => void
       render: (ctx: CanvasRenderingContext2D) => void
     }
 
@@ -123,7 +124,7 @@ const CrowdCanvas = ({ src, rows = 15, cols = 7 }: CrowdCanvasProps) => {
       rect,
     }: {
       image: HTMLImageElement
-      rect: number[]
+      rect: Array<number>
     }): Peep => {
       const peep: Peep = {
         image,
@@ -136,7 +137,7 @@ const CrowdCanvas = ({ src, rows = 15, cols = 7 }: CrowdCanvasProps) => {
         anchorY: 0,
         scaleX: 1,
         walk: null,
-        setRect: (rect: number[]) => {
+        setRect: (rect: Array<number>) => {
           peep.rect = rect
           peep.width = rect[2] * scaleFactor
           peep.height = rect[3] * scaleFactor
@@ -166,15 +167,15 @@ const CrowdCanvas = ({ src, rows = 15, cols = 7 }: CrowdCanvasProps) => {
     }
 
     // MAIN
-    const img = document.createElement("img")
+    const img = document.createElement('img')
     const stage = {
       width: 0,
       height: 0,
     }
 
-    const allPeeps: Peep[] = []
-    const availablePeeps: Peep[] = []
-    const crowd: Peep[] = []
+    const allPeeps: Array<Peep> = []
+    const availablePeeps: Array<Peep> = []
+    const crowd: Array<Peep> = []
 
     const createPeeps = () => {
       const { rows, cols } = config
@@ -212,7 +213,7 @@ const CrowdCanvas = ({ src, rows = 15, cols = 7 }: CrowdCanvasProps) => {
           peep,
           stage,
         }),
-      }).eventCallback("onComplete", () => {
+      }).eventCallback('onComplete', () => {
         removePeepFromCrowd(peep)
         addPeepToCrowd()
       })
@@ -271,10 +272,10 @@ const CrowdCanvas = ({ src, rows = 15, cols = 7 }: CrowdCanvasProps) => {
     img.src = config.src
 
     const handleResize = () => resize()
-    window.addEventListener("resize", handleResize)
+    window.addEventListener('resize', handleResize)
 
     return () => {
-      window.removeEventListener("resize", handleResize)
+      window.removeEventListener('resize', handleResize)
       gsap.ticker.remove(render)
       crowd.forEach((peep) => {
         if (peep.walk) peep.walk.kill()

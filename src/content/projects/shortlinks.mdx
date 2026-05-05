@@ -87,21 +87,21 @@ The MCP server supports both anonymous and API-key-authenticated identities, wit
 
 ## Key Design Decisions
 
-| Decision | Rationale |
-|---|---|
-| Appwrite as backend | Managed database with atomic attribute increment — removes the need for a dedicated caching layer for rate limiting |
-| SHA-256 identity hashing | Rate limit windows remain functional without ever persisting raw IP addresses |
-| Single service layer | URL cleaning, platform detection, and link creation logic are shared across website, REST, and MCP — no drift between interfaces |
-| 307 redirects | Temporary redirect preserves the ability to update destinations without breaking existing short links |
-| NDJSON MCP transport | Standard HTTP-based MCP transport; also ships a stdio binary for local agent configuration |
+| Decision                 | Rationale                                                                                                                        |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| Appwrite as backend      | Managed database with atomic attribute increment — removes the need for a dedicated caching layer for rate limiting              |
+| SHA-256 identity hashing | Rate limit windows remain functional without ever persisting raw IP addresses                                                    |
+| Single service layer     | URL cleaning, platform detection, and link creation logic are shared across website, REST, and MCP — no drift between interfaces |
+| 307 redirects            | Temporary redirect preserves the ability to update destinations without breaking existing short links                            |
+| NDJSON MCP transport     | Standard HTTP-based MCP transport; also ships a stdio binary for local agent configuration                                       |
 
 ## Tech Stack
 
-| Component | Technology |
-|---|---|
-| Framework | Next.js (App Router, server components) |
-| Language | TypeScript |
-| Database | Appwrite (documents, attribute increment) |
-| Validation | Zod |
-| MCP | @modelcontextprotocol/sdk |
-| Deployment | Appwrite Cloud / Next.js edge-compatible |
+| Component  | Technology                                |
+| ---------- | ----------------------------------------- |
+| Framework  | Next.js (App Router, server components)   |
+| Language   | TypeScript                                |
+| Database   | Appwrite (documents, attribute increment) |
+| Validation | Zod                                       |
+| MCP        | @modelcontextprotocol/sdk                 |
+| Deployment | Appwrite Cloud / Next.js edge-compatible  |

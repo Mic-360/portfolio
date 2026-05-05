@@ -2,10 +2,12 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { motion } from 'motion/react'
 import { Suspense, lazy, useEffect, useState } from 'react'
 
+import { ArrowRight, Calendar } from 'lucide-react'
 import type { CertificateMeta } from '@/lib/certificates'
 import type { HealthSample } from '@/lib/health'
 import type { PinterestCreatedPin } from '@/lib/pinterest'
 
+import type { HyperspeedOptions } from '@/components/ui/hyperspeed'
 import { getCertificateIndex } from '@/lib/certificates'
 import { getBlogIndex, getProjectIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
@@ -34,7 +36,6 @@ import { ExpandableCard } from '@/components/ui/expandable-card'
 import { LayoutGrid } from '@/components/ui/layout-grid'
 import { LinkPreview } from '@/components/ui/link-preview'
 import PreviousIcon from '@/components/ui/previous-icon'
-import type { HyperspeedOptions } from '@/components/ui/hyperspeed'
 import ScrambledText from '@/components/ui/scrambled-text'
 import { ProjectShowcase } from '@/components/ProjectShowcase'
 import { gravatarConfig } from '@/config/gravatar'
@@ -47,7 +48,6 @@ import {
   siteInfo,
   siteMeta,
 } from '@/config/site-data'
-import { ArrowRight, Calendar } from 'lucide-react'
 
 // Heavy below-the-fold components — loaded lazily to keep the main bundle small.
 const PixelBlast = lazy(() => import('@/components/ui/pixel-blast'))
@@ -607,7 +607,10 @@ function App() {
         </div>
       </motion.section>
 
-      <motion.div variants={item} className="flex flex-col gap-24 md:gap-32 px-4 sm:px-6">
+      <motion.div
+        variants={item}
+        className="flex flex-col gap-24 md:gap-32 px-4 sm:px-6"
+      >
         <Section title="current">
           <div className="flex flex-col sm:block relative min-h-0 sm:min-h-145 lg:min-h-160">
             <div className="relative sm:absolute sm:inset-0 z-50 flex flex-col items-center justify-center px-4 py-16 sm:py-0 pointer-events-none">
