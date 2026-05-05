@@ -78,7 +78,16 @@ async function buildResume() {
   }
 }
 
-buildResume().catch((error) => {
-  console.error(error instanceof Error ? error.message : String(error))
-  process.exitCode = 1
+buildResume().catch(async (error) => {
+  const message = error instanceof Error ? error.message : String(error)
+  console.warn(`\n⚠️  Resume generation skipped: ${message}`)
+
+  try {
+    await stat(outputPdf)
+    console.log(`✅ Using existing resume at ${relative(rootDir, outputPdf)}\n`)
+    process.exitCode = 0
+  } catch {
+    console.error(`❌ CRITICAL: Resume generation failed and no existing PDF found at ${relative(rootDir, outputPdf)}`)
+    process.exitCode = 1
+  }
 })
