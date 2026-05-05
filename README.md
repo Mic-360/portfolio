@@ -51,14 +51,12 @@
 | Route                | Description                                                                                                |
 | -------------------- | ---------------------------------------------------------------------------------------------------------- |
 | `/`                  | Home — profile, experience roadmap, blogs, projects, certificates, health stats, GitHub heatmap, Pinterest |
-| `/about`             | Extended bio                                                                                               |
 | `/blog`              | Blog index and individual posts (`/blog/:slug`)                                                            |
 | `/projects`          | Project index and detail pages (`/projects/:slug`)                                                         |
 | `/certificates`      | Certificate gallery and detail pages (`/certificates/:slug`)                                               |
 | `/pinterest/gallery` | Full Pinterest created pins gallery                                                                        |
 | `/resume`            | Resume viewer                                                                                              |
 | `/readme`            | GitHub-style README page                                                                                   |
-| `/bento`             | Bento grid layout                                                                                          |
 | `/rss`               | RSS feed                                                                                                   |
 
 ## Getting Started

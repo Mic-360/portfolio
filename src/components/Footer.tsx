@@ -79,7 +79,7 @@ export default function Footer() {
 
           <div className="grid gap-8 lg:justify-self-end lg:text-right">
             <motion.a
-              href="/about"
+              href={gravatar.verifiedDomain}
               rel="noopener noreferrer me"
               title="Scan to open the Gravatar profile"
               whileHover={{ y: -2 }}

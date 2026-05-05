@@ -56,13 +56,6 @@ export const Route = createFileRoute('/sitemap/xml')({
             images: [],
           },
           {
-            loc: `${siteMeta.baseUrl}/about`,
-            lastmod: new Date().toISOString(),
-            changefreq: 'monthly',
-            priority: '0.7',
-            images: [],
-          },
-          {
             loc: `${siteMeta.baseUrl}/resume`,
             lastmod: new Date().toISOString(),
             changefreq: 'monthly',
@@ -74,13 +67,6 @@ export const Route = createFileRoute('/sitemap/xml')({
             lastmod: new Date().toISOString(),
             changefreq: 'monthly',
             priority: '0.6',
-            images: [],
-          },
-          {
-            loc: `${siteMeta.baseUrl}/bento`,
-            lastmod: new Date().toISOString(),
-            changefreq: 'monthly',
-            priority: '0.5',
             images: [],
           },
           {

@@ -184,11 +184,9 @@ export function CommandMenu({
   )
 
   useHotkey('Mod+H', () => navTo('/'))
-  useHotkey('Mod+A', () => navTo('/about'))
   useHotkey('Mod+B', () => navTo('/blog'))
   useHotkey('Mod+P', () => navTo('/projects'))
   useHotkey('Mod+R', () => navTo('/resume'))
-  useHotkey('Mod+E', () => navTo('/bento'))
   useHotkey('Mod+G', () => navTo('/readme'))
   useHotkey('Mod+F', () => navTo('/rss'))
   useHotkey('Mod+L', () => navTo('/llms-full/txt'))
@@ -646,13 +644,6 @@ function RootPage({
             <ShortcutText mounted={mounted} shortcut="Mod+H" />
           </CommandShortcut>
         </CommandItem>
-        <CommandItem onSelect={() => handleNavigate('/about')}>
-          <User />
-          <span>about</span>
-          <CommandShortcut>
-            <ShortcutText mounted={mounted} shortcut="Mod+A" />
-          </CommandShortcut>
-        </CommandItem>
         <CommandItem onSelect={() => handleNavigate('/blog')}>
           <BookOpen />
           <span>blog</span>
@@ -683,13 +674,6 @@ function RootPage({
           <span>resume</span>
           <CommandShortcut>
             <ShortcutText mounted={mounted} shortcut="Mod+R" />
-          </CommandShortcut>
-        </CommandItem>
-        <CommandItem onSelect={() => handleNavigate('/bento')}>
-          <Briefcase />
-          <span>bento</span>
-          <CommandShortcut>
-            <ShortcutText mounted={mounted} shortcut="Mod+E" />
           </CommandShortcut>
         </CommandItem>
         <CommandItem onSelect={() => handleNavigate('/readme')}>

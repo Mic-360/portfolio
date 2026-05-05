@@ -53,7 +53,6 @@ export const Route = createFileRoute('/llms-full/txt')({
 ## Canonical routes
 
 - Home: ${siteMeta.baseUrl}
-- About: ${siteMeta.baseUrl}/about
 - Blog index: ${siteMeta.baseUrl}/blog
 - Projects index: ${siteMeta.baseUrl}/projects
 - Resume: ${siteMeta.baseUrl}/resume

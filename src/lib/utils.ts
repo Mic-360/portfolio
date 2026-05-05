@@ -62,7 +62,7 @@ export const WEBMCP_INIT_SCRIPT = `(function(){
       name: 'get-page-markdown',
       title: 'Get Page as Markdown',
       description: 'Fetch any page on this site as clean markdown with navigation and scripts stripped',
-      inputSchema: { type: 'object', properties: { path: { type: 'string', description: 'URL path to fetch, e.g. "/blog/my-post" or "/about"' } }, required: ['path'] },
+      inputSchema: { type: 'object', properties: { path: { type: 'string', description: 'URL path to fetch, e.g. "/blog/my-post"' } }, required: ['path'] },
       annotations: { readOnlyHint: true },
       execute: async function(input){
         var res = await fetch(input.path, { headers: { Accept: 'text/markdown' } });

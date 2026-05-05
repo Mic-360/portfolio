@@ -95,10 +95,7 @@ export const socialLinks: Array<SocialLink> = [
   { label: 'linkedin', url: 'https://www.linkedin.com/in/bhaumic/' },
 ]
 
-export const contactLinks = [
-  { label: 'resume', url: '/resume' },
-  { label: 'bento', url: '/bento' },
-]
+export const contactLinks = [{ label: 'resume', url: '/resume' }]
 
 export const pinterest = {
   profileUrl: 'https://in.pinterest.com/bhaumics/',

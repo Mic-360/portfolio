@@ -1,4 +1,3 @@
 Contact: mailto:connect@bhaumicsingh.dev
-Contact: https://bhaumicsingh.dev/bento
 Preferred-Languages: en
 Canonical: https://bhaumicsingh.dev/.well-known/security.txt

@@ -12,8 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as RssRouteImport } from './routes/rss'
 import { Route as ResumeRouteImport } from './routes/resume'
 import { Route as ReadmeRouteImport } from './routes/readme'
-import { Route as BentoRouteImport } from './routes/bento'
-import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
 import { Route as PinterestIndexRouteImport } from './routes/pinterest/index'
@@ -48,16 +46,6 @@ const ResumeRoute = ResumeRouteImport.update({
 const ReadmeRoute = ReadmeRouteImport.update({
   id: '/readme',
   path: '/readme',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BentoRoute = BentoRouteImport.update({
-  id: '/bento',
-  path: '/bento',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -163,8 +151,6 @@ const ApiGravatarIdentifierRoute = ApiGravatarIdentifierRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/bento': typeof BentoRoute
   '/readme': typeof ReadmeRoute
   '/resume': typeof ResumeRoute
   '/rss': typeof RssRoute
@@ -190,8 +176,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/bento': typeof BentoRoute
   '/readme': typeof ReadmeRoute
   '/resume': typeof ResumeRoute
   '/rss': typeof RssRoute
@@ -218,8 +202,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/bento': typeof BentoRoute
   '/readme': typeof ReadmeRoute
   '/resume': typeof ResumeRoute
   '/rss': typeof RssRoute
@@ -247,8 +229,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/about'
-    | '/bento'
     | '/readme'
     | '/resume'
     | '/rss'
@@ -274,8 +254,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/about'
-    | '/bento'
     | '/readme'
     | '/resume'
     | '/rss'
@@ -301,8 +279,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/about'
-    | '/bento'
     | '/readme'
     | '/resume'
     | '/rss'
@@ -329,8 +305,6 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
-  BentoRoute: typeof BentoRoute
   ReadmeRoute: typeof ReadmeRoute
   ResumeRoute: typeof ResumeRoute
   RssRoute: typeof RssRoute
@@ -376,20 +350,6 @@ declare module '@tanstack/react-router' {
       path: '/readme'
       fullPath: '/readme'
       preLoaderRoute: typeof ReadmeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/bento': {
-      id: '/bento'
-      path: '/bento'
-      fullPath: '/bento'
-      preLoaderRoute: typeof BentoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -537,8 +497,6 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
-  BentoRoute: BentoRoute,
   ReadmeRoute: ReadmeRoute,
   ResumeRoute: ResumeRoute,
   RssRoute: RssRoute,

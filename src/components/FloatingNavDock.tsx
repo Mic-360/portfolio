@@ -7,7 +7,6 @@ import {
   IconMessage,
   IconMoon,
   IconSunHigh,
-  IconUser,
 } from '@tabler/icons-react'
 import { AnimatePresence, motion } from 'motion/react'
 import type { DockItem } from '@/components/ui/floating-dock'
@@ -91,11 +90,6 @@ export function FloatingNavDock() {
         const next = CYCLE[(idx + 1) % CYCLE.length]
         prefetchThemeVideo(next)
       },
-    },
-    {
-      title: 'About',
-      icon: <IconUser className="h-full w-full text-foreground" />,
-      href: '/about',
     },
     {
       title: 'Contact',
