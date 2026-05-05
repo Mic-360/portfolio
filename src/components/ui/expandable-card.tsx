@@ -121,21 +121,10 @@ export function ExpandableCard({
                   className="h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-linear-to-t from-background via-background/15 to-transparent opacity-90" />
+                <div className="absolute inset-0 bg-linear-to-b from-background via-background/50 to-transparent opacity-90" />
                 <div className="absolute inset-x-0 top-0 flex items-center justify-between gap-4 p-5 text-[10px] uppercase tracking-[0.24em] text-foreground/65 sm:p-6">
                   <span>{item.eyebrow}</span>
                   <span>{meta}</span>
-                </div>
-                <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
-                  <motion.h3
-                    layoutId={`expandable-card-title-${item.id}-${id}`}
-                    className={cn(
-                      'max-w-3xl font-serif leading-[1.02] tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary',
-                      item.featured ? 'text-2xl sm:text-3xl' : 'text-xl',
-                    )}
-                  >
-                    {item.title}
-                  </motion.h3>
                 </div>
               </motion.div>
 
@@ -145,16 +134,26 @@ export function ExpandableCard({
                   item.featured && 'sm:flex-row sm:items-end sm:gap-10',
                 )}
               >
-                <motion.p
-                  layoutId={`expandable-card-summary-${item.id}-${id}`}
-                  className={cn(
-                    'max-w-2xl text-sm leading-7 text-foreground/62',
-                    item.featured ? 'sm:text-base' : 'line-clamp-3',
-                  )}
-                >
-                  {item.summary}
-                </motion.p>
-
+                <div className="flex-1 space-y-2">
+                  <motion.h3
+                    layoutId={`expandable-card-title-${item.id}-${id}`}
+                    className={cn(
+                      'max-w-3xl font-serif leading-[1.02] tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary',
+                      item.featured ? 'text-2xl sm:text-3xl' : 'text-xl',
+                    )}
+                  >
+                    {item.title}
+                  </motion.h3>
+                  <motion.p
+                    layoutId={`expandable-card-summary-${item.id}-${id}`}
+                    className={cn(
+                      'max-w-2xl text-sm leading-7 text-foreground/62',
+                      item.featured ? 'sm:text-base' : 'line-clamp-3',
+                    )}
+                  >
+                    {item.summary}
+                  </motion.p>
+                </div>
                 <div className="flex items-center justify-between gap-4 border-t border-border/8 pt-3 sm:min-w-44 sm:border-t-0 sm:border-l sm:pl-6 sm:pt-0">
                   {item.tags.length > 0 ? (
                     <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/34">
@@ -219,7 +218,10 @@ export function ExpandableCard({
                         >
                           <CloseIcon />
                         </button>
-                        <div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 p-5 sm:gap-4 sm:p-8 lg:p-10">
+                      </div>
+
+                      <div className="grid min-h-0 flex-1 gap-8 overflow-y-auto p-5 sm:p-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(16rem,0.65fr)] lg:p-10">
+                        <div className="grid content-start gap-6">
                           <div className="flex flex-wrap items-center gap-3 text-[10px] uppercase tracking-[0.24em] text-foreground/68">
                             <span>{activeItem.eyebrow}</span>
                             <span className="h-px w-8 bg-foreground/20" />
@@ -232,11 +234,6 @@ export function ExpandableCard({
                           <h3 className="max-w-4xl font-serif text-2xl leading-none tracking-tight text-foreground sm:text-4xl lg:text-5xl">
                             {activeItem.title}
                           </h3>
-                        </div>
-                      </div>
-
-                      <div className="grid min-h-0 flex-1 gap-8 overflow-y-auto p-5 sm:p-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(16rem,0.65fr)] lg:p-10">
-                        <div className="grid content-start gap-6">
                           <p className="max-w-3xl text-base leading-8 text-foreground/74 sm:text-lg">
                             {activeItem.summary}
                           </p>
