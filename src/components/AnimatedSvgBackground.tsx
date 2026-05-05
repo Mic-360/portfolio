@@ -1,6 +1,8 @@
+import { useIsMobile } from '@/hooks/use-mobile'
 import { gsap } from 'gsap'
 import { Observer } from 'gsap/Observer'
 import React, { useEffect, useRef } from 'react'
+import type { WebGLRendererParameters } from 'three'
 import {
   ACESFilmicToneMapping,
   AmbientLight,
@@ -27,8 +29,6 @@ import {
   WebGLRenderer,
 } from 'three'
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
-import type { WebGLRendererParameters } from 'three'
-import { useIsMobile } from '@/hooks/use-mobile'
 
 gsap.registerPlugin(Observer)
 
@@ -641,24 +641,24 @@ function createPointerData(
         'touchstart',
         onTouchStart as EventListener,
         {
-          passive: false,
+          passive: true,
         },
       )
       document.body.addEventListener(
         'touchmove',
         onTouchMove as EventListener,
         {
-          passive: false,
+          passive: true,
         },
       )
       document.body.addEventListener('touchend', onTouchEnd as EventListener, {
-        passive: false,
+        passive: true,
       })
       document.body.addEventListener(
         'touchcancel',
         onTouchEnd as EventListener,
         {
-          passive: false,
+          passive: true,
         },
       )
       globalPointerActive = true
@@ -723,7 +723,6 @@ function processPointerInteraction() {
 
 function onTouchStart(e: TouchEvent) {
   if (e.touches.length > 0) {
-    e.preventDefault()
     pointerPosition.set(e.touches[0].clientX, e.touches[0].clientY)
     for (const [elem, data] of pointerMap) {
       const rect = elem.getBoundingClientRect()
@@ -742,7 +741,6 @@ function onTouchStart(e: TouchEvent) {
 
 function onTouchMove(e: TouchEvent) {
   if (e.touches.length > 0) {
-    e.preventDefault()
     pointerPosition.set(e.touches[0].clientX, e.touches[0].clientY)
     for (const [elem, data] of pointerMap) {
       const rect = elem.getBoundingClientRect()
@@ -942,7 +940,7 @@ function createBallpit(
     size: 'parent',
     rendererOptions: { antialias: true, alpha: true },
   })
-  let spheres: Z
+  let spheres: Z | null = null
   threeInstance.renderer.toneMapping = ACESFilmicToneMapping
   threeInstance.camera.position.set(0, 0, 20)
   threeInstance.camera.lookAt(0, 0, 0)
@@ -954,13 +952,14 @@ function createBallpit(
   const intersectionPoint = new Vector3()
   let isPaused = false
 
-  canvas.style.touchAction = 'none'
+  canvas.style.touchAction = 'auto'
   canvas.style.userSelect = 'none'
   ;(canvas.style as any).webkitUserSelect = 'none'
 
   const pointerData = createPointerData({
     domElement: canvas,
     onMove() {
+      if (!spheres) return
       raycaster.setFromCamera(pointerData.nPosition, threeInstance.camera)
       threeInstance.camera.getWorldDirection(plane.normal)
       raycaster.ray.intersectPlane(plane, intersectionPoint)
@@ -968,6 +967,7 @@ function createBallpit(
       spheres.config.controlSphere0 = true
     },
     onLeave() {
+      if (!spheres) return
       spheres.config.controlSphere0 = false
     },
   })
@@ -980,18 +980,21 @@ function createBallpit(
     threeInstance.scene.add(spheres)
   }
   threeInstance.onBeforeRender = (deltaInfo) => {
-    if (!isPaused) spheres.update(deltaInfo)
+    if (!isPaused && spheres) spheres.update(deltaInfo)
   }
   threeInstance.onAfterResize = (size) => {
+    if (!spheres) return
     spheres.config.maxX = size.wWidth / 2
     spheres.config.maxY = size.wHeight / 2
   }
   return {
     three: threeInstance,
     get spheres() {
+      if (!spheres) throw new Error('Ballpit is not initialized')
       return spheres
     },
     setCount(count: number) {
+      if (!spheres) return
       initialize({ ...spheres.config, count })
     },
     togglePause() {
@@ -1035,7 +1038,6 @@ export const AnimatedSvgBackground: React.FC<BallpitProps> = ({
         spheresInstanceRef.current.dispose()
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {

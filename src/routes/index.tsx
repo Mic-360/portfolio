@@ -263,7 +263,7 @@ function App() {
       <ScrollProgress />
       <motion.section
         variants={item}
-        className="relative flex flex-col lg:flex-row items-center w-full min-h-screen px-4 sm:px-8 overflow-hidden"
+        className="relative flex flex-col lg:flex-row items-center w-full min-h-[95vh] px-4 sm:px-8 overflow-hidden"
       >
         {/* Background Tagline Typography */}
         <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none select-none overflow-hidden opacity-[0.06] dark:opacity-[0.03]">
