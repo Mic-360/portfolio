@@ -33,12 +33,14 @@ const CrowdCanvas = ({ src, rows = 15, cols = 7 }: CrowdCanvasProps) => {
     const randomRange = (min: number, max: number) =>
       min + Math.random() * (max - min)
     const randomIndex = (array: Array<any>) => randomRange(0, array.length) | 0
-    const removeFromArray = (array: Array<any>, i: number) => array.splice(i, 1)[0]
+    const removeFromArray = (array: Array<any>, i: number) =>
+      array.splice(i, 1)[0]
     const removeItemFromArray = (array: Array<any>, item: any) =>
       removeFromArray(array, array.indexOf(item))
     const removeRandomFromArray = (array: Array<any>) =>
       removeFromArray(array, randomIndex(array))
-    const getRandomFromArray = (array: Array<any>) => array[randomIndex(array) | 0]
+    const getRandomFromArray = (array: Array<any>) =>
+      array[randomIndex(array) | 0]
 
     // TWEEN FACTORIES
     const resetPeep = ({ stage, peep }: { stage: any; peep: any }) => {

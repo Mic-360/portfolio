@@ -8,7 +8,7 @@ export const useOutsideClick = (
   useEffect(() => {
     const listener = (event: any) => {
       // DO NOTHING if the element being clicked is the target element or their children
-       
+
       if (!ref.current || ref.current.contains(event.target)) {
         return
       }

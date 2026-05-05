@@ -27,8 +27,7 @@ import {
   WebGLRenderer,
 } from 'three'
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
-import type {
-  WebGLRendererParameters} from 'three';
+import type { WebGLRendererParameters } from 'three'
 import { useIsMobile } from '@/hooks/use-mobile'
 
 gsap.registerPlugin(Observer)

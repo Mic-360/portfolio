@@ -7,8 +7,7 @@ const AUDIO_VOLUME = 0.45
 
 export function VideoBackground() {
   const { mode } = useTheme()
-  const showVideo =
-    mode === 'sunny'
+  const showVideo = mode === 'sunny'
   const sunnyAudioRef = useRef<HTMLAudioElement>(null)
   const midnightAudioRef = useRef<HTMLAudioElement>(null)
   const frierenAudioRef = useRef<HTMLAudioElement>(null)
@@ -38,8 +37,7 @@ export function VideoBackground() {
     midnightAudio.currentTime = 0
     frierenAudio.currentTime = 0
 
-    const activeAudio =
-      mode === 'sunny' ? sunnyAudio : undefined
+    const activeAudio = mode === 'sunny' ? sunnyAudio : undefined
 
     if (!activeAudio) {
       return

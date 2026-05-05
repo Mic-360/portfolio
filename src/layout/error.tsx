@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { motion } from 'motion/react'
-import type { ErrorComponentProps} from '@tanstack/react-router';
+import type { ErrorComponentProps } from '@tanstack/react-router'
 
 export default function GlobalError({ error, reset }: ErrorComponentProps) {
   return (
