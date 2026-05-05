@@ -5,6 +5,7 @@ import LayersIcon from '@/components/ui/layers-icon'
 import { siteMeta } from '@/config/site-data'
 import { getProjectIndex } from '@/lib/content'
 import { formatDate } from '@/lib/format'
+import { PageLayout, PAGE_ITEM_VARIANTS } from '@/layout/layout'
 
 export const Route = createFileRoute('/projects/')({
   validateSearch: (search: Record<string, unknown>): { tag?: string } =>
@@ -114,38 +115,16 @@ function ProjectsIndex() {
       )
     : projects
 
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 },
-    },
-  }
-
-  const item = {
-    hidden: { opacity: 0, y: 28 },
-    show: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
-      },
-    },
-  }
-
   return (
-    <motion.section
-      variants={container}
-      initial="hidden"
-      animate="show"
-      className="flex flex-col gap-16"
-    >
-      <motion.header variants={item} className="relative overflow-hidden pb-8">
+    <PageLayout>
+      <motion.header
+        variants={PAGE_ITEM_VARIANTS}
+        className="relative overflow-hidden pb-8"
+      >
         <div className="pointer-events-none absolute inset-x-[18%] top-0 h-28 rounded-full bg-primary/10 blur-3xl" />
         <div className="pointer-events-none absolute right-[6%] top-[10%] h-72 w-72 rounded-full bg-primary/6 blur-[120px]" />
 
-        <div className="flex items-center justify-between gap-4 px-4 sm:px-6">
+        <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">
             <span className="text-primary/50">
               <LayersIcon size={18} />
@@ -163,7 +142,7 @@ function ProjectsIndex() {
           </Link>
         </div>
 
-        <div className="flex flex-col gap-8 pt-8 lg:pt-12 px-4 sm:px-6">
+        <div className="flex flex-col gap-8 pt-8 lg:pt-12">
           <div className="grid gap-5">
             <h1 className="font-serif text-4xl leading-[1.08] tracking-tight text-foreground sm:text-5xl xl:text-6xl">
               Every project, one archive.
@@ -190,8 +169,8 @@ function ProjectsIndex() {
 
       {allCategories.length > 0 ? (
         <motion.div
-          variants={item}
-          className="sticky top-0 z-30 mx-4 px-0 sm:px-4 py-3 backdrop-blur-xl bg-background/80 border-b border-border/10"
+          variants={PAGE_ITEM_VARIANTS}
+          className="sticky top-0 z-30 mx-0 px-0 py-3 backdrop-blur-xl bg-background/80 border-b border-border/10"
         >
           <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
             <button
@@ -225,7 +204,7 @@ function ProjectsIndex() {
         </motion.div>
       ) : null}
 
-      <div className="grid gap-6 sm:grid-cols-2 px-4 sm:px-6">
+      <div className="grid gap-6 sm:grid-cols-2">
         <AnimatePresence mode="popLayout">
           {filteredProjects.map((project, index) => {
             const projectVisual =
@@ -317,8 +296,8 @@ function ProjectsIndex() {
       </div>
 
       <motion.footer
-        variants={item}
-        className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-end sm:justify-between px-4 sm:px-6"
+        variants={PAGE_ITEM_VARIANTS}
+        className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-end sm:justify-between"
       >
         <div className="flex items-end gap-6">
           <img
@@ -340,6 +319,6 @@ function ProjectsIndex() {
           back home
         </Link>
       </motion.footer>
-    </motion.section>
+    </PageLayout>
   )
 }

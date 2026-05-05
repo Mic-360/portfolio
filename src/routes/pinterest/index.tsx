@@ -7,6 +7,7 @@ import { LayoutGrid } from '@/components/ui/layout-grid'
 import { LinkPreview } from '@/components/ui/link-preview'
 import { siteMeta } from '@/config/site-data'
 import { getPinterestCreatedPins } from '@/lib/pinterest'
+import { PageLayout, PAGE_ITEM_VARIANTS } from '@/layout/layout'
 
 export const Route = createFileRoute('/pinterest/')({
   loader: async () => {
@@ -75,38 +76,16 @@ function PinterestIndexPage() {
   const previewPins = pins.slice(1, 7)
   const lastSyncLabel = fetchedAt.replace('T', ' ').replace('Z', ' UTC')
 
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 },
-    },
-  }
-
-  const item = {
-    hidden: { opacity: 0, y: 28 },
-    show: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
-      },
-    },
-  }
-
   return (
-    <motion.section
-      variants={container}
-      initial="hidden"
-      animate="show"
-      className="flex flex-col gap-16"
-    >
-      <motion.header variants={item} className="relative overflow-hidden pb-8">
+    <PageLayout>
+      <motion.header
+        variants={PAGE_ITEM_VARIANTS}
+        className="relative overflow-hidden pb-8"
+      >
         <div className="pointer-events-none absolute inset-x-[18%] top-[8%] h-28 rounded-full bg-primary/10 blur-3xl" />
         <div className="pointer-events-none absolute right-[6%] top-[10%] h-72 w-72 rounded-full bg-primary/6 blur-[120px]" />
 
-        <div className="flex items-center justify-between gap-4 px-4 sm:px-6">
+        <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">
             <span className="text-primary/50">
               <ImageIcon size={18} />
@@ -124,7 +103,7 @@ function PinterestIndexPage() {
           </Link>
         </div>
 
-        <div className="flex flex-col gap-8 pt-8 lg:pt-12 px-4 sm:px-6">
+        <div className="flex flex-col gap-8 pt-8 lg:pt-12">
           <div className="grid gap-5">
             <h1 className="font-serif text-4xl leading-[1.08] tracking-tight text-foreground sm:text-5xl xl:text-6xl">
               Visual studies, curated pins.
@@ -156,12 +135,12 @@ function PinterestIndexPage() {
         </div>
       </motion.header>
 
-      <motion.div variants={item}>
+      <motion.div variants={PAGE_ITEM_VARIANTS}>
         <a
           href={heroPin.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="group block px-4 sm:px-6"
+          className="group block"
         >
           <motion.div
             whileHover={{ y: -4 }}
@@ -198,7 +177,7 @@ function PinterestIndexPage() {
       </motion.div>
 
       {previewPins.length > 0 ? (
-        <motion.div variants={item} className="px-4 sm:px-6">
+        <motion.div variants={PAGE_ITEM_VARIANTS}>
           <LayoutGrid
             className="sm:columns-2 md:columns-3"
             cards={previewPins.map(
@@ -233,8 +212,8 @@ function PinterestIndexPage() {
       ) : null}
 
       <motion.section
-        variants={item}
-        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 px-4 sm:px-6"
+        variants={PAGE_ITEM_VARIANTS}
+        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
       >
         <ActionCard
           title="Full Gallery"
@@ -257,8 +236,8 @@ function PinterestIndexPage() {
       </motion.section>
 
       <motion.footer
-        variants={item}
-        className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-end sm:justify-between px-4 sm:px-6"
+        variants={PAGE_ITEM_VARIANTS}
+        className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-end sm:justify-between"
       >
         <div className="flex items-end gap-6">
           <p className="max-w-2xl text-sm leading-7 text-muted-foreground/70">
@@ -284,7 +263,7 @@ function PinterestIndexPage() {
           </Link>
         </div>
       </motion.footer>
-    </motion.section>
+    </PageLayout>
   )
 }
 
