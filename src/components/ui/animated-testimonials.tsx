@@ -1,9 +1,7 @@
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react'
 import { AnimatePresence, motion } from 'motion/react'
 
-import { siteMeta } from '@/config/site-data'
 import { useEffect, useState } from 'react'
-import { LinkPreview } from './link-preview'
 import { Link } from '@tanstack/react-router'
 
 type Testimonial = {
