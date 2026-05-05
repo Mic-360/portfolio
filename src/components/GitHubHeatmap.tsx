@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import localeData from 'dayjs/plugin/localeData'
 import { motion } from 'motion/react'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 dayjs.extend(localeData)
 
@@ -180,6 +180,33 @@ export default function GitHubHeatmap({ username }: GitHubHeatmapProps) {
   const isVisible = useDeferredVisibility(wrapperRef)
   const [isHeatmapReady, setIsHeatmapReady] = useState(false)
 
+  const stats = useMemo(() => {
+    if (!contributions.length)
+      return { active: 0, streak: 0, peak: 0, peakDate: null as string | null }
+
+    const sorted = [...contributions].sort((a, b) =>
+      a.date < b.date ? -1 : 1,
+    )
+    let active = 0
+    let peak = 0
+    let peakDate: string | null = null
+    for (const c of sorted) {
+      if (c.value > 0) active += 1
+      if (c.value > peak) {
+        peak = c.value
+        peakDate = c.date
+      }
+    }
+
+    let streak = 0
+    for (let i = sorted.length - 1; i >= 0; i -= 1) {
+      if (sorted[i].value > 0) streak += 1
+      else if (streak > 0) break
+    }
+
+    return { active, streak, peak, peakDate }
+  }, [contributions])
+
   useEffect(() => {
     if (!isVisible || !contributions.length || !containerRef.current) return
 
@@ -295,82 +322,198 @@ export default function GitHubHeatmap({ username }: GitHubHeatmapProps) {
 
   const handlePrevious = useCallback((e: React.MouseEvent) => {
     e.preventDefault()
+    e.stopPropagation()
     calRef.current?.previous()
   }, [])
 
   const handleNext = useCallback((e: React.MouseEvent) => {
     e.preventDefault()
+    e.stopPropagation()
     calRef.current?.next()
   }, [])
+
+  const tapeStats = [
+    {
+      label: 'total',
+      value:
+        total !== null ? total.toLocaleString('en-US') : loading ? '———' : '0',
+    },
+    { label: 'active', value: stats.active.toLocaleString('en-US') },
+    { label: 'streak', value: `${stats.streak}d` },
+    {
+      label: 'peak',
+      value: stats.peak ? stats.peak.toLocaleString('en-US') : '0',
+      sub: stats.peakDate
+        ? dayjs(stats.peakDate).format('MMM D')
+        : undefined,
+    },
+  ]
 
   return (
     <motion.div
       ref={wrapperRef}
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
-      className="mx-auto flex w-full flex-col gap-4 rounded-2xl border border-border/10 bg-card/30 p-4 sm:p-6"
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+      className="relative w-full"
     >
-      {/* Header */}
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex flex-col gap-1">
-          <h3 className="text-[10px] font-semibold uppercase tracking-[0.24em] text-primary/80">
-            GitHub Activity
-          </h3>
-          <p className="text-[10px] text-muted-foreground/70 uppercase tracking-wider">
-            {total
-              ? `${total.toLocaleString('en-US')} total commits`
-              : loading
-                ? 'Syncing activity...'
-                : 'No activity found'}
-          </p>
+      {/* Header — instrument label ribbon */}
+      <div className="mb-3 flex items-center justify-between gap-4 px-1">
+        <div className="flex items-center gap-3">
+          <span className="font-mono text-[9px] uppercase tracking-[0.32em] text-muted-foreground/55">
+            git telemetry
+          </span>
+          <span className="hidden h-px w-8 bg-foreground/15 sm:block" />
+          <span className="hidden font-mono text-[9px] uppercase tracking-[0.28em] text-muted-foreground/40 sm:inline">
+            @{username}
+          </span>
         </div>
-        {loading ? (
-          <div className="flex gap-1">
-            <div className="h-1 w-1 rounded-full bg-primary animate-bounce [animation-delay:-0.3s]" />
-            <div className="h-1 w-1 rounded-full bg-primary animate-bounce [animation-delay:-0.15s]" />
-            <div className="h-1 w-1 rounded-full bg-primary animate-bounce" />
+        <div className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.28em] text-muted-foreground/55">
+          {loading ? (
+            <span className="flex items-center gap-1.5">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-50" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
+              </span>
+              syncing
+            </span>
+          ) : (
+            <>
+              <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+              live
+            </>
+          )}
+          <span className="hidden sm:inline">·</span>
+          <span className="hidden sm:inline">
+            {dayjs().format('YYYY.MM.DD')}
+          </span>
+        </div>
+      </div>
+
+      {/* Tape body — instrument bezel */}
+      <div className="instrument-panel relative overflow-hidden border border-foreground/10">
+        <span className="instrument-bracket-bl" />
+        <span className="instrument-bracket-br" />
+
+        {/* Stats strip */}
+        <div className="relative grid grid-cols-2 divide-foreground/8 border-b border-foreground/10 sm:grid-cols-4 sm:divide-x">
+          {tapeStats.map((s, i) => (
+            <div
+              key={s.label}
+              className="flex flex-col gap-1 border-foreground/8 px-4 py-3 sm:px-5 sm:py-4 nth-[-n+2]:border-b sm:nth-[-n+2]:border-b-0"
+            >
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-[9px] uppercase tracking-[0.32em] text-muted-foreground/45">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span className="h-px flex-1 bg-foreground/8" />
+                <span className="font-mono text-[9px] uppercase tracking-[0.28em] text-muted-foreground/55">
+                  {s.label}
+                </span>
+              </div>
+              <div className="flex items-baseline justify-between gap-2">
+                <span className="font-serif text-2xl font-light tabular-nums leading-none tracking-tight text-foreground sm:text-3xl">
+                  {s.value}
+                </span>
+                {s.sub ? (
+                  <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-muted-foreground/50">
+                    {s.sub}
+                  </span>
+                ) : null}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Tape feed — perforation top */}
+        <div
+          className="pointer-events-none h-1 w-full"
+          style={{
+            backgroundImage:
+              'repeating-linear-gradient(90deg, color-mix(in oklab, var(--foreground) 18%, transparent) 0 4px, transparent 4px 12px)',
+          }}
+          aria-hidden="true"
+        />
+
+        {/* Heatmap canvas */}
+        <div className="commit-tape relative px-4 pt-5 pb-4 sm:px-6 sm:pt-6">
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <span className="font-mono text-[9px] uppercase tracking-[0.32em] text-muted-foreground/55">
+              365·day trace
+            </span>
+            <span className="font-mono text-[9px] uppercase tracking-[0.28em] text-muted-foreground/40">
+              ch·{responsive.range}
+            </span>
           </div>
-        ) : null}
-      </div>
-
-      {/* Heatmap */}
-      <div className="relative flex w-full justify-center overflow-hidden">
-        <div ref={containerRef} className="min-h-47.5 w-full max-w-full" />
-      </div>
-
-      {/* Controls */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border/10 pt-3">
-        <div className="flex gap-3">
-          <button
-            type="button"
-            onClick={handlePrevious}
-            disabled={!isHeatmapReady}
-            className="rounded-lg px-2.5 py-1 text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 transition-all duration-200 hover:bg-foreground/4 hover:text-primary active:scale-95"
-          >
-            &larr; Prev
-          </button>
-          <button
-            type="button"
-            onClick={handleNext}
-            disabled={!isHeatmapReady}
-            className="rounded-lg px-2.5 py-1 text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 transition-all duration-200 hover:bg-foreground/4 hover:text-primary active:scale-95"
-          >
-            Next &rarr;
-          </button>
+          <div className="github-heatmap-shell relative flex w-full justify-center overflow-hidden">
+            <div
+              ref={containerRef}
+              className="min-h-47.5 w-full max-w-full"
+            />
+            {!isHeatmapReady && !loading ? null : null}
+          </div>
         </div>
 
-        <div className="flex items-center gap-2 text-[10px] font-medium text-muted-foreground/70">
-          <span>Less</span>
-          <div id="cal-heatmap-legend" className="flex items-center" />
-          <span>More</span>
+        {/* Tape feed — perforation bottom */}
+        <div
+          className="pointer-events-none h-1 w-full"
+          style={{
+            backgroundImage:
+              'repeating-linear-gradient(90deg, color-mix(in oklab, var(--foreground) 18%, transparent) 0 4px, transparent 4px 12px)',
+          }}
+          aria-hidden="true"
+        />
+
+        {/* Control bezel */}
+        <div className="relative flex flex-wrap items-center justify-between gap-3 border-t border-foreground/10 px-4 py-3 sm:px-6">
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={handlePrevious}
+              disabled={!isHeatmapReady}
+              className="group/btn flex items-center gap-1.5 border border-foreground/10 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.24em] text-muted-foreground/70 transition-all duration-200 hover:border-foreground/25 hover:bg-foreground/3 hover:text-foreground active:scale-95 disabled:opacity-40"
+            >
+              <span className="transition-transform duration-300 group-hover/btn:-translate-x-0.5">
+                ◀
+              </span>
+              prev
+            </button>
+            <button
+              type="button"
+              onClick={handleNext}
+              disabled={!isHeatmapReady}
+              className="group/btn flex items-center gap-1.5 border border-l-0 border-foreground/10 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.24em] text-muted-foreground/70 transition-all duration-200 hover:border-foreground/25 hover:bg-foreground/3 hover:text-foreground active:scale-95 disabled:opacity-40"
+            >
+              next
+              <span className="transition-transform duration-300 group-hover/btn:translate-x-0.5">
+                ▶
+              </span>
+            </button>
+          </div>
+
+          <div className="flex items-center gap-2.5 font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground/55">
+            <span>intensity</span>
+            <span className="text-muted-foreground/35">·</span>
+            <span>low</span>
+            <div
+              id="cal-heatmap-legend"
+              className="flex items-center"
+            />
+            <span>high</span>
+          </div>
         </div>
       </div>
 
-      <p className="text-[10px] text-muted-foreground/35 uppercase tracking-[0.15em]">
-        click to view full github readme
-      </p>
+      {/* Footer hint */}
+      <div className="mt-3 flex items-center justify-between gap-3 px-1">
+        <span className="font-mono text-[9px] uppercase tracking-[0.28em] text-muted-foreground/35">
+          tap card · open full readme ↗
+        </span>
+        <span className="hidden font-mono text-[9px] uppercase tracking-[0.28em] text-muted-foreground/35 sm:inline">
+          src · github contributions
+        </span>
+      </div>
     </motion.div>
   )
 }

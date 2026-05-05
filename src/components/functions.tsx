@@ -471,6 +471,8 @@ function MetricRow({
   type = 'sum',
   chartType = 'line',
   color,
+  index,
+  vitalCode,
   format = (v: number) => v.toLocaleString('en-US'),
 }: {
   label: string
@@ -483,6 +485,8 @@ function MetricRow({
   type?: 'sum' | 'avg' | 'latest'
   chartType?: 'bar' | 'area' | 'scatter' | 'line'
   color?: string
+  index?: number
+  vitalCode?: string
   format?: (v: number) => string
 }) {
   const processedData = (samples || []).map((s) => {
@@ -519,72 +523,136 @@ function MetricRow({
 
   const min = values.length ? Math.min(...values) : 0
   const max = values.length ? Math.max(...values) : 0
-  const avg = values.length ? mainValue : 0
-  const summaryItems = [
-    { label: 'avg', value: format(avg) },
-    { label: 'min', value: format(min) },
-    { label: 'max', value: format(max) },
-  ]
+  const avgRaw = values.length
+    ? values.reduce((a, b) => a + b, 0) / values.length
+    : 0
+  const range = max - min || 1
+  const avgPct = ((avgRaw - min) / range) * 100
+  const tickColor = color || 'var(--primary)'
+  const idx =
+    typeof index === 'number'
+      ? String(index + 1).padStart(2, '0')
+      : '··'
+  const code = vitalCode ?? label.slice(0, 3).toUpperCase()
 
   return (
     <motion.div
-      whileInView={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-      initial={{ opacity: 0, y: 12, scale: 0.98, filter: 'blur(4px)' }}
+      whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      initial={{ opacity: 0, y: 14, filter: 'blur(4px)' }}
       viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.9, ease: APPLE_EASE }}
-      className="group grid min-w-0 gap-4 py-5 transition-colors sm:flex sm:items-center sm:gap-6 sm:py-6"
+      transition={{ duration: 0.85, ease: APPLE_EASE }}
+      style={{ ['--metric-color' as never]: tickColor }}
+      className="metric-row group grid min-w-0 grid-cols-1 gap-4 px-4 py-6 sm:grid-cols-[auto_minmax(11rem,1fr)_minmax(0,1.6fr)_auto] sm:items-center sm:gap-6 sm:px-6 sm:py-7"
     >
-      <div className="flex min-w-0 w-full shrink-0 flex-col gap-1.5 sm:w-40">
-        <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/60 transition-colors duration-300 group-hover:text-primary/80">
+      {/* Index gutter */}
+      <div className="hidden sm:flex shrink-0 flex-col items-start gap-2 pl-2">
+        <span className="font-mono text-[10px] tabular-nums tracking-[0.18em] text-muted-foreground/40">
+          {idx}
+        </span>
+        <span
+          className="block h-2.5 w-2.5 rounded-full ring-2 ring-background"
+          style={{ background: tickColor }}
+          aria-hidden="true"
+        />
+      </div>
+
+      {/* Hero readout (label + big number) */}
+      <div className="flex min-w-0 flex-col gap-2">
+        <div className="flex items-center gap-2">
+          <span
+            className="font-mono text-[9px] uppercase tracking-[0.32em]"
+            style={{ color: tickColor }}
+          >
+            VTAL·{code}
+          </span>
+          <span className="font-mono text-[9px] uppercase tracking-[0.28em] text-muted-foreground/40 sm:hidden">
+            {idx}
+          </span>
+          <span className="h-px flex-1 bg-foreground/8" />
+        </div>
+        <span className="text-[11px] font-medium uppercase tracking-[0.24em] text-foreground/65 transition-colors duration-300 group-hover:text-foreground">
           {label}
         </span>
-        <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-1">
-          <span className="tabular-nums font-serif text-3xl font-semibold tracking-tight text-foreground/90 transition-colors duration-300 group-hover:text-foreground">
+        <div className="flex items-baseline gap-2">
+          <span className="metric-row-value font-serif text-4xl font-light tabular-nums leading-[0.95] tracking-tight text-foreground/85 transition-colors duration-500 sm:text-5xl">
             {format(mainValue)}
           </span>
-          <span className="text-[11px] font-mono uppercase tracking-tight text-muted-foreground transition-colors duration-300 group-hover:text-foreground/70">
+          <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-muted-foreground/70">
             {unit}
           </span>
         </div>
       </div>
 
-      <div className="min-w-0 flex-1 h-16 group-hover:scale-[1.02] transition-transform duration-500 ease-out">
-        <InteractiveChart
-          data={graphData}
-          color={color || 'var(--primary)'}
-          type={chartType}
-          height={64}
-          formatValue={(v) => format(v) + ' ' + unit}
+      {/* Waveform */}
+      <div className="relative min-w-0">
+        <div className="pointer-events-none absolute inset-x-0 top-2 flex items-center justify-between font-mono text-[8px] uppercase tracking-[0.22em] text-muted-foreground/30">
+          <span>trace · last 40</span>
+          <span>{chartType}</span>
+        </div>
+        <div className="relative pt-5 pb-2">
+          {/* horizontal mean reference */}
+          <div
+            className="pointer-events-none absolute left-0 right-0 z-0 h-px"
+            style={{
+              top: `calc(20px + ${100 - avgPct}% * 0.6)`,
+              background: `repeating-linear-gradient(90deg, ${tickColor} 0 3px, transparent 3px 7px)`,
+              opacity: 0.18,
+            }}
+            aria-hidden="true"
+          />
+          <div className="relative z-10 h-16">
+            <InteractiveChart
+              data={graphData}
+              color={tickColor}
+              type={chartType}
+              height={64}
+              formatValue={(v) => format(v) + ' ' + unit}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Peak / Mean / Floor */}
+      <div className="grid grid-cols-3 gap-2 sm:flex sm:w-32 sm:flex-col sm:gap-2 sm:pl-3 sm:border-l sm:border-foreground/8 font-mono text-[10px] tabular-nums">
+        <StatLine
+          icon="↑"
+          label="peak"
+          value={format(max)}
+          accent={tickColor}
+        />
+        <StatLine icon="◇" label="mean" value={format(avgRaw)} />
+        <StatLine
+          icon="↓"
+          label="floor"
+          value={format(min)}
+          accent={tickColor}
         />
       </div>
-
-      <div className="grid grid-cols-3 gap-2 rounded-2xl bg-black/5 dark:bg-white/5 px-4 py-2.5 font-mono text-[10px] tabular-nums backdrop-blur-md sm:hidden">
-        {summaryItems.map((item) => (
-          <div key={item.label} className="min-w-0 text-center">
-            <span className="block text-muted-foreground/60">{item.label}</span>
-            <span className="block truncate font-medium text-foreground/80 mt-0.5">
-              {item.value}
-            </span>
-          </div>
-        ))}
-      </div>
-
-      <div className="hidden w-22 px-2 shrink-0 flex-col gap-1.5 text-right font-mono text-[11px] tabular-nums sm:flex sm:justify-center">
-        {summaryItems.map((item) => (
-          <div
-            key={item.label}
-            className="flex w-full justify-between items-center group/stat"
-          >
-            <span className="text-muted-foreground/45 transition-colors duration-300 group-hover/stat:text-muted-foreground">
-              {item.label}
-            </span>
-            <span className="font-medium text-foreground/50 transition-colors duration-300 group-hover/stat:text-foreground">
-              {item.value}
-            </span>
-          </div>
-        ))}
-      </div>
     </motion.div>
+  )
+}
+
+function StatLine({
+  icon,
+  label,
+  value,
+  accent,
+}: {
+  icon: string
+  label: string
+  value: string
+  accent?: string
+}) {
+  return (
+    <div className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-2">
+      <span className="flex items-center gap-1 text-muted-foreground/45">
+        <span style={accent ? { color: accent, opacity: 0.85 } : undefined}>
+          {icon}
+        </span>
+        <span className="uppercase tracking-[0.2em]">{label}</span>
+      </span>
+      <span className="truncate font-medium text-foreground/75">{value}</span>
+    </div>
   )
 }
 

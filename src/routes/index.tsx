@@ -1008,97 +1008,236 @@ function App() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-80px' }}
             transition={{ duration: 1.2, ease: APPLE_EASE }}
-            className="mb-6 flex flex-col gap-3"
+            className="mb-8 grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-end px-4 sm:px-6"
           >
-            <h3 className="font-serif text-3xl leading-[1.05] tracking-tight text-foreground sm:text-4xl lg:text-5xl">
-              The body, in numbers.
-            </h3>
-          </motion.div>
-          <div className="grid min-w-0 gap-8">
-            <div className="grid min-w-0 gap-0 overflow-hidden rounded-[2.5rem] border border-white/10 bg-background/40 shadow-2xl backdrop-blur-3xl p-5 sm:p-8">
-              <div className="flex flex-col divide-y divide-border/10">
-                <MetricRow
-                  label="steps"
-                  samples={sanitizeSamples(health.steps)}
-                  unit="steps"
-                  type="sum"
-                  chartType="bar"
-                  color="#f97316"
-                />
-                <MetricRow
-                  label="energy"
-                  samples={sanitizeSamples(health.activeEnergy)}
-                  unit="kcal"
-                  type="sum"
-                  chartType="area"
-                  color="#ef4444"
-                  format={(v: number) => formatMetricValue(v, 0)}
-                />
-                <MetricRow
-                  label="heart rate"
-                  samples={sanitizeSamples<HealthSample>(health.heartRate).map(
-                    (sample) => {
-                      const value = Number(sample.value)
-                      const start = new Date(sample.startDate).getTime()
-                      const end = new Date(sample.endDate).getTime()
-                      const minutes = (end - start) / 1000
-                      const bpm =
-                        value > 300 && minutes > 0 ? value / minutes : value
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground/55">
+                <span className="flex items-center gap-1.5">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-destructive/70 opacity-60" />
+                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-destructive/80" />
+                  </span>
+                  live telemetry
+                </span>
+                <span className="text-foreground/15">·</span>
+                <span>subject {siteInfo.name.split(' ')[0].toLowerCase()}</span>
+                <span className="text-foreground/15">·</span>
+                <span>06 vitals</span>
+              </div>
+              <h3 className="font-serif text-4xl leading-[0.95] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+                The body,
+                <br />
+                <span className="italic font-light text-primary/85">
+                  in numbers.
+                </span>
+              </h3>
+              <p className="max-w-md text-sm leading-7 text-foreground/55">
+                Apple Watch tells, I publish. Six channels, raw — no averaging
+                dashboards, no flattering medians. The trace below is whatever
+                the wrist saw last.
+              </p>
+            </div>
 
-                      return {
-                        ...sample,
-                        value: bpm,
-                      } as HealthSample & { value: number }
-                    },
-                  )}
-                  unit="bpm"
-                  type="avg"
-                  chartType="scatter"
-                  color="#f43f5e"
-                  format={(v: number) => formatMetricValue(v, 0)}
+            {/* EKG pulse */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ duration: 1.4, ease: APPLE_EASE, delay: 0.2 }}
+              className="relative hidden h-24 items-end overflow-hidden border-y border-foreground/10 lg:flex"
+            >
+              <div
+                className="absolute inset-0 opacity-60"
+                style={{
+                  backgroundImage:
+                    'linear-gradient(color-mix(in oklab, var(--foreground) 6%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in oklab, var(--foreground) 6%, transparent) 1px, transparent 1px)',
+                  backgroundSize: '14px 14px',
+                  maskImage:
+                    'linear-gradient(to right, transparent, black 12%, black 88%, transparent)',
+                  WebkitMaskImage:
+                    'linear-gradient(to right, transparent, black 12%, black 88%, transparent)',
+                }}
+                aria-hidden="true"
+              />
+              <svg
+                viewBox="0 0 600 96"
+                preserveAspectRatio="none"
+                className="relative h-full w-full"
+                aria-hidden="true"
+              >
+                <path
+                  d="M0,48 L60,48 L80,48 L88,30 L96,68 L104,18 L112,48 L160,48 L180,48 L188,42 L196,52 L220,48 L260,48 L268,32 L276,68 L284,16 L292,52 L300,48 L360,48 L380,48 L388,40 L400,56 L420,48 L460,48 L470,30 L478,68 L486,18 L494,48 L520,48 L600,48"
+                  fill="none"
+                  stroke="var(--primary)"
+                  strokeWidth="1.4"
+                  className="ekg-line"
                 />
-                <MetricRow
-                  label="distance"
-                  samples={sanitizeSamples(health.distance)}
-                  unit="km"
-                  type="sum"
-                  chartType="bar"
-                  color="#3b82f6"
-                  format={(v: number) => formatMetricValue(v, 2)}
+                <path
+                  d="M0,48 L60,48 L80,48 L88,30 L96,68 L104,18 L112,48 L160,48 L180,48 L188,42 L196,52 L220,48 L260,48 L268,32 L276,68 L284,16 L292,52 L300,48 L360,48 L380,48 L388,40 L400,56 L420,48 L460,48 L470,30 L478,68 L486,18 L494,48 L520,48 L600,48"
+                  fill="none"
+                  stroke="var(--primary)"
+                  strokeWidth="0.5"
+                  opacity="0.25"
                 />
-                <MetricRow
-                  label="sleep"
-                  samples={sanitizeSamples(health.sleep)}
-                  unit="hrs"
-                  type="sum"
-                  chartType="area"
-                  color="#818cf8"
-                  format={(v: number) => formatMetricValue(v, 1)}
-                />
-                <MetricRow
-                  label="spO2"
-                  samples={sanitizeSamples(health.spO2)}
-                  unit="%"
-                  type="avg"
-                  chartType="line"
-                  color="#22d3ee"
-                  format={(v: number) => formatMetricValue(v, 1)}
-                />
+              </svg>
+              <div className="pointer-events-none absolute inset-x-0 bottom-1 flex items-end justify-between px-3 font-mono text-[8px] uppercase tracking-[0.28em] text-muted-foreground/40">
+                <span>rhythm · sinus</span>
+                <span>chan·02 / hr</span>
+              </div>
+              <div className="pointer-events-none absolute inset-x-0 top-1 flex items-start justify-between px-3 font-mono text-[8px] uppercase tracking-[0.28em] text-muted-foreground/40">
+                <span>—— ekg sample</span>
+                <span>amp 1.0 mV</span>
+              </div>
+            </motion.div>
+          </motion.div>
+
+          {/* Telemetry instrument panel */}
+          <motion.div
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 1.1, ease: APPLE_EASE, delay: 0.1 }}
+            className="instrument-panel relative border border-foreground/10 px-4 sm:px-6"
+          >
+            <span className="instrument-bracket-bl" />
+            <span className="instrument-bracket-br" />
+
+            {/* Bezel header */}
+            <div className="relative flex flex-wrap items-center justify-between gap-3 border-b border-foreground/10 bg-background/30 px-4 py-3 backdrop-blur-sm sm:px-6">
+              <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.28em] text-muted-foreground/65">
+                <span className="flex h-4 w-4 items-center justify-center border border-foreground/20 text-[8px] text-foreground/60">
+                  ✚
+                </span>
+                <span>vital trace · met·001</span>
+              </div>
+              <div className="hidden items-center gap-5 font-mono text-[9px] uppercase tracking-[0.28em] text-muted-foreground/45 sm:flex">
+                <span>idx</span>
+                <span>vital · label</span>
+                <span>value</span>
+                <span>waveform</span>
+                <span>range</span>
+              </div>
+              <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.28em] text-muted-foreground/55">
+                {isMounted ? (
+                  <>
+                    <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                    <span>{new Date().toISOString().slice(0, 10)}</span>
+                  </>
+                ) : null}
               </div>
             </div>
 
-            <Link to="/readme" className="block min-w-0 overflow-hidden">
-              <DeferredSection minHeight={120}>
-                <GitHubHeatmap username={siteInfo.githubUsername} />
-              </DeferredSection>
-            </Link>
+            {/* Metric rows */}
+            <div className="relative flex min-w-0 flex-col divide-y divide-foreground/8">
+              <MetricRow
+                index={0}
+                vitalCode="STP"
+                label="steps"
+                samples={sanitizeSamples(health.steps)}
+                unit="steps"
+                type="sum"
+                chartType="bar"
+                color="#f97316"
+              />
+              <MetricRow
+                index={1}
+                vitalCode="ENR"
+                label="energy"
+                samples={sanitizeSamples(health.activeEnergy)}
+                unit="kcal"
+                type="sum"
+                chartType="area"
+                color="#ef4444"
+                format={(v: number) => formatMetricValue(v, 0)}
+              />
+              <MetricRow
+                index={2}
+                vitalCode="HRT"
+                label="heart rate"
+                samples={sanitizeSamples<HealthSample>(health.heartRate).map(
+                  (sample) => {
+                    const value = Number(sample.value)
+                    const start = new Date(sample.startDate).getTime()
+                    const end = new Date(sample.endDate).getTime()
+                    const minutes = (end - start) / 1000
+                    const bpm =
+                      value > 300 && minutes > 0 ? value / minutes : value
 
-            {health.updatedAt && isMounted ? (
-              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/35">
-                last updated {new Date(health.updatedAt).toLocaleString()}
-              </p>
-            ) : null}
-          </div>
+                    return {
+                      ...sample,
+                      value: bpm,
+                    } as HealthSample & { value: number }
+                  },
+                )}
+                unit="bpm"
+                type="avg"
+                chartType="scatter"
+                color="#f43f5e"
+                format={(v: number) => formatMetricValue(v, 0)}
+              />
+              <MetricRow
+                index={3}
+                vitalCode="DST"
+                label="distance"
+                samples={sanitizeSamples(health.distance)}
+                unit="km"
+                type="sum"
+                chartType="bar"
+                color="#3b82f6"
+                format={(v: number) => formatMetricValue(v, 2)}
+              />
+              <MetricRow
+                index={4}
+                vitalCode="SLP"
+                label="sleep"
+                samples={sanitizeSamples(health.sleep)}
+                unit="hrs"
+                type="sum"
+                chartType="area"
+                color="#818cf8"
+                format={(v: number) => formatMetricValue(v, 1)}
+              />
+              <MetricRow
+                index={5}
+                vitalCode="SO2"
+                label="spO2"
+                samples={sanitizeSamples(health.spO2)}
+                unit="%"
+                type="avg"
+                chartType="line"
+                color="#22d3ee"
+                format={(v: number) => formatMetricValue(v, 1)}
+              />
+            </div>
+
+            {/* Bezel footer */}
+            <div className="relative flex flex-wrap items-center justify-between gap-3 border-t border-foreground/10 bg-background/30 px-4 py-3 backdrop-blur-sm sm:px-6">
+              <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-muted-foreground/55">
+                — end of trace
+              </span>
+              {health.updatedAt && isMounted ? (
+                <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-muted-foreground/45">
+                  sync ·{' '}
+                  {new Date(health.updatedAt).toLocaleString(undefined, {
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </span>
+              ) : null}
+            </div>
+          </motion.div>
+
+          {/* GitHub commit-tape */}
+          <Link
+            to="/readme"
+            className="group/tape mt-12 block min-w-0 overflow-hidden px-4 sm:px-6"
+          >
+            <DeferredSection minHeight={240}>
+              <GitHubHeatmap username={siteInfo.githubUsername} />
+            </DeferredSection>
+          </Link>
         </Section>
       </motion.div>
 
@@ -1127,7 +1266,7 @@ function App() {
         </Section>
 
         <Section title="pinterest">
-          <div className="relative">
+          <div className="relative px-4 sm:px-6">
             <motion.div
               initial={{ opacity: 0, y: -20, scale: 0.92 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -1192,15 +1331,15 @@ function App() {
                     }))}
                 />
 
-                <LinkPreview
-                  url={siteMeta.baseUrl + '/pinterest'}
+                <Link
+                  to="/pinterest"
                   className="inline-flex items-center gap-2 self-end text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
                 >
                   full gallery
                   <span className="transition-transform duration-300 group-hover:translate-x-1">
                     &rarr;
                   </span>
-                </LinkPreview>
+                </Link>
               </div>
             ) : (
               <p className="text-sm text-muted-foreground">
@@ -1226,6 +1365,13 @@ function App() {
         </DeferredSection>
       </motion.div>
 
+      <motion.p
+        variants={item}
+        className="flex flex-col items-center justify-between gap-1 text-center font-mono text-[10px] tracking-[0.2em] text-muted-foreground sm:flex-row sm:text-left px-8 sm:px-10"
+      >
+        <span>Yes, this portfolio can run DOOM.</span>
+        <span>Konami Code: ↑ ↑ ↓ ↓ ← → ← → b a</span>
+      </motion.p>
       <motion.div variants={item}>
         <Section title="contact">
           <div className="relative overflow-hidden pb-8">
@@ -1380,14 +1526,6 @@ function App() {
           </div>
         </Section>
       </motion.div>
-
-      <motion.p
-        variants={item}
-        className="flex flex-col items-center justify-between gap-1 text-center font-mono text-[10px] tracking-[0.2em] text-muted-foreground sm:flex-row sm:text-left px-8"
-      >
-        <span>Yes, this portfolio can run DOOM.</span>
-        <span>Konami Code: ↑ ↑ ↓ ↓ ← → ← → b a</span>
-      </motion.p>
     </motion.div>
   )
 }

@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { siteMeta } from '@/config/site-data'
 import { useEffect, useState } from 'react'
 import { LinkPreview } from './link-preview'
+import { Link } from '@tanstack/react-router'
 
 type Testimonial = {
   quote: string
@@ -171,12 +172,12 @@ export const AnimatedTestimonials = ({
               {String(active + 1).padStart(2, '0')}/
               {String(testimonials.length).padStart(2, '0')}
             </span>
-            <LinkPreview
-              url={siteMeta.baseUrl + '/certificates'}
+            <Link
+              to="/certificates"
               className="text-xs text-muted-foreground/70 transition-colors duration-300 hover:text-primary"
             >
               all credentials <span>&rarr;</span>
-            </LinkPreview>
+            </Link>
           </div>
         </div>
       </div>
