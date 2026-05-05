@@ -279,7 +279,7 @@ function BlogIndex() {
               </p>
 
               {/* drop-cap excerpt */}
-              <div className="mt-6 max-w-3xl text-base leading-[1.85] text-foreground/82 sm:text-[17px] sm:leading-[1.85] [column-rule:1px_solid_var(--border)] sm:[columns:2] sm:[column-gap:2.5rem]">
+              <div className="mt-6 max-w-3xl text-base leading-[1.85] text-foreground/82 sm:text-[17px] sm:leading-[1.85] [column-rule:1px_solid_var(--border)] sm:columns-2 sm:gap-x-10">
                 <p className="break-inside-avoid first-letter:float-left first-letter:mr-2 first-letter:font-serif first-letter:text-6xl first-letter:font-bold first-letter:leading-[0.85] first-letter:text-primary sm:first-letter:text-7xl">
                   {lead.summary}
                 </p>

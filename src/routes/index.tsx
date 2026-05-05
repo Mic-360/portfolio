@@ -58,7 +58,7 @@ const GamesCinematic = lazy(() =>
     default: m.GamesCinematic,
   })),
 )
-const GitHubHeatmap = lazy(() => import('@/components/GitHubHeatmap'))
+const GithubHeatmap = lazy(() => import('@/components/GithubHeatmap'))
 const AnimatedTestimonials = lazy(() =>
   import('@/components/ui/animated-testimonials').then((m) => ({
     default: m.AnimatedTestimonials,
@@ -423,7 +423,7 @@ function App() {
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 2, ease: 'easeOut' }}
-            className="absolute right-[-20%] top-[10%] w-[600px] h-[600px] bg-primary rounded-full blur-[80px] opacity-20 dark:opacity-10"
+            className="absolute right-[-20%] top-[10%] w-150 h-150 bg-primary rounded-full blur-[80px] opacity-20 dark:opacity-10"
           />
 
           {/* The Person Image */}
@@ -434,7 +434,7 @@ function App() {
             src="/profile_image.png"
             alt={siteInfo.name}
             data-backlight="off"
-            className="relative z-10 w-[70%] max-w-[450px] object-contain translate-x-[10%] lg:translate-x-0"
+            className="relative z-10 w-[70%] max-w-112.5 object-contain translate-x-[10%] lg:translate-x-0"
           />
 
           {/* Floating Terminal */}
@@ -1235,7 +1235,7 @@ function App() {
             className="group/tape mt-12 block min-w-0 overflow-hidden px-4 sm:px-6"
           >
             <DeferredSection minHeight={240}>
-              <GitHubHeatmap username={siteInfo.githubUsername} />
+              <GithubHeatmap username={siteInfo.githubUsername} />
             </DeferredSection>
           </Link>
         </Section>
