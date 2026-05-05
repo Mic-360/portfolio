@@ -58,7 +58,7 @@ export function ProjectShowcase({
                 <span>View All Projects</span>
                 <ArrowRight className='h-4 w-4 -rotate-45 group-hover:rotate-0 transition-transform duration-300' />
               </Link>
-              <ul className="flex flex-col w-fit text-right gap-2 sm:gap-4 pb-10">
+              <ul className="flex flex-col w-fit text-right gap-2 sm:gap-4 pb-10 backdrop-blur-2xl">
                 {projects.map((project) => {
                   const isHovered = hoveredId === project.id
                   const isDimmed =

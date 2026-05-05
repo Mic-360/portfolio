@@ -22,6 +22,7 @@ import {
   ScrollProgress,
   Section,
 } from '@/components/functions'
+import { AnimatedSvgBackground } from '@/components/AnimatedSvgBackground'
 import GravatarAvatar from '@/components/gravatar/GravatarAvatar'
 import GravatarSocialLinks from '@/components/gravatar/GravatarSocialLinks'
 import { KeyboardHint } from '@/components/KeyboardHint'
@@ -888,7 +889,7 @@ function App() {
                   className="max-w-3xl font-serif text-5xl leading-[1.04] tracking-tight text-foreground sm:text-6xl lg:text-7xl"
                 >
                   Where{' '}
-                  <span className="italic font-light text-foreground/80">
+                  <span className="italic font-light text-primary/80">
                     I've
                   </span>{' '}
                   been.
@@ -929,6 +930,7 @@ function App() {
       </motion.div>
 
       <motion.div variants={item} className="px-4 sm:px-6 relative">
+        <AnimatedSvgBackground />
         <Section title="projects">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -937,6 +939,7 @@ function App() {
             transition={{ duration: 1.2, ease: APPLE_EASE }}
             className="mb-4 max-w-3xl px-4 sm:px-6 sm:absolute sm:top-10"
           >
+            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none" />
             <h3 className="font-serif text-4xl leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
               Selected work,
               <br />
