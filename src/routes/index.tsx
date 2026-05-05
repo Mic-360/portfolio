@@ -255,7 +255,7 @@ function App() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="flex flex-col gap-20 md:gap-28"
+      className="flex flex-col gap-10"
     >
       <ScrollProgress />
       <motion.section
@@ -545,7 +545,7 @@ function App() {
 
       <motion.section
         variants={item}
-        className="hero-seamless-stage relative min-h-80 overflow-hidden lg:min-h-105 -mt-28"
+        className="hero-seamless-stage relative min-h-80 overflow-hidden lg:min-h-105 -mt-10"
       >
         <div className="pointer-events-none absolute inset-x-[12%] top-[10%] h-28 rounded-full bg-primary/10 blur-3xl" />
         <div className="pointer-events-none absolute inset-x-[24%] bottom-[18%] h-36 rounded-full bg-primary/8 blur-3xl" />
@@ -607,7 +607,7 @@ function App() {
         </div>
       </motion.section>
 
-      <motion.div variants={item} className="flex flex-col gap-24 md:gap-32">
+      <motion.div variants={item} className="flex flex-col gap-24 md:gap-32 px-4 sm:px-6">
         <Section title="current">
           <div className="flex flex-col sm:block relative min-h-0 sm:min-h-145 lg:min-h-160">
             <div className="relative sm:absolute sm:inset-0 z-50 flex flex-col items-center justify-center px-4 py-16 sm:py-0 pointer-events-none">
@@ -982,20 +982,20 @@ function App() {
             <p className="text-sm text-muted-foreground/45">
               Build logs and essays.
             </p>
-            <LinkPreview
-              url={siteMeta.baseUrl + '/blog'}
+            <Link
+              to="/blog"
               className="group/link inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary/80"
             >
               All writing
               <span className="inline-block transition-transform duration-300 group-hover/link:translate-x-1">
                 &rarr;
               </span>
-            </LinkPreview>
+            </Link>
           </div>
         </Section>
       </motion.div>
 
-      <motion.div variants={item} className="px-4 sm:px-8">
+      <motion.div variants={item} className="px-4 sm:px-6">
         <Section title="healthstat">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
