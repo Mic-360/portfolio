@@ -48,6 +48,7 @@ import {
   siteInfo,
   siteMeta,
 } from '@/config/site-data'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 // Heavy below-the-fold components — loaded lazily to keep the main bundle small.
 const PixelBlast = lazy(() => import('@/components/ui/pixel-blast'))
@@ -234,7 +235,9 @@ function App() {
     },
   }
 
-  const featuredPosts = posts.slice(0, 5)
+  const isMobile = useIsMobile()
+
+  const featuredPosts = posts.slice(0, isMobile ? 5 : 8)
   const featuredCertificates = certificates.slice(0, 7)
   const featuredPins = pinterestData.pins.slice(0, 4)
 
@@ -971,7 +974,7 @@ function App() {
             transition={{ duration: 1.2, ease: APPLE_EASE }}
             className="mb-8 flex items-end justify-between gap-6"
           >
-            <h3 className="font-serif text-3xl leading-[1.08] tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+            <h3 className="font-serif text-3xl leading-[1.08] tracking-tight text-foreground sm:text-4xl lg:text-5xl px-4 sm:px-6">
               Notes from
               <br />
               the build.
@@ -981,7 +984,7 @@ function App() {
             items={featuredBlogCards}
             formatMeta={(post) => formatDate(post.date)}
           />
-          <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center justify-between gap-4 px-4 sm:px-6">
             <p className="text-sm text-muted-foreground/45">
               Build logs and essays.
             </p>

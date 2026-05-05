@@ -44,6 +44,9 @@ export function ExpandableCard({
   className,
 }: ExpandableCardProps) {
   const [activeId, setActiveId] = useState<string | null>(null)
+  const [activeHoverId, setActiveHoverId] = useState<string | null>(
+    () => items[0]?.id ?? null,
+  )
   const id = useId()
   const dialogRef = useRef<HTMLDivElement>(null)
 
@@ -84,7 +87,10 @@ export function ExpandableCard({
   return (
     <>
       <div
-        className={cn('grid gap-4 sm:grid-cols-2 lg:grid-cols-3', className)}
+        className={cn(
+          'flex w-full flex-col sm:flex-row items-stretch justify-center gap-2 px-4 sm:px-6 h-[600px]',
+          className,
+        )}
       >
         {items.map((item, index) => {
           const meta = formatMeta ? formatMeta(item) : item.date
@@ -93,82 +99,75 @@ export function ExpandableCard({
             <motion.button
               key={item.id}
               type="button"
-              initial={{ opacity: 0, y: 32, filter: 'blur(6px)' }}
-              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              initial={{ flexGrow: 0, flexBasis: '4rem', opacity: 0, y: 32 }}
+              animate={{
+                flexGrow: activeHoverId === item.id ? 1 : 0,
+                flexBasis: activeHoverId === item.id ? 'auto' : '4rem',
+                opacity: 1,
+                y: 0,
+              }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{
-                duration: 1,
-                delay: index * 0.08,
-                ease: [0.16, 1, 0.3, 1],
+                flexGrow: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
+                flexBasis: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
+                opacity: { duration: 1, delay: index * 0.08 },
+                y: { duration: 1, delay: index * 0.08 },
               }}
               layoutId={`expandable-card-${item.id}-${id}`}
               onClick={() => setActiveId(item.id)}
-              className={cn(
-                'group relative flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-4xl border border-border/10 bg-background/45 text-left shadow-2xl backdrop-blur-3xl transition-colors duration-500 hover:border-primary/25 hover:bg-background/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
-                item.featured && 'sm:col-span-2 lg:col-span-2',
-              )}
+              onHoverStart={() => setActiveHoverId(item.id)}
+              onPointerEnter={() => setActiveHoverId(item.id)}
+              onFocus={() => setActiveHoverId(item.id)}
+              className="relative flex shrink-0 cursor-pointer flex-col overflow-hidden rounded-3xl border border-border/10 bg-background/45 text-left shadow-2xl backdrop-blur-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
             >
               <motion.div
                 layoutId={`expandable-card-image-${item.id}-${id}`}
-                className={cn(
-                  'relative overflow-hidden border-b border-border/10',
-                  item.featured ? 'aspect-16/8 sm:aspect-16/7' : 'aspect-4/3',
-                )}
+                className="absolute inset-0"
               >
                 <img
                   src={item.image}
                   alt={item.title}
-                  className="h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
+                  className="h-full w-full object-cover"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-linear-to-b from-background via-background/50 to-transparent opacity-90" />
-                <div className="absolute inset-x-0 top-0 flex items-center justify-between gap-4 p-5 text-[10px] uppercase tracking-[0.24em] text-foreground/65 sm:p-6">
-                  <span>{item.eyebrow}</span>
-                  <span>{meta}</span>
-                </div>
+                <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent/50 to-background opacity-90" />
               </motion.div>
 
-              <div
-                className={cn(
-                  'flex flex-1 flex-col justify-between gap-5 p-5 sm:p-6',
-                  item.featured && 'sm:flex-row sm:items-end sm:gap-10',
+              <AnimatePresence>
+                {activeHoverId === item.id && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent"
+                  />
                 )}
-              >
-                <div className="flex-1 space-y-2">
-                  <motion.h3
-                    layoutId={`expandable-card-title-${item.id}-${id}`}
-                    className={cn(
-                      'max-w-3xl font-serif leading-[1.02] tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary',
-                      item.featured ? 'text-2xl sm:text-3xl' : 'text-xl',
-                    )}
+              </AnimatePresence>
+
+              <AnimatePresence>
+                {activeHoverId === item.id && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute inset-0 flex flex-col justify-end gap-4 p-5 sm:p-6"
                   >
-                    {item.title}
-                  </motion.h3>
-                  <motion.p
-                    layoutId={`expandable-card-summary-${item.id}-${id}`}
-                    className={cn(
-                      'max-w-2xl text-sm leading-7 text-foreground/62',
-                      item.featured ? 'sm:text-base' : 'line-clamp-3',
-                    )}
-                  >
-                    {item.summary}
-                  </motion.p>
-                </div>
-                <div className="flex items-center justify-between gap-4 border-t border-border/8 pt-3 sm:min-w-44 sm:border-t-0 sm:border-l sm:pl-6 sm:pt-0">
-                  {item.tags.length > 0 ? (
-                    <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/34">
-                      {item.tags.slice(0, item.featured ? 4 : 3).join(' · ')}
-                    </p>
-                  ) : (
-                    <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/24">
-                      open note
-                    </span>
-                  )}
-                  <span className="text-xs text-primary/60 transition-transform duration-300 group-hover:translate-x-1">
-                    expand ↗
-                  </span>
-                </div>
-              </div>
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4 text-[10px] uppercase tracking-[0.24em] text-white/80">
+                      <span>{item.eyebrow}</span>
+                      <span>{meta}</span>
+                    </div>
+                    <motion.h3
+                      layoutId={`expandable-card-title-${item.id}-${id}`}
+                      className="font-serif text-xl sm:text-2xl leading-[1.2] tracking-tight text-foreground line-clamp-3"
+                    >
+                      {item.title}
+                    </motion.h3>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.button>
           )
         })}
@@ -179,11 +178,22 @@ export function ExpandableCard({
             <AnimatePresence>
               <>
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="fixed inset-0 z-80 bg-background/75 backdrop-blur-xl"
-                />
+                  layoutId={`expandable-card-image-${activeItem.id}-${id}`}
+                  className="fixed inset-0 z-80 overflow-hidden"
+                >
+                  <img
+                    src={activeItem.image}
+                    alt={activeItem.title}
+                    className="h-full w-full object-cover"
+                  />
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className="absolute inset-0 backdrop-blur-xs"
+                  />
+                </motion.div>
 
                 <motion.div
                   initial={{ opacity: 0, scale: 0.96, y: 18 }}
@@ -201,26 +211,18 @@ export function ExpandableCard({
                   <div className="flex h-full w-full items-center justify-center px-0 sm:px-4">
                     <motion.div
                       ref={dialogRef}
-                      className="relative flex w-full max-w-4xl flex-col overflow-hidden rounded-4xl border border-border/10 bg-background/92 shadow-[0_40px_120px_rgb(0_0_0_/0.4)] max-h-[70svh] md:max-h-[70vh]"
+                      className="relative flex w-full max-w-4xl flex-col overflow-hidden rounded-4xl border border-border/10 bg-background/85 backdrop-blur-xl shadow-[0_40px_120px_rgb(0_0_0_/0.5)] max-h-[85svh] md:max-h-[80vh]"
                     >
-                      <div className="relative h-[24svh] min-h-44 shrink-0 overflow-hidden sm:h-[28vh]">
-                        <img
-                          src={activeItem.image}
-                          alt={activeItem.title}
-                          className="h-full w-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-linear-to-t from-background via-background/30 to-black/10" />
-                        <button
-                          type="button"
-                          onClick={() => setActiveId(null)}
-                          className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full border border-border/15 bg-background/55 text-foreground backdrop-blur-md transition-colors hover:border-primary/40 hover:text-primary"
-                          aria-label="Close expanded card"
-                        >
-                          <CloseIcon />
-                        </button>
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setActiveId(null)}
+                        className="absolute right-5 top-5 z-20 inline-flex h-10 w-10 items-center justify-center rounded-full border border-border/15 bg-background/55 text-foreground backdrop-blur-md transition-colors hover:border-primary/40 hover:text-primary"
+                        aria-label="Close expanded card"
+                      >
+                        <CloseIcon />
+                      </button>
 
-                      <div className="grid min-h-0 flex-1 gap-8 overflow-y-auto p-5 sm:p-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(16rem,0.65fr)] lg:p-10">
+                      <div className="grid min-h-0 flex-1 gap-8 overflow-y-auto p-5 sm:p-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(16rem,0.65fr)] lg:p-10 pt-16 sm:pt-16 lg:pt-16">
                         <div className="grid content-start gap-6">
                           <div className="flex flex-wrap items-center gap-3 text-[10px] uppercase tracking-[0.24em] text-foreground/68">
                             <span>{activeItem.eyebrow}</span>
