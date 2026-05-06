@@ -167,11 +167,11 @@ function useDeferredVisibility(ref: React.RefObject<HTMLDivElement | null>) {
   return isVisible
 }
 
-interface GitHubHeatmapProps {
+interface GithubHeatmapProps {
   username: string
 }
 
-export default function GitHubHeatmap({ username }: GitHubHeatmapProps) {
+export default function GithubHeatmap({ username }: GithubHeatmapProps) {
   const calRef = useRef<HeatmapInstance | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)

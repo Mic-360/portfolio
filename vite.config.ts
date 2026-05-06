@@ -31,7 +31,7 @@ const config = defineConfig({
           'vendor-jsdos',
           'vendor-shiki',
           'CommandMenu',
-          'GitHubHeatmap',
+          'GithubHeatmap',
           'GamesCinematic',
           'animated-testimonials',
           'world-map',
