@@ -1,0 +1,183 @@
+---
+title: 'Chappie'
+date: '2026-05-16'
+summary: 'A Claude Code plugin that plays realistic Blue Switch mechanical keyboard sounds while Claude generates and runs tools — powered by a Rust audio daemon, nonce-based signal architecture, and a flow-state typing rhythm engine.'
+stack:
+  - 'Rust'
+  - 'Claude Code Plugins'
+  - 'rodio'
+  - 'Web Audio API'
+links:
+  - label: 'Live'
+    url: 'https://mic-360.github.io/chappie/'
+  - label: 'GitHub'
+    url: 'https://github.com/mic-360/chappie'
+tags:
+  - 'rust'
+  - 'audio'
+  - 'claude-code'
+  - 'cli'
+  - 'plugin'
+categories:
+  - 'tooling'
+image: '/chappie.png'
+---
+
+# Chappie
+
+Chappie is a [Claude Code plugin](https://code.claude.com/docs/en/plugins) that plays realistic Blue Switch mechanical keyboard sounds while Claude actively generates responses or executes tools. The moment Claude pauses for your approval, the typing stops and a pleasant alert ding fires instead — giving the session a tactile, present quality that silent AI inference doesn't deliver.
+
+## The problem
+
+Claude Code generates and executes code silently. There's no ambient feedback to signal that work is in progress, no auditory cue when Claude halts for your approval, and no natural rhythm to the interaction. This creates a disconnect, especially during long agentic sessions where you step away and have no peripheral awareness of what the model is doing.
+
+## The solution
+
+Chappie hooks into every stage of the Claude Code lifecycle and drives a persistent Rust audio daemon via a lightweight signal file. The result is a continuous, humanistic typing soundscape that mirrors Claude's actual activity state — typing when it's working, silent when it's idle, and alerting when it needs you.
+
+## Architecture
+
+```
+┌──────────────────┐  chappie-daemon signal <name>  ┌───────────────────────────┐
+│  Claude Code     │ ─────────────────────────────▶  │ ~/.claude/                │
+│  Lifecycle Hooks │  writes "<nonce> <signal>"       │ .chappie_state/signal     │
+└──────────────────┘  spawns daemon if absent         └─────────────┬─────────────┘
+                                                                     │ polls
+                                                                     ▼
+                                                       ┌─────────────────────────┐
+                                                       │  chappie-daemon (Rust)   │
+                                                       │  • Downloads WAV assets  │
+                                                       │  • Rhythm engine         │
+                                                       │  • rodio audio output    │
+                                                       │  • Single-instance lock  │
+                                                       └─────────────────────────┘
+```
+
+The hooks invoke the same compiled binary in a lightweight `signal` mode — `chappie-daemon signal <name>` — rather than using shell scripts. This means identical behavior across Windows, macOS, and Linux with no platform-specific branching.
+
+Each signal write carries a unique nonce, so the daemon reacts to every signal exactly once. Concurrent hook invocations cannot clobber an `alert` or `stop` — a race condition that would break the UX of the permission-pause interaction.
+
+### Hook → signal mapping
+
+| Hook               | Signal   | Behavior                              |
+| ------------------ | -------- | ------------------------------------- |
+| `UserPromptSubmit` | `start`  | Begin playing typing sounds           |
+| `PreToolUse`       | `typing` | Continue / resume typing sounds       |
+| `PostToolUse`      | `typing` | Continue / resume typing sounds       |
+| `Notification`     | `alert`  | Pause typing → play alert ding → idle |
+| `Stop`             | `stop`   | Return to idle, silence               |
+| `SessionEnd`       | `quit`   | Shut the daemon down immediately      |
+
+## The typing rhythm engine
+
+The most significant piece of engineering in Chappie is the rhythm engine inside `src/main.rs`. Rather than playing key clicks at a uniform random interval, the daemon models a fast, fluent workaholic typist — someone who drifts between flow states and exhibits human physical detail.
+
+### Flow states
+
+The engine cycles between three modes, re-rolled every 10–30 simulated words and weighted heavily toward speed:
+
+| State      | Interval per key | Character                                |
+| ---------- | ---------------- | ---------------------------------------- |
+| Sprint     | 45–78 ms         | Peak velocity — short bursts of momentum |
+| Cruise     | 62–112 ms        | Comfortable default, sustainable pace    |
+| Deliberate | 95–175 ms        | Slower, considered keystrokes            |
+
+### Human detail layers
+
+On top of flow-state timing, the engine adds four behavioral layers:
+
+- **Finger rolls** — words occasionally open with a 2–4 key burst at ~30 ms, simulating fast initial keystrokes
+- **In-word acceleration** — the first key of a word is slower, the middle is fastest, the end eases off
+- **Typo corrections** — ~6% of words trigger a rapid backspace rattle followed by a retype, simulating self-correction
+- **Cadence variation** — short gaps between words, longer sentence breaths every 8–16 words, and rare thinking pauses
+
+The combination produces a soundscape that reads as a person — not a timer.
+
+## Sound assets
+
+All audio is sourced under open licenses and downloaded on first run via `curl` (with `wget` as fallback), then cached in `~/.claude/sounds/`. Nothing is embedded in the binary.
+
+| Asset                    | Source                                                        | License         |
+| ------------------------ | ------------------------------------------------------------- | --------------- |
+| Key clicks ×4 + spacebar | [Nigh/OpenClickSound](https://github.com/Nigh/OpenClickSound) | CC BY-NC 4.0    |
+| Alert ding               | [akx/Notifications](https://github.com/akx/Notifications)     | CC0 / CC BY 3.0 |
+
+The zero-embed approach keeps the binary lean and avoids bundling any audio codec or TLS library — `curl` ships on modern Windows 10+, macOS, and virtually every Linux distribution.
+
+## Audio engine
+
+The daemon uses [rodio](https://github.com/RustAudio/rodio) for cross-platform audio playback — WASAPI on Windows, CoreAudio on macOS, ALSA on Linux. The entire Cargo dependency tree for audio is just two crates: `rodio` and `rand`. There is no heavyweight media framework, no embedded runtime.
+
+On Windows, the daemon opts into **EcoQoS** (efficiency mode) and runs at below-normal CPU priority, ensuring it stays invisible to power and thermal budgets even during long sessions.
+
+## Tuning
+
+All rhythm constants live at the top of `src/main.rs`. Edit and rebuild to change the feel:
+
+| Constant                  | Default     | Effect                                      |
+| ------------------------- | ----------- | ------------------------------------------- |
+| `ROLL_CHANCE`             | 0.22        | Probability a word opens with a finger-roll |
+| `TYPO_CHANCE`             | 0.06        | Probability of a typo + correction per word |
+| `WORD_LEN_MIN / MAX`      | 2 / 9       | Simulated word-length range (skewed short)  |
+| `MIN_PITCH / MAX_PITCH`   | 0.92 / 1.08 | Per-click pitch randomisation               |
+| `MIN_VOLUME / MAX_VOLUME` | 0.62 / 1.0  | Per-click volume randomisation              |
+| `IDLE_SHUTDOWN_MS`        | 15000       | Idle ms before the daemon self-exits        |
+
+Per-flow-state timing lives in `Flow::params()`.
+
+## Plugin structure
+
+```
+chappie/
+├── .claude-plugin/
+│   ├── plugin.json        # Manifest — name, version, author, entry point
+│   └── marketplace.json   # Marketplace definition for distribution
+├── hooks/
+│   └── hooks.json         # Claude Code lifecycle hook definitions
+├── skills/
+│   ├── setup/
+│   │   └── SKILL.md       # /chappie:setup — compile daemon, verify audio
+│   └── status/
+│       └── SKILL.md       # /chappie:status — daemon health, log, signal state
+├── src/
+│   └── main.rs            # Rust daemon + signal entry point
+├── Cargo.toml
+└── README.md
+```
+
+Two built-in skills handle the full lifecycle:
+
+- **`/chappie:setup`** — compiles the Rust binary with `cargo build --release` and verifies audio output end-to-end
+- **`/chappie:status`** — reports daemon state, sound cache completeness, current signal file content, and the tail of `daemon.log`
+
+## Installation
+
+```bash
+# From GitHub
+claude --plugin-url https://github.com/mic-360/chappie
+
+# From a marketplace
+/plugin install chappie@<marketplace-name>
+
+# From a local clone
+git clone https://github.com/mic-360/chappie.git
+claude --plugin-dir ./chappie
+```
+
+After installation, run `/chappie:setup` to compile the daemon. Hooks take over automatically from the first session.
+
+The only prerequisite is the [Rust toolchain](https://rustup.rs/).
+
+## What I learned
+
+Building Chappie forced several non-obvious design decisions:
+
+**Signal atomicity matters.** The first version used a plain signal name in the file. Concurrent `PreToolUse` and `PostToolUse` hooks firing within the same tool call could overwrite each other, causing the daemon to miss an `alert` or `stop`. Moving to a `<nonce> <signal>` format — where each write is unique and the daemon never needs to clear the file — eliminated the race entirely.
+
+**Single-instance locking is essential for audio.** Without a lock, overlapping hook invocations would spawn multiple daemon processes, each trying to open the audio device simultaneously. The lock file approach, combined with the signal architecture, means the daemon is spawned at most once per session regardless of hook concurrency.
+
+**Rhythm is perception.** Uniform random intervals sound mechanical and fake immediately. The three-state flow model with layered human detail — even subtle things like in-word acceleration — produces a result that people describe as "someone actually typing" rather than "a sound effect." The quality of that illusion is entirely in the layering.
+
+---
+
+The [landing page](https://mic-360.github.io/chappie/) includes a live Web Audio API demo where you can hear the key sounds synthesized in-browser before installing anything.

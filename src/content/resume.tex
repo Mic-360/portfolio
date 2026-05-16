@@ -189,6 +189,19 @@ and \textbf{RESTful/GraphQL APIs} to \textbf{CI/CD automation} and \textbf{real-
 
 \begin{samepage}
 \projentry
+  {Mechanical Keyboard Audio Daemon for Claude Code}{Chappie}
+  {GitHub}
+  {https://github.com/mic-360/chappie}
+  {
+    \begin{resbullets}
+      \item Designed and shipped a \textbf{Claude Code plugin} in \textbf{Rust} that drives a persistent audio daemon via a \textbf{nonce-tagged signal file}, mapping all six lifecycle hooks (\texttt{UserPromptSubmit}, \texttt{PreToolUse}, \texttt{PostToolUse}, \texttt{Notification}, \texttt{Stop}, \texttt{SessionEnd}) to discrete playback states — eliminating hook-concurrency race conditions through guaranteed per-signal uniqueness.
+      \item Engineered a \textbf{flow-state rhythm engine} modelling Sprint / Cruise / Deliberate typing cadences with layered finger-roll bursts, in-word acceleration, and probabilistic typo correction; implemented cross-platform audio output via \textbf{rodio} (WASAPI / CoreAudio / ALSA) with \textbf{Windows EcoQoS} efficiency-mode opt-in, keeping daemon CPU and battery overhead below baseline noise.
+    \end{resbullets}
+  }
+\end{samepage}
+
+\begin{samepage}
+\projentry
   {Precision A--B Playback Controller}{Spotify Looper}
   {GitHub}
   {https://github.com/Mic-360/spotify_looper}

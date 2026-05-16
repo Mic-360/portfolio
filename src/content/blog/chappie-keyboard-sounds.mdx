@@ -1,0 +1,98 @@
+---
+title: 'I Gave Claude a Keyboard Because Silence Was Too Productive'
+date: '2026-05-16'
+summary: 'A totally sane deep-dive into why I spent real engineering hours making an AI assistant sound like it has fingers.'
+tags:
+  - 'claude-code'
+  - 'rust'
+  - 'plugins'
+  - 'audio'
+  - 'productivity-theater'
+categories:
+  - 'development'
+image: '/chappie.png'
+---
+
+# I Gave Claude a Keyboard Because Silence Was Too Productive
+
+> "If it doesn't go clack, was it even thinking?"
+
+Somewhere between my third cup of coffee and my second existential crisis of the week, I decided the biggest unsolved problem in software engineering was that Claude Code is too quiet. Not too slow. Not too expensive. Too. Quiet.
+
+Yes. That was the gap. That was the thing holding back civilization.
+
+## The Problem Nobody Asked Me To Solve
+
+Here's the thing about watching Claude write your code for you: it just… does it. Silently. Like a ghost with a CS degree. One moment the file is empty, the next there are 300 lines of Rust that you definitely didn't write and now sort of have to understand. There's no _drama_. No sense of effort. No visceral feedback loop that says "yes, something is happening and you should feel good about it."
+
+Keyboards go clack. That's the deal. When humans type, things clack. When Claude types, you get nothing but a blinking cursor and the quiet shame of knowing it's faster than you.
+
+Unacceptable.
+
+## The Solution: A Rust Daemon That Makes Sounds At A Machine That Cannot Hear
+
+Enter **Chappie** — a Claude Code plugin I built that solves this non-problem with a frankly disproportionate amount of engineering.
+
+The architecture is, genuinely, something:
+
+- A **Rust binary** polls a nonce-tagged signal file
+- **Claude's lifecycle hooks** fire that binary on every tool call, every prompt submission, every pause for your permission
+- Six **WAV files** — live-recorded Blue Switch mechanical key clicks, a spacebar, an alert ding — get downloaded on first run and cached in `~/.claude/sounds/`
+- A **flow-state rhythm engine** models sprinting, cruising, and deliberate typing patterns so the sounds feel like a _workaholic_, not a metronome
+
+A workaholic. The sounds model a workaholic. I did this.
+
+```rust
+// Real code I wrote so an AI could sound like it cares
+fn roll_burst(rng: &mut impl Rng, n: u8) {
+    for _ in 0..n {
+        play_key(rng);
+        sleep_ms(rng.gen_range(25..40));
+    }
+}
+```
+
+## The Feature That Broke Me
+
+There is a `TYPO_CHANCE` constant set to `0.06`.
+
+Six percent of the time, Chappie plays a fast backspace rattle followed by a retype — to simulate Claude _making and correcting a typo_.
+
+Claude does not make typos. Claude is a language model. It outputs tokens. It has no fingers, no fatigue, no distracted thought that leads to hitting `r` instead of `t`. And yet here I am, at my desk, having engineered the _impression_ of fallibility into a machine that is, statistically, less mistake-prone than I am.
+
+I'm going to sit with that for a moment.
+
+## The Part Where I Justified It With System Performance
+
+To be clear, I did not just write a script that plays sounds. That would be beneath me apparently.
+
+I wrote a **single-instance daemon** with a nonce-based signalling system so concurrent hook invocations can never clobber each other. I opted the daemon into **Windows EcoQoS** — efficiency mode, below-normal CPU priority — because if you're going to waste battery on keyboard sounds, you should at least waste it efficiently.
+
+The hooks invoke a compiled binary, not a shell script, so the behavior is identical on Windows, macOS, and Linux. It's cross-platform clacking. For a non-problem. I am very normal.
+
+![Chappie mascot](/chappie.png)
+
+## The Tuning Table (Yes, There Is A Tuning Table)
+
+| Constant                | Default   | What It Does                                      |
+| ----------------------- | --------- | ------------------------------------------------- |
+| `ROLL_CHANCE`           | 0.22      | How often words open with a dramatic finger-roll  |
+| `TYPO_CHANCE`           | 0.06      | How often Claude "makes a mistake" it can't make  |
+| `MIN_PITCH / MAX_PITCH` | 0.92–1.08 | Pitch randomisation so keys don't sound identical |
+| `IDLE_SHUTDOWN_MS`      | 15000     | How long before the daemon gets tired and quits   |
+
+The daemon models fatigue. I added an idle timeout so it shuts itself down after fifteen seconds of silence, presumably to rest. I gave the sound daemon a concept of rest. It now has a better work-life balance than me.
+
+## Was It Worth It?
+
+Absolutely. Unequivocally. I now sit here, watching Claude blast through file system refactors, and I hear every single keystroke. It sounds like a developer is working. It sounds like _effort_. It sounds like someone cares deeply about my codebase.
+
+None of those things are true. But they sound true. And in this economy, vibes are load-bearing.
+
+The first time Claude paused for my tool approval and a soft _ding_ played — the typing stopping mid-word, just like a real human would — I felt something. I don't want to talk about what I felt. But I felt it.
+
+If you want your AI assistant to have the acoustic presence of a 1990s IBM Model M, [Chappie is open source and MIT licensed](https://github.com/mic-360/chappie). Install it, build the daemon, and join me in the frontier of problems I created and then solved.
+
+---
+
+You're welcome. And I'm sorry.
