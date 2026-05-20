@@ -1,0 +1,156 @@
+---
+title: 'I Built a Yelp for Indian Fab Labs Because Apparently Google Maps Was Too Easy'
+date: '2026-05-21'
+summary: 'A perfectly reasonable two-sided marketplace for a country that mostly still discovers CNC shops via WhatsApp forwards. Now with Razorpay, RLS, and twelve migrations of regret.'
+tags:
+  - 'nextjs'
+  - 'supabase'
+  - 'typesense'
+  - 'razorpay'
+  - 'marketplace'
+  - 'over-engineering'
+categories:
+  - 'development'
+image: '/labsinindia.png'
+---
+
+# I Built a Yelp for Indian Fab Labs Because Apparently Google Maps Was Too Easy
+
+> "Just put it on JustDial bro" — every uncle who saw the prototype.
+
+So here's how it started. India has thousands of fabrication labs, 3D printing services, CNC shops, laser cutters, PCB houses, and assorted machine wizards tucked into back alleys from Pune to Coimbatore. Discovery is, professionally speaking, _vibes_. You ask a friend. Who asks a friend. Who sends you a 2017 PDF brochure on WhatsApp. The PDF has a phone number that doesn't work.
+
+I thought: what if there was a website. What if the website had _search_. What if the search had _filters_.
+
+Reader, that's where the discipline ended.
+
+## The Problem Nobody Was Specifically Begging Me To Solve
+
+Two real users exist in this market and they hate each other in a beautiful, codependent way:
+
+1. **Makers and small manufacturers** who need a 5-axis CNC for one (1) prototype next Tuesday and have no idea who in their state can actually do it.
+2. **Lab owners** who would love more inbound leads but currently rely on the eternal mercy of Google ranking their Wix site above someone's cousin's Wix site.
+
+The obvious solution was a directory. A simple directory. A list. The kind of project you finish over a long weekend, deploy to Vercel, and forget about.
+
+I did not build that.
+
+## What I Actually Built (Brace Yourself)
+
+I built **LabsInIndia** — a full two-sided marketplace with:
+
+- A **claims pipeline** where lab owners prove they own a listing with uploaded documents that an admin then moderates
+- **Location-gated reviews** where you can only review a lab if your profile city/state matches, with optional real-location verification for a fancier trust badge
+- A **comparison tray** that works for guests via local storage and upgrades to a saved, shareable board the moment you log in
+- **Three Razorpay subscription tiers** with signed-webhook-only entitlement granting, because I do not trust the frontend and frankly neither should you
+- **Analytics dashboards** for paid owners showing demand, visitors, machine interest, and leads
+- **ZeptoMail transactional emails** for moderation, claims, reviews, billing, and lead alerts, with delivery logging and idempotency keys
+- **Typesense-powered search** across labs, machines, and profiles, with a reindexing cron and a Docker compose just for local dev
+- **Twelve Supabase migrations** with Row-Level Security on basically every table because the threat model is "people will absolutely try"
+- **A social graph** where you can follow labs, makers, and admins, and a feed shows you marketplace-safe activity
+- A **/x402** payments route because I read a spec and decided it was personally my problem now
+
+For a directory. Of workshops. In India.
+
+## The "Just Use Algolia" Conversation I Had With Myself
+
+I needed search. Postgres full-text search would have been fine. `ILIKE '%cnc%'` would have been fine. A `<select>` element would have been _spiritually_ fine.
+
+I deployed Typesense.
+
+In Docker. With a `docker-compose.typesense.yml`. With a `typesense:setup` script. With a `typesense:reindex` script. With a `typesense:health` script. With a cron job that processes search index update queues.
+
+For ~50 listings I had at the time. That's roughly one container per lab. Excellent ratio. Very normal.
+
+```bash
+bun run typesense:start
+bun run typesense:setup
+bun run typesense:reindex
+bun run typesense:health
+```
+
+Look at all those `bun run`s. That's craftsmanship.
+
+## RLS Tables Will Find You In Your Sleep
+
+Supabase Row-Level Security is genuinely great until you have:
+
+- `labs` (public read if approved, owner write, admin override)
+- `machines` (inherits lab visibility)
+- `claims` (only the claimant + admins; documents in a private bucket)
+- `reviews` (public read if approved, write only if location matches, edit only if you're the author and we're inside an edit window)
+- `follows` (public read, write only if you're not following yourself, please)
+- `subscriptions` (read your own, write only via webhook with service role)
+- `email_logs` (admin only — these contain things)
+- `analytics_events` (insert anywhere, read scoped by entitlement tier)
+- `comparison_boards` (public if marked shareable, otherwise owner-scoped)
+
+I have a `docs/` folder with **twelve** markdown files just for the RLS notes. Each one ends with "and a short local smoke check." I have written enough smoke check scripts to start a small wildfire.
+
+## The Webhook That Made Me A Better Person
+
+The Razorpay webhook is the only part of the platform where I genuinely could not be lazy. Lazy here means: a user pays you money and your app forgets.
+
+So the flow is:
+
+1. Razorpay subscription event fires.
+2. Webhook verifies the signature with the secret.
+3. Idempotency key is checked against a `processed_webhook_events` table.
+4. If new, the event is logged, the subscription row is updated, and entitlements are granted.
+5. If duplicate, we shrug atomically and return 200 so Razorpay stops re-delivering.
+
+The frontend has no role in any of this. The frontend's job is to look pretty and redirect to checkout. Anything the frontend says about your subscription status is a polite suggestion, not a fact. The fact lives in the database, written by the webhook, gated by RLS, and triggers a ZeptoMail receipt.
+
+For directory listings. Of labs. That make brackets.
+
+## The Comparison Tray That Required A Spec
+
+You know that Amazon "compare products" feature you've never used? I built it. For lab capabilities. With a guest mode using `localStorage`. With a sign-in upgrade path where the local tray merges into the server-side board. With shareable URLs. With permissions on who can view a shared board. With a max-items limit because someone, somewhere, will try to compare 47 labs.
+
+The doc for this feature alone is longer than my last three blog posts combined.
+
+![LabsInIndia mascot](/labsinindia.png)
+
+## Location-Verified Reviews, Because Yelp Wasn't Enough
+
+You cannot review a lab unless one of:
+
+- Your profile city matches the lab's city, **or**
+- Your profile state matches and you've consented to current-location verification at the time of writing the review
+
+The second path stamps the review with a "verified visit nearby" badge. The first path gives you a normal review. Anyone outside both paths gets a polite "you can't review this" notice and a suggestion to update their profile location.
+
+Why? Because the moment you let anyone review anything from anywhere, you get a Bangalore lab whose 1-star reviews are all from someone in Delhi who's never been within 2000 km of a lathe.
+
+The privacy boundary is the part I'm proud of: we store the verification _result_ and a coarse city-level signal, not the user's actual coordinates. The map UI knows. The database does not.
+
+## Stack, Because People Ask
+
+| Layer            | Tech                                                              |
+| ---------------- | ----------------------------------------------------------------- |
+| Framework        | Next.js 16 App Router, React 19, React Compiler                   |
+| Data             | Supabase Postgres + RLS + Storage                                 |
+| Search           | Typesense (self-hosted dev, Cloud-ready)                          |
+| Auth             | Supabase Auth, email/password + protected dashboards              |
+| Payments         | Razorpay subscriptions + signed webhooks                          |
+| Email            | ZeptoMail with delivery logging and lead alerts                   |
+| Realtime + Media | Supabase Realtime + Storage                                       |
+| Tooling          | Bun, Biome, TypeScript strict, base-ui, Tailwind v4, shadcn       |
+
+Yes, Tailwind v4. Yes, React Compiler. Yes, Bun. I am one of _those_ people now. I'm sorry.
+
+## Was It Worth It?
+
+[The site is live](https://www.labsinindia.com/). It loads. It has labs. It has machines. It has reviews. People are claiming listings. Lab owners are getting actual leads they can actually act on. A small subset of them are paying real money for analytics dashboards that show them actual visitor patterns.
+
+A directory of workshops in India is now powered by Typesense, Razorpay webhooks, RLS, three-tier subscriptions, location-verified reviews, and a comparison tray with shareable boards. Each one of these features was, at some point, "maybe overkill."
+
+None of them are overkill once a real owner emails you with a real claim about a real lab they want to manage, and the right thing happens automatically.
+
+That, weirdly, is the whole point. The over-engineering wasn't the bug. The over-engineering was the only way the boring outcome — _trust_ — ever shows up.
+
+---
+
+If you run a fab lab, machine shop, PCB house, or anything that turns CAD into atoms in India, [list it on LabsInIndia](https://www.labsinindia.com/). If you're a maker, find the people who can build the thing for you. If you're a developer reading this thinking "this is too many features for one project," you are correct, and also welcome.
+
+You're welcome. And, again, I'm sorry.

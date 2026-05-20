@@ -1,0 +1,247 @@
+---
+title: 'LabsInIndia'
+date: '2026-05-21'
+summary: 'A two-sided Next.js marketplace for discovering, claiming, reviewing, and comparing fabrication labs and machine-service providers across India — with location-verified reviews, Razorpay-backed paid memberships, Typesense search, and a webhook-gated entitlement model.'
+stack:
+  - 'Next.js 16 App Router'
+  - 'React 19 + React Compiler'
+  - 'Supabase (Postgres, Auth, RLS, Storage)'
+  - 'Typesense'
+  - 'Razorpay'
+  - 'ZeptoMail'
+  - 'Tailwind CSS v4'
+  - 'Bun + Biome'
+links:
+  - label: 'Live'
+    url: 'https://www.labsinindia.com/'
+tags:
+  - 'marketplace'
+  - 'fullstack'
+  - 'supabase'
+  - 'nextjs'
+  - 'payments'
+  - 'search'
+categories:
+  - 'web'
+image: '/labsinindia.png'
+---
+
+# LabsInIndia
+
+LabsInIndia is a discovery and trust platform for India's fabrication ecosystem. Makers, small manufacturers, and product teams can search and compare labs by machine capability, location, and verified reviews. Lab owners can claim listings, manage inventory, capture leads, and upgrade to paid analytics tiers — with every paid entitlement gated by signed Razorpay webhooks and Supabase Row-Level Security.
+
+## The problem
+
+India's fabrication and machine-service capacity is enormous but fragmented. Discovery happens through informal networks — WhatsApp groups, JustDial listings, stale brochures, and word-of-mouth referrals. Makers struggle to find the right CNC, laser, 3D printing, or PCB partner for a specific job, and lab owners struggle to surface their actual capabilities to buyers who need them.
+
+The platform needed to solve four interlocking problems at once:
+
+- **Verifiable directory** — a single source of truth for which labs exist, where they are, and what machines they actually run
+- **Trust signals** — reviews that are tied to plausible visits, not anonymous review-bombing from anywhere on the internet
+- **Owner activation** — a low-friction claim and verification flow so existing listings can be taken over by their real operators
+- **Monetisation without lock-in** — paid tiers that grant analytics, lead access, and surface area, but never gate the public directory
+
+## The solution
+
+A Next.js App Router platform backed by Supabase (Postgres + Auth + RLS + Storage), with Typesense as the search layer, Razorpay handling subscription payments, and ZeptoMail covering transactional email. The system is designed around two principles:
+
+- **The database is the source of truth.** Entitlements, claim status, and review state all live in Postgres with RLS. The frontend can render UI based on them but cannot grant them.
+- **External actions write to the database, not the other way around.** Razorpay webhooks, ZeptoMail delivery logs, and Typesense reindex jobs all flow inward — the app exposes signed endpoints, validates them, and updates state idempotently.
+
+## Architecture
+
+```
+┌────────────────────────┐    ┌──────────────────────────┐
+│ Next.js 16 App Router  │    │  Razorpay (subscriptions)│
+│  • (marketing)         │◀──▶│  ─signed webhook────────▶│
+│  • (search)            │    └──────────────────────────┘
+│  • (compare)           │
+│  • (location)          │    ┌──────────────────────────┐
+│  • (dashboard)         │◀──▶│  ZeptoMail (transactional)│
+│  • (auth)              │    └──────────────────────────┘
+│  • api/*               │
+└──────────┬─────────────┘    ┌──────────────────────────┐
+           │                  │  Typesense (self-hosted   │
+           ▼                  │  dev, Cloud-ready)        │
+┌────────────────────────┐◀──▶└──────────────────────────┘
+│ Supabase               │
+│  • Postgres + RLS      │    ┌──────────────────────────┐
+│  • Auth                │    │  Cron (reindex, leads,    │
+│  • Storage (claim docs)│    │  email queue, analytics)  │
+│  • Realtime            │◀──▶└──────────────────────────┘
+└────────────────────────┘
+```
+
+The Next.js app is organised into route groups by concern:
+
+| Route group     | Purpose                                                       |
+| --------------- | ------------------------------------------------------------- |
+| `(marketing)`   | About, pricing, list-your-lab, claim landing                  |
+| `(search)`      | Lab, machine, and profile search surfaces                     |
+| `(compare)`     | Guest + saved comparison boards                               |
+| `(location)`    | State-scoped browse pages (`/[stateSlug]`)                    |
+| `(dashboard)`   | Owner, admin, user, claim, and profile dashboards             |
+| `(auth)`        | Email/password login, signup, password reset                  |
+| `api/*`         | Analytics ingest, cron jobs, webhooks, search, location, x402 |
+
+## Data model and RLS
+
+The Supabase schema is layered across twelve migrations, each scoped to a feature domain so RLS reasoning stays local:
+
+| Migration                              | Scope                                                   |
+| -------------------------------------- | ------------------------------------------------------- |
+| `initial_platform_schema`              | Labs, machines, owners, categories, tags                |
+| `search_index_job_metadata`            | Queue rows + worker metadata for Typesense reindexing   |
+| `auth_profile_signup_role`             | User profiles, role flags, signup hooks                 |
+| `owner_flow_public_profile_policy`     | Claim lifecycle + public profile visibility             |
+| `location_reviews`                     | Reviews, location verification, edit windows            |
+| `social_activity`                      | Follows, activity events, feed projection               |
+| `paid_memberships`                     | Plans, subscriptions, entitlements                      |
+| `zeptomail_emails`                     | Template metadata, delivery logs, idempotency keys      |
+| `analytics_dashboards`                 | Aggregated event tables, owner-scoped views             |
+| `comparison_system`                    | Guest tray sync model, saved boards, sharing rules      |
+| `realtime_media_ads`                   | Realtime channels, media references, ad slots           |
+| `seed_public_plans`                    | Free / Pro / Growth plan seed data                      |
+
+Every table has RLS enabled. The general policy shape:
+
+- **Public-read** for approved labs, approved reviews, public profiles
+- **Owner-scoped** for unpublished drafts, private analytics, billing state
+- **Admin-only** for moderation queues, email delivery logs, raw audit tables
+- **Service-role-only** for webhook-driven writes (subscription state, idempotency tables)
+
+## Lab owner flow
+
+The claim pipeline is the heart of owner activation:
+
+1. An owner finds their existing listing or submits a new one through `(marketing)/list-your-lab` or `(marketing)/claim`.
+2. They upload proof documents into a private Supabase Storage bucket, scoped by claim ID.
+3. The claim enters an admin moderation queue. Admins can approve, reject, or request changes from `(dashboard)/admin`.
+4. On approval, the listing is transferred to the owner's account, the lab is published, and a Typesense reindex job is enqueued.
+5. ZeptoMail fires the appropriate template at each transition with delivery logging keyed by claim ID for idempotency.
+
+This is the single most policy-heavy area of the codebase: storage RLS for documents, table RLS for the claim itself, transition rules in `lib/owner`, and email templates per state.
+
+## Location-verified reviews
+
+Reviews are intentionally gated to discourage anonymous review-bombing:
+
+- A logged-in user can write a review only if their profile city or state matches the lab.
+- An optional **current-location verification step** uses browser geolocation at write-time to attach a "verified visit nearby" trust label.
+- Only the verification _result_ and a coarse city signal are stored — exact coordinates never persist.
+- Edits are allowed inside a time-bound window; afterwards reviews are immutable except by admins.
+
+The same `lib/location` helpers are reused by the state-scoped browse pages, the review gate, and the analytics dashboards (for visitor-by-state breakdowns).
+
+## Paid memberships
+
+The pricing surface lives at `(marketing)/pricing` and offers three tiers seeded in `20260518000100_seed_public_plans.sql`:
+
+| Tier   | Entitlements                                                          |
+| ------ | --------------------------------------------------------------------- |
+| Free   | Public listing, basic profile, limited analytics                      |
+| Pro    | Lead alerts, expanded analytics, multiple machines, priority surfaces |
+| Growth | Full analytics, lead funnels, social activity boosts, admin tooling   |
+
+Checkout flows through Razorpay subscriptions. The critical guarantee is that **only the signed webhook** can grant entitlements:
+
+```
+Razorpay checkout ──▶ payment captured ──▶ webhook fires
+                                              │
+                                              ▼
+                                  /api/webhooks/razorpay
+                                              │
+                              ┌───────────────┴───────────────┐
+                              │  1. Verify signature           │
+                              │  2. Look up idempotency key   │
+                              │  3. Upsert subscription row    │
+                              │  4. Grant/revoke entitlements │
+                              │  5. Log event + send email     │
+                              └───────────────────────────────┘
+```
+
+Entitlements are read by RLS-protected views — the UI cannot lie about a user's tier because the data layer wouldn't return Pro-only rows to a Free account regardless of what the frontend rendered.
+
+## Analytics dashboards
+
+Owner dashboards expose:
+
+- **Lab demand** — search impressions, profile views, time-on-page proxies
+- **Visitors** — anonymised by-state, by-device, by-day breakdowns
+- **Machine interest** — per-machine click and inquiry counts
+- **Leads** — captured contact intents, with paid-tier alerting
+
+Admin dashboards add platform-wide metrics: lead flow, claim throughput, review moderation latency, email delivery health, and subscription funnel state. All charts read from aggregate tables maintained by ingest endpoints in `app/api/analytics`, with raw events kept private behind RLS.
+
+## Search
+
+Typesense powers all three search surfaces under `(search)`:
+
+- `/labs` — capability + location + tag filters
+- `/machines` — machine-class search across labs
+- `/profiles` — public owner / maker / admin profile search
+
+Indexing is queue-driven:
+
+- App-level writes enqueue index update jobs into a Postgres table
+- A scheduled cron in `app/api/cron` pulls the queue and pushes to Typesense
+- Documents are kept lean — only fields needed for filtering, faceting, and result rendering are mirrored
+
+Local development uses a Docker compose file (`docker-compose.typesense.yml`) and a set of `typesense:*` bun scripts for setup, reindex, health checks, and teardown. The same code paths target Typesense Cloud in production.
+
+## Comparison system
+
+Labs and machine capabilities can be added to a comparison tray. The flow is:
+
+- **Guests** accumulate items in browser local storage with a hard cap
+- **Logged-in users** get their local tray merged into a server-side board on sign-in
+- **Saved boards** are private by default and can be marked shareable, generating a token-scoped public view
+- **Sharing rules** are enforced by RLS — a public board exposes only the columns the owner agreed to share
+
+## Email and notifications
+
+ZeptoMail handles all transactional email:
+
+- Moderation transitions (claim submitted, approved, rejected, changes requested)
+- Review lifecycle (submitted, approved, flagged)
+- Billing (checkout confirmed, renewal succeeded / failed, plan changed, cancelled)
+- Lead alerts (Pro/Growth owners receive real-time and digest alerts)
+
+Every send is logged with a delivery record and idempotency key, so retried events never double-send. A cron job processes the lead-alert queue separately from synchronous webhook handlers to keep payment paths fast.
+
+## Social activity
+
+Users can follow public lab, maker, and admin profiles. The activity feed surfaces marketplace-safe events: new lab approvals, public reviews, new machine additions, plan upgrades that the owner opted into sharing. The feed is deliberately read-only and projection-driven — there is no full social graph traversal at request time.
+
+## SEO and structured data
+
+The public surface is built to be indexable:
+
+- `app/sitemap.ts` generates a structured sitemap covering labs, machines, locations, and marketing pages
+- `app/robots.txt` and `app/manifest.ts` cover the basics
+- `app/opengraph-image.tsx` produces a per-route OG image at the edge
+- Structured data (`JSON-LD`) on lab pages exposes organisation, geo, and review metadata
+- Dashboard and admin routes are `noindex` to keep the index focused on discovery pages
+
+## Tooling and conventions
+
+- **Runtime** — Bun for scripts and dev, Node-compatible for production
+- **Lint + format** — Biome (`bun run lint`, `bun run format`)
+- **Type safety** — TypeScript strict, Zod v4 validation at every external boundary
+- **UI** — Tailwind v4, shadcn primitives, `@base-ui/react`, Tabler icons, `recharts` for analytics
+- **State** — TanStack Query for server state, React Hook Form for forms
+- **React Compiler** — enabled via the Babel plugin, reducing memo boilerplate across owner dashboards
+
+## What I learned
+
+**RLS is a load-bearing design tool, not an afterthought.** Designing each feature migration around the policy shape forced cleaner separations between owner/admin/user surfaces than a permission-check-everywhere approach ever would have. The dashboards, search results, and shareable boards all read the same tables — RLS is what makes that safe.
+
+**Webhooks must be the only path to privileged state.** Allowing the frontend, or even a "trusted" backend route, to grant entitlements would have created drift the moment a renewal failed silently. Routing every billing transition through one idempotent webhook handler keeps the model consistent under retries, race conditions, and partial failures.
+
+**Trust is a feature, not a vibe.** Location-gated reviews, claim verification, signed webhooks, and per-feature documentation aren't UX polish — they're the only reason an owner trusts the platform enough to claim a listing or pay for a tier. Each guardrail that looked like over-engineering during build became a load-bearing trust signal at launch.
+
+**Boring infrastructure wins.** Postgres, Supabase RLS, Typesense, Razorpay, ZeptoMail, Next.js App Router. Nothing exotic. The exotic part is the way they're composed and the policies that hold them together.
+
+---
+
+If you operate a fab lab, machine shop, or any service that turns CAD into atoms in India, the platform is live at [labsinindia.com](https://www.labsinindia.com/). Listing is free, claiming an existing entry is verified, and paid tiers unlock owner analytics and lead alerts.
